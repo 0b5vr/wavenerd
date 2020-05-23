@@ -29,7 +29,7 @@ function HeaderBeatIndicators( { className }: {
         progress={ bar }
       />
       <BeatIndicator
-        label="SixteenBar"
+        label="16Bar"
         progress={ sixteenBar }
       />
     </Root>

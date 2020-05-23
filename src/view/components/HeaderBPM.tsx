@@ -14,6 +14,7 @@ const Label = styled.div`
 const Value = styled( NumberParam )`
   font: 500 16px monospace;
   line-height: 1.0;
+  min-width: 64px;
 `;
 
 const Root = styled.div`
@@ -40,6 +41,7 @@ function HeaderBPM( { hostDeck, className }: {
         onChange={ ( value ) => {
           hostDeck.bpm = value;
         } }
+        fixedDigits={ 2 }
         deltaCoarse={ 1.0 }
         deltaFine={ 0.1 }
       />

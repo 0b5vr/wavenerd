@@ -32,7 +32,7 @@ function HeaderTime( { className }: {
       className={ className }
     >
       <Label>Time</Label>
-      <Value>{ time.toFixed( 3 ) }</Value>
+      <Value>{ time.toFixed( 2 ) }</Value>
     </Root>
   );
 }

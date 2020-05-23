@@ -20,11 +20,11 @@ function inputToValue( value: string, type: ValueType ): number | null {
   }
 }
 
-function valueToInput( value: number, type: ValueType ): string {
+function valueToInput( value: number, type: ValueType, digits: number ): string {
   if ( type === 'int' ) {
     return Math.floor( value ).toString();
   } else {
-    return ( value ).toFixed( 3 );
+    return ( value ).toFixed( digits );
   }
 }
 
@@ -70,6 +70,7 @@ const NumberParam = ( params: {
 
   deltaCoarse?: number;
   deltaFine?: number;
+  fixedDigits?: number;
 
   changeValueWhenInput?: boolean;
 
@@ -83,6 +84,7 @@ const NumberParam = ( params: {
     onChange,
     onSettle
   } = params;
+  const fixedDigits = params.fixedDigits ?? 3;
   const deltaCoarse = params.deltaCoarse ?? ( type === 'int' ? 1.0 : 0.01 );
   const deltaFine = params.deltaFine ?? ( type === 'int' ? 0.1 : 0.001 );
 
@@ -212,7 +214,7 @@ const NumberParam = ( params: {
     [ inputValue, type, inputPrevValue, trySettle ]
   );
 
-  const displayValue = valueToInput( value, type );
+  const displayValue = valueToInput( value, type, fixedDigits );
 
   return (
     <Root className={ className }>

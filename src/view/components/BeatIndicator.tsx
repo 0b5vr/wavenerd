@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  width: 64px;
+  width: 40px;
 `;
 
 const BarBG = styled.div`
@@ -31,7 +31,7 @@ const BarContainer = styled.div`
 `;
 
 const Value = styled.div`
-  width: 48px;
+  width: 40px;
   text-align: right;
 `;
 
