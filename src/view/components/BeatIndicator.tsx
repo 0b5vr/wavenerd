@@ -21,17 +21,17 @@ const BarFG = styled.div`
   left: 0;
   top: 0;
   height: 100%;
-  background: ${ Colors.accent };
+  background: ${ Colors.fore };
 `;
 
 const BarContainer = styled.div`
   position: relative;
   width: 64px;
-  height: 4px;
+  height: 2px;
 `;
 
 const Value = styled.div`
-  width: 40px;
+  width: 48px;
   text-align: right;
 `;
 
