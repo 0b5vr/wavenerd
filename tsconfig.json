@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "removeComments": false,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "lib": [ "dom", "es2017" ],
+    "types": [ "react", "webmidi" ],
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./types"
+  },
+  "include": [ "src" ],
+  "exclude": [ "node_modules" ]
+}
