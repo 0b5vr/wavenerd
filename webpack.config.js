@@ -37,6 +37,21 @@ Repository: ${ packageJson.repository }`
           use: [ 'raw-loader' ]
         },
         {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: 'react-svg-loader',
+              options: {
+                svgo: {
+                  plugins: [
+                    { removeUselessStrokeAndFill: false }
+                  ],
+                }
+              }
+            }
+          ]
+        },
+        {
           test: /\.tsx?$/,
           exclude: /node_modules/,
           use: [
