@@ -22,7 +22,7 @@ function MixerListener( { mixer }: {
         mixer.off( 'changeXFader', handleChangeXFader );
       };
     },
-    [ executorXFaderValue ]
+    [ mixer, executorXFaderValue ]
   );
 
   return null;

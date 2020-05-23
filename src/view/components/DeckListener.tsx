@@ -1,7 +1,6 @@
 import { deckBPMState, deckBeatsState, deckTimeState } from '../states/deck';
-import { useEffect, useState } from 'react';
-import { RateLimitedExecutor } from '../utils/RateLimitedExecutor';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 function DeckListener( { deck }: {
@@ -11,17 +10,14 @@ function DeckListener( { deck }: {
   const setDeckBeats = useSetRecoilState( deckBeatsState );
   const setDeckBPM = useSetRecoilState( deckBPMState );
 
-  const [ executorProcess ] = useState( new RateLimitedExecutor( 20 ) );
   useEffect(
     () => {
       const handleProcess = deck.on( 'process', () => {
-        executorProcess.cue( () => {
-          setDeckTime( deck.time );
-          setDeckBeats( {
-            beat: deck.beatManager.beat,
-            bar: deck.beatManager.bar,
-            sixteenBar: deck.beatManager.sixteenBar,
-          } );
+        setDeckTime( deck.time );
+        setDeckBeats( {
+          beat: deck.beatManager.beat,
+          bar: deck.beatManager.bar,
+          sixteenBar: deck.beatManager.sixteenBar,
         } );
       } );
 
@@ -34,7 +30,7 @@ function DeckListener( { deck }: {
         deck.off( 'changeBPM', handleChangeBPM );
       };
     },
-    [ executorProcess ]
+    [ deck ]
   );
 
   return null;
