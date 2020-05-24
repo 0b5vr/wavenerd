@@ -17,6 +17,7 @@ export const Colors = {
   accentbright: '#53c5ff',
   accent: '#00aaff',
   accentdark: '#0080c0',
+  green: '#00ff91',
   error: '#ff0066',
   errorBright: '#ec5fa3',
   warning: '#fc9821'

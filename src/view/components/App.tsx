@@ -1,4 +1,4 @@
-import { deckACodeState, deckBCodeState } from '../states/deck';
+import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState } from '../states/deck';
 import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
@@ -9,6 +9,7 @@ import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
+import { Stalker } from './Stalker';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
 import { XFader } from './XFader';
 import styled from 'styled-components';
@@ -66,14 +67,16 @@ function App( { deckA, deckB, mixer }: {
   deckB: WavenerdDeck;
   mixer: Mixer;
 } ) {
-  return (
+  return <>
     <RecoilRoot>
       <MIDIListener />
       <MixerListener
         mixer={ mixer }
       />
       <DeckListener
-        deck={ deckA }
+        hostDeck={ deckA }
+        deckA={ deckA }
+        deckB={ deckB }
       />
       <Root>
         <StyledHeader
@@ -81,19 +84,24 @@ function App( { deckA, deckB, mixer }: {
         />
         <StyledDeckA
           codeState={ deckACodeState }
+          errorState={ deckAErrorState }
+          cueStatusState={ deckACueStatusState }
           deck={ deckA }
         />
         <StyledDeckB
           codeState={ deckBCodeState }
+          errorState={ deckBErrorState }
+          cueStatusState={ deckBCueStatusState }
           deck={ deckB }
         />
         <StyledXFader
           mixer={ mixer }
         />
         <ContextMenu />
+        <Stalker />
       </Root>
     </RecoilRoot>
-  );
+  </>;
 }
 
 export { App };

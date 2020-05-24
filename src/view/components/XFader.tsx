@@ -119,6 +119,7 @@ function XFader( { mixer, className }: {
       onMouseDown={ handleClick }
       onContextMenu={ handleContextMenu }
       className={ className }
+      data-stalker="X Fader"
     >
       <Ruler style={ { left: 'calc( 5% - 1px )' } } />
       <Ruler style={ { left: 'calc( 50% - 1px )' } } />
