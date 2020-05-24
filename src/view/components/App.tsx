@@ -54,7 +54,7 @@ const Root = styled.div`
   width: 100%;
   height: 100%;
   color: ${ Colors.fore };
-  background: ${ Colors.back1 };
+  background: ${ Colors.back2 };
 
   * {
     box-sizing: border-box;

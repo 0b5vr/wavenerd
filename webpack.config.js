@@ -37,6 +37,10 @@ Repository: ${ packageJson.repository }`
           use: [ 'raw-loader' ]
         },
         {
+          test: /\.css$/,
+          use: [ 'style-loader', 'css-loader' ],
+        },
+        {
           test: /\.svg$/,
           use: [
             {

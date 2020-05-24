@@ -19,7 +19,7 @@ const Gutter = styled.div`
   top: calc( 50% - 4px );
   width: 100%;
   height: 8px;
-  background: ${ Colors.back2 };
+  background: ${ Colors.back1 };
   pointer-events: none;
 `;
 

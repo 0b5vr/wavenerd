@@ -91,7 +91,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   font: 500 16px monospace;
-  background: ${ Colors.back2 };
+  background: ${ Colors.back4 };
   overflow: hidden;
 
   * {

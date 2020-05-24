@@ -1,12 +1,32 @@
 /* eslint-disable sort-imports */
 
-import ace from 'ace-builds';
-import 'ace-builds/src-noconflict/mode-glsl';
-import 'ace-builds/src-noconflict/theme-monokai';
-import React, { useEffect, useRef, useState } from 'react';
+import CodeMirror from 'codemirror';
+import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
+import React, { useCallback } from 'react';
 import { RecoilState } from '../utils/RecoilState';
 import { useSetRecoilState } from 'recoil';
+import { defineGLSLMode, defineGLSLMime } from '../codemirror-modes/glsl';
+import styled from 'styled-components';
+import 'codemirror/keymap/sublime';
+import '../codemirror-themes/monokai-sharp.css';
+import 'codemirror/lib/codemirror.css';
 import { defaultCode } from '../../defaultCode';
+
+// == setup CodeMirror =============================================================================
+defineGLSLMode();
+defineGLSLMime();
+
+// == styles =======================================================================================
+const StyledReactCodeMirror = styled( ReactCodeMirror )`
+  height: 100%;
+
+  & .CodeMirror {
+    height: 100%;
+  }
+`;
+
+const Root = styled.div`
+`;
 
 // == component ====================================================================================
 function DeckEditor( { codeState, onCompile, onApply, className }: {
@@ -16,60 +36,46 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
   className?: string;
 } ): JSX.Element {
   const setCode = useSetRecoilState( codeState );
-  const [ editor, setEditor ] = useState<ace.Ace.Editor | null>( null );
-  const refRoot = useRef<HTMLDivElement>( null );
 
-  // -- initialize editor --------------------------------------------------------------------------
-  useEffect(
-    () => {
-      const root = refRoot.current;
-      if ( !root ) { return; }
-
-      setEditor( ace.edit( root ) );
+  // -- event handlers -----------------------------------------------------------------------------
+  const handleEditorDidMount = useCallback(
+    ( editor: CodeMirror.Editor ) => {
+      editor.addKeyMap( {
+        'Ctrl-S': () => {
+          onCompile();
+        },
+        'Ctrl-R': () => {
+          onApply();
+        }
+      } );
     },
-    [ refRoot.current ]
+    [ onCompile, onApply ]
   );
 
-  useEffect(
-    () => {
-      if ( !editor ) { return; }
-
-      editor.setTheme( 'ace/theme/monokai' );
-      editor.session.setMode( 'ace/mode/glsl' );
-
-      const commandCompile: ace.Ace.Command = {
-        name: 'Compile Shader',
-        bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
-        exec: () => { onCompile(); }
-      };
-      editor.commands.addCommand( commandCompile );
-
-      const commandApply: ace.Ace.Command = {
-        name: 'Apply Shader',
-        bindKey: { win: 'Ctrl-R', mac: 'Command-R' },
-        exec: () => { onApply(); }
-      };
-      editor.commands.addCommand( commandApply );
-
-      const handleChange = editor.on( 'change', () => {
-        setCode( editor.getValue() );
-      } );
-
-      return () => {
-        editor.off( 'change', handleChange );
-        editor.commands.removeCommand( commandCompile );
-        editor.commands.removeCommand( commandApply );
-      };
+  const handleChange = useCallback(
+    ( editor: CodeMirror.Editor, data: CodeMirror.EditorChange, value: string ) => {
+      setCode( value );
     },
-    [ editor, onCompile ]
+    []
   );
 
   // -- component ----------------------------------------------------------------------------------
   return (
-    <div
-      ref={ refRoot }
+    <Root
       className={ className }
-    >{ defaultCode }</div>
+    >
+      <StyledReactCodeMirror
+        value={ defaultCode }
+        options={ {
+          mode: 'glsl',
+          keyMap: 'sublime',
+          theme: 'monokai-sharp',
+          lineNumbers: true
+        } }
+        editorDidMount={ handleEditorDidMount }
+        onChange={ handleChange }
+      />
+    </Root>
   );
 }
 

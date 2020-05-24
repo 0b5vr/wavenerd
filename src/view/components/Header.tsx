@@ -15,7 +15,7 @@ const Logo = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ Colors.back3 };
+  background: ${ Colors.back4 };
 
   & > * {
     margin: 0 8px;
