@@ -1,5 +1,3 @@
-/* Based on Sublime Text's Monokai theme */
-
 .cm-s-monokai-sharp.CodeMirror { background: #191a1f; color: #d0edff; }
 .cm-s-monokai-sharp div.CodeMirror-selected { background: #474f57; }
 .cm-s-monokai-sharp .CodeMirror-line::selection, .cm-s-monokai-sharp .CodeMirror-line > span::selection, .cm-s-monokai-sharp .CodeMirror-line > span > span::selection { background: #474f57; }
@@ -9,7 +7,6 @@
 .cm-s-monokai-sharp .CodeMirror-guttermarker-subtle { color: #d0d0d0; }
 .cm-s-monokai-sharp .CodeMirror-linenumber { color: #75848f; }
 .cm-s-monokai-sharp .CodeMirror-cursor { border-left: 1px solid #d0edff; }
-.cm-s-monokai-sharp .CodeMirror-scroll { overflow: hidden !important; }
 
 .cm-s-monokai-sharp span.cm-comment { color: #75848f; }
 .cm-s-monokai-sharp span.cm-atom { color: #8a8aff; }
