@@ -1,6 +1,7 @@
-import { atom } from 'recoil';
+import { atom, selector, useRecoilCallback } from 'recoil';
 import { defaultCode } from '../../defaultCode';
 
+// == atoms ========================================================================================
 export const deckACodeState = atom( {
   key: 'deckACodeState',
   default: defaultCode
@@ -49,3 +50,50 @@ export const deckBPMState = atom( {
   key: 'deckBPMState',
   default: 140.0
 } );
+
+export const deckSampleListState = atom<Set<string>>( {
+  key: 'deckSampleListState',
+  default: new Set()
+} );
+
+// == selectors ====================================================================================
+export const deckSortedSampleListState = selector( {
+  key: 'deckSortedSampleListState',
+  get: ( { get } ) => {
+    const sampleList = get( deckSampleListState );
+    const array = Array.from( sampleList );
+    array.sort();
+    return array;
+  }
+} );
+
+// == hooks ========================================================================================
+export function useAddSampleAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    async ( { getPromise, set }, name ) => {
+      const sampleList = await getPromise( deckSampleListState );
+
+      const newSamples = new Set( sampleList );
+      newSamples.add( name );
+
+      set( deckSampleListState, newSamples );
+    },
+    []
+  );
+}
+
+export function useDeleteSampleAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    async ( { getPromise, set }, name ) => {
+      const sampleList = await getPromise( deckSampleListState );
+
+      const newSamples = new Set( sampleList );
+      if ( newSamples.has( name ) ) {
+        newSamples.delete( name );
+      }
+
+      set( deckSampleListState, newSamples );
+    },
+    []
+  );
+}

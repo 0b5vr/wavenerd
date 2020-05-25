@@ -1,4 +1,4 @@
-import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState } from '../states/deck';
+import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState, useAddSampleAction, useDeleteSampleAction } from '../states/deck';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -15,6 +15,8 @@ function DeckListener( { hostDeck, deckA, deckB }: {
   const setDeckTime = useSetRecoilState( deckTimeState );
   const setDeckBeats = useSetRecoilState( deckBeatsState );
   const setDeckBPM = useSetRecoilState( deckBPMState );
+  const addSample = useAddSampleAction();
+  const deleteSample = useDeleteSampleAction();
 
   useEffect(
     () => {
@@ -89,6 +91,32 @@ function DeckListener( { hostDeck, deckA, deckB }: {
       };
     },
     [ hostDeck ]
+  );
+
+  useEffect(
+    () => {
+      const handleLoadSample = hostDeck.on( 'loadSample', ( { name } ) => {
+        addSample( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'loadSample', handleLoadSample );
+      };
+    },
+    [ hostDeck, addSample ]
+  );
+
+  useEffect(
+    () => {
+      const handleDeleteSample = hostDeck.on( 'deleteSample', ( { name } ) => {
+        deleteSample( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'deleteSample', handleDeleteSample );
+      };
+    },
+    [ hostDeck, deleteSample ]
   );
 
   return null;

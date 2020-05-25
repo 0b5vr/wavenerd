@@ -5,10 +5,12 @@ import { Deck } from './Deck';
 import { DeckListener } from './DeckListener';
 import { Header } from './Header';
 import { MIDIListener } from './MIDIListener';
+import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
+import { SampleList } from './SampleList';
 import { Stalker } from './Stalker';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
 import { XFader } from './XFader';
@@ -20,30 +22,38 @@ const StyledHeader = styled( Header )`
   left: 0;
   top: 0;
   width: 100%;
-  height: 32px;
+  height: ${ Metrics.headerHeight }px;
 `;
 
 const StyledDeckA = styled( Deck )`
   position: absolute;
   left: 0;
-  top: 32px;
-  width: calc( 50% - 64px );
+  top: ${ Metrics.headerHeight }px;
+  width: calc( 50% - ${ 0.5 * Metrics.sampleListWidth + 2 }px );
   height: calc( 100% - 96px );
 `;
 
 const StyledDeckB = styled( Deck )`
   position: absolute;
   right: 0;
-  top: 32px;
-  width: calc( 50% - 64px );
+  top: ${ Metrics.headerHeight }px;
+  width: calc( 50% - ${ 0.5 * Metrics.sampleListWidth + 2 }px );
+  height: calc( 100% - 96px );
+`;
+
+const StyledSampleList = styled( SampleList )`
+  position: absolute;
+  left: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
+  top: ${ Metrics.headerHeight }px;
+  width: ${ Metrics.sampleListWidth }px;
   height: calc( 100% - 96px );
 `;
 
 const StyledXFader = styled( XFader )`
   position: absolute;
-  left: calc( 50% - 128px );
+  left: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
   bottom: 4px;
-  width: 256px;
+  width: ${ Metrics.xFaderWidth }px;
   height: 56px;
 `;
 
@@ -55,6 +65,7 @@ const Root = styled.div`
   height: 100%;
   color: ${ Colors.fore };
   background: ${ Colors.back2 };
+  font-family: monospace;
 
   * {
     box-sizing: border-box;
@@ -93,6 +104,9 @@ function App( { deckA, deckB, mixer }: {
           errorState={ deckBErrorState }
           cueStatusState={ deckBCueStatusState }
           deck={ deckB }
+        />
+        <StyledSampleList
+          hostDeck={ deckA }
         />
         <StyledXFader
           mixer={ mixer }
