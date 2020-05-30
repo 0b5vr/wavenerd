@@ -12,6 +12,7 @@ const gl = canvas.getContext( 'webgl' )!;
 const glCat = new GLCat( gl );
 
 const audio = new AudioContext();
+audio.resume();
 
 const deckOptions = {
   glCat,
