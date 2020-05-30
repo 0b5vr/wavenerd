@@ -12,20 +12,11 @@ module.exports = ( env, argv ) => {
   const DEV = argv.mode === 'development';
   console.info( `Webpack: Building ${ packageJson.name } v${ VERSION } under ${ argv.mode } settings...` );
 
-  const banner = DEV
-    ? `${ packageJson.name } v${ VERSION }
-${ packageJson.description }
-Copyright (c) 2019 ${ packageJson.author }
-${ packageJson.name } is distributed under the MIT License
-https://opensource.org/licenses/MIT
-Repository: ${ packageJson.repository }`
-    : `${ packageJson.name } v${ VERSION } - (c) ${ packageJson.author }, MIT License`;
-
   return {
     entry: path.resolve( __dirname, 'src/index.tsx' ),
     output: {
       path: path.join( __dirname, 'dist' ),
-      filename: DEV ? 'wavenerd.js' : 'wavenerd.min.js',
+      filename: 'wavenerd.js',
     },
     resolve: {
       extensions: [ '.js', '.json', '.ts', '.tsx' ],
@@ -73,14 +64,12 @@ Repository: ${ packageJson.repository }`
     devServer: {
       contentBase: path.resolve( __dirname, './' ),
       publicPath: '/dist/',
-      openPage: 'example/example.html',
       watchContentBase: true,
       inline: true,
       hot: true
     },
     devtool: DEV ? 'inline-source-map' : false,
     plugins: [
-      new webpack.BannerPlugin( banner ),
       new webpack.DefinePlugin( {
         'process.env': {
           DEV,
