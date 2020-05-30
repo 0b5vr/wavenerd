@@ -9,6 +9,7 @@ import { defineGLSLMode, defineGLSLMime } from '../codemirror-modes/glsl';
 import styled from 'styled-components';
 import 'codemirror/keymap/sublime';
 import '../codemirror-themes/monokai-sharp.css';
+import '../codemirror-themes/chromacoder-green.css';
 import 'codemirror/lib/codemirror.css';
 import { defaultCode } from '../../defaultCode';
 
