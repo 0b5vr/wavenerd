@@ -3,10 +3,14 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
+    "version": "yarn all",
+    "all": "yarn lint && yarn clean && yarn build",
+    "clean": "rimraf dist types",
     "dev": "webpack-dev-server --mode development",
     "build": "yarn build-dev && yarn build-prod",
     "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production"
+    "build-prod": "webpack --mode production",
+    "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
     "@fms-cat/experimental": "^0.3.0",
@@ -33,6 +37,7 @@
     "react-svg-loader": "^3.0.3",
     "recoil": "^0.0.7",
     "resize-observer-polyfill": "^1.5.1",
+    "rimraf": "^3.0.2",
     "style-loader": "^1.2.1",
     "styled-components": "^5.1.0",
     "ts-loader": "^7.0.4",
