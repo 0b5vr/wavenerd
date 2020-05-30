@@ -50,8 +50,3 @@ jobs:
       with:
         name: dist
         path: dist
-    - name: Upload Types
-      uses: actions/upload-artifact@v1
-      with:
-        name: types
-        path: types
