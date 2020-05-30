@@ -75,11 +75,11 @@ export class Mixer extends EventEmittable<MixerEvents> {
   private __updateGains(): void {
     this.__gainNodeL.gain.linearRampToValueAtTime(
       this.__volumeL * linearstep( 0.95, 0.55, this.__xFaderPos ),
-      this.__audio.currentTime + 0.01
+      this.__audio.currentTime + 0.02
     );
     this.__gainNodeR.gain.linearRampToValueAtTime(
       this.__volumeR * linearstep( 0.05, 0.45, this.__xFaderPos ),
-      this.__audio.currentTime + 0.01
+      this.__audio.currentTime + 0.02
     );
   }
 }
