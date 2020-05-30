@@ -26,6 +26,7 @@ const StyledReactCodeMirror = styled( ReactCodeMirror )`
 `;
 
 const Root = styled.div`
+  transform: translateZ(0);
 `;
 
 // == component ====================================================================================
