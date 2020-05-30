@@ -42,7 +42,7 @@ const StyledSampleListBar = styled( SampleListBar )`
 
 const Root = styled.div<{ isDragging: boolean }>`
   position: relative;
-  background: ${ ( { isDragging } ) => isDragging ? Colors.back2 : Colors.back1 };
+  background: ${ ( { isDragging } ) => isDragging ? Colors.back3 : Colors.back1 };
 `;
 
 // == components ===================================================================================

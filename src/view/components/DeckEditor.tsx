@@ -2,7 +2,7 @@
 
 import CodeMirror from 'codemirror';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { RecoilState } from '../utils/RecoilState';
 import { useSetRecoilState } from 'recoil';
 import { defineGLSLMode, defineGLSLMime } from '../codemirror-modes/glsl';
@@ -12,6 +12,7 @@ import '../codemirror-themes/monokai-sharp.css';
 import '../codemirror-themes/chromacoder-green.css';
 import 'codemirror/lib/codemirror.css';
 import { defaultCode } from '../../defaultCode';
+import { Colors } from '../constants/Colors';
 
 // == setup CodeMirror =============================================================================
 defineGLSLMode();
@@ -26,6 +27,18 @@ const StyledReactCodeMirror = styled( ReactCodeMirror )`
   }
 `;
 
+const Overlay = styled.div<{ isDragging: boolean }>`
+  display: ${ ( { isDragging } ) => isDragging ? 'block' : 'none' };
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: ${ Colors.fore };
+  opacity: 0.125;
+  pointer-events: none;
+`;
+
 const Root = styled.div`
   transform: translateZ(0);
 `;
@@ -37,6 +50,7 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
   onApply: () => void;
   className?: string;
 } ): JSX.Element {
+  const [ isDragging, setIsDragging ] = useState( false );
   const setCode = useSetRecoilState( codeState );
 
   // -- event handlers -----------------------------------------------------------------------------
@@ -61,6 +75,55 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
     []
   );
 
+  const handleFile = useCallback(
+    ( files: FileList, editor: CodeMirror.Editor ) => {
+      const file = files && files[ 0 ];
+      if ( file ) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const code = reader.result as string;
+          setCode( code );
+          editor.setValue( code );
+        };
+        reader.readAsText( file );
+      }
+    },
+    []
+  );
+
+  const handleDragOver = useCallback(
+    ( editor: CodeMirror.Editor, event?: any ) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setIsDragging( true );
+    },
+    []
+  );
+
+  const handleDragLeave = useCallback(
+    ( editor: CodeMirror.Editor, event?: any ) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setIsDragging( false );
+    },
+    []
+  );
+
+  const handleDrop = useCallback(
+    ( editor: CodeMirror.Editor, event?: any ) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setIsDragging( false );
+
+      const files = event.dataTransfer.files;
+      handleFile( files, editor );
+    },
+    [ handleFile ]
+  );
+
   // -- component ----------------------------------------------------------------------------------
   return (
     <Root
@@ -76,6 +139,12 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
         } }
         editorDidMount={ handleEditorDidMount }
         onChange={ handleChange }
+        onDragOver={ handleDragOver }
+        onDragLeave={ handleDragLeave }
+        onDrop={ handleDrop }
+      />
+      <Overlay
+        isDragging={ isDragging }
       />
     </Root>
   );
