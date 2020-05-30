@@ -1,19 +1,35 @@
+import styled, { css } from 'styled-components';
 import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderTime } from './HeaderTime';
 import IconGit from '../assets/git.svg';
+import IconHelp from '../assets/help.svg';
 import React from 'react';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
-import styled from 'styled-components';
+import { helpIsOpeningState } from '../states/help';
+import { useRecoilCallback } from 'recoil';
 
 // == styles =======================================================================================
 const Logo = styled.div`
   font: 500 24px monospace;
   line-height: 1.0;
+  margin-left: 8px;
 `;
 
-const StyledIconGit = styled( IconGit )`
+const StyledHeaderTime = styled( HeaderTime )`
+  margin-left: 8px;
+`;
+
+const StyledHeaderBeatIndicators = styled( HeaderBeatIndicators )`
+  margin-left: 8px;
+`;
+
+const StyledHeaderBPM = styled( HeaderBPM )`
+  margin-left: 8px;
+`;
+
+const StyleIcon = css`
   width: 32px;
   height: 32px;
   fill: ${ Colors.fore };
@@ -26,6 +42,14 @@ const StyledIconGit = styled( IconGit )`
   &:active {
     opacity: 0.6;
   }
+`;
+
+const StyledIconHelp = styled( IconHelp )`
+  ${ StyleIcon };
+`;
+
+const StyledIconGit = styled( IconGit )`
+  ${ StyleIcon };
 `;
 
 const AnchorGit = styled.a`
@@ -44,7 +68,6 @@ const Root = styled.div`
   background: ${ Colors.back4 };
 
   & > * {
-    margin: 0 8px;
     flex-grow: 0;
     flex-shrink: 0;
   }
@@ -55,17 +78,28 @@ function Header( { hostDeck, className }: {
   hostDeck: WavenerdDeck;
   className?: string;
 } ): JSX.Element {
+  const handleClickHelp = useRecoilCallback(
+    ( { set } ) => {
+      set( helpIsOpeningState, true );
+    },
+    []
+  );
+
   return (
     <Root
       className={ className }
     >
       <Logo>Wavenerd</Logo>
-      <HeaderTime />
-      <HeaderBeatIndicators />
-      <HeaderBPM
+      <StyledHeaderTime />
+      <StyledHeaderBeatIndicators />
+      <StyledHeaderBPM
         hostDeck={ hostDeck }
       />
       <Margin />
+      <StyledIconHelp
+        onClick={ handleClickHelp }
+        data-stalker="Show help"
+      />
       <AnchorGit
         href="https://github.com/FMS-Cat/wavenerd/"
         target="_blank"

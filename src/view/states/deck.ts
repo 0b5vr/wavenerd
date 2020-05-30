@@ -68,6 +68,9 @@ export const deckSortedSampleListState = selector( {
 } );
 
 // == hooks ========================================================================================
+/**
+ * @todo 🔥 It will conflict when you use {@link useDeleteSampleAction} simultaneously
+ */
 export function useAddSampleAction(): ( name: string ) => Promise<void> {
   return useRecoilCallback(
     async ( { getPromise, set }, name ) => {
@@ -82,6 +85,9 @@ export function useAddSampleAction(): ( name: string ) => Promise<void> {
   );
 }
 
+/**
+ * @todo 🔥 It will conflict when you use {@link useAddSampleAction} simultaneously
+ */
 export function useDeleteSampleAction(): ( name: string ) => Promise<void> {
   return useRecoilCallback(
     async ( { getPromise, set }, name ) => {

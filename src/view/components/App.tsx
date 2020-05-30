@@ -4,6 +4,7 @@ import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckListener } from './DeckListener';
 import { Header } from './Header';
+import { Help } from './Help';
 import { MIDIListener } from './MIDIListener';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
@@ -55,6 +56,13 @@ const StyledXFader = styled( XFader )`
   bottom: 4px;
   width: ${ Metrics.xFaderWidth }px;
   height: 56px;
+`;
+
+const StyledHelp = styled( Help )`
+  position: absolute;
+  margin: 16px;
+  width: calc( 100% - 32px );
+  height: calc( 100% - 32px );
 `;
 
 const Root = styled.div`
@@ -111,6 +119,7 @@ function App( { deckA, deckB, mixer }: {
         <StyledXFader
           mixer={ mixer }
         />
+        <StyledHelp />
         <ContextMenu />
         <Stalker />
       </Root>
