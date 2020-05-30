@@ -9,6 +9,7 @@ import { MIDIListener } from './MIDIListener';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
+import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { SampleList } from './SampleList';
@@ -120,6 +121,9 @@ function App( { deckA, deckB, mixer }: {
           mixer={ mixer }
         />
         <StyledHelp />
+        <PlayOverlay
+          audio={ deckA.audio }
+        />
         <ContextMenu />
         <Stalker />
       </Root>
