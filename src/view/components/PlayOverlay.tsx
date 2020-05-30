@@ -75,7 +75,7 @@ function PlayOverlay( { audio, className }: {
       <Content>
         <StyledIconPlay />
         <Description>
-          Wavenerd needs you to press here for activate its audio context.
+          Wavenerd needs you to press here to activate its audio context.
         </Description>
       </Content>
     </Root>
