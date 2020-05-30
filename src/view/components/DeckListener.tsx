@@ -72,12 +72,12 @@ function DeckListener( { hostDeck, deckA, deckB }: {
 
   useEffect(
     () => {
-      const handleProcess = hostDeck.on( 'process', () => {
-        setDeckTime( hostDeck.time );
+      const handleBeatManagerUpdate = hostDeck.beatManager.on( 'update', ( event ) => {
+        setDeckTime( event.time );
         setDeckBeats( {
-          beat: hostDeck.beatManager.beat,
-          bar: hostDeck.beatManager.bar,
-          sixteenBar: hostDeck.beatManager.sixteenBar,
+          beat: event.beat,
+          bar: event.bar,
+          sixteenBar: event.sixteenBar,
         } );
       } );
 
@@ -86,7 +86,7 @@ function DeckListener( { hostDeck, deckA, deckB }: {
       } );
 
       return () => {
-        hostDeck.off( 'process', handleProcess );
+        hostDeck.beatManager.off( 'update', handleBeatManagerUpdate );
         hostDeck.off( 'changeBPM', handleChangeBPM );
       };
     },

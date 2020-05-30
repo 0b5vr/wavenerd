@@ -21,6 +21,7 @@ const deckOptions = {
 };
 const deckA = new WavenerdDeck( deckOptions );
 const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
+deckA.node.connect( deckB.node );
 
 const mixer = new Mixer( audio );
 deckA.node.connect( mixer.inputL );
