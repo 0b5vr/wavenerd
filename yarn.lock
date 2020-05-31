@@ -307,10 +307,10 @@
   resolved "https://registry.yarnpkg.com/@fms-cat/glcat-ts/-/glcat-ts-0.10.0.tgz#18d9026e0b1328f705cffc3227de604ca9a2bdd1"
   integrity sha512-axOgPftIIkr1sycjVxYqTzL69U7mI2q4Cp5jvuQk1lY3LSQHVEwg9fOH/bvLsjMeJ5vjpgJcn36wSM4UeuhCTw==
 
-"@fms-cat/wavenerd-deck@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@fms-cat/wavenerd-deck/-/wavenerd-deck-0.2.1.tgz#17d552b95676de0897c9abe9e650175986180dcf"
-  integrity sha512-J+pW4UJR5WkRhrW/aik1WK0a0TG79lxToi3V4MQ+k9niCMtvBQZ+WmTTBk3nmeOaDyhO4e46wJSy2DANJNTWLw==
+"@fms-cat/wavenerd-deck@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@fms-cat/wavenerd-deck/-/wavenerd-deck-0.2.2.tgz#4ad35033cdbf98c9916babda68dea3b341d99b97"
+  integrity sha512-EeTiTUxhqUonJ0QT+7qYEzYrw4xo+sdBy9ow7e7Dp7Psh/r7JOTsXUrGmMXb/R6GRLdm9L4kHC6z1M2xmkA1Rw==
 
 "@types/anymatch@*":
   version "1.3.1"
