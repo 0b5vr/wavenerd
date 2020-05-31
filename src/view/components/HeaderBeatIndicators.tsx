@@ -1,6 +1,7 @@
+import { deckBPMState, deckBeatsState } from '../states/deck';
 import { BeatIndicator } from './BeatIndicator';
+import { BeatManager } from '@fms-cat/wavenerd-deck';
 import React from 'react';
-import { deckBeatsState } from '../states/deck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
@@ -14,7 +15,12 @@ const Root = styled.div`
 function HeaderBeatIndicators( { className }: {
   className?: string;
 } ): JSX.Element {
+  const bpm = useRecoilValue( deckBPMState );
   const { beat, bar, sixteenBar } = useRecoilValue( deckBeatsState );
+
+  const beatSeconds = BeatManager.CalcBeatSeconds( bpm );
+  const barSeconds = BeatManager.CalcBarSeconds( bpm );
+  const sixteenBarSeconds = BeatManager.CalcSixteenBarSeconds( bpm );
 
   return (
     <Root
@@ -22,15 +28,15 @@ function HeaderBeatIndicators( { className }: {
     >
       <BeatIndicator
         label="Beat"
-        progress={ beat }
+        progress={ beat / beatSeconds }
       />
       <BeatIndicator
         label="Bar"
-        progress={ bar }
+        progress={ bar / barSeconds }
       />
       <BeatIndicator
         label="16Bar"
-        progress={ sixteenBar }
+        progress={ sixteenBar / sixteenBarSeconds }
       />
     </Root>
   );

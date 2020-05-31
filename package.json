@@ -13,7 +13,7 @@
   "devDependencies": {
     "@fms-cat/experimental": "^0.3.0",
     "@fms-cat/glcat-ts": "^0.10.0",
-    "@fms-cat/wavenerd-deck": "^0.1.1",
+    "@fms-cat/wavenerd-deck": "^0.2.1",
     "@types/codemirror": "^0.0.95",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",

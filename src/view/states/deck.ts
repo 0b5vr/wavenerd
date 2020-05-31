@@ -12,12 +12,12 @@ export const deckBCodeState = atom( {
   default: defaultCode
 } );
 
-export const deckACueStatusState = atom<'none' | 'ready' | 'applying'>( {
+export const deckACueStatusState = atom<'none' | 'compiling' | 'ready' | 'applying'>( {
   key: 'deckACueStatusState',
   default: 'none'
 } );
 
-export const deckBCueStatusState = atom<'none' | 'ready' | 'applying'>( {
+export const deckBCueStatusState = atom<'none' | 'compiling' | 'ready' | 'applying'>( {
   key: 'deckBCueStatusState',
   default: 'none'
 } );
