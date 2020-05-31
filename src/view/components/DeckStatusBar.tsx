@@ -34,7 +34,18 @@ const StyleIconButton = css`
 
 const StyledIconCat = styled( IconCat )`
   ${ StyleIcon }
-  fill: ${ Colors.fore };
+  fill: ${ Colors.foresub };
+`;
+
+const StyleAnimationBuild = keyframes`
+  0% { transform: rotate(-20deg); }
+  50% { transform: rotate(10deg); }
+`;
+
+const StyledIconBuilding = styled( IconBuild )`
+  ${ StyleIcon }
+  fill: ${ Colors.accent };
+  animation: 0.1s steps(1) infinite ${ StyleAnimationBuild };
 `;
 
 const StyledIconError = styled( IconError )`
@@ -103,7 +114,7 @@ const Root = styled.div`
 function DeckStatusBar( { className, onCompile, onApply, cueStatusState, errorState }: {
   onCompile: () => void;
   onApply: () => void;
-  cueStatusState: RecoilState<'none' | 'ready' | 'applying'>;
+  cueStatusState: RecoilState<'none' | 'compiling' | 'ready' | 'applying'>;
   errorState: RecoilState<string | null>;
   className?: string;
 } ): JSX.Element {
@@ -122,6 +133,13 @@ function DeckStatusBar( { className, onCompile, onApply, cueStatusState, errorSt
         data-stalker="A cat that has been used as a placeholder icon for no reason"
       />
       <Text>Playing</Text>
+    </>;
+  } else if ( cueStatus === 'compiling' ) {
+    content = <>
+      <StyledIconBuilding
+        data-stalker="Compiling..."
+      />
+      <Text>Compiling...</Text>
     </>;
   } else if ( cueStatus === 'ready' ) {
     content = <>
