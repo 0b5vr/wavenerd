@@ -3,7 +3,6 @@
   "version": "0.1.4",
   "license": "MIT",
   "scripts": {
-    "version": "yarn all",
     "all": "yarn lint && yarn clean && yarn build",
     "clean": "rimraf dist types",
     "dev": "webpack-dev-server --mode development",
