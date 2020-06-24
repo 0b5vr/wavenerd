@@ -101,7 +101,9 @@ function Help( { className }: {
         <h2>How to use samples</h2>
         <p>
           TBD<br />
-          sample( sample_****, sample_****_meta, time )
+          sampleSinc( sample_****, sample_****_meta, time )<br />
+          or<br />
+          sampleNearest( sample_****, sample_****_meta, time )<br />
         </p>
       </Content>
     </Root>
