@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { WavenerdDeck } from '@fms-cat/wavenerd-deck';
 
 const canvas = document.createElement( 'canvas' );
-const gl = canvas.getContext( 'webgl' )!;
+const gl = canvas.getContext( 'webgl2' )!;
 const glCat = new GLCat( gl );
 
 const audio = new AudioContext();
