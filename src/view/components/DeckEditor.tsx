@@ -5,18 +5,15 @@ import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import React, { useCallback, useState } from 'react';
 import { RecoilState } from '../utils/RecoilState';
 import { useSetRecoilState } from 'recoil';
-import { defineGLSLMode, defineGLSLMime } from '../codemirror-modes/glsl';
 import styled from 'styled-components';
+import 'codemirror/addon/comment/comment';
+import 'codemirror/mode/clike/clike';
 import 'codemirror/keymap/sublime';
 import '../codemirror-themes/monokai-sharp.css';
 import '../codemirror-themes/chromacoder-green.css';
 import 'codemirror/lib/codemirror.css';
 import { defaultCode } from '../../defaultCode';
 import { Colors } from '../constants/Colors';
-
-// == setup CodeMirror =============================================================================
-defineGLSLMode();
-defineGLSLMime();
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -62,7 +59,7 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
         },
         'Ctrl-R': () => {
           onApply();
-        }
+        },
       } );
     },
     [ onCompile, onApply ]
@@ -132,7 +129,7 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
       <StyledReactCodeMirror
         value={ defaultCode }
         options={ {
-          mode: 'glsl',
+          mode: 'x-shader/x-fragment',
           keyMap: 'sublime',
           theme: 'monokai-sharp',
           lineNumbers: true

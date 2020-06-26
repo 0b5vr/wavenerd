@@ -23,6 +23,7 @@
 .cm-s-chromacoder-green span.cm-property, .cm-s-chromacoder-green span.cm-attribute { color: #88ddff; }
 .cm-s-chromacoder-green span.cm-keyword { color: #ff0066; }
 .cm-s-chromacoder-green span.cm-operator { color: #ff0066; }
+.cm-s-chromacoder-green span.cm-meta { color: #ff0066; }
 .cm-s-chromacoder-green span.cm-builtin { color: #00aaff; }
 .cm-s-chromacoder-green span.cm-string { color: #8844ff; }
 

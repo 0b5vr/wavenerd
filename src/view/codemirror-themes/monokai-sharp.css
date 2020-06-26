@@ -21,6 +21,7 @@
 .cm-s-monokai-sharp span.cm-property, .cm-s-monokai-sharp span.cm-attribute { color: #00ff91; }
 .cm-s-monokai-sharp span.cm-keyword { color: #ff0066; }
 .cm-s-monokai-sharp span.cm-operator { color: #ff0066; }
+.cm-s-monokai-sharp span.cm-meta { color: #ff0066; }
 .cm-s-monokai-sharp span.cm-builtin { color: #00aaff; }
 .cm-s-monokai-sharp span.cm-string { color: #f7f025; }
 
