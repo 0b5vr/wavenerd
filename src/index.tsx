@@ -17,17 +17,22 @@ audio.suspend();
 const deckOptions = {
   glCat,
   audio,
-  bufferSize: 2048,
-  timeErrorThreshold: 0.01
+  bufferLength: 48000,
 };
 const deckA = new WavenerdDeck( deckOptions );
 const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
-deckA.node.connect( deckB.node );
 
 const mixer = new Mixer( audio );
 deckA.node.connect( mixer.inputL );
 deckB.node.connect( mixer.inputR );
 mixer.output.connect( audio.destination );
+
+function update() {
+  requestAnimationFrame( update );
+  deckA.update();
+  deckB.update();
+}
+update();
 
 // == midi =========================================================================================
 MIDIMAN.on( 'paramChange', ( { key, value } ) => {

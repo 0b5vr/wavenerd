@@ -2,6 +2,7 @@ import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, d
 import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
+import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
 import { Header } from './Header';
 import { Help } from './Help';
@@ -49,6 +50,22 @@ const StyledSampleList = styled( SampleList )`
   top: ${ Metrics.headerHeight }px;
   width: ${ Metrics.sampleListWidth }px;
   height: calc( 100% - 96px );
+`;
+
+const StyledDeckAKnobs = styled( DeckKnobs )`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
+  height: 64px;
+`;
+
+const StyledDeckBKnobs = styled( DeckKnobs )`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
+  height: 64px;
 `;
 
 const StyledXFader = styled( XFader )`
@@ -116,6 +133,12 @@ function App( { deckA, deckB, mixer }: {
         />
         <StyledSampleList
           hostDeck={ deckA }
+        />
+        <StyledDeckAKnobs
+          deck={ deckA }
+        />
+        <StyledDeckBKnobs
+          deck={ deckB }
         />
         <StyledXFader
           mixer={ mixer }

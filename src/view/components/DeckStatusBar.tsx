@@ -76,7 +76,7 @@ const StyledIconStopwatchHand = styled( IconStopwatchHand )`
   width: 100%;
   height: 100%;
   fill: ${ Colors.accent };
-  animation: 1s linear infinite ${ StyleAnimationRotate };
+  animation: 0.2s steps(3) infinite ${ StyleAnimationRotate };
 `;
 
 const IconStopwatchContainer = styled.div`
