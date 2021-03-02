@@ -11,28 +11,35 @@ import { useOpenContextMenuAction } from '../states/contextMenu';
 import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
-const Head = styled.div`
+const Gutter = styled.div`
   position: absolute;
-  top: 10%;
-  left: 45%;
-  width: 10%;
-  height: 40%;
+  left: 0;
+  top: calc( 50% - 4px );
+  width: 100%;
+  height: 8px;
   background: ${ Colors.back1 };
   pointer-events: none;
 `;
 
-const Body = styled.div`
-  width: 100%;
+const Ruler = styled.div`
+  position: absolute;
+  top: 0px;
+  width: 2px;
   height: 100%;
-  border-radius: 50%;
-  background: ${ Colors.fore };
+  background: ${ Colors.gray };
+  pointer-events: none;
 `;
 
-const Root = styled.div<{ isLearning: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Knob = styled.div`
+  position: absolute;
+  top: 4px;
+  width: 16px;
+  height: calc( 100% - 8px );
+  background: ${ Colors.fore };
+  pointer-events: none;
+`;
+
+const Root = styled.div<{ isLearning: boolean | undefined }>`
   cursor: pointer;
 
   box-shadow: ${ ( { isLearning } ) => (
@@ -43,7 +50,7 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-function Knob( { midiParamName, onChange, className }: {
+function Fader( { midiParamName, onChange, className }: {
   midiParamName: string;
   onChange?: ( value: number ) => void;
   className?: string;
@@ -66,20 +73,22 @@ function Knob( { midiParamName, onChange, className }: {
     ( event: React.MouseEvent<HTMLDivElement> ) => {
       mouseCombo( {
         [ MouseComboBit.LMB ]: () => {
-          const y0 = event.clientY;
-          const v0 = MIDIMAN.midi( midiParamName );
+          const left = event.clientX - event.nativeEvent.offsetX;
+          const x0 = ( event.nativeEvent.offsetX );
+          const v0 = saturate( x0 / rectRoot.width );
+          MIDIMAN.setValue( midiParamName, v0 );
 
           registerMouseEvent(
             ( event ) => {
-              const y = ( y0 - event.clientY );
-              const v = saturate( v0 + y / rectRoot.height );
+              const x = ( event.clientX - left );
+              const v = saturate( x / rectRoot.width );
               MIDIMAN.setValue( midiParamName, v );
             }
           );
         }
       } )( event );
     },
-    [ midiParamName, rectRoot.height ]
+    [ midiParamName, rectRoot.width ]
   );
 
   const handleContextMenu = useCallback(
@@ -104,21 +113,24 @@ function Knob( { midiParamName, onChange, className }: {
 
   return (
     <Root
-      ref={ refRoot }
       isLearning={ isLearning }
+      ref={ refRoot }
       onMouseDown={ handleClick }
       onContextMenu={ handleContextMenu }
       className={ className }
+      data-stalker="X Fader"
     >
-      <Body
+      <Ruler style={ { left: 'calc( 5% - 1px )' } } />
+      <Ruler style={ { left: 'calc( 50% - 1px )' } } />
+      <Ruler style={ { left: 'calc( 95% - 1px )' } } />
+      <Gutter />
+      <Knob
         style={ {
-          transform: `rotate( ${ 210 + 300.0 * value }deg )`
+          left: `calc( ${ 100.0 * value }% - 8px )`
         } }
-      >
-        <Head />
-      </Body>
+      />
     </Root>
   );
 }
 
-export { Knob };
+export { Fader };

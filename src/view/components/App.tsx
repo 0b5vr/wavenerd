@@ -136,9 +136,11 @@ function App( { deckA, deckB, mixer }: {
         />
         <StyledDeckAKnobs
           deck={ deckA }
+          midiParamNamePrefix={ 'deckA-' }
         />
         <StyledDeckBKnobs
           deck={ deckB }
+          midiParamNamePrefix={ 'deckB-' }
         />
         <StyledXFader
           mixer={ mixer }

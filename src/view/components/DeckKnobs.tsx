@@ -1,10 +1,10 @@
-import { Knob } from './Knob';
+import { DeckKnob } from './DeckKnob';
 import React from 'react';
 import WavenerdDeck from '@fms-cat/wavenerd-deck';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
-const StyledKnob = styled( Knob )`
+const StyledDeckKnob = styled( DeckKnob )`
 `;
 
 const Root = styled.div`
@@ -18,20 +18,32 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function DeckKnobs( { deck, className }: {
+function DeckKnobs( { deck, midiParamNamePrefix, className }: {
   deck: WavenerdDeck;
+  midiParamNamePrefix: string;
   className?: string;
 } ): JSX.Element {
+  const paramNames = [
+    'knob0',
+    'knob1',
+    'knob2',
+    'knob3',
+    'knob4',
+    'knob5',
+    'knob6',
+    'knob7',
+  ];
+
   return (
     <Root className={ className }>
-      <StyledKnob deck={ deck } paramName="knob0" />
-      <StyledKnob deck={ deck } paramName="knob1" />
-      <StyledKnob deck={ deck } paramName="knob2" />
-      <StyledKnob deck={ deck } paramName="knob3" />
-      <StyledKnob deck={ deck } paramName="knob4" />
-      <StyledKnob deck={ deck } paramName="knob5" />
-      <StyledKnob deck={ deck } paramName="knob6" />
-      <StyledKnob deck={ deck } paramName="knob7" />
+      { paramNames.map( ( paramName ) => (
+        <StyledDeckKnob
+          key={ paramName }
+          deck={ deck }
+          midiParamNamePrefix={ midiParamNamePrefix }
+          paramName={ paramName }
+        />
+      ) ) }
     </Root>
   );
 }

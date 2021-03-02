@@ -43,7 +43,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
   }
 
   public midi( key: string ): number {
-    if ( !this.__params[ key ] ) {
+    if ( this.__params[ key ] == null ) {
       this.__createParam( key );
     }
 
@@ -69,9 +69,13 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
   }
 
   public setValue( key: string, value: number ): void {
-    if ( !this.__params[ key ] ) { return; }
-
     this.__params[ key ] = value;
+
+    this.__emit( 'paramChange', {
+      key,
+      value
+    } );
+
     this.__storage.values[ key ] = value;
     this.__writeStorage();
   }
@@ -88,18 +92,6 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   private __createParam( key: string ): void {
     this.__params[ key ] = this.__storage.values[ key ] || 0.0;
-  }
-
-  private __changeValue( key: string, value: number ): void {
-    this.__params[ key ] = value;
-
-    this.__emit( 'paramChange', {
-      key,
-      value
-    } );
-
-    this.__storage.values[ key ] = value;
-    this.__writeStorage();
   }
 
   private __handleMidiMessage( event: WebMidi.MIDIMessageEvent ): void {
@@ -146,7 +138,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     }
 
     if ( paramKey ) {
-      this.__changeValue( paramKey, value );
+      this.setValue( paramKey, value );
     }
   }
 }
