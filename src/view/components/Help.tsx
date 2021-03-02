@@ -98,6 +98,13 @@ function Help( { className }: {
           Every components represents seconds but these seconds of each components will be looped in
           (a beat, a bar, sixteen bars, infinity).
         </p>
+        <h2>How to use params</h2>
+        <p>
+          TBD<br />
+          paramFetch( param_**** )<br />
+          or<br />
+          sampleNearest( sample_****, sample_****_meta, time )<br />
+        </p>
         <h2>How to use samples</h2>
         <p>
           TBD<br />
