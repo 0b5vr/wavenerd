@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
 import { MIDIMAN } from '../../MIDIManager';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import { useMidiLearning } from '../utils/useMidiLearning';
 import { useMidiValue } from '../utils/useMidiValue';
 import { useOpenContextMenuAction } from '../states/contextMenu';
-import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
 const Head = styled.div`
@@ -43,14 +42,13 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-function Knob( { midiParamName, onChange, className }: {
+function Knob( { midiParamName, deltaValuePerPixel, onChange, className }: {
   midiParamName: string;
+  deltaValuePerPixel: number;
   onChange?: ( value: number ) => void;
   className?: string;
 } ): JSX.Element {
   const isLearning = useMidiLearning( midiParamName );
-  const refRoot = useRef<HTMLDivElement>( null );
-  const rectRoot = useRect( refRoot );
   const openContextMenu = useOpenContextMenuAction();
 
   const handleValueChange = useCallback(
@@ -72,14 +70,14 @@ function Knob( { midiParamName, onChange, className }: {
           registerMouseEvent(
             ( event ) => {
               const y = ( y0 - event.clientY );
-              const v = saturate( v0 + y / rectRoot.height );
+              const v = saturate( v0 + y * deltaValuePerPixel );
               MIDIMAN.setValue( midiParamName, v );
             }
           );
         }
       } )( event );
     },
-    [ midiParamName, rectRoot.height ]
+    [ midiParamName, deltaValuePerPixel ]
   );
 
   const handleContextMenu = useCallback(
@@ -104,7 +102,6 @@ function Knob( { midiParamName, onChange, className }: {
 
   return (
     <Root
-      ref={ refRoot }
       isLearning={ isLearning }
       onMouseDown={ handleClick }
       onContextMenu={ handleContextMenu }

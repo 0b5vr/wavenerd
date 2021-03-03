@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
 import { Colors } from '../constants/Colors';
 import { Knob } from './Knob';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import { Mixer } from '../../Mixer';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )`
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
 `;
 
 const Label = styled.div`
@@ -36,23 +36,34 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-function DeckKnob( { paramName, midiParamNamePrefix, deck, className }: {
+function GainKnob( { paramName, mixer, channel, className }: {
   paramName: string;
-  midiParamNamePrefix: string;
-  deck: WavenerdDeck;
+  mixer: Mixer;
+  channel: 'A' | 'B';
   className?: string;
 } ): JSX.Element {
-  const value = useMidiValue( midiParamNamePrefix + paramName );
+  const value = useMidiValue( paramName );
 
   const handleChange = useCallback(
     ( v ) => {
-      deck.setParam( paramName, v );
+      if ( channel === 'A' ) {
+        mixer.volumeL = 4.0 * v * v;
+      } else {
+        mixer.volumeR = 4.0 * v * v;
+      }
     },
-    [ deck, paramName ]
+    [ mixer, channel ]
   );
 
   const valueStr = useMemo(
-    () => value.toFixed( 3 ),
+    () => {
+      if ( value === 0.0 ) {
+        return '-INF dB';
+      } else {
+        const db = 10.0 * Math.log10( 4.0 * value * value );
+        return db.toFixed( 2 ) + ' dB';
+      }
+    },
     [ value ],
   );
 
@@ -61,10 +72,10 @@ function DeckKnob( { paramName, midiParamNamePrefix, deck, className }: {
       isLearning={ false }
       className={ className }
     >
-      <Label>{ paramName }</Label>
+      <Label>Gain</Label>
       <StyledKnob
-        midiParamName={ midiParamNamePrefix + paramName }
-        deltaValuePerPixel={ 1.0 / 64.0 }
+        midiParamName={ paramName }
+        deltaValuePerPixel={ 1.0 / 256.0 }
         onChange={ handleChange }
         data-stalker={ paramName }
       />
@@ -73,4 +84,4 @@ function DeckKnob( { paramName, midiParamNamePrefix, deck, className }: {
   );
 }
 
-export { DeckKnob };
+export { GainKnob };

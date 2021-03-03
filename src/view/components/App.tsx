@@ -4,6 +4,7 @@ import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
+import { GainKnob } from './GainKnob';
 import { Header } from './Header';
 import { Help } from './Help';
 import { MIDIListener } from './MIDIListener';
@@ -49,7 +50,23 @@ const StyledSampleList = styled( SampleList )`
   left: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
   top: ${ Metrics.headerHeight }px;
   width: ${ Metrics.sampleListWidth }px;
-  height: calc( 100% - 96px );
+  height: calc( 100% - 96px - 322px );
+`;
+
+const StyledGainKnobA = styled( GainKnob )`
+  position: absolute;
+  left: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
+  bottom: ${ 64 }px;
+  width: ${ 0.5 * Metrics.sampleListWidth }px;
+  height: ${ 0.5 * Metrics.sampleListWidth }px;
+`;
+
+const StyledGainKnobB = styled( GainKnob )`
+  position: absolute;
+  right: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
+  bottom: ${ 64 }px;
+  width: ${ 0.5 * Metrics.sampleListWidth }px;
+  height: ${ 0.5 * Metrics.sampleListWidth }px;
 `;
 
 const StyledDeckAKnobs = styled( DeckKnobs )`
@@ -141,6 +158,16 @@ function App( { deckA, deckB, mixer }: {
         <StyledDeckBKnobs
           deck={ deckB }
           midiParamNamePrefix={ 'deckB-' }
+        />
+        <StyledGainKnobA
+          paramName="gainA"
+          mixer={ mixer }
+          channel="A"
+        />
+        <StyledGainKnobB
+          paramName="gainB"
+          mixer={ mixer }
+          channel="B"
         />
         <StyledXFader
           mixer={ mixer }
