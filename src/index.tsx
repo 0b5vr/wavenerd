@@ -1,4 +1,5 @@
 import { App } from './view/components/App';
+import { ClockRealtime } from '@fms-cat/experimental';
 import { GLCat } from '@fms-cat/glcat-ts';
 import { MIDIMAN } from './MIDIManager';
 import { MIDIParams } from './MIDIParams';
@@ -27,10 +28,17 @@ deckA.node.connect( mixer.inputL );
 deckB.node.connect( mixer.inputR );
 mixer.output.connect( audio.destination );
 
+const clock = new ClockRealtime();
+clock.play();
+
 function update() {
   requestAnimationFrame( update );
+
+  clock.update();
+
   deckA.update();
   deckB.update();
+  mixer.updateLevelMeter( clock.deltaTime );
 }
 update();
 

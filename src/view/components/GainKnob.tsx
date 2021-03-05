@@ -21,18 +21,12 @@ const Value = styled.div`
   color: ${ Colors.fore };
 `;
 
-const Root = styled.div<{ isLearning: boolean }>`
+const Root = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
-  box-shadow: ${ ( { isLearning } ) => (
-    isLearning
-      ? `0 0 0 2px ${ Colors.accent }`
-      : 'none'
-  ) };
 `;
 
 // == components ===================================================================================
@@ -69,7 +63,6 @@ function GainKnob( { paramName, mixer, channel, className }: {
 
   return (
     <Root
-      isLearning={ false }
       className={ className }
     >
       <Label>Gain</Label>
