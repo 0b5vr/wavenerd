@@ -2,7 +2,7 @@
 
 import CodeMirror from 'codemirror';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { RecoilState } from '../utils/RecoilState';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -49,6 +49,7 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
 } ): JSX.Element {
   const [ isDragging, setIsDragging ] = useState( false );
   const setCode = useSetRecoilState( codeState );
+  const [ hasEdited, setHasEdited ] = useState( false );
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleEditorDidMount = useCallback(
@@ -65,9 +66,21 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
     [ onCompile, onApply ]
   );
 
+  useEffect( () => {
+    // prevent terrible consequence
+    window.addEventListener( 'beforeunload', ( event ) => {
+      if ( hasEdited ) {
+        const confirmationMessage = 'You will lose all of your changes on the editor!';
+        event.returnValue = confirmationMessage;
+        return confirmationMessage;
+      }
+    } );
+  }, [ hasEdited ] );
+
   const handleChange = useCallback(
     ( editor: CodeMirror.Editor, data: CodeMirror.EditorChange, value: string ) => {
       setCode( value );
+      setHasEdited( true );
     },
     []
   );
