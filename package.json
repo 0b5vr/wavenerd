@@ -22,7 +22,7 @@
     "@types/webmidi": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
-    "codemirror": "^5.54.0",
+    "codemirror": "^5.58.2",
     "css-loader": "^3.5.3",
     "eslint": "^7.0.0",
     "eslint-plugin-react": "^7.20.0",
