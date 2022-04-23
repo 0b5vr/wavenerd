@@ -1,52 +1,67 @@
 name: Inspect
-on: [push]
+
+on: push
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache Deps
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Init Stuff
+      uses: ./.github/actions/init
     - name: Fetch Deps
-      shell: bash
-      run: yarn
+      run: yarn install --frozen-lockfile
+
   lint:
     runs-on: ubuntu-latest
     needs: fetch
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache Deps
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Init Stuff
+      uses: ./.github/actions/init
     - name: Lint
-      shell: bash
       run: yarn lint
+
   build:
     runs-on: ubuntu-latest
     needs: fetch
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache Deps
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Init Stuff
+      uses: ./.github/actions/init
     - name: Build
-      shell: bash
       run: yarn build
     - name: Upload Builds
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: dist
-        path: dist
+        path: |
+          dist/
+
+  gh-pages:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/release' }}
+    needs:
+    - build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Init Stuff
+      uses: ./.github/actions/init
+    - name: Download Builds
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: public
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: public
