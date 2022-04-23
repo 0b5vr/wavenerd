@@ -6,7 +6,7 @@ import { HeaderTime } from './HeaderTime';
 import IconGit from '../assets/git.svg';
 import IconHelp from '../assets/help.svg';
 import React from 'react';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { helpIsOpeningState } from '../states/help';
 import { useRecoilCallback } from 'recoil';
 
@@ -79,7 +79,7 @@ function Header( { hostDeck, className }: {
   className?: string;
 } ): JSX.Element {
   const handleClickHelp = useRecoilCallback(
-    ( { set } ) => {
+    ( { set } ) => () => {
       set( helpIsOpeningState, true );
     },
     []
@@ -101,7 +101,7 @@ function Header( { hostDeck, className }: {
         data-stalker="Show help"
       />
       <AnchorGit
-        href="https://github.com/FMS-Cat/wavenerd/"
+        href="https://github.com/0b5vr/wavenerd/"
         target="_blank"
         rel="noreferrer"
         data-stalker="See the source @ GitHub"

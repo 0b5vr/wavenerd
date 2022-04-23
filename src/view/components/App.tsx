@@ -16,7 +16,7 @@ import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { SampleList } from './SampleList';
 import { Stalker } from './Stalker';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import styled from 'styled-components';
 

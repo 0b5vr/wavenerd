@@ -55,7 +55,7 @@ function PlayOverlay( { audio, className }: {
   const isOpening = useRecoilValue( playOverlayIsOpeningState );
 
   const handleClick = useRecoilCallback(
-    ( { set } ) => {
+    ( { set } ) => () => {
       audio.resume();
       set( playOverlayIsOpeningState, false );
     },

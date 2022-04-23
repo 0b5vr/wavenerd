@@ -1,3 +1,5 @@
+import React from 'react';
+
 export enum MouseComboBit {
   LMB = 1,
   RMB = 2,

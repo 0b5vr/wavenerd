@@ -1,24 +1,22 @@
 import { App } from './view/components/App';
-import { ClockRealtime } from '@fms-cat/experimental';
-import { GLCat } from '@fms-cat/glcat-ts';
+import { ClockRealtime } from '@0b5vr/experimental';
 import { MIDIMAN } from './MIDIManager';
 import { MIDIParams } from './MIDIParams';
 import { Mixer } from './Mixer';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { WavenerdDeck } from '@fms-cat/wavenerd-deck';
+import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 
 const canvas = document.createElement( 'canvas' );
 const gl = canvas.getContext( 'webgl2' )!;
-const glCat = new GLCat( gl );
 
 const audio = new AudioContext();
 audio.suspend();
 
 const deckOptions = {
-  glCat,
+  gl,
   audio,
-  bufferLength: 48000,
+  latencyBlocks: 32,
 };
 const deckA = new WavenerdDeck( deckOptions );
 const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
@@ -32,13 +30,13 @@ const clock = new ClockRealtime();
 clock.play();
 
 function update() {
-  requestAnimationFrame( update );
-
   clock.update();
 
   deckA.update();
   deckB.update();
   mixer.updateLevelMeter( clock.deltaTime );
+
+  setTimeout( update, 10 );
 }
 update();
 

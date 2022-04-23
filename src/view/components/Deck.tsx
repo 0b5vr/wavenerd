@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
+import { RecoilState, useRecoilCallback } from 'recoil';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
-import { RecoilState } from '../utils/RecoilState';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
-import { useRecoilCallback } from 'recoil';
 
 // == styles =======================================================================================
 const StyledEditor = styled( DeckEditor )`
@@ -29,14 +28,14 @@ const Root = styled.div`
 // == components ===================================================================================
 function Deck( { className, cueStatusState, errorState, codeState, deck }: {
   deck: WavenerdDeck;
-  cueStatusState: RecoilState<'none' | 'ready' | 'applying'>;
+  cueStatusState: RecoilState<'none' | 'ready' | 'applying' | 'compiling'>;
   errorState: RecoilState<string | null>;
   codeState: RecoilState<string>;
   className?: string;
 } ): JSX.Element {
   const handleCompile = useRecoilCallback(
-    async ( { getPromise } ) => {
-      const code = await getPromise( codeState );
+    ( { snapshot } ) => async () => {
+      const code = await snapshot.getPromise( codeState );
       await deck.compile( code );
     },
     [ deck ]

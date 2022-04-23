@@ -3,8 +3,7 @@
 import CodeMirror from 'codemirror';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RecoilState } from '../utils/RecoilState';
-import { useSetRecoilState } from 'recoil';
+import { RecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/mode/clike/clike';

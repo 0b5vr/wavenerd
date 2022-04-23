@@ -56,7 +56,7 @@ function Help( { className }: {
   const isOpening = useRecoilValue( helpIsOpeningState );
 
   const handleClickClose = useRecoilCallback(
-    ( { set } ) => {
+    ( { set } ) => () => {
       set( helpIsOpeningState, false );
     },
     []

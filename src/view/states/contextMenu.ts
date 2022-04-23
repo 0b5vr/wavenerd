@@ -24,8 +24,8 @@ export function useOpenContextMenuAction(): ( params: {
   commands: ContextMenuCommand[];
 } ) => Promise<void> {
   return useRecoilCallback(
-    async ( { getPromise, set }, { x, y, commands: addCommands } ) => {
-      const commands = await getPromise( contextMenuCommandsState );
+    ( { snapshot, set } ) => async ( { x, y, commands: addCommands } ) => {
+      const commands = await snapshot.getPromise( contextMenuCommandsState );
 
       const newCommands: typeof commands = [];
       if ( commands.length !== 0 ) {
@@ -44,7 +44,7 @@ export function useOpenContextMenuAction(): ( params: {
 
 export function useResetContextMenuAction(): () => Promise<void> {
   return useRecoilCallback(
-    async ( { reset } ) => {
+    ( { reset } ) => async () => {
       reset( contextMenuIsOpeningState );
       reset( contextMenuPositionState );
       reset( contextMenuCommandsState );

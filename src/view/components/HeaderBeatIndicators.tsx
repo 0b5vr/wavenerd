@@ -1,6 +1,6 @@
 import { deckBPMState, deckBeatsState } from '../states/deck';
 import { BeatIndicator } from './BeatIndicator';
-import { BeatManager } from '@fms-cat/wavenerd-deck';
+import { BeatManager } from '@0b5vr/wavenerd-deck';
 import React from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';

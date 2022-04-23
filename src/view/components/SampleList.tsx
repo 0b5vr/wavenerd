@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Colors } from '../constants/Colors';
 import { SampleListBar } from './SampleListBar';
 import { SampleListEntry } from './SampleListEntry';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckSortedSampleListState } from '../states/deck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';

@@ -1,6 +1,6 @@
 import { LevelMeter, LevelMeterResult } from './LevelMeter';
 import { EventEmittable } from './utils/EventEmittable';
-import { linearstep } from '@fms-cat/experimental';
+import { linearstep } from '@0b5vr/experimental';
 
 interface MixerEvents {
   changeVolumeL: { value: number };

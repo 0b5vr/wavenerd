@@ -18,6 +18,7 @@ module.exports = {
 
   'extends': [
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended'
   ],
 
@@ -83,6 +84,9 @@ module.exports = {
     'no-console': [ 'error', { allow: [ 'info', 'warn', 'error' ] } ], // don't forget to remove `console.log` !
 
     // typescript-specifics
-    '@typescript-eslint/explicit-member-accessibility': [ 'error' ], // `public` / `private` for members and methods are required
-  }
+    "@typescript-eslint/no-explicit-any": [ "off" ], // yea
+    "@typescript-eslint/explicit-member-accessibility": [ "error" ], // `public` / `private` for members and methods are required
+    "@typescript-eslint/no-non-null-assertion": [ "off" ], // bang is sometimes required
+    "@typescript-eslint/no-empty-interface": [ "error", { "allowSingleExtends": true } ], // bans interface Foo {}
+}
 };

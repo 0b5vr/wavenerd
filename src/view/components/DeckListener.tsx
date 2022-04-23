@@ -1,5 +1,5 @@
 import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState, useAddSampleAction, useDeleteSampleAction } from '../states/deck';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 

@@ -44,10 +44,6 @@ const Stalker = ( { className }: StalkerProps ): JSX.Element => {
         currentTarget = currentTarget?.parentElement || null;
       }
 
-      /**
-       * The New Text T-shirt is available @ my BOOTH shop, check this out:
-       * https://fms-cat.booth.pm/items/1874699
-       */
       const newText = currentTarget?.dataset?.stalker;
       if ( newText ) {
         setText( newText );

@@ -1,3 +1,4 @@
+import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import { Colors } from '../constants/Colors';
 import IconApply from '../assets/apply.svg';
@@ -8,8 +9,6 @@ import IconReady from '../assets/ready.svg';
 import IconStopwatchBody from '../assets/stopwatch-body.svg';
 import IconStopwatchHand from '../assets/stopwatch-hand.svg';
 import React from 'react';
-import { RecoilState } from '../utils/RecoilState';
-import { useRecoilValue } from 'recoil';
 
 // == styles =======================================================================================
 const StyleIcon = css`

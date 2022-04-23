@@ -73,8 +73,8 @@ export const deckSortedSampleListState = selector( {
  */
 export function useAddSampleAction(): ( name: string ) => Promise<void> {
   return useRecoilCallback(
-    async ( { getPromise, set }, name ) => {
-      const sampleList = await getPromise( deckSampleListState );
+    ( { snapshot, set } ) => async ( name ) => {
+      const sampleList = await snapshot.getPromise( deckSampleListState );
 
       const newSamples = new Set( sampleList );
       newSamples.add( name );
@@ -90,8 +90,8 @@ export function useAddSampleAction(): ( name: string ) => Promise<void> {
  */
 export function useDeleteSampleAction(): ( name: string ) => Promise<void> {
   return useRecoilCallback(
-    async ( { getPromise, set }, name ) => {
-      const sampleList = await getPromise( deckSampleListState );
+    ( { snapshot, set } ) => async ( name ) => {
+      const sampleList = await snapshot.getPromise( deckSampleListState );
 
       const newSamples = new Set( sampleList );
       if ( newSamples.has( name ) ) {

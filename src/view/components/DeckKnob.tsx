@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Colors } from '../constants/Colors';
 import { Knob } from './Knob';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
 

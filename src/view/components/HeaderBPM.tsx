@@ -1,6 +1,6 @@
 import { NumberParam } from './NumberParam';
 import React from 'react';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckBPMState } from '../states/deck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';

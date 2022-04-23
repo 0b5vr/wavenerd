@@ -12,7 +12,6 @@
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
         "webpack:///./*": "${webRoot}/*",
-        "webpack://Automaton/./*": "${webRoot}/node_modules/@fms-cat/automaton"
       }
     }
   ]

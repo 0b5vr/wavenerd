@@ -1,6 +1,6 @@
 import { DeckKnob } from './DeckKnob';
 import React from 'react';
-import WavenerdDeck from '@fms-cat/wavenerd-deck';
+import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
