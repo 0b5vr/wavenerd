@@ -58,10 +58,10 @@ jobs:
     - name: Download Builds
       uses: actions/download-artifact@v2
       with:
-        name: build
-        path: public
+        name: dist
+        path: dist
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: public
+        publish_dir: dist
