@@ -50,18 +50,18 @@ const Root = styled.div<{ isLearning: boolean | undefined }>`
 `;
 
 // == components ===================================================================================
-function Fader( { midiParamName, onChange, className }: {
+export const Fader: React.FC<{
   midiParamName: string;
   onChange?: ( value: number ) => void;
   className?: string;
-} ): JSX.Element {
+}> = ( { midiParamName, onChange, className } ) => {
   const isLearning = useMidiLearning( midiParamName );
   const refRoot = useRef<HTMLDivElement>( null );
   const rectRoot = useRect( refRoot );
   const openContextMenu = useOpenContextMenuAction();
 
   const handleValueChange = useCallback(
-    ( value ) => {
+    ( value: number ) => {
       onChange?.( value );
     },
     [ onChange ]
@@ -131,6 +131,4 @@ function Fader( { midiParamName, onChange, className }: {
       />
     </Root>
   );
-}
-
-export { Fader };
+};

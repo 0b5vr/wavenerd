@@ -3,8 +3,8 @@ import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderTime } from './HeaderTime';
-import IconGit from '../assets/git.svg';
-import IconHelp from '../assets/help.svg';
+import { ReactComponent as IconGit } from '../assets/git.svg';
+import { ReactComponent as IconHelp } from '../assets/help.svg';
 import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { helpIsOpeningState } from '../states/help';
@@ -74,10 +74,10 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function Header( { hostDeck, className }: {
+export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-} ): JSX.Element {
+}> = ( { hostDeck, className } ) => {
   const handleClickHelp = useRecoilCallback(
     ( { set } ) => () => {
       set( helpIsOpeningState, true );
@@ -110,6 +110,4 @@ function Header( { hostDeck, className }: {
       </AnchorGit>
     </Root>
   );
-}
-
-export { Header };
+};

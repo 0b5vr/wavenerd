@@ -23,10 +23,10 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function GainSection( { mixer, className }: {
+export const GainSection: React.FC<{
   mixer: Mixer;
   className?: string;
-} ): JSX.Element {
+}> = ( { mixer, className } ) => {
   return (
     <Root
       className={ className }
@@ -44,6 +44,4 @@ function GainSection( { mixer, className }: {
       />
     </Root>
   );
-}
-
-export { GainSection };
+};

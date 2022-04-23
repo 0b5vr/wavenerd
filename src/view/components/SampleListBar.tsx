@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
-import IconFolder from '../assets/folder.svg';
+import { ReactComponent as IconFolder } from '../assets/folder.svg';
 import styled from 'styled-components';
 
 // == utils ========================================================================================
@@ -47,12 +47,12 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function SampleListBar( { onFile, className }: {
+export const SampleListBar: React.FC<{
   onFile?: ( files: FileList ) => void;
   className?: string;
-} ): JSX.Element {
+}> = ( { onFile, className } ) => {
   const handleClickOpen = useCallback(
-    ( event: React.DragEvent<HTMLDivElement> ) => {
+    ( event: React.MouseEvent ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -79,6 +79,4 @@ function SampleListBar( { onFile, className }: {
       />
     </Root>
   );
-}
-
-export { SampleListBar };
+};

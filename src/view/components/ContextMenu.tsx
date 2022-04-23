@@ -36,7 +36,7 @@ const Root = styled.div`
 `;
 
 // == component ====================================================================================
-const ContextMenu = (): JSX.Element | null => {
+export const ContextMenu: React.FC = () => {
   const isOpening = useRecoilValue( contextMenuIsOpeningState );
   const position = useRecoilValue( contextMenuPositionState );
   const commands = useRecoilValue( contextMenuCommandsState );
@@ -105,5 +105,3 @@ const ContextMenu = (): JSX.Element | null => {
     </Root>
   );
 };
-
-export { ContextMenu };

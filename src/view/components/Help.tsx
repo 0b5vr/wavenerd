@@ -1,8 +1,8 @@
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
-import IconApply from '../assets/apply.svg';
-import IconBuild from '../assets/build.svg';
-import IconClose from '../assets/close.svg';
+import { ReactComponent as IconApply } from '../assets/apply.svg';
+import { ReactComponent as IconBuild } from '../assets/build.svg';
+import { ReactComponent as IconClose } from '../assets/close.svg';
 import React from 'react';
 import { helpIsOpeningState } from '../states/help';
 import styled from 'styled-components';
@@ -50,9 +50,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function Help( { className }: {
+export const Help: React.FC<{
   className?: string;
-} ): JSX.Element | null {
+}> = ( { className } ) => {
   const isOpening = useRecoilValue( helpIsOpeningState );
 
   const handleClickClose = useRecoilCallback(
@@ -115,6 +115,4 @@ function Help( { className }: {
       </Content>
     </Root>
   );
-}
-
-export { Help };
+};

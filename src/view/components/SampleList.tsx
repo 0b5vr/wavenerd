@@ -46,10 +46,10 @@ const Root = styled.div<{ isDragging: boolean }>`
 `;
 
 // == components ===================================================================================
-function SampleList( { hostDeck, className }: {
+export const SampleList: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-} ): JSX.Element {
+}> = ( { hostDeck, className } ) => {
   const [ isDragging, setIsDragging ] = useState( false );
   const sortedSampleList = useRecoilValue( deckSortedSampleListState );
 
@@ -128,6 +128,4 @@ function SampleList( { hostDeck, className }: {
       />
     </Root>
   );
-}
-
-export { SampleList };
+};

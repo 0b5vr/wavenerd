@@ -37,11 +37,11 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function LevelMeter( { level, peak, className }: {
+export const LevelMeter: React.FC<{
   level: number;
   peak: number;
   className?: string;
-} ): JSX.Element {
+}> = ( { level, peak, className } ) => {
   const p = useMemo(
     () => saturate( peak * 0.8 ),
     [ peak ]
@@ -71,6 +71,4 @@ function LevelMeter( { level, peak, className }: {
       </Fg>
     </Root>
   );
-}
-
-export { LevelMeter };
+};

@@ -51,7 +51,7 @@ const Root = styled.div`
 `;
 
 // == element ======================================================================================
-const NumberParam = ( params: {
+export const NumberParam: React.FC<{
   type: ValueType;
   value: number;
 
@@ -75,7 +75,7 @@ const NumberParam = ( params: {
   changeValueWhenInput?: boolean;
 
   className?: string;
-} ): JSX.Element => {
+}> = ( params ) => {
   const {
     className,
     type,
@@ -236,5 +236,3 @@ const NumberParam = ( params: {
     </Root>
   );
 };
-
-export { NumberParam };

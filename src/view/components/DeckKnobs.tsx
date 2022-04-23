@@ -18,11 +18,11 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function DeckKnobs( { deck, midiParamNamePrefix, className }: {
+export const DeckKnobs: React.FC<{
   deck: WavenerdDeck;
   midiParamNamePrefix: string;
   className?: string;
-} ): JSX.Element {
+}> = ( { deck, midiParamNamePrefix, className } ) => {
   const paramNames = [
     'knob0',
     'knob1',
@@ -46,6 +46,4 @@ function DeckKnobs( { deck, midiParamNamePrefix, className }: {
       ) ) }
     </Root>
   );
-}
-
-export { DeckKnobs };
+};

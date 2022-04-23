@@ -36,16 +36,16 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-function DeckKnob( { paramName, midiParamNamePrefix, deck, className }: {
+export const DeckKnob: React.FC<{
   paramName: string;
   midiParamNamePrefix: string;
   deck: WavenerdDeck;
   className?: string;
-} ): JSX.Element {
+}> = ( { paramName, midiParamNamePrefix, deck, className } ) => {
   const value = useMidiValue( midiParamNamePrefix + paramName );
 
   const handleChange = useCallback(
-    ( v ) => {
+    ( v: number ) => {
       deck.setParam( paramName, v );
     },
     [ deck, paramName ]
@@ -71,6 +71,4 @@ function DeckKnob( { paramName, midiParamNamePrefix, deck, className }: {
       <Value>{ valueStr }</Value>
     </Root>
   );
-}
-
-export { DeckKnob };
+};

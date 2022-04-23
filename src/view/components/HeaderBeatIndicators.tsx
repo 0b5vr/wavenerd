@@ -12,9 +12,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function HeaderBeatIndicators( { className }: {
+export const HeaderBeatIndicators: React.FC<{
   className?: string;
-} ): JSX.Element {
+}> = ( { className } ) => {
   const bpm = useRecoilValue( deckBPMState );
   const { beat, bar, sixteenBar } = useRecoilValue( deckBeatsState );
 
@@ -40,6 +40,4 @@ function HeaderBeatIndicators( { className }: {
       />
     </Root>
   );
-}
-
-export { HeaderBeatIndicators };
+};

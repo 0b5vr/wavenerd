@@ -19,7 +19,7 @@ export interface StalkerProps {
   className?: string;
 }
 
-const Stalker = ( { className }: StalkerProps ): JSX.Element => {
+export const Stalker: React.FC<StalkerProps> = ( { className } ) => {
   const [ position, setPosition ] = useState( { x: 0, y: 0 } );
   const [ target, setTarget ] = useState<EventTarget | null>( null );
   const [ text, setText ] = useState<string | null>( null );
@@ -89,5 +89,3 @@ const Stalker = ( { className }: StalkerProps ): JSX.Element => {
     ) }
   </>;
 };
-
-export { Stalker };

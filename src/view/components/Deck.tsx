@@ -26,13 +26,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function Deck( { className, cueStatusState, errorState, codeState, deck }: {
+export const Deck: React.FC<{
   deck: WavenerdDeck;
   cueStatusState: RecoilState<'none' | 'ready' | 'applying' | 'compiling'>;
   errorState: RecoilState<string | null>;
   codeState: RecoilState<string>;
   className?: string;
-} ): JSX.Element {
+}> = ( { className, cueStatusState, errorState, codeState, deck } ) => {
   const handleCompile = useRecoilCallback(
     ( { snapshot } ) => async () => {
       const code = await snapshot.getPromise( codeState );
@@ -68,6 +68,4 @@ function Deck( { className, cueStatusState, errorState, codeState, deck }: {
       />
     </Root>
   );
-}
-
-export { Deck };
+};

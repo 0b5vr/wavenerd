@@ -40,7 +40,7 @@ interface ContextMenuEntryProps {
   onClick?: ( event: React.MouseEvent<HTMLDivElement> ) => void;
 }
 
-const ContextMenuEntry = ( props: ContextMenuEntryProps ): JSX.Element => {
+export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = ( props ) => {
   const { className, name: text, onClick } = props;
 
   return (
@@ -52,5 +52,3 @@ const ContextMenuEntry = ( props: ContextMenuEntryProps ): JSX.Element => {
     </Root>
   );
 };
-
-export { ContextMenuEntry };

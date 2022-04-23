@@ -29,9 +29,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function LevelMeters( { className }: {
+export const LevelMeters: React.FC<{
   className?: string;
-} ): JSX.Element {
+}> = ( { className } ) => {
   const [ levelMeters ] = useRecoilState( levelMeterState );
 
   return (
@@ -56,6 +56,4 @@ function LevelMeters( { className }: {
       />
     </Root>
   );
-}
-
-export { LevelMeters };
+};

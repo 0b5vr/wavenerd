@@ -40,12 +40,12 @@ const Root = styled.div`
 `;
 
 // == component ====================================================================================
-function DeckEditor( { codeState, onCompile, onApply, className }: {
+export const DeckEditor: React.FC<{
   codeState: RecoilState<string>;
   onCompile: () => void;
   onApply: () => void;
   className?: string;
-} ): JSX.Element {
+}> = ( { codeState, onCompile, onApply, className } ) => {
   const [ isDragging, setIsDragging ] = useState( false );
   const setCode = useSetRecoilState( codeState );
   const [ hasEdited, setHasEdited ] = useState( false );
@@ -157,6 +157,4 @@ function DeckEditor( { codeState, onCompile, onApply, className }: {
       />
     </Root>
   );
-}
-
-export { DeckEditor };
+};

@@ -3,12 +3,12 @@ import { Fader } from './Fader';
 import { Mixer } from '../../Mixer';
 
 // == components ===================================================================================
-function XFader( { mixer, className }: {
+export const XFader: React.FC<{
   mixer: Mixer;
   className?: string;
-} ): JSX.Element {
+}> = ( { mixer, className } ) => {
   const handleChange = useCallback(
-    ( v ) => {
+    ( v: number ) => {
       mixer.xFaderPos = v;
     },
     [ mixer ]
@@ -19,6 +19,4 @@ function XFader( { mixer, className }: {
     onChange={ handleChange }
     className={ className }
   />;
-}
-
-export { XFader };
+};

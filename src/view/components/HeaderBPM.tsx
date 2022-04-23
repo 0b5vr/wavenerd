@@ -24,10 +24,10 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function HeaderBPM( { hostDeck, className }: {
+export const HeaderBPM: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-} ): JSX.Element {
+}> = ( { hostDeck, className } ) => {
   const bpm = useRecoilValue( deckBPMState );
 
   return (
@@ -47,6 +47,4 @@ function HeaderBPM( { hostDeck, className }: {
       />
     </Root>
   );
-}
-
-export { HeaderBPM };
+};

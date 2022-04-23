@@ -1,13 +1,13 @@
 import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import { Colors } from '../constants/Colors';
-import IconApply from '../assets/apply.svg';
-import IconBuild from '../assets/build.svg';
-import IconCat from '../assets/cat.svg';
-import IconError from '../assets/error.svg';
-import IconReady from '../assets/ready.svg';
-import IconStopwatchBody from '../assets/stopwatch-body.svg';
-import IconStopwatchHand from '../assets/stopwatch-hand.svg';
+import { ReactComponent as IconApply } from '../assets/apply.svg';
+import { ReactComponent as IconBuild } from '../assets/build.svg';
+import { ReactComponent as IconCat } from '../assets/cat.svg';
+import { ReactComponent as IconError } from '../assets/error.svg';
+import { ReactComponent as IconReady } from '../assets/ready.svg';
+import { ReactComponent as IconStopwatchBody } from '../assets/stopwatch-body.svg';
+import { ReactComponent as IconStopwatchHand } from '../assets/stopwatch-hand.svg';
 import React from 'react';
 
 // == styles =======================================================================================
@@ -110,17 +110,17 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function DeckStatusBar( { className, onCompile, onApply, cueStatusState, errorState }: {
+export const DeckStatusBar: React.FC<{
   onCompile: () => void;
   onApply: () => void;
   cueStatusState: RecoilState<'none' | 'compiling' | 'ready' | 'applying'>;
   errorState: RecoilState<string | null>;
   className?: string;
-} ): JSX.Element {
+}> = ( { className, onCompile, onApply, cueStatusState, errorState } ) => {
   const cueStatus = useRecoilValue( cueStatusState );
   const error = useRecoilValue( errorState );
 
-  let content: JSX.Element;
+  let content: React.ReactNode;
   if ( error != null ) {
     content = <>
       <StyledIconError />
@@ -174,6 +174,4 @@ function DeckStatusBar( { className, onCompile, onApply, cueStatusState, errorSt
       />
     </Root>
   );
-}
-
-export { DeckStatusBar };
+};

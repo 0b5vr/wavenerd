@@ -45,11 +45,11 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function BeatIndicator( { label, progress, className }: {
+export const BeatIndicator: React.FC<{
   label: string;
   progress: number;
   className?: string;
-} ): JSX.Element {
+}> = ( { label, progress, className } ) => {
   return (
     <Root
       className={ className }
@@ -64,6 +64,4 @@ function BeatIndicator( { label, progress, className }: {
       <Value>{ progress.toFixed( 3 ) }</Value>
     </Root>
   );
-}
-
-export { BeatIndicator };
+};

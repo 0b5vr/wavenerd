@@ -1,6 +1,6 @@
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
-import IconPlay from '../assets/play.svg';
+import { ReactComponent as IconPlay } from '../assets/play.svg';
 import React from 'react';
 import { playOverlayIsOpeningState } from '../states/playOverlay';
 import styled from 'styled-components';
@@ -48,10 +48,10 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function PlayOverlay( { audio, className }: {
+export const PlayOverlay: React.FC<{
   audio: AudioContext;
   className?: string;
-} ): JSX.Element | null {
+}> = ( { audio, className } ) => {
   const isOpening = useRecoilValue( playOverlayIsOpeningState );
 
   const handleClick = useRecoilCallback(
@@ -80,6 +80,4 @@ function PlayOverlay( { audio, className }: {
       </Content>
     </Root>
   );
-}
-
-export { PlayOverlay };
+};

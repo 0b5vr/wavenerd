@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
-import IconBin from '../assets/bin.svg';
+import { ReactComponent as IconBin } from '../assets/bin.svg';
 import styled from 'styled-components';
 import { useDeleteSampleAction } from '../states/deck';
 
@@ -53,14 +53,14 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function SampleListEntry( { name, className }: {
+export const SampleListEntry: React.FC<{
   name: string;
   className?: string;
-} ): JSX.Element {
+}> = ( { name, className } ) => {
   const deleteSample = useDeleteSampleAction();
 
   const handleClickDelete = useCallback(
-    ( event: React.DragEvent<HTMLDivElement> ) => {
+    ( event: React.MouseEvent ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -79,6 +79,4 @@ function SampleListEntry( { name, className }: {
       />
     </Root>
   );
-}
-
-export { SampleListEntry };
+};

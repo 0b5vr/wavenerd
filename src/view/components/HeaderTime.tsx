@@ -22,9 +22,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function HeaderTime( { className }: {
+export const HeaderTime: React.FC<{
   className?: string;
-} ): JSX.Element {
+}> = ( { className } ) => {
   const time = useRecoilValue( deckTimeState );
 
   return (
@@ -35,6 +35,4 @@ function HeaderTime( { className }: {
       <Value>{ time.toFixed( 2 ) }</Value>
     </Root>
   );
-}
-
-export { HeaderTime };
+};

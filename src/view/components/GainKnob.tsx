@@ -30,16 +30,16 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-function GainKnob( { paramName, mixer, channel, className }: {
+export const GainKnob: React.FC<{
   paramName: string;
   mixer: Mixer;
   channel: 'A' | 'B';
   className?: string;
-} ): JSX.Element {
+}> = ( { paramName, mixer, channel, className } ) => {
   const value = useMidiValue( paramName );
 
   const handleChange = useCallback(
-    ( v ) => {
+    ( v: number ) => {
       if ( channel === 'A' ) {
         mixer.volumeL = 4.0 * v * v;
       } else {
@@ -75,6 +75,4 @@ function GainKnob( { paramName, mixer, channel, className }: {
       <Value>{ valueStr }</Value>
     </Root>
   );
-}
-
-export { GainKnob };
+};

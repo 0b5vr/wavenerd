@@ -42,17 +42,17 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-function Knob( { midiParamName, deltaValuePerPixel, onChange, className }: {
+export const Knob: React.FC<{
   midiParamName: string;
   deltaValuePerPixel: number;
   onChange?: ( value: number ) => void;
   className?: string;
-} ): JSX.Element {
+}> = ( { midiParamName, deltaValuePerPixel, onChange, className } ) => {
   const isLearning = useMidiLearning( midiParamName );
   const openContextMenu = useOpenContextMenuAction();
 
   const handleValueChange = useCallback(
-    ( value ) => {
+    ( value: number ) => {
       onChange?.( value );
     },
     [ onChange ]
@@ -116,6 +116,4 @@ function Knob( { midiParamName, deltaValuePerPixel, onChange, className }: {
       </Body>
     </Root>
   );
-}
-
-export { Knob };
+};

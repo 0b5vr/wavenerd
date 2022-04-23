@@ -3,9 +3,8 @@ import { ClockRealtime } from '@0b5vr/experimental';
 import { MIDIMAN } from './MIDIManager';
 import { MIDIParams } from './MIDIParams';
 import { Mixer } from './Mixer';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
+import { createRoot } from 'react-dom/client';
 
 const canvas = document.createElement( 'canvas' );
 const gl = canvas.getContext( 'webgl2' )!;
@@ -48,13 +47,11 @@ MIDIMAN.on( 'paramChange', ( { key, value } ) => {
 } );
 
 // == dom ==========================================================================================
-const container = document.createElement( 'div' );
-document.body.appendChild( container );
-ReactDOM.render(
+const root = createRoot( document.getElementById( 'root' )! );
+root.render(
   <App
     deckA={ deckA }
     deckB={ deckB }
     mixer={ mixer }
-  />,
-  container
+  />
 );
