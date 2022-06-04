@@ -12,7 +12,6 @@ import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import { PlayOverlay } from './PlayOverlay';
-import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { SampleList } from './SampleList';
 import { Stalker } from './Stalker';
@@ -22,67 +21,58 @@ import styled from 'styled-components';
 
 // == styles =======================================================================================
 const StyledHeader = styled( Header )`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
   height: ${ Metrics.headerHeight }px;
 `;
 
+const DeckRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-grow: 1;
+  gap: 2px;
+`;
+
 const StyledDeckA = styled( Deck )`
-  position: absolute;
-  left: 0;
-  top: ${ Metrics.headerHeight }px;
-  width: calc( 50% - ${ 0.5 * Metrics.sampleListWidth + 2 }px );
-  height: calc( 100% - 96px );
+  flex-grow: 1;
 `;
 
 const StyledDeckB = styled( Deck )`
-  position: absolute;
-  right: 0;
-  top: ${ Metrics.headerHeight }px;
-  width: calc( 50% - ${ 0.5 * Metrics.sampleListWidth + 2 }px );
-  height: calc( 100% - 96px );
+  flex-grow: 1;
+`;
+
+const SamplesColumn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: ${ Metrics.sampleListWidth }px;
 `;
 
 const StyledSampleList = styled( SampleList )`
-  position: absolute;
-  left: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
-  top: ${ Metrics.headerHeight }px;
-  width: ${ Metrics.sampleListWidth }px;
-  height: calc( 100% - 96px - 96px );
+  flex-grow: 1;
 `;
 
 const StyledGainSection = styled( GainSection )`
-  position: absolute;
-  left: calc( 50% - ${ 0.5 * Metrics.sampleListWidth }px );
-  bottom: 64px;
-  width: ${ Metrics.sampleListWidth }px;
   height: 96px;
 `;
 
-const StyledDeckAKnobs = styled( DeckKnobs )`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
+const FaderRow = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
   height: 64px;
+`;
+
+const StyledDeckAKnobs = styled( DeckKnobs )`
+  flex-grow: 1;
 `;
 
 const StyledDeckBKnobs = styled( DeckKnobs )`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
-  height: 64px;
+  flex-grow: 1;
 `;
 
 const StyledXFader = styled( XFader )`
-  position: absolute;
-  left: calc( 50% - ${ 0.5 * Metrics.xFaderWidth }px );
-  bottom: 4px;
   width: ${ Metrics.xFaderWidth }px;
-  height: 56px;
+  margin: 4px 0;
 `;
 
 const StyledHelp = styled( Help )`
@@ -98,6 +88,8 @@ const Root = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   color: ${ Colors.fore };
   background: ${ Colors.back2 };
   font-family: monospace;
@@ -128,35 +120,41 @@ function App( { deckA, deckB, mixer }: {
         <StyledHeader
           hostDeck={ deckA }
         />
-        <StyledDeckA
-          codeState={ deckACodeState }
-          errorState={ deckAErrorState }
-          cueStatusState={ deckACueStatusState }
-          deck={ deckA }
-        />
-        <StyledDeckB
-          codeState={ deckBCodeState }
-          errorState={ deckBErrorState }
-          cueStatusState={ deckBCueStatusState }
-          deck={ deckB }
-        />
-        <StyledSampleList
-          hostDeck={ deckA }
-        />
-        <StyledDeckAKnobs
-          deck={ deckA }
-          midiParamNamePrefix={ 'deckA-' }
-        />
-        <StyledDeckBKnobs
-          deck={ deckB }
-          midiParamNamePrefix={ 'deckB-' }
-        />
-        <StyledGainSection
-          mixer={ mixer }
-        />
-        <StyledXFader
-          mixer={ mixer }
-        />
+        <DeckRow x-data="haha">
+          <StyledDeckA
+            codeState={ deckACodeState }
+            errorState={ deckAErrorState }
+            cueStatusState={ deckACueStatusState }
+            deck={ deckA }
+          />
+          <SamplesColumn>
+            <StyledSampleList
+              hostDeck={ deckA }
+            />
+            <StyledGainSection
+              mixer={ mixer }
+            />
+          </SamplesColumn>
+          <StyledDeckB
+            codeState={ deckBCodeState }
+            errorState={ deckBErrorState }
+            cueStatusState={ deckBCueStatusState }
+            deck={ deckB }
+          />
+        </DeckRow>
+        <FaderRow>
+          <StyledDeckAKnobs
+            deck={ deckA }
+            midiParamNamePrefix={ 'deckA-' }
+          />
+          <StyledXFader
+            mixer={ mixer }
+          />
+          <StyledDeckBKnobs
+            deck={ deckB }
+            midiParamNamePrefix={ 'deckB-' }
+          />
+        </FaderRow>
         <StyledHelp />
         <PlayOverlay
           audio={ deckA.audio }

@@ -23,6 +23,7 @@ const StyledStatusBar = styled( DeckStatusBar )`
 `;
 
 const Root = styled.div`
+  position: relative;
 `;
 
 // == components ===================================================================================

@@ -40,6 +40,7 @@ const Knob = styled.div`
 `;
 
 const Root = styled.div<{ isLearning: boolean | undefined }>`
+  position: relative;
   cursor: pointer;
 
   box-shadow: ${ ( { isLearning } ) => (
