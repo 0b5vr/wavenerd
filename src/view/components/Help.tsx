@@ -1,8 +1,8 @@
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
-import { ReactComponent as IconApply } from '../assets/apply.svg';
-import { ReactComponent as IconBuild } from '../assets/build.svg';
-import { ReactComponent as IconClose } from '../assets/close.svg';
+import IconApply from '~icons/mdi/reload';
+import IconBuild from '~icons/mdi/hammer';
+import IconClose from '~icons/mdi/close';
 import React from 'react';
 import { helpIsOpeningState } from '../states/help';
 import styled from 'styled-components';

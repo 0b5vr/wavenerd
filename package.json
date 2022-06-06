@@ -15,6 +15,8 @@
   "devDependencies": {
     "@0b5vr/experimental": "^0.8.0",
     "@0b5vr/wavenerd-deck": "^0.5.2",
+    "@iconify-json/mdi": "^1.1.19",
+    "@svgr/core": "^6.2.1",
     "@types/codemirror": "^0.0.95",
     "@types/react": "^18.0.6",
     "@types/react-dom": "^18.0.2",
@@ -34,7 +36,7 @@
     "rimraf": "^3.0.2",
     "styled-components": "^5.3.5",
     "typescript": "^4.6.3",
-    "vite": "^2.9.5",
-    "vite-plugin-svgr": "^1.1.0"
+    "unplugin-icons": "^0.14.3",
+    "vite": "^2.9.5"
   }
 }

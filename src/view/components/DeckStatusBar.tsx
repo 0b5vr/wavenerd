@@ -1,25 +1,25 @@
 import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import { Colors } from '../constants/Colors';
-import { ReactComponent as IconApply } from '../assets/apply.svg';
-import { ReactComponent as IconBuild } from '../assets/build.svg';
-import { ReactComponent as IconCat } from '../assets/cat.svg';
-import { ReactComponent as IconError } from '../assets/error.svg';
-import { ReactComponent as IconReady } from '../assets/ready.svg';
-import { ReactComponent as IconStopwatchBody } from '../assets/stopwatch-body.svg';
-import { ReactComponent as IconStopwatchHand } from '../assets/stopwatch-hand.svg';
+import IconApply from '~icons/mdi/reload';
+import IconBuild from '~icons/mdi/hammer';
+import IconCheck from '~icons/mdi/check-bold';
+import IconError from '~icons/mdi/close-octagon';
+import IconLoading from '~icons/mdi/loading';
+import IconPlay from '~icons/mdi/play';
 import React from 'react';
 
 // == styles =======================================================================================
 const StyleIcon = css`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
 `;
 
 const StyleIconButton = css`
   ${ StyleIcon }
 
-  fill: ${ Colors.fore };
+  color: ${ Colors.fore };
   cursor: pointer;
 
   &:hover {
@@ -31,9 +31,9 @@ const StyleIconButton = css`
   }
 `;
 
-const StyledIconCat = styled( IconCat )`
+const StyledIconPlay = styled( IconPlay )`
   ${ StyleIcon }
-  fill: ${ Colors.foresub };
+  color: ${ Colors.foresub };
 `;
 
 const StyleAnimationBuild = keyframes`
@@ -43,25 +43,18 @@ const StyleAnimationBuild = keyframes`
 
 const StyledIconBuilding = styled( IconBuild )`
   ${ StyleIcon }
-  fill: ${ Colors.accent };
+  color: ${ Colors.accent };
   animation: 0.1s steps(1) infinite ${ StyleAnimationBuild };
 `;
 
 const StyledIconError = styled( IconError )`
   ${ StyleIcon }
-  fill: ${ Colors.error };
+  color: ${ Colors.error };
 `;
 
-const StyledIconReady = styled( IconReady )`
+const StyledIconCheck = styled( IconCheck )`
   ${ StyleIcon }
-  fill: ${ Colors.green };
-`;
-
-const StyledIconStopwatchBody = styled( IconStopwatchBody )`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  fill: ${ Colors.accent };
+  color: ${ Colors.green };
 `;
 
 const StyleAnimationRotate = keyframes`
@@ -69,13 +62,12 @@ const StyleAnimationRotate = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-const StyledIconStopwatchHand = styled( IconStopwatchHand )`
+const StyledIconLoading = styled( IconLoading )`
   position: absolute;
-  top: 2px;
   width: 100%;
   height: 100%;
-  fill: ${ Colors.accent };
-  animation: 0.2s steps(3) infinite ${ StyleAnimationRotate };
+  color: ${ Colors.accent };
+  animation: 1.0s linear infinite ${ StyleAnimationRotate };
 `;
 
 const IconStopwatchContainer = styled.div`
@@ -128,9 +120,7 @@ export const DeckStatusBar: React.FC<{
     </>;
   } else if ( cueStatus === 'none' ) {
     content = <>
-      <StyledIconCat
-        data-stalker="A cat that has been used as a placeholder icon for no reason"
-      />
+      <StyledIconPlay />
       <Text>Playing</Text>
     </>;
   } else if ( cueStatus === 'compiling' ) {
@@ -142,7 +132,7 @@ export const DeckStatusBar: React.FC<{
     </>;
   } else if ( cueStatus === 'ready' ) {
     content = <>
-      <StyledIconReady
+      <StyledIconCheck
         data-stalker="A shader is successfully compiled and ready to be applied"
       />
       <Text>Ready to apply</Text>
@@ -152,8 +142,7 @@ export const DeckStatusBar: React.FC<{
       <IconStopwatchContainer
         data-stalker="Applying..."
       >
-        <StyledIconStopwatchBody />
-        <StyledIconStopwatchHand />
+        <StyledIconLoading />
       </IconStopwatchContainer>
       <Text>Applying...</Text>
     </>;

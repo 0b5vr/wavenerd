@@ -1,4 +1,5 @@
-import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState } from '../states/deck';
+import { RecoilRoot, useRecoilValue } from 'recoil';
+import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckShowBState } from '../states/deck';
 import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
@@ -12,7 +13,7 @@ import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import { PlayOverlay } from './PlayOverlay';
-import { RecoilRoot } from 'recoil';
+import React from 'react';
 import { SampleList } from './SampleList';
 import { Stalker } from './Stalker';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -32,11 +33,7 @@ const DeckRow = styled.div`
   gap: 2px;
 `;
 
-const StyledDeckA = styled( Deck )`
-  flex-grow: 1;
-`;
-
-const StyledDeckB = styled( Deck )`
+const StyledDeck = styled( Deck )`
   flex-grow: 1;
 `;
 
@@ -62,17 +59,13 @@ const FaderRow = styled.div`
   height: 64px;
 `;
 
-const StyledDeckAKnobs = styled( DeckKnobs )`
-  flex-grow: 1;
-`;
-
-const StyledDeckBKnobs = styled( DeckKnobs )`
+const StyledDeckKnobs = styled( DeckKnobs )`
   flex-grow: 1;
 `;
 
 const StyledXFader = styled( XFader )`
   width: ${ Metrics.xFaderWidth }px;
-  margin: 4px 0;
+  margin: 4px 16px;
 `;
 
 const StyledHelp = styled( Help )`
@@ -100,70 +93,86 @@ const Root = styled.div`
 `;
 
 // == component ====================================================================================
-function App( { deckA, deckB, mixer }: {
+interface Props {
   deckA: WavenerdDeck;
   deckB: WavenerdDeck;
   mixer: Mixer;
-} ) {
+}
+
+const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
+  const showB = useRecoilValue( deckShowBState );
+
   return <>
-    <RecoilRoot>
-      <MIDIListener />
-      <MixerListener
-        mixer={ mixer }
-      />
-      <DeckListener
+    <MIDIListener />
+    <MixerListener
+      mixer={ mixer }
+    />
+    <DeckListener
+      hostDeck={ deckA }
+      deckA={ deckA }
+      deckB={ deckB }
+    />
+    <Root>
+      <StyledHeader
         hostDeck={ deckA }
-        deckA={ deckA }
-        deckB={ deckB }
       />
-      <Root>
-        <StyledHeader
-          hostDeck={ deckA }
+      <DeckRow x-data="haha">
+        <StyledDeck
+          codeState={ deckACodeState }
+          errorState={ deckAErrorState }
+          cueStatusState={ deckACueStatusState }
+          deck={ deckA }
         />
-        <DeckRow x-data="haha">
-          <StyledDeckA
-            codeState={ deckACodeState }
-            errorState={ deckAErrorState }
-            cueStatusState={ deckACueStatusState }
-            deck={ deckA }
+        <SamplesColumn>
+          <StyledSampleList
+            hostDeck={ deckA }
           />
-          <SamplesColumn>
-            <StyledSampleList
-              hostDeck={ deckA }
-            />
-            <StyledGainSection
-              mixer={ mixer }
-            />
-          </SamplesColumn>
-          <StyledDeckB
+          <StyledGainSection
+            mixer={ mixer }
+          />
+        </SamplesColumn>
+        { showB && (
+          <StyledDeck
             codeState={ deckBCodeState }
             errorState={ deckBErrorState }
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
           />
-        </DeckRow>
-        <FaderRow>
-          <StyledDeckAKnobs
-            deck={ deckA }
-            midiParamNamePrefix={ 'deckA-' }
-          />
-          <StyledXFader
-            mixer={ mixer }
-          />
-          <StyledDeckBKnobs
+        ) }
+      </DeckRow>
+      <FaderRow>
+        <StyledDeckKnobs
+          deck={ deckA }
+          midiParamNamePrefix={ 'deckA-' }
+        />
+        <StyledXFader
+          mixer={ mixer }
+        />
+        { showB && (
+          <StyledDeckKnobs
             deck={ deckB }
             midiParamNamePrefix={ 'deckB-' }
           />
-        </FaderRow>
-        <StyledHelp />
-        <PlayOverlay
-          audio={ deckA.audio }
-        />
-        <ContextMenu />
-        <Stalker />
-      </Root>
-    </RecoilRoot>
+        ) }
+      </FaderRow>
+      <StyledHelp />
+      <PlayOverlay
+        audio={ deckA.audio }
+      />
+      <ContextMenu />
+      <Stalker />
+    </Root>
   </>;
-}
+};
+
+const App: React.FC<Props> = ( { deckA, deckB, mixer } ) => (
+  <RecoilRoot>
+    <OutOfContextApp
+      deckA={ deckA }
+      deckB={ deckB }
+      mixer={ mixer }
+    />
+  </RecoilRoot>
+);
 
 export { App };

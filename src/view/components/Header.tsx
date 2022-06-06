@@ -1,14 +1,16 @@
 import styled, { css } from 'styled-components';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderTime } from './HeaderTime';
-import { ReactComponent as IconGit } from '../assets/git.svg';
-import { ReactComponent as IconHelp } from '../assets/help.svg';
+import IconBBox from '~icons/mdi/alpha-b-box';
+import IconGitHub from '~icons/mdi/github';
+import IconHelp from '~icons/mdi/help-circle';
 import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
+import { deckShowBState } from '../states/deck';
 import { helpIsOpeningState } from '../states/help';
-import { useRecoilCallback } from 'recoil';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -30,9 +32,10 @@ const StyledHeaderBPM = styled( HeaderBPM )`
 `;
 
 const StyleIcon = css`
-  width: 32px;
-  height: 32px;
-  fill: ${ Colors.fore };
+  width: 24px;
+  height: 24px;
+  margin: 4px 4px 4px 0;
+  color: ${ Colors.fore };
   cursor: pointer;
 
   &:hover {
@@ -44,17 +47,20 @@ const StyleIcon = css`
   }
 `;
 
+const StyledIconBBox = styled( IconBBox )`
+  ${ StyleIcon };
+`;
+
 const StyledIconHelp = styled( IconHelp )`
   ${ StyleIcon };
 `;
 
-const StyledIconGit = styled( IconGit )`
+const StyledIconGitHub = styled( IconGitHub )`
   ${ StyleIcon };
 `;
 
 const AnchorGit = styled.a`
   display: block;
-  width: 32px;
   height: 32px;
 `;
 
@@ -78,6 +84,16 @@ export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
+  const showB = useRecoilValue( deckShowBState );
+
+  const handleClickToggleB = useRecoilCallback(
+    ( { set, snapshot } ) => async () => {
+      const current = await snapshot.getPromise( deckShowBState );
+      set( deckShowBState, !current );
+    },
+    [],
+  );
+
   const handleClickHelp = useRecoilCallback(
     ( { set } ) => () => {
       set( helpIsOpeningState, true );
@@ -96,6 +112,11 @@ export const Header: React.FC<{
         hostDeck={ hostDeck }
       />
       <Margin />
+      <StyledIconBBox
+        onClick={ handleClickToggleB }
+        style={ { color: showB ? Colors.fore : Colors.gray } }
+        data-stalker="Toggle Deck B"
+      />
       <StyledIconHelp
         onClick={ handleClickHelp }
         data-stalker="Show help"
@@ -106,7 +127,7 @@ export const Header: React.FC<{
         rel="noreferrer"
         data-stalker="See the source @ GitHub"
       >
-        <StyledIconGit />
+        <StyledIconGitHub />
       </AnchorGit>
     </Root>
   );

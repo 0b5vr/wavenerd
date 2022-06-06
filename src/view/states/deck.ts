@@ -56,6 +56,11 @@ export const deckSampleListState = atom<Set<string>>( {
   default: new Set()
 } );
 
+export const deckShowBState = atom( {
+  key: 'deckShowBState',
+  default: true,
+} );
+
 // == selectors ====================================================================================
 export const deckSortedSampleListState = selector( {
   key: 'deckSortedSampleListState',

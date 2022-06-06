@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
-import { ReactComponent as IconBin } from '../assets/bin.svg';
+import IconBin from '~icons/mdi/delete';
 import styled from 'styled-components';
 import { useDeleteSampleAction } from '../states/deck';
 

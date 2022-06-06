@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["webmidi", "vite-plugin-svgr/client"],
+    "types": ["webmidi", "unplugin-icons/types/react"],
     "jsx": "react-jsx",
   },
   "include": [ "src" ],

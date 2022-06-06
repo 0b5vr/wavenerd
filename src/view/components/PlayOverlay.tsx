@@ -1,6 +1,6 @@
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
-import { ReactComponent as IconPlay } from '../assets/play.svg';
+import IconPlay from '~icons/mdi/play';
 import React from 'react';
 import { playOverlayIsOpeningState } from '../states/playOverlay';
 import styled from 'styled-components';

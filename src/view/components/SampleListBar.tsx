@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
-import { ReactComponent as IconFolder } from '../assets/folder.svg';
+import IconFolder from '~icons/mdi/folder';
 import styled from 'styled-components';
 
 // == utils ========================================================================================
@@ -20,8 +20,9 @@ const Title = styled.div`
 `;
 
 const ButtonOpen = styled( IconFolder )`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
 
   fill: ${ Colors.fore };
   cursor: pointer;
