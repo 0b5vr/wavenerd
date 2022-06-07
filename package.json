@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@0b5vr/experimental": "^0.8.0",
-    "@0b5vr/wavenerd-deck": "^0.5.2",
+    "@0b5vr/wavenerd-deck": "^0.5.4",
     "@iconify-json/mdi": "^1.1.19",
     "@svgr/core": "^6.2.1",
     "@types/codemirror": "^0.0.95",
