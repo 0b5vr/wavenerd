@@ -1,5 +1,6 @@
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckShowBState } from '../states/deck';
+import { AssetList } from './AssetList';
 import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
@@ -14,7 +15,6 @@ import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
-import { SampleList } from './SampleList';
 import { Stalker } from './Stalker';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
@@ -44,7 +44,7 @@ const SamplesColumn = styled.div`
   width: ${ Metrics.sampleListWidth }px;
 `;
 
-const StyledSampleList = styled( SampleList )`
+const StyledAssetList = styled( AssetList )`
   flex-grow: 1;
 `;
 
@@ -116,7 +116,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
       <StyledHeader
         hostDeck={ deckA }
       />
-      <DeckRow x-data="haha">
+      <DeckRow>
         <StyledDeck
           codeState={ deckACodeState }
           errorState={ deckAErrorState }
@@ -124,7 +124,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           deck={ deckA }
         />
         <SamplesColumn>
-          <StyledSampleList
+          <StyledAssetList
             hostDeck={ deckA }
           />
           <StyledGainSection

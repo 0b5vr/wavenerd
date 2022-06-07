@@ -1,16 +1,9 @@
 import React, { useCallback } from 'react';
 import { Colors } from '../constants/Colors';
+import IconChevronDown from '~icons/mdi/chevron-down';
+import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
 import styled from 'styled-components';
-
-// == utils ========================================================================================
-export function sanitizeSampleName( raw: string ): string | null {
-  if ( raw.match( /^[0-9a-zA-Z_]+$/ ) ) {
-    return raw;
-  }
-
-  return null;
-}
 
 // == styles =======================================================================================
 const Title = styled.div`
@@ -19,12 +12,12 @@ const Title = styled.div`
   flex-shrink: 1;
 `;
 
-const ButtonOpen = styled( IconFolder )`
+const IconButton = styled.svg`
   width: 20px;
   height: 20px;
   margin: 2px;
 
-  fill: ${ Colors.fore };
+  color: ${ Colors.fore };
   cursor: pointer;
 
   &:hover {
@@ -48,10 +41,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const SampleListBar: React.FC<{
-  onFile?: ( files: FileList ) => void;
+export const AssetListBar: React.FC<{
+  title: string;
+  onFile: ( files: FileList ) => void;
+  expand: boolean;
+  onChangeExpand: () => void;
   className?: string;
-}> = ( { onFile, className } ) => {
+}> = ( { title, onFile, expand, onChangeExpand, className } ) => {
   const handleClickOpen = useCallback(
     ( event: React.MouseEvent ) => {
       event.preventDefault();
@@ -74,8 +70,13 @@ export const SampleListBar: React.FC<{
     <Root
       className={ className }
     >
-      <Title>Samples</Title>
-      <ButtonOpen
+      <IconButton
+        as={ expand ? IconChevronDown : IconChevronRight }
+        onClick={ onChangeExpand }
+      />
+      <Title>{ title }</Title>
+      <IconButton
+        as={ IconFolder }
         onClick={ handleClickOpen }
       />
     </Root>

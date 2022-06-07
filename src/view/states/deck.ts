@@ -53,7 +53,17 @@ export const deckBPMState = atom( {
 
 export const deckSampleListState = atom<Set<string>>( {
   key: 'deckSampleListState',
-  default: new Set()
+  default: new Set(),
+} );
+
+export const deckWavetableListState = atom<Set<string>>( {
+  key: 'deckWavetableListState',
+  default: new Set(),
+} );
+
+export const deckImageListState = atom<Set<string>>( {
+  key: 'deckImageListState',
+  default: new Set(),
 } );
 
 export const deckShowBState = atom( {
@@ -67,6 +77,26 @@ export const deckSortedSampleListState = selector( {
   get: ( { get } ) => {
     const sampleList = get( deckSampleListState );
     const array = Array.from( sampleList );
+    array.sort();
+    return array;
+  }
+} );
+
+export const deckSortedWavetableListState = selector( {
+  key: 'deckSortedWavetableListState',
+  get: ( { get } ) => {
+    const wavetableList = get( deckWavetableListState );
+    const array = Array.from( wavetableList );
+    array.sort();
+    return array;
+  }
+} );
+
+export const deckSortedImageListState = selector( {
+  key: 'deckSortedImageListState',
+  get: ( { get } ) => {
+    const imageList = get( deckImageListState );
+    const array = Array.from( imageList );
     array.sort();
     return array;
   }
@@ -104,6 +134,66 @@ export function useDeleteSampleAction(): ( name: string ) => Promise<void> {
       }
 
       set( deckSampleListState, newSamples );
+    },
+    []
+  );
+}
+
+export function useAddWavetableAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    ( { snapshot, set } ) => async ( name ) => {
+      const wavetableList = await snapshot.getPromise( deckWavetableListState );
+
+      const newWavetables = new Set( wavetableList );
+      newWavetables.add( name );
+
+      set( deckWavetableListState, newWavetables );
+    },
+    []
+  );
+}
+
+export function useDeleteWavetableAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    ( { snapshot, set } ) => async ( name ) => {
+      const wavetableList = await snapshot.getPromise( deckWavetableListState );
+
+      const newWavetables = new Set( wavetableList );
+      if ( newWavetables.has( name ) ) {
+        newWavetables.delete( name );
+      }
+
+      set( deckWavetableListState, newWavetables );
+    },
+    []
+  );
+}
+
+export function useAddImageAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    ( { snapshot, set } ) => async ( name ) => {
+      const imageList = await snapshot.getPromise( deckImageListState );
+
+      const newImages = new Set( imageList );
+      newImages.add( name );
+
+      set( deckImageListState, newImages );
+    },
+    []
+  );
+}
+
+export function useDeleteImageAction(): ( name: string ) => Promise<void> {
+  return useRecoilCallback(
+    ( { snapshot, set } ) => async ( name ) => {
+      const imageList = await snapshot.getPromise( deckImageListState );
+
+      const newImages = new Set( imageList );
+      if ( newImages.has( name ) ) {
+        newImages.delete( name );
+      }
+
+      set( deckImageListState, newImages );
     },
     []
   );

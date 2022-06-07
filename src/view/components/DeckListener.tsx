@@ -1,4 +1,4 @@
-import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState, useAddSampleAction, useDeleteSampleAction } from '../states/deck';
+import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState, useAddImageAction, useAddSampleAction, useAddWavetableAction, useDeleteImageAction, useDeleteSampleAction, useDeleteWavetableAction } from '../states/deck';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -17,6 +17,10 @@ function DeckListener( { hostDeck, deckA, deckB }: {
   const setDeckBPM = useSetRecoilState( deckBPMState );
   const addSample = useAddSampleAction();
   const deleteSample = useDeleteSampleAction();
+  const addWavetable = useAddWavetableAction();
+  const deleteWavetable = useDeleteWavetableAction();
+  const addImage = useAddImageAction();
+  const deleteImage = useDeleteImageAction();
 
   useEffect(
     () => {
@@ -117,6 +121,58 @@ function DeckListener( { hostDeck, deckA, deckB }: {
       };
     },
     [ hostDeck, deleteSample ]
+  );
+
+  useEffect(
+    () => {
+      const handleLoadWavetable = hostDeck.on( 'loadWavetable', ( { name } ) => {
+        addWavetable( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'loadWavetable', handleLoadWavetable );
+      };
+    },
+    [ hostDeck, addWavetable ],
+  );
+
+  useEffect(
+    () => {
+      const handleDeleteWavetable = hostDeck.on( 'deleteWavetable', ( { name } ) => {
+        deleteWavetable( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'deleteWavetable', handleDeleteWavetable );
+      };
+    },
+    [ hostDeck, deleteWavetable ]
+  );
+
+  useEffect(
+    () => {
+      const handleLoadImage = hostDeck.on( 'loadImage', ( { name } ) => {
+        addImage( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'loadImage', handleLoadImage );
+      };
+    },
+    [ hostDeck, addImage ],
+  );
+
+  useEffect(
+    () => {
+      const handleDeleteImage = hostDeck.on( 'deleteImage', ( { name } ) => {
+        deleteImage( name );
+      } );
+
+      return () => {
+        hostDeck.off( 'deleteImage', handleDeleteImage );
+      };
+    },
+    [ hostDeck, deleteImage ]
   );
 
   return null;
