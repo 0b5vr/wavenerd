@@ -11,6 +11,7 @@ function MixerListener( { mixer }: {
   const setXFaderValue = useSetRecoilState( xFaderState );
   const setLevelMeter = useSetRecoilState( levelMeterState );
 
+  // TODO: rename me to debounce
   const [ executorXFaderValue ] = useState( new RateLimitedExecutor( 50 ) );
   useEffect(
     () => {

@@ -1,6 +1,12 @@
 import { LevelMeter, LevelMeterResult } from './LevelMeter';
 import { EventEmittable } from './utils/EventEmittable';
-import { linearstep } from '@0b5vr/experimental';
+import { SETTINGSMAN } from './SettingsManager';
+import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
+import { xfaderCurveCut } from './xfaderCurveCut';
+import { xfaderCurveLinear } from './xfaderCurveLinear';
+import { xfaderCurveTransition } from './xfaderCurveTransition';
+
+export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
 
 interface MixerEvents {
   changeVolumeL: { value: number };
@@ -94,6 +100,10 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__gainNodeL.connect( this.__levelMeterInputL.input );
     this.__gainNodeR.connect( this.__levelMeterInputR.input );
     this.__gainNodeOut.connect( this.__levelMeterOutput.input );
+
+    SETTINGSMAN.on( 'changeXFaderMode', () => {
+      this.__updateGains();
+    } );
   }
 
   public updateLevelMeter( deltaTime: number ): {
@@ -113,24 +123,26 @@ export class Mixer extends EventEmittable<MixerEvents> {
   }
 
   private __updateGains(): void {
-    this.__gainNodeL.gain.linearRampToValueAtTime(
-      this.__volumeL,
-      this.__audio.currentTime + 0.02
-    );
+    const [ a, b ] = this.__getXFaderValue();
 
-    this.__gainNodeR.gain.linearRampToValueAtTime(
-      this.__volumeR,
-      this.__audio.currentTime + 0.02
-    );
+    const time = this.__audio.currentTime + 0.005;
 
-    this.__gainXFaderL.gain.linearRampToValueAtTime(
-      linearstep( 0.95, 0.55, this.__xFaderPos ),
-      this.__audio.currentTime + 0.02
-    );
+    this.__gainNodeL.gain.linearRampToValueAtTime( this.__volumeL, time );
+    this.__gainNodeR.gain.linearRampToValueAtTime( this.__volumeR, time );
 
-    this.__gainXFaderR.gain.linearRampToValueAtTime(
-      linearstep( 0.05, 0.45, this.__xFaderPos ),
-      this.__audio.currentTime + 0.02
+    this.__gainXFaderL.gain.linearRampToValueAtTime( a, time );
+    this.__gainXFaderR.gain.linearRampToValueAtTime( b, time );
+  }
+
+  private __getXFaderValue(): [ number, number ] {
+    const x = this.__xFaderPos;
+    const mode = SETTINGSMAN.xfaderMode;
+
+    return (
+      mode === 'constantPower' ? xfaderCurveConstantPower( x ) :
+      mode === 'cut' ? xfaderCurveCut( x ) :
+      mode === 'linear' ? xfaderCurveLinear( x ) :
+      xfaderCurveTransition( x )
     );
   }
 }
