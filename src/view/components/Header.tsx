@@ -4,6 +4,7 @@ import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderTime } from './HeaderTime';
+import { HeaderTransport } from './HeaderTransport';
 import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
@@ -16,6 +17,10 @@ import { helpIsOpeningState } from '../states/help';
 const Logo = styled.div`
   font: 500 24px monospace;
   line-height: 1.0;
+  margin-left: 8px;
+`;
+
+const StyledHeaderTransport = styled( HeaderTransport )`
   margin-left: 8px;
 `;
 
@@ -106,6 +111,9 @@ export const Header: React.FC<{
       className={ className }
     >
       <Logo>Wavenerd</Logo>
+      <StyledHeaderTransport
+        hostDeck={ hostDeck }
+      />
       <StyledHeaderTime />
       <StyledHeaderBeatIndicators />
       <StyledHeaderBPM
