@@ -3,7 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
-import IconClose from '~icons/mdi/close';
+import { Modal } from './Modal';
 import React from 'react';
 import { helpIsOpeningState } from '../states/help';
 import styled from 'styled-components';
@@ -15,40 +15,13 @@ const IconsInContent = styled.svg`
   width: 1em;
   height: 1em;
   transform: scale(1.25);
-  fill: ${ Colors.fore };
+  color: ${ Colors.fore };
 `;
 
 const Content = styled.div`
-  max-width: 640px;
-  max-height: 100%;
-  margin: 0 auto;
   padding: 0 16px;
-  overflow: auto;
-`;
-
-const Close = styled( IconClose )`
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  width: 24px;
-  height: 24px;
-  fill: ${ Colors.fore };
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.6;
-  }
-`;
-
-const Root = styled.div`
-  padding: 16px;
-  border-radius: 4px;
-  background: ${ Colors.back2 };
-  box-shadow: 0 0 8px 0 ${ Colors.black };
+  height: 480px;
+  overflow-y: scroll;
 
   h2 {
     margin: 32px 0 16px;
@@ -72,16 +45,14 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const Help: React.FC<{
-  className?: string;
-}> = ( { className } ) => {
+export const HelpModal: React.FC = () => {
   const isOpening = useRecoilValue( helpIsOpeningState );
 
-  const handleClickClose = useRecoilCallback(
+  const handleClose = useRecoilCallback(
     ( { set } ) => () => {
       set( helpIsOpeningState, false );
     },
-    []
+    [],
   );
 
   if ( !isOpening ) {
@@ -89,12 +60,7 @@ export const Help: React.FC<{
   }
 
   return (
-    <Root
-      className={ className }
-    >
-      <Close
-        onClick={ handleClickClose }
-      />
+    <Modal onClose={handleClose}>
       <Content>
         <h1>Help</h1>
         <h2>What is Wavenerd</h2>
@@ -170,6 +136,6 @@ export const Help: React.FC<{
           Simply <code>texture( image_****, uv )</code> to use.<br />
         </p>
       </Content>
-    </Root>
+    </Modal>
   );
 };

@@ -8,10 +8,12 @@ import { HeaderTransport } from './HeaderTransport';
 import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
+import IconSettings from '~icons/mdi/cog';
 import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
 import { helpIsOpeningState } from '../states/help';
+import { settingsIsOpeningState } from '../states/settings';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -53,6 +55,10 @@ const StyleIcon = css`
 `;
 
 const StyledIconBBox = styled( IconBBox )`
+  ${ StyleIcon };
+`;
+
+const StyledIconSettings = styled( IconSettings )`
   ${ StyleIcon };
 `;
 
@@ -106,6 +112,13 @@ export const Header: React.FC<{
     []
   );
 
+  const handleClickSettings = useRecoilCallback(
+    ( { set } ) => () => {
+      set( settingsIsOpeningState, true );
+    },
+    [],
+  );
+
   return (
     <Root
       className={ className }
@@ -128,6 +141,10 @@ export const Header: React.FC<{
       <StyledIconHelp
         onClick={ handleClickHelp }
         data-stalker="Show help"
+      />
+      <StyledIconSettings
+        onClick={ handleClickSettings }
+        data-stalker="Settings"
       />
       <AnchorGit
         href="https://github.com/0b5vr/wavenerd/"

@@ -1,11 +1,17 @@
 import { LevelMeter, LevelMeterResult } from './LevelMeter';
 import { EventEmittable } from './utils/EventEmittable';
-import { linearstep } from '@0b5vr/experimental';
+import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
+import { xfaderCurveCut } from './xfaderCurveCut';
+import { xfaderCurveLinear } from './xfaderCurveLinear';
+import { xfaderCurveTransition } from './xfaderCurveTransition';
+
+export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
 
 interface MixerEvents {
   changeVolumeL: { value: number };
   changeVolumeR: { value: number };
   changeXFader: { value: number };
+  changeXFaderMode: { mode: XFaderModeType };
   updateLevelMeters: {
     inputL: LevelMeterResult;
     inputR: LevelMeterResult;
@@ -14,6 +20,19 @@ interface MixerEvents {
 }
 
 export class Mixer extends EventEmittable<MixerEvents> {
+  private __xfaderMode: XFaderModeType;
+  public get xfaderMode(): XFaderModeType {
+    return this.__xfaderMode;
+  }
+  public set xfaderMode( mode: XFaderModeType ) {
+    this.__xfaderMode = mode;
+    localStorage[ 'wavenerd-xfaderMode' ] = mode;
+
+    this.__updateGains();
+
+    this.__emit( 'changeXFaderMode', { mode } );
+  }
+
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -76,6 +95,8 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
     this.__audio = audio;
 
+    this.__xfaderMode = localStorage[ 'wavenerd-xfaderMode' ] ?? 'constantPower';
+
     this.__gainNodeL = audio.createGain();
     this.__gainNodeR = audio.createGain();
     this.__gainXFaderL = audio.createGain();
@@ -113,24 +134,26 @@ export class Mixer extends EventEmittable<MixerEvents> {
   }
 
   private __updateGains(): void {
-    this.__gainNodeL.gain.linearRampToValueAtTime(
-      this.__volumeL,
-      this.__audio.currentTime + 0.02
-    );
+    const [ a, b ] = this.__getXFaderValue();
 
-    this.__gainNodeR.gain.linearRampToValueAtTime(
-      this.__volumeR,
-      this.__audio.currentTime + 0.02
-    );
+    const time = this.__audio.currentTime + 0.005;
 
-    this.__gainXFaderL.gain.linearRampToValueAtTime(
-      linearstep( 0.95, 0.55, this.__xFaderPos ),
-      this.__audio.currentTime + 0.02
-    );
+    this.__gainNodeL.gain.linearRampToValueAtTime( this.__volumeL, time );
+    this.__gainNodeR.gain.linearRampToValueAtTime( this.__volumeR, time );
 
-    this.__gainXFaderR.gain.linearRampToValueAtTime(
-      linearstep( 0.05, 0.45, this.__xFaderPos ),
-      this.__audio.currentTime + 0.02
+    this.__gainXFaderL.gain.linearRampToValueAtTime( a, time );
+    this.__gainXFaderR.gain.linearRampToValueAtTime( b, time );
+  }
+
+  private __getXFaderValue(): [ number, number ] {
+    const x = this.__xFaderPos;
+    const mode = this.__xfaderMode;
+
+    return (
+      mode === 'constantPower' ? xfaderCurveConstantPower( x ) :
+      mode === 'cut' ? xfaderCurveCut( x ) :
+      mode === 'linear' ? xfaderCurveLinear( x ) :
+      xfaderCurveTransition( x )
     );
   }
 }

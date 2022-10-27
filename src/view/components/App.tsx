@@ -8,13 +8,14 @@ import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
 import { GainSection } from './GainSection';
 import { Header } from './Header';
-import { Help } from './Help';
+import { HelpModal } from './HelpModal';
 import { MIDIListener } from './MIDIListener';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
+import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
@@ -66,13 +67,6 @@ const StyledDeckKnobs = styled( DeckKnobs )`
 const StyledXFader = styled( XFader )`
   width: ${ Metrics.xFaderWidth }px;
   margin: 4px 16px;
-`;
-
-const StyledHelp = styled( Help )`
-  position: absolute;
-  margin: 16px;
-  width: calc( 100% - 32px );
-  height: calc( 100% - 32px );
 `;
 
 const Root = styled.div`
@@ -155,7 +149,8 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           />
         ) }
       </FaderRow>
-      <StyledHelp />
+      <SettingsModal mixer={ mixer } />
+      <HelpModal />
       <PlayOverlay
         audio={ deckA.audio }
       />
