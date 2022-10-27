@@ -37,6 +37,11 @@ export const deckTimeState = atom( {
   default: 0.0
 } );
 
+export const deckIsPlayingState = atom( {
+  key: 'deckIsPlayingState',
+  default: false,
+} );
+
 export const deckBeatsState = atom( {
   key: 'deckBeatsState',
   default: {

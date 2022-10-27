@@ -1,4 +1,4 @@
-import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckTimeState, useAddImageAction, useAddSampleAction, useAddWavetableAction, useDeleteImageAction, useDeleteSampleAction, useDeleteWavetableAction } from '../states/deck';
+import { deckACueStatusState, deckAErrorState, deckBCueStatusState, deckBErrorState, deckBPMState, deckBeatsState, deckIsPlayingState, deckTimeState, useAddImageAction, useAddSampleAction, useAddWavetableAction, useDeleteImageAction, useDeleteSampleAction, useDeleteWavetableAction } from '../states/deck';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -13,6 +13,7 @@ function DeckListener( { hostDeck, deckA, deckB }: {
   const setDeckAError = useSetRecoilState( deckAErrorState );
   const setDeckBError = useSetRecoilState( deckBErrorState );
   const setDeckTime = useSetRecoilState( deckTimeState );
+  const setDeckIsPlaying = useSetRecoilState( deckIsPlayingState );
   const setDeckBeats = useSetRecoilState( deckBeatsState );
   const setDeckBPM = useSetRecoilState( deckBPMState );
   const addSample = useAddSampleAction();
@@ -85,12 +86,22 @@ function DeckListener( { hostDeck, deckA, deckB }: {
         } );
       } );
 
+      const handlePlay = hostDeck.on( 'play', () => {
+        setDeckIsPlaying( true );
+      } );
+
+      const handlePause = hostDeck.on( 'pause', () => {
+        setDeckIsPlaying( false );
+      } );
+
       const handleChangeBPM = hostDeck.on( 'changeBPM', ( { bpm } ) => {
         setDeckBPM( bpm );
       } );
 
       return () => {
         hostDeck.beatManager.off( 'update', handleBeatManagerUpdate );
+        hostDeck.off( 'play', handlePlay );
+        hostDeck.off( 'pause', handlePause );
         hostDeck.off( 'changeBPM', handleChangeBPM );
       };
     },
