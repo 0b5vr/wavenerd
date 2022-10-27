@@ -15,6 +15,7 @@ import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
+import { SettingsListener } from './SettingsListener';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -97,6 +98,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
 
   return <>
+    <SettingsListener />
     <MIDIListener />
     <MixerListener
       mixer={ mixer }

@@ -1,10 +1,10 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback } from 'react';
+import { settingsIsOpeningState, settingsLatencyBlocksState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Modal } from './Modal';
-import { settingsIsOpeningState } from '../states/settings';
+import { SETTINGSMAN } from '../../SettingsManager';
 import styled from 'styled-components';
-import { xFaderModeState } from '../states/xFader';
 
 // == styles =======================================================================================
 const Sans = styled.div`
@@ -13,11 +13,16 @@ const Sans = styled.div`
   margin-bottom: 2em;
 `;
 
+const StyledNumberInput = styled.input`
+  width: 4em;
+`;
+
 // == components ===================================================================================
 export const SettingsModal: React.FC<{
   mixer: Mixer,
-}> = ( { mixer } ) => {
-  const xFaderMode = useRecoilValue( xFaderModeState );
+}> = () => {
+  const latencyBlocks = useRecoilValue( settingsLatencyBlocksState );
+  const xFaderMode = useRecoilValue( settingsXFaderModeState );
   const isOpening = useRecoilValue( settingsIsOpeningState );
 
   const handleClose = useRecoilCallback(
@@ -27,9 +32,18 @@ export const SettingsModal: React.FC<{
     [],
   );
 
+  const handleChangeLatencyBlocks = useCallback( ( event: React.ChangeEvent ) => {
+    const value = ( event.target as HTMLInputElement ).value;
+    const valueInt = parseInt( value, 10 );
+    const valueValid = valueInt > 0 ? valueInt : 32;
+
+    SETTINGSMAN.latencyBlocks = valueValid;
+  }, [] );
+
   const handleChangeXFaderCurveMode = useCallback( ( event: React.ChangeEvent ) => {
-    const mode = ( event.target as HTMLInputElement ).value;
-    mixer.xfaderMode = mode as XFaderModeType;
+    const mode = ( event.target as HTMLSelectElement ).value;
+
+    SETTINGSMAN.xfaderMode = mode as XFaderModeType;
   }, [] );
 
   if ( !isOpening ) {
@@ -39,6 +53,14 @@ export const SettingsModal: React.FC<{
   return (
     <Modal onClose={handleClose}>
       <Sans>decent settings modal window</Sans>
+      Latency Blocks: { (
+        <StyledNumberInput
+          type="number"
+          step="1"
+          value={ latencyBlocks }
+          onChange={ handleChangeLatencyBlocks }
+        />
+      ) }<br />
       X Fader Curve Mode: { (
         <select
           value={ xFaderMode }

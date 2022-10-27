@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { xFaderModeState, xFaderState } from '../states/xFader';
 import { Mixer } from '../../Mixer';
 import { RateLimitedExecutor } from '../utils/RateLimitedExecutor';
 import { levelMeterState } from '../states/levelMeter';
 import { useSetRecoilState } from 'recoil';
+import { xFaderState } from '../states/xFader';
 
 function MixerListener( { mixer }: {
   mixer: Mixer;
 } ): null {
   const setXFaderValue = useSetRecoilState( xFaderState );
-  const setXFaderMode = useSetRecoilState( xFaderModeState );
   const setLevelMeter = useSetRecoilState( levelMeterState );
 
   // TODO: rename me to debounce
@@ -22,18 +21,12 @@ function MixerListener( { mixer }: {
         } );
       } );
 
-      const handleChangeXFaderMode = mixer.on( 'changeXFaderMode', ( { mode } ) => {
-        setXFaderMode( mode );
-      } );
-      setXFaderMode( mixer.xfaderMode );
-
       const handleUpdateLevelMeters = mixer.on( 'updateLevelMeters', ( event ) => {
         setLevelMeter( event );
       } );
 
       return () => {
         mixer.off( 'changeXFader', handleChangeXFader );
-        mixer.off( 'changeXFaderMode', handleChangeXFaderMode );
         mixer.off( 'updateLevelMeters', handleUpdateLevelMeters );
       };
     },

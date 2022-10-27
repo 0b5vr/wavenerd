@@ -1,5 +1,6 @@
 import { LevelMeter, LevelMeterResult } from './LevelMeter';
 import { EventEmittable } from './utils/EventEmittable';
+import { SETTINGSMAN } from './SettingsManager';
 import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
 import { xfaderCurveLinear } from './xfaderCurveLinear';
@@ -11,7 +12,6 @@ interface MixerEvents {
   changeVolumeL: { value: number };
   changeVolumeR: { value: number };
   changeXFader: { value: number };
-  changeXFaderMode: { mode: XFaderModeType };
   updateLevelMeters: {
     inputL: LevelMeterResult;
     inputR: LevelMeterResult;
@@ -20,19 +20,6 @@ interface MixerEvents {
 }
 
 export class Mixer extends EventEmittable<MixerEvents> {
-  private __xfaderMode: XFaderModeType;
-  public get xfaderMode(): XFaderModeType {
-    return this.__xfaderMode;
-  }
-  public set xfaderMode( mode: XFaderModeType ) {
-    this.__xfaderMode = mode;
-    localStorage[ 'wavenerd-xfaderMode' ] = mode;
-
-    this.__updateGains();
-
-    this.__emit( 'changeXFaderMode', { mode } );
-  }
-
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -95,8 +82,6 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
     this.__audio = audio;
 
-    this.__xfaderMode = localStorage[ 'wavenerd-xfaderMode' ] ?? 'constantPower';
-
     this.__gainNodeL = audio.createGain();
     this.__gainNodeR = audio.createGain();
     this.__gainXFaderL = audio.createGain();
@@ -115,6 +100,10 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__gainNodeL.connect( this.__levelMeterInputL.input );
     this.__gainNodeR.connect( this.__levelMeterInputR.input );
     this.__gainNodeOut.connect( this.__levelMeterOutput.input );
+
+    SETTINGSMAN.on( 'changeXFaderMode', () => {
+      this.__updateGains();
+    } );
   }
 
   public updateLevelMeter( deltaTime: number ): {
@@ -147,7 +136,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
   private __getXFaderValue(): [ number, number ] {
     const x = this.__xFaderPos;
-    const mode = this.__xfaderMode;
+    const mode = SETTINGSMAN.xfaderMode;
 
     return (
       mode === 'constantPower' ? xfaderCurveConstantPower( x ) :

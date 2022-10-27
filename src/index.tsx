@@ -3,6 +3,7 @@ import { ClockRealtime } from '@0b5vr/experimental';
 import { MIDIMAN } from './MIDIManager';
 import { MIDIParams } from './MIDIParams';
 import { Mixer } from './Mixer';
+import { SETTINGSMAN } from './SettingsManager';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 
@@ -19,6 +20,11 @@ const deckOptions = {
 };
 const deckA = new WavenerdDeck( deckOptions );
 const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
+
+SETTINGSMAN.on( 'changeLatencyBlocks', ( { blocks } ) => {
+  deckA.latencyBlocks = blocks;
+  deckB.latencyBlocks = blocks;
+} );
 
 const mixer = new Mixer( audio );
 deckA.node.connect( mixer.inputL );
