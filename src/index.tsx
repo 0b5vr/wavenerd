@@ -27,8 +27,8 @@ SETTINGSMAN.on( 'changeLatencyBlocks', ( { blocks } ) => {
 } );
 
 const mixer = new Mixer( audio );
-deckA.node.connect( mixer.inputL );
-deckB.node.connect( mixer.inputR );
+deckA.node.connect( mixer.inputA );
+deckB.node.connect( mixer.inputB );
 mixer.output.connect( audio.destination );
 
 const clock = new ClockRealtime();
@@ -39,7 +39,7 @@ function update() {
 
   deckA.update();
   deckB.update();
-  mixer.updateLevelMeter( clock.deltaTime );
+  mixer.updateAnalyser( clock.deltaTime );
 
   setTimeout( update, 10 );
 }

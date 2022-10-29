@@ -1,3 +1,4 @@
+import { Analyser, AnalyserResult } from './Analyser';
 import { EventEmittable } from './utils/EventEmittable';
 
 export interface LevelMeterResult {
@@ -14,21 +15,7 @@ interface LevelMeterEvents {
 }
 
 export class LevelMeter extends EventEmittable<LevelMeterEvents> {
-  private __audio: AudioContext;
-  public get audio(): AudioContext {
-    return this.__audio;
-  }
-
-  private __gainNode: GainNode;
-  private __splitterNode: ChannelSplitterNode;
-  private __analyserNodeL: AnalyserNode;
-  private __analyserNodeR: AnalyserNode;
-
-  public get input(): AudioNode {
-    return this.__gainNode;
-  }
-
-  private __buffer: Float32Array;
+  public readonly analyser: Analyser;
 
   private __level = 0.0;
   private __levelL = 0.0;
@@ -40,37 +27,29 @@ export class LevelMeter extends EventEmittable<LevelMeterEvents> {
   private __vpeakL = 0.0;
   private __vpeakR = 0.0;
 
-  public constructor( audio: AudioContext ) {
+  public constructor( analyser: Analyser ) {
     super();
 
-    this.__audio = audio;
-
-    this.__gainNode = audio.createGain();
-    this.__splitterNode = audio.createChannelSplitter( 2 );
-    this.__analyserNodeL = audio.createAnalyser();
-    this.__analyserNodeR = audio.createAnalyser();
-
-    this.__gainNode.connect( this.__splitterNode );
-    this.__splitterNode.connect( this.__analyserNodeL, 0 );
-    this.__splitterNode.connect( this.__analyserNodeR, 1 );
-
-    this.__buffer = new Float32Array( 256 );
+    this.analyser = analyser;
+    this.analyser.on( 'update', ( result ) => {
+      this.__update( result );
+    } );
   }
 
-  public update( deltaTime: number ): LevelMeterResult {
+  private __update( result: AnalyserResult ): LevelMeterResult {
+    const { deltaTime, timeDomainL, timeDomainR } = result;
+
     const decay = Math.exp( -5.0 * deltaTime );
 
     this.__levelL *= decay;
-    this.__analyserNodeL.getFloatTimeDomainData( this.__buffer );
-    for ( let i = 0; i < 256; i ++ ) {
-      this.__levelL = Math.max( this.__levelL, Math.abs( this.__buffer[ i ] ) );
-    }
+    timeDomainL.forEach( ( v ) => {
+      this.__levelL = Math.max( this.__levelL, Math.abs( v ) );
+    } );
 
     this.__levelR *= decay;
-    this.__analyserNodeR.getFloatTimeDomainData( this.__buffer );
-    for ( let i = 0; i < 256; i ++ ) {
-      this.__levelR = Math.max( this.__levelR, Math.abs( this.__buffer[ i ] ) );
-    }
+    timeDomainR.forEach( ( v ) => {
+      this.__levelR = Math.max( this.__levelR, Math.abs( v ) );
+    } );
 
     this.__level = Math.max( this.__levelL, this.__levelR );
 

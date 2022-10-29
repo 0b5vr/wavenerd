@@ -1,4 +1,5 @@
 import { RecoilRoot, useRecoilValue } from 'recoil';
+import { analyserInAState, analyserInBState } from '../states/mixer';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckShowBState } from '../states/deck';
 import { AssetList } from './AssetList';
 import { Colors } from '../constants/Colors';
@@ -116,6 +117,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
         <StyledDeck
           codeState={ deckACodeState }
           errorState={ deckAErrorState }
+          analyserState={ analyserInAState }
           cueStatusState={ deckACueStatusState }
           deck={ deckA }
         />
@@ -131,6 +133,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           <StyledDeck
             codeState={ deckBCodeState }
             errorState={ deckBErrorState }
+            analyserState={ analyserInBState }
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
           />

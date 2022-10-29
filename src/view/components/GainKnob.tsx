@@ -41,9 +41,9 @@ export const GainKnob: React.FC<{
   const handleChange = useCallback(
     ( v: number ) => {
       if ( channel === 'A' ) {
-        mixer.volumeL = 4.0 * v * v;
+        mixer.volumeA = 4.0 * v * v;
       } else {
-        mixer.volumeR = 4.0 * v * v;
+        mixer.volumeB = 4.0 * v * v;
       }
     },
     [ mixer, channel ]

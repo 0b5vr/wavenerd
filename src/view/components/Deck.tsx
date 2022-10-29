@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import { RecoilState, useRecoilCallback } from 'recoil';
+import { AnalyserResult } from '../../Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
+import { DeckVectorscope } from './DeckVectorscope';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 
@@ -22,6 +24,15 @@ const StyledStatusBar = styled( DeckStatusBar )`
   height: 24px;
 `;
 
+const StyledVectorscope = styled( DeckVectorscope )`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc( 100% - 24px );
+  pointer-events: none;
+`;
+
 const Root = styled.div`
   position: relative;
 `;
@@ -32,8 +43,9 @@ export const Deck: React.FC<{
   cueStatusState: RecoilState<'none' | 'ready' | 'applying' | 'compiling'>;
   errorState: RecoilState<string | null>;
   codeState: RecoilState<string>;
+  analyserState: RecoilState<AnalyserResult>;
   className?: string;
-}> = ( { className, cueStatusState, errorState, codeState, deck } ) => {
+}> = ( { className, cueStatusState, errorState, codeState, analyserState, deck } ) => {
   const handleCompile = useRecoilCallback(
     ( { snapshot } ) => async () => {
       const code = await snapshot.getPromise( codeState );
@@ -66,6 +78,9 @@ export const Deck: React.FC<{
         cueStatusState={ cueStatusState }
         onCompile={ handleCompile }
         onApply={ handleApply }
+      />
+      <StyledVectorscope
+        analyserState={ analyserState }
       />
     </Root>
   );

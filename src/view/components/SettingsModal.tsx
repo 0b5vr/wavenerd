@@ -1,9 +1,9 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback } from 'react';
-import { settingsIsOpeningState, settingsLatencyBlocksState, settingsXFaderModeState } from '../states/settings';
+import { SETTINGSMAN, VectorscopeModeType } from '../../SettingsManager';
+import { settingsIsOpeningState, settingsLatencyBlocksState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Modal } from './Modal';
-import { SETTINGSMAN } from '../../SettingsManager';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -21,9 +21,12 @@ const StyledNumberInput = styled.input`
 export const SettingsModal: React.FC<{
   mixer: Mixer,
 }> = () => {
+  const isOpening = useRecoilValue( settingsIsOpeningState );
   const latencyBlocks = useRecoilValue( settingsLatencyBlocksState );
   const xFaderMode = useRecoilValue( settingsXFaderModeState );
-  const isOpening = useRecoilValue( settingsIsOpeningState );
+  const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
+  const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
+  const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );
 
   const handleClose = useRecoilCallback(
     ( { set } ) => () => {
@@ -44,6 +47,24 @@ export const SettingsModal: React.FC<{
     const mode = ( event.target as HTMLSelectElement ).value;
 
     SETTINGSMAN.xfaderMode = mode as XFaderModeType;
+  }, [] );
+
+  const handleChangeVectorscopeMode = useCallback( ( event: React.ChangeEvent ) => {
+    const mode = ( event.target as HTMLSelectElement ).value;
+
+    SETTINGSMAN.vectorscopeMode = mode as VectorscopeModeType;
+  }, [] );
+
+  const handleChangeVectorscopeOpacity = useCallback( ( event: React.ChangeEvent ) => {
+    const opacity = ( event.target as HTMLInputElement ).value;
+
+    SETTINGSMAN.vectorscopeOpacity = parseFloat( opacity );
+  }, [] );
+
+  const handleChangeVectorscopeColor = useCallback( ( event: React.ChangeEvent ) => {
+    const color = ( event.target as HTMLInputElement ).value;
+
+    SETTINGSMAN.vectorscopeColor = color;
   }, [] );
 
   if ( !isOpening ) {
@@ -71,7 +92,31 @@ export const SettingsModal: React.FC<{
           <option value="linear">Linear</option>
           <option value="transition">Transition</option>
         </select>
-      ) }
+      ) }<br />
+      <br />
+      Vectorscope Mode: { (
+        <select
+          value={ vectorscopeMode }
+          onChange={ handleChangeVectorscopeMode }
+        >
+          <option value="none">None</option>
+          <option value="line">Line</option>
+          <option value="points">Points</option>
+        </select>
+      ) }<br />
+      Vectorscope Opacity: <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value={ vectorscopeOpacity }
+        onChange={ handleChangeVectorscopeOpacity }
+      /><br />
+      Vectorscope Color: <input
+        type="color"
+        value={ vectorscopeColor }
+        onChange={ handleChangeVectorscopeColor }
+      />
     </Modal>
   );
 };

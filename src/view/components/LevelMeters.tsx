@@ -1,8 +1,8 @@
+import { levelMeterInAState, levelMeterInBState, levelMeterOutState } from '../states/mixer';
 import { LevelMeter } from './LevelMeter';
 import React from 'react';
-import { levelMeterState } from '../states/levelMeter';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 // == styles =======================================================================================
 const StyledLevelMeterA = styled( LevelMeter )`
@@ -32,27 +32,29 @@ const Root = styled.div`
 export const LevelMeters: React.FC<{
   className?: string;
 }> = ( { className } ) => {
-  const [ levelMeters ] = useRecoilState( levelMeterState );
+  const levelMeterInA = useRecoilValue( levelMeterInAState );
+  const levelMeterInB = useRecoilValue( levelMeterInBState );
+  const levelMeterOut = useRecoilValue( levelMeterOutState );
 
   return (
     <Root
       className={ className }
     >
       <StyledLevelMeterA
-        level={ levelMeters.inputL.level }
-        peak={ levelMeters.inputL.peak }
+        level={ levelMeterInA.level }
+        peak={ levelMeterInA.peak }
       />
       <StyledLevelMeterL
-        level={ levelMeters.output.levelL }
-        peak={ levelMeters.output.peakL }
+        level={ levelMeterOut.levelL }
+        peak={ levelMeterOut.peakL }
       />
       <StyledLevelMeterR
-        level={ levelMeters.output.levelR }
-        peak={ levelMeters.output.peakR }
+        level={ levelMeterOut.levelR }
+        peak={ levelMeterOut.peakR }
       />
       <StyledLevelMeterB
-        level={ levelMeters.inputR.level }
-        peak={ levelMeters.inputR.peak }
+        level={ levelMeterInB.level }
+        peak={ levelMeterInB.peak }
       />
     </Root>
   );

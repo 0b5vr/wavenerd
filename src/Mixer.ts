@@ -1,5 +1,6 @@
-import { LevelMeter, LevelMeterResult } from './LevelMeter';
+import { Analyser } from './Analyser';
 import { EventEmittable } from './utils/EventEmittable';
+import { LevelMeter } from './LevelMeter';
 import { SETTINGSMAN } from './SettingsManager';
 import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
@@ -9,14 +10,9 @@ import { xfaderCurveTransition } from './xfaderCurveTransition';
 export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
 
 interface MixerEvents {
-  changeVolumeL: { value: number };
-  changeVolumeR: { value: number };
+  changeVolumeA: { value: number };
+  changeVolumeB: { value: number };
   changeXFader: { value: number };
-  updateLevelMeters: {
-    inputL: LevelMeterResult;
-    inputR: LevelMeterResult;
-    output: LevelMeterResult;
-  };
 }
 
 export class Mixer extends EventEmittable<MixerEvents> {
@@ -25,24 +21,24 @@ export class Mixer extends EventEmittable<MixerEvents> {
     return this.__audio;
   }
 
-  private __volumeL = 1.0;
-  public get volumeL(): number {
-    return this.__volumeL;
+  private __volumeA = 1.0;
+  public get volumeA(): number {
+    return this.__volumeA;
   }
-  public set volumeL( value: number ) {
-    this.__volumeL = value;
+  public set volumeA( value: number ) {
+    this.__volumeA = value;
     this.__updateGains();
-    this.__emit( 'changeVolumeL', { value } );
+    this.__emit( 'changeVolumeA', { value } );
   }
 
-  private __volumeR = 1.0;
-  public get volumeR(): number {
-    return this.__volumeR;
+  private __volumeB = 1.0;
+  public get volumeB(): number {
+    return this.__volumeB;
   }
-  public set volumeR( value: number ) {
-    this.__volumeR = value;
+  public set volumeB( value: number ) {
+    this.__volumeB = value;
     this.__updateGains();
-    this.__emit( 'changeVolumeR', { value } );
+    this.__emit( 'changeVolumeB', { value } );
   }
 
   private __xFaderPos = 0.5;
@@ -55,71 +51,69 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__emit( 'changeXFader', { value } );
   }
 
-  private __gainNodeL: GainNode;
-  private __gainNodeR: GainNode;
-  private __gainXFaderL: GainNode;
-  private __gainXFaderR: GainNode;
+  private __gainNodeA: GainNode;
+  private __gainNodeB: GainNode;
+  private __gainXFaderA: GainNode;
+  private __gainXFaderB: GainNode;
   private __gainNodeOut: GainNode;
 
-  public get inputL(): AudioNode {
-    return this.__gainNodeL;
+  public get inputA(): AudioNode {
+    return this.__gainNodeA;
   }
 
-  public get inputR(): AudioNode {
-    return this.__gainNodeR;
+  public get inputB(): AudioNode {
+    return this.__gainNodeB;
   }
 
   public get output(): AudioNode {
     return this.__gainNodeOut;
   }
 
-  private __levelMeterInputL: LevelMeter;
-  private __levelMeterInputR: LevelMeter;
-  private __levelMeterOutput: LevelMeter;
+  public readonly analyserInA: Analyser;
+  public readonly analyserInB: Analyser;
+  public readonly analyserOut: Analyser;
+
+  public readonly levelMeterInA: LevelMeter;
+  public readonly levelMeterInB: LevelMeter;
+  public readonly levelMeterOut: LevelMeter;
 
   public constructor( audio: AudioContext ) {
     super();
 
     this.__audio = audio;
 
-    this.__gainNodeL = audio.createGain();
-    this.__gainNodeR = audio.createGain();
-    this.__gainXFaderL = audio.createGain();
-    this.__gainXFaderR = audio.createGain();
+    this.__gainNodeA = audio.createGain();
+    this.__gainNodeB = audio.createGain();
+    this.__gainXFaderA = audio.createGain();
+    this.__gainXFaderB = audio.createGain();
     this.__gainNodeOut = audio.createGain();
 
-    this.__gainNodeL.connect( this.__gainXFaderL );
-    this.__gainNodeR.connect( this.__gainXFaderR );
-    this.__gainXFaderL.connect( this.__gainNodeOut );
-    this.__gainXFaderR.connect( this.__gainNodeOut );
+    this.__gainNodeA.connect( this.__gainXFaderA );
+    this.__gainNodeB.connect( this.__gainXFaderB );
+    this.__gainXFaderA.connect( this.__gainNodeOut );
+    this.__gainXFaderB.connect( this.__gainNodeOut );
 
-    this.__levelMeterInputL = new LevelMeter( audio );
-    this.__levelMeterInputR = new LevelMeter( audio );
-    this.__levelMeterOutput = new LevelMeter( audio );
+    this.analyserInA = new Analyser( audio );
+    this.analyserInB = new Analyser( audio );
+    this.analyserOut = new Analyser( audio );
 
-    this.__gainNodeL.connect( this.__levelMeterInputL.input );
-    this.__gainNodeR.connect( this.__levelMeterInputR.input );
-    this.__gainNodeOut.connect( this.__levelMeterOutput.input );
+    this.__gainNodeA.connect( this.analyserInA.input );
+    this.__gainNodeB.connect( this.analyserInB.input );
+    this.__gainNodeOut.connect( this.analyserOut.input );
+
+    this.levelMeterInA = new LevelMeter( this.analyserInA );
+    this.levelMeterInB = new LevelMeter( this.analyserInB );
+    this.levelMeterOut = new LevelMeter( this.analyserOut );
 
     SETTINGSMAN.on( 'changeXFaderMode', () => {
       this.__updateGains();
     } );
   }
 
-  public updateLevelMeter( deltaTime: number ): {
-    inputL: LevelMeterResult;
-    inputR: LevelMeterResult;
-    output: LevelMeterResult;
-  } {
-    const inputL = this.__levelMeterInputL.update( deltaTime );
-    const inputR = this.__levelMeterInputR.update( deltaTime );
-    const output = this.__levelMeterOutput.update( deltaTime );
-
-    const ret = { inputL, inputR, output };
-
-    this.__emit( 'updateLevelMeters', ret );
-
-    return ret;
+  public updateAnalyser( deltaTime: number ): void {
+    this.analyserInA.update( deltaTime );
+    this.analyserInB.update( deltaTime );
+    this.analyserOut.update( deltaTime );
   }
 
   private __updateGains(): void {
@@ -127,11 +121,11 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
     const time = this.__audio.currentTime + 0.005;
 
-    this.__gainNodeL.gain.linearRampToValueAtTime( this.__volumeL, time );
-    this.__gainNodeR.gain.linearRampToValueAtTime( this.__volumeR, time );
+    this.__gainNodeA.gain.linearRampToValueAtTime( this.__volumeA, time );
+    this.__gainNodeB.gain.linearRampToValueAtTime( this.__volumeB, time );
 
-    this.__gainXFaderL.gain.linearRampToValueAtTime( a, time );
-    this.__gainXFaderR.gain.linearRampToValueAtTime( b, time );
+    this.__gainXFaderA.gain.linearRampToValueAtTime( a, time );
+    this.__gainXFaderB.gain.linearRampToValueAtTime( b, time );
   }
 
   private __getXFaderValue(): [ number, number ] {
