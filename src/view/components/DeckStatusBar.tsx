@@ -1,5 +1,5 @@
 import { RecoilState, useRecoilValue } from 'recoil';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Colors } from '../constants/Colors';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
