@@ -18,6 +18,19 @@ const Sans = styled.div`
   margin-bottom: 2em;
 `;
 
+const Name = styled.div`
+  width: 12em;
+`;
+
+const Line = styled.div`
+  display: flex;
+  align-items: center;
+
+  & + & {
+    margin-top: 4px;
+  }
+`;
+
 const StyledNumberParam = styled( NumberParam )`
   display: inline-block;
   background: ${ Colors.back4 };
@@ -86,22 +99,25 @@ export const SettingsModal: React.FC<{
     <Modal onClose={handleClose}>
       <Sans>decent settings modal window</Sans>
 
-      <p
+      <Line
         data-stalker="Faster = more noises, slower = less interactive.&#10;I usually use 32 or 64."
       >
-        Latency Blocks: { (
+        <Name>Latency Blocks</Name>
+        { (
           <StyledNumberParam
             type="int"
             value={ latencyBlocks }
             onChange={ handleChangeLatencyBlocks }
           />
-        ) } ({ latencyTime.toFixed( 0 ) } ms)
-      </p>
+        ) }
+        ({ latencyTime.toFixed( 0 ) } ms)
+      </Line>
 
-      <p
+      <Line
         data-stalker="Change the curve of the cross fader."
       >
-        X Fader Curve Mode: { (
+        <Name>X Fader Curve Mode</Name>
+        { (
           <select
             value={ xFaderMode }
             onChange={ handleChangeXFaderCurveMode }
@@ -112,12 +128,13 @@ export const SettingsModal: React.FC<{
             <option value="transition">Transition</option>
           </select>
         ) }<br />
-      </p>
+      </Line>
 
-      <p
+      <Line
         data-stalker="Change the type of the vectorscope.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky&#10;&quot;Points&quot; is way too expensive to use right now. I will improve later"
       >
-        Vectorscope Mode: { (
+        <Name>Vectorscope Mode</Name>
+        { (
           <select
             value={ vectorscopeMode }
             onChange={ handleChangeVectorscopeMode }
@@ -127,11 +144,12 @@ export const SettingsModal: React.FC<{
             <option value="points">Points</option>
           </select>
         ) }<br />
-      </p>
-      <p
+      </Line>
+      <Line
         data-stalker="Change the opacity of the vectorscope."
       >
-        Vectorscope Opacity: <input
+        <Name>Vectorscope Opacity</Name>
+        <input
           type="range"
           min="0"
           max="1"
@@ -139,16 +157,17 @@ export const SettingsModal: React.FC<{
           value={ vectorscopeOpacity }
           onChange={ handleChangeVectorscopeOpacity }
         /><br />
-      </p>
-      <p
+      </Line>
+      <Line
         data-stalker="Change the color of the vectorscope."
       >
-        Vectorscope Color: <input
+        <Name>Vectorscope Color</Name>
+        <input
           type="color"
           value={ vectorscopeColor }
           onChange={ handleChangeVectorscopeColor }
         />
-      </p>
+      </Line>
     </Modal>
   );
 };
