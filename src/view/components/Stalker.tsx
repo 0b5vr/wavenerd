@@ -8,6 +8,7 @@ const Root = styled.div`
   font: 500 12px monospace;
   padding: 2px 4px;
   margin: 8px 16px;
+  white-space: pre-line;
   background: ${ Colors.back1 };
   border-radius: 4px;
   opacity: 0.8;

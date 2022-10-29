@@ -1,10 +1,15 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, VectorscopeModeType } from '../../SettingsManager';
 import { settingsIsOpeningState, settingsLatencyBlocksState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
+import { NumberParam } from './NumberParam';
 import styled from 'styled-components';
+
+// == constants ====================================================================================
+const BLOCK_SIZE = 128;
 
 // == styles =======================================================================================
 const Sans = styled.div`
@@ -13,20 +18,28 @@ const Sans = styled.div`
   margin-bottom: 2em;
 `;
 
-const StyledNumberInput = styled.input`
+const StyledNumberParam = styled( NumberParam )`
+  display: inline-block;
+  background: ${ Colors.back4 };
+  padding: 2px;
+  border-radius: 4px;
   width: 4em;
 `;
 
 // == components ===================================================================================
 export const SettingsModal: React.FC<{
   mixer: Mixer,
-}> = () => {
+}> = ( { mixer } ) => {
   const isOpening = useRecoilValue( settingsIsOpeningState );
   const latencyBlocks = useRecoilValue( settingsLatencyBlocksState );
   const xFaderMode = useRecoilValue( settingsXFaderModeState );
   const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
   const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
   const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );
+
+  const latencyTime = useMemo( () => (
+    latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
+  ), [ latencyBlocks ] );
 
   const handleClose = useRecoilCallback(
     ( { set } ) => () => {
@@ -35,10 +48,8 @@ export const SettingsModal: React.FC<{
     [],
   );
 
-  const handleChangeLatencyBlocks = useCallback( ( event: React.ChangeEvent ) => {
-    const value = ( event.target as HTMLInputElement ).value;
-    const valueInt = parseInt( value, 10 );
-    const valueValid = valueInt > 0 ? valueInt : 32;
+  const handleChangeLatencyBlocks = useCallback( ( value: number ) => {
+    const valueValid = Math.max( 1, value );
 
     SETTINGSMAN.latencyBlocks = valueValid;
   }, [] );
@@ -74,49 +85,70 @@ export const SettingsModal: React.FC<{
   return (
     <Modal onClose={handleClose}>
       <Sans>decent settings modal window</Sans>
-      Latency Blocks: { (
-        <StyledNumberInput
-          type="number"
-          step="1"
-          value={ latencyBlocks }
-          onChange={ handleChangeLatencyBlocks }
+
+      <p
+        data-stalker="Faster = more noises, slower = less interactive.&#10;I usually use 32 or 64."
+      >
+        Latency Blocks: { (
+          <StyledNumberParam
+            type="int"
+            value={ latencyBlocks }
+            onChange={ handleChangeLatencyBlocks }
+          />
+        ) } ({ latencyTime.toFixed( 0 ) } ms)
+      </p>
+
+      <p
+        data-stalker="Change the curve of the cross fader."
+      >
+        X Fader Curve Mode: { (
+          <select
+            value={ xFaderMode }
+            onChange={ handleChangeXFaderCurveMode }
+          >
+            <option value="constantPower">Constant Power</option>
+            <option value="cut">Cut</option>
+            <option value="linear">Linear</option>
+            <option value="transition">Transition</option>
+          </select>
+        ) }<br />
+      </p>
+
+      <p
+        data-stalker="Change the type of the vectorscope.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky&#10;&quot;Points&quot; is way too expensive to use right now. I will improve later"
+      >
+        Vectorscope Mode: { (
+          <select
+            value={ vectorscopeMode }
+            onChange={ handleChangeVectorscopeMode }
+          >
+            <option value="none">None</option>
+            <option value="line">Line</option>
+            <option value="points">Points</option>
+          </select>
+        ) }<br />
+      </p>
+      <p
+        data-stalker="Change the opacity of the vectorscope."
+      >
+        Vectorscope Opacity: <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={ vectorscopeOpacity }
+          onChange={ handleChangeVectorscopeOpacity }
+        /><br />
+      </p>
+      <p
+        data-stalker="Change the color of the vectorscope."
+      >
+        Vectorscope Color: <input
+          type="color"
+          value={ vectorscopeColor }
+          onChange={ handleChangeVectorscopeColor }
         />
-      ) }<br />
-      X Fader Curve Mode: { (
-        <select
-          value={ xFaderMode }
-          onChange={ handleChangeXFaderCurveMode }
-        >
-          <option value="constantPower">Constant Power</option>
-          <option value="cut">Cut</option>
-          <option value="linear">Linear</option>
-          <option value="transition">Transition</option>
-        </select>
-      ) }<br />
-      <br />
-      Vectorscope Mode: { (
-        <select
-          value={ vectorscopeMode }
-          onChange={ handleChangeVectorscopeMode }
-        >
-          <option value="none">None</option>
-          <option value="line">Line</option>
-          <option value="points">Points</option>
-        </select>
-      ) }<br />
-      Vectorscope Opacity: <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value={ vectorscopeOpacity }
-        onChange={ handleChangeVectorscopeOpacity }
-      /><br />
-      Vectorscope Color: <input
-        type="color"
-        value={ vectorscopeColor }
-        onChange={ handleChangeVectorscopeColor }
-      />
+      </p>
     </Modal>
   );
 };
