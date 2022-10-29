@@ -1,11 +1,10 @@
 import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import { Colors } from '../constants/Colors';
-import IconApply from '~icons/mdi/reload';
+import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
 import IconCheck from '~icons/mdi/check-bold';
 import IconError from '~icons/mdi/close-octagon';
-import IconLoading from '~icons/mdi/loading';
 import IconPlay from '~icons/mdi/play';
 import React from 'react';
 
@@ -36,15 +35,9 @@ const StyledIconPlay = styled( IconPlay )`
   color: ${ Colors.foresub };
 `;
 
-const StyleAnimationBuild = keyframes`
-  0% { transform: rotate(-20deg); }
-  50% { transform: rotate(10deg); }
-`;
-
 const StyledIconBuilding = styled( IconBuild )`
   ${ StyleIcon }
   color: ${ Colors.accent };
-  animation: 0.1s steps(1) infinite ${ StyleAnimationBuild };
 `;
 
 const StyledIconError = styled( IconError )`
@@ -57,17 +50,11 @@ const StyledIconCheck = styled( IconCheck )`
   color: ${ Colors.green };
 `;
 
-const StyleAnimationRotate = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
-
-const StyledIconLoading = styled( IconLoading )`
+const StyledIconApplying = styled( IconApply )`
   position: absolute;
   width: 100%;
   height: 100%;
   color: ${ Colors.accent };
-  animation: 1.0s linear infinite ${ StyleAnimationRotate };
 `;
 
 const IconStopwatchContainer = styled.div`
@@ -142,7 +129,7 @@ export const DeckStatusBar: React.FC<{
       <IconStopwatchContainer
         data-stalker="Applying..."
       >
-        <StyledIconLoading />
+        <StyledIconApplying />
       </IconStopwatchContainer>
       <Text>Applying...</Text>
     </>;
