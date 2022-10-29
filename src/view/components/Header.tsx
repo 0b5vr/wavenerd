@@ -3,6 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
+import { HeaderNudge } from './HeaderNudge';
 import { HeaderTime } from './HeaderTime';
 import { HeaderTransport } from './HeaderTransport';
 import IconBBox from '~icons/mdi/alpha-b-box';
@@ -35,6 +36,10 @@ const StyledHeaderBeatIndicators = styled( HeaderBeatIndicators )`
 `;
 
 const StyledHeaderBPM = styled( HeaderBPM )`
+  margin-left: 8px;
+`;
+
+const StyledHeaderNudge = styled( HeaderNudge )`
   margin-left: 8px;
 `;
 
@@ -130,6 +135,9 @@ export const Header: React.FC<{
       <StyledHeaderTime />
       <StyledHeaderBeatIndicators />
       <StyledHeaderBPM
+        hostDeck={ hostDeck }
+      />
+      <StyledHeaderNudge
         hostDeck={ hostDeck }
       />
       <Margin />
