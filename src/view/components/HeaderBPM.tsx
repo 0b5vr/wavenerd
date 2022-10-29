@@ -39,7 +39,7 @@ export const HeaderBPM: React.FC<{
         type="float"
         value={ bpm }
         onChange={ ( value ) => {
-          hostDeck.bpm = value;
+          hostDeck.bpm = Math.max( 40.0, value );
         } }
         fixedDigits={ 2 }
         deltaCoarse={ 1.0 }
