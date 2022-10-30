@@ -16,6 +16,7 @@ const Rect = styled.div`
   position: absolute;
   height: 100%;
   background: ${ Colors.fore };
+  mix-blend-mode: difference;
 `;
 
 const CenterLine = styled.div`
