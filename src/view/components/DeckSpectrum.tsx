@@ -1,28 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RecoilState, useRecoilValue } from 'recoil';
-import { lerp, linearstep } from '@0b5vr/experimental';
 import { settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState } from '../states/settings';
 import { AnalyserResult } from '../../Analyser';
+import { SpectrumRenderer } from '../renderers/SpectrumRenderer';
 import styled from 'styled-components';
+import { useElement } from '../utils/useElement';
+import { useFrames } from '../utils/useFrames';
+import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
-const Polyline = styled.polyline`
-  fill: none;
-  stroke: #fff;
-  stroke-width: 0.005;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-`;
-
-const Svg = styled.svg`
+const Canvas = styled.canvas`
   width: 100%;
-  height: auto;
+  height: 100%;
 `;
 
-const Root = styled.div`
-  display: flex;
-  align-items: flex-end;
-`;
+const Root = styled.div``;
 
 // == param ========================================================================================
 interface Param {
@@ -32,45 +24,68 @@ interface Param {
 
 // == component ====================================================================================
 export const DeckSpectrum: React.FC<Param> = ( { analyserState, className } ) => {
+  const [ renderer, setRenderer ] = useState<SpectrumRenderer>();
+  const refCanvas = useRef<HTMLCanvasElement>( null );
+  const canvas = useElement( refCanvas );
+  const rectCanvas = useRect( refCanvas );
+
   const { frequencyL } = useRecoilValue( analyserState );
   const spectrumMode = useRecoilValue( settingsSpectrumModeState );
   const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
   const spectrumColor = useRecoilValue( settingsSpectrumColorState );
 
-  const pointsStr = useMemo( () => {
-    let str = '';
+  // setup the renderer
+  useEffect( () => {
+    if ( canvas == null ) { return; }
 
-    for ( let i = 0; i < 512; i ++ ) {
-      const t = i / 511.0;
-      const logJ = lerp( 2.0, Math.log2( frequencyL.length ), t );
-      const j = Math.pow( 2.0, logJ ) - 1.0;
+    const renderer = new SpectrumRenderer( canvas );
+    setRenderer( renderer );
 
-      const jf = j % 1.0;
-      const ji = Math.floor( j );
-      const db0 = frequencyL[ ji ];
-      const db1 = ji === frequencyL.length - 1 ? 0.0 : frequencyL[ ji + 1.0 ];
-      const db = lerp( db0, db1, jf );
+    return () => {
+      renderer.dispose();
+    };
+  }, [ canvas ] );
 
-      const x = 4.0 * i / 512;
-      const y = linearstep( 0.0, -100.0, db );
-      str += `${ x },${ y } `;
+  // set mode, color to the renderer
+  useEffect( () => {
+    if ( renderer == null ) { return; }
+
+    renderer.mode = spectrumMode;
+
+    renderer.color = [
+      parseInt( spectrumColor.slice( 1, 3 ), 16 ) / 255.0,
+      parseInt( spectrumColor.slice( 3, 5 ), 16 ) / 255.0,
+      parseInt( spectrumColor.slice( 5, 7 ), 16 ) / 255.0,
+      spectrumOpacity,
+    ];
+  }, [ renderer, spectrumMode, spectrumColor, spectrumOpacity ] );
+
+  // set data to the renderer
+  useEffect( () => {
+    if ( spectrumMode !== 'none' ) {
+      renderer?.setData( frequencyL );
     }
+  }, [ frequencyL, renderer ] );
 
-    return str;
-  }, [ frequencyL ] );
+  // update the renderer
+  useFrames( () => {
+    if ( spectrumMode !== 'none' ) {
+      renderer?.render();
+    }
+  }, [ renderer ] );
 
-  if ( spectrumMode === 'none' ) {
-    return null;
-  }
+  // handle resize
+  useEffect( () => {
+    renderer?.resize( rectCanvas.width, rectCanvas.height );
+  }, [ renderer, rectCanvas ] );
 
   return (
     <Root className={ className }>
-      <Svg width="4" height="1" viewBox="0 0 4 1">
-        <Polyline
-          points={ pointsStr }
-          style={{ stroke: spectrumColor, opacity: spectrumOpacity }}
-        />
-      </Svg>
+      <Canvas ref={refCanvas}
+        style={{
+          display: spectrumMode === 'none' ? 'none' : 'block',
+        }}
+      />
     </Root>
   );
 };
