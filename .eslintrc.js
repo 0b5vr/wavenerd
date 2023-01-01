@@ -72,7 +72,7 @@ module.exports = {
     'space-in-parens': [ 'error', 'always' ], // it kills `func (arg)`
     'space-infix-ops': [ 'error' ], // it kills val1+val2
     'space-unary-ops': [ 'error', { 'words': true, 'nonwords': false, 'overrides': { '++': true, '--': true } } ], // it kills `val++`
-    'spaced-comment': [ 'error', 'always' ], // it kills `//this is comment`
+    'spaced-comment': [ 'error', 'always', { 'markers': [ '/', '!' ] } ], // it kills `//this is comment`
 
     // ban spacing
     'func-call-spacing': [ 'error', 'never' ], // no-trailing-spaces. yea.
