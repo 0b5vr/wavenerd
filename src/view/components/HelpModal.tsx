@@ -100,12 +100,19 @@ export const HelpModal: React.FC = () => {
           It&apos;s since the precision of time goes worse in longer live coding performances.
           Thank you floating point number very cool
         </p>
+        <h2>Keyboard shortcuts</h2>
+        <p>
+          <code>Ctrl + S</code>: Compile the code<br />
+          <code>Ctrl + R</code>: Apply the code<br />
+          <code>Shift + Ctrl + R</code>: Apply the code immediately<br />
+          <code>Ctrl + B</code>: Comment out inside the current bracket<br />
+        </p>
         <h2>How to use params</h2>
         <p>
           Knobs can be used as interactive params.<br />
         </p>
         <p>
-          <code>sampleSinc( sample_****, sample_****_meta, time )</code><br />
+          <code>paramFetch( param_knob0 )</code><br />
         </p>
         <h2>How to use samples</h2>
         <p>
@@ -114,9 +121,9 @@ export const HelpModal: React.FC = () => {
           can be loaded.<br />
         </p>
         <p>
-          <code>sampleSinc( sample_****, sample_****_meta, time )</code><br />
+          <code>sampleSinc( sample_****, sample_****_meta, sampleTime )</code><br />
           or<br />
-          <code>sampleNearest( sample_****, sample_****_meta, time )</code><br />
+          <code>sampleNearest( sample_****, sample_****_meta, sampleTime )</code><br />
         </p>
         <h2>How to use wavetables</h2>
         <p>
