@@ -1,4 +1,4 @@
-import { settingsLatencyBlocksState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsLatencyBlocksState, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -9,6 +9,9 @@ function SettingsListener(): null {
   const setVectorscopeMode = useSetRecoilState( settingsVectorscopeModeState );
   const setVectorscopeOpacity = useSetRecoilState( settingsVectorscopeOpacityState );
   const setVectorscopeColor = useSetRecoilState( settingsVectorscopeColorState );
+  const setSpectrumMode = useSetRecoilState( settingsSpectrumModeState );
+  const setSpectrumOpacity = useSetRecoilState( settingsSpectrumOpacityState );
+  const setSpectrumColor = useSetRecoilState( settingsSpectrumColorState );
 
   useEffect(
     () => {
@@ -40,12 +43,33 @@ function SettingsListener(): null {
         } );
       setVectorscopeColor( SETTINGSMAN.vectorscopeColor );
 
+      const handleChangeSpectrumMode
+        = SETTINGSMAN.on( 'changeSpectrumMode', ( { mode } ) => {
+          setSpectrumMode( mode );
+        } );
+      setSpectrumMode( SETTINGSMAN.spectrumMode );
+
+      const handleChangeSpectrumOpacity
+        = SETTINGSMAN.on( 'changeSpectrumOpacity', ( { opacity } ) => {
+          setSpectrumOpacity( opacity );
+        } );
+      setSpectrumOpacity( SETTINGSMAN.spectrumOpacity );
+
+      const handleChangeSpectrumColor
+        = SETTINGSMAN.on( 'changeSpectrumColor', ( { color } ) => {
+          setSpectrumColor( color );
+        } );
+      setSpectrumColor( SETTINGSMAN.spectrumColor );
+
       return () => {
         SETTINGSMAN.off( 'changeLatencyBlocks', handleChangeLatencyBlocks );
         SETTINGSMAN.off( 'changeXFaderMode', handleChangeXFaderMode );
         SETTINGSMAN.off( 'changeVectorscopeMode', handleChangeVectorscopeMode );
         SETTINGSMAN.off( 'changeVectorscopeOpacity', handleChangeVectorscopeOpacity );
         SETTINGSMAN.off( 'changeVectorscopeColor', handleChangeVectorscopeColor );
+        SETTINGSMAN.off( 'changeSpectrumMode', handleChangeSpectrumMode );
+        SETTINGSMAN.off( 'changeSpectrumOpacity', handleChangeSpectrumOpacity );
+        SETTINGSMAN.off( 'changeSpectrumColor', handleChangeSpectrumColor );
       };
     },
     []

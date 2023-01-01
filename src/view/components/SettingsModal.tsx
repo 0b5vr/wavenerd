@@ -1,7 +1,7 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
-import { SETTINGSMAN, VectorscopeModeType } from '../../SettingsManager';
-import { settingsIsOpeningState, settingsLatencyBlocksState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
+import { settingsIsOpeningState, settingsLatencyBlocksState, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
@@ -49,6 +49,9 @@ export const SettingsModal: React.FC<{
   const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
   const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
   const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );
+  const spectrumMode = useRecoilValue( settingsSpectrumModeState );
+  const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
+  const spectrumColor = useRecoilValue( settingsSpectrumColorState );
 
   const latencyTime = useMemo( () => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
@@ -89,6 +92,24 @@ export const SettingsModal: React.FC<{
     const color = ( event.target as HTMLInputElement ).value;
 
     SETTINGSMAN.vectorscopeColor = color;
+  }, [] );
+
+  const handleChangeSpectrumMode = useCallback( ( event: React.ChangeEvent ) => {
+    const mode = ( event.target as HTMLSelectElement ).value;
+
+    SETTINGSMAN.spectrumMode = mode as SpectrumModeType;
+  }, [] );
+
+  const handleChangeSpectrumOpacity = useCallback( ( event: React.ChangeEvent ) => {
+    const opacity = ( event.target as HTMLInputElement ).value;
+
+    SETTINGSMAN.spectrumOpacity = parseFloat( opacity );
+  }, [] );
+
+  const handleChangeSpectrumColor = useCallback( ( event: React.ChangeEvent ) => {
+    const color = ( event.target as HTMLInputElement ).value;
+
+    SETTINGSMAN.spectrumColor = color;
   }, [] );
 
   if ( !isOpening ) {
@@ -166,6 +187,44 @@ export const SettingsModal: React.FC<{
           type="color"
           value={ vectorscopeColor }
           onChange={ handleChangeVectorscopeColor }
+        />
+      </Line>
+
+      <Line
+        data-stalker="Change the type of the spectrum.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
+      >
+        <Name>Spectrum Mode</Name>
+        { (
+          <select
+            value={ spectrumMode }
+            onChange={ handleChangeSpectrumMode }
+          >
+            <option value="none">None</option>
+            <option value="line">Line</option>
+          </select>
+        ) }<br />
+      </Line>
+      <Line
+        data-stalker="Change the opacity of the spectrum."
+      >
+        <Name>spectrum Opacity</Name>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={ spectrumOpacity }
+          onChange={ handleChangeSpectrumOpacity }
+        /><br />
+      </Line>
+      <Line
+        data-stalker="Change the color of the spectrum."
+      >
+        <Name>spectrum Color</Name>
+        <input
+          type="color"
+          value={ spectrumColor }
+          onChange={ handleChangeSpectrumColor }
         />
       </Line>
     </Modal>

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { RecoilState, useRecoilCallback } from 'recoil';
 import { AnalyserResult } from '../../Analyser';
 import { DeckEditor } from './DeckEditor';
+import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
 import { DeckVectorscope } from './DeckVectorscope';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -25,6 +26,15 @@ const StyledStatusBar = styled( DeckStatusBar )`
 `;
 
 const StyledVectorscope = styled( DeckVectorscope )`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc( 100% - 24px );
+  pointer-events: none;
+`;
+
+const StyledSpectrogram = styled( DeckSpectrum )`
   position: absolute;
   left: 0;
   top: 0;
@@ -80,6 +90,9 @@ export const Deck: React.FC<{
         onApply={ handleApply }
       />
       <StyledVectorscope
+        analyserState={ analyserState }
+      />
+      <StyledSpectrogram
         analyserState={ analyserState }
       />
     </Root>

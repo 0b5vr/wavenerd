@@ -1,4 +1,4 @@
-import { VectorscopeModeType } from '../../SettingsManager';
+import { SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
 import { XFaderModeType } from '../../Mixer';
 import { atom } from 'recoil';
 
@@ -30,5 +30,20 @@ export const settingsVectorscopeOpacityState = atom<number>( {
 
 export const settingsVectorscopeColorState = atom<string>( {
   key: 'settingsVectorscopeColorState',
+  default: '#ffffff',
+} );
+
+export const settingsSpectrumModeState = atom<SpectrumModeType>( {
+  key: 'settingsSpectrumModeState',
+  default: 'none',
+} );
+
+export const settingsSpectrumOpacityState = atom<number>( {
+  key: 'settingsSpectrumOpacityState',
+  default: 0.2,
+} );
+
+export const settingsSpectrumColorState = atom<string>( {
+  key: 'settingsSpectrumColorState',
   default: '#ffffff',
 } );

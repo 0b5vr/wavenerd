@@ -5,12 +5,17 @@ export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
 
 export type VectorscopeModeType = 'none' | 'line' | 'points';
 
+export type SpectrumModeType = 'none' | 'line';
+
 interface SettingsManagerStorageType {
   latencyBlocks: number;
   xfaderMode: XFaderModeType;
   vectorscopeMode: VectorscopeModeType;
   vectorscopeOpacity: number;
   vectorscopeColor: string;
+  spectrumMode: SpectrumModeType;
+  spectrumOpacity: number;
+  spectrumColor: string;
 }
 
 interface SettingsManagerEvents {
@@ -19,6 +24,9 @@ interface SettingsManagerEvents {
   changeVectorscopeMode: { mode: VectorscopeModeType };
   changeVectorscopeOpacity: { opacity: number };
   changeVectorscopeColor: { color: string };
+  changeSpectrumMode: { mode: SpectrumModeType };
+  changeSpectrumOpacity: { opacity: number };
+  changeSpectrumColor: { color: string };
 }
 
 export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
@@ -60,6 +68,30 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public set vectorscopeColor( color: string ) {
     this.__storage.set( 'vectorscopeColor', color );
     this.__emit( 'changeVectorscopeColor', { color } );
+  }
+
+  public get spectrumMode(): SpectrumModeType {
+    return this.__storage.get( 'spectrumMode' ) ?? 'none';
+  }
+  public set spectrumMode( mode: SpectrumModeType ) {
+    this.__storage.set( 'spectrumMode', mode );
+    this.__emit( 'changeSpectrumMode', { mode } );
+  }
+
+  public get spectrumOpacity(): number {
+    return this.__storage.get( 'spectrumOpacity' ) ?? 0.2;
+  }
+  public set spectrumOpacity( opacity: number ) {
+    this.__storage.set( 'spectrumOpacity', opacity );
+    this.__emit( 'changeSpectrumOpacity', { opacity } );
+  }
+
+  public get spectrumColor(): string {
+    return this.__storage.get( 'spectrumColor' ) ?? '#ffffff';
+  }
+  public set spectrumColor( color: string ) {
+    this.__storage.set( 'spectrumColor', color );
+    this.__emit( 'changeSpectrumColor', { color } );
   }
 
   private __storage: ThrottledJSONStorage<SettingsManagerStorageType>;

@@ -11,6 +11,8 @@ function copyAnalyserResult( result: AnalyserResult ): AnalyserResult {
     deltaTime: result.deltaTime,
     timeDomainL: result.timeDomainL.slice(),
     timeDomainR: result.timeDomainR.slice(),
+    frequencyL: result.frequencyL.slice(),
+    frequencyR: result.frequencyR.slice(),
   };
 }
 
