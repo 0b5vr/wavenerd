@@ -64,6 +64,10 @@ export const DeckEditor: React.FC<{
         'Shift-Ctrl-R': () => {
           onApplyImmediately();
         },
+        'Ctrl-B': () => {
+          editor.execCommand( 'selectBetweenBrackets' );
+          editor.execCommand( 'toggleCommentIndented' );
+        },
       } );
     },
     [ onCompile, onApply ]
