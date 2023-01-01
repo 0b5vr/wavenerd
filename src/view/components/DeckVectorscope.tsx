@@ -1,22 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RecoilState, useRecoilValue } from 'recoil';
 import { settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState } from '../states/settings';
 import { AnalyserResult } from '../../Analyser';
+import { VectorscopeRenderer } from '../renderers/VectorscopeRenderer';
 import styled from 'styled-components';
+import { useElement } from '../utils/useElement';
+import { useFrames } from '../utils/useFrames';
+import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
-const Polyline = styled.polyline`
-  fill: none;
-  stroke-width: 0.005;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-`;
-
-const Circle = styled.circle`
-  stroke: none;
-`;
-
-const Svg = styled.svg`
+const Canvas = styled.canvas`
   width: 100%;
   height: 100%;
 `;
@@ -24,50 +17,72 @@ const Svg = styled.svg`
 const Root = styled.div``;
 
 // == components ===================================================================================
-// TODO: expensive. replace this in WebGL
 export const DeckVectorscope: React.FC<{
   analyserState: RecoilState<AnalyserResult>;
   className?: string;
 }> = ( { analyserState, className } ) => {
+  const [ renderer, setRenderer ] = useState<VectorscopeRenderer>();
+  const refCanvas = useRef<HTMLCanvasElement>( null );
+  const canvas = useElement( refCanvas );
+  const rectCanvas = useRect( refCanvas );
+
   const { timeDomainL, timeDomainR } = useRecoilValue( analyserState );
   const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
   const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
   const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );
 
-  const [ pointsArray, pointsStr ] = useMemo( () => {
-    const array: [ number, number ][] = [];
-    let str = '';
+  // setup the renderer
+  useEffect( () => {
+    if ( canvas == null ) { return; }
 
-    timeDomainL.forEach( ( vl, i ) => {
-      const vr = timeDomainR[ i ];
+    const renderer = new VectorscopeRenderer( canvas );
+    setRenderer( renderer );
 
-      array.push( [ vl, vr ] );
-      str += `${vl},${vr} `;
-    } );
+    return () => {
+      renderer.dispose();
+    };
+  }, [ canvas ] );
 
-    return [ array, str ];
-  }, [ timeDomainL, timeDomainR ] );
+  // set mode, color to the renderer
+  useEffect( () => {
+    if ( renderer == null ) { return; }
+
+    renderer.mode = vectorscopeMode;
+
+    renderer.color = [
+      parseInt( vectorscopeColor.slice( 1, 3 ), 16 ) / 255.0,
+      parseInt( vectorscopeColor.slice( 3, 5 ), 16 ) / 255.0,
+      parseInt( vectorscopeColor.slice( 5, 7 ), 16 ) / 255.0,
+      vectorscopeOpacity,
+    ];
+  }, [ renderer, vectorscopeMode, vectorscopeColor, vectorscopeOpacity ] );
+
+  // set data to the renderer
+  useEffect( () => {
+    if ( vectorscopeMode !== 'none' ) {
+      renderer?.setData( timeDomainL, timeDomainR );
+    }
+  }, [ timeDomainL, timeDomainR, renderer ] );
+
+  // update the renderer
+  useFrames( () => {
+    if ( vectorscopeMode !== 'none' ) {
+      renderer?.render();
+    }
+  }, [ renderer ] );
+
+  // handle resize
+  useEffect( () => {
+    renderer?.resize( rectCanvas.width, rectCanvas.height );
+  }, [ renderer, rectCanvas ] );
 
   return (
     <Root className={ className }>
-      <Svg width="4" height="4" viewBox="0 0 4 4">
-        <g transform="translate(2 2) rotate(45 0 0)">
-          { vectorscopeMode === 'line' && (
-            <Polyline
-              points={ pointsStr }
-              style={{ stroke: vectorscopeColor, opacity: vectorscopeOpacity }}
-            />
-          ) }
-
-          { vectorscopeMode === 'points' && (
-            <g style={{ fill: vectorscopeColor, opacity: vectorscopeOpacity }}>
-              { pointsArray.map( ( [ x, y ], i ) => (
-                <Circle key={ i } cx={ x } cy={ y } r="0.01" />
-              ) ) }
-            </g>
-          ) }
-        </g>
-      </Svg>
+      <Canvas ref={refCanvas}
+        style={{
+          display: vectorscopeMode === 'none' ? 'none' : 'block',
+        }}
+      />
     </Root>
   );
 };
