@@ -152,7 +152,7 @@ export const SettingsModal: React.FC<{
       </Line>
 
       <Line
-        data-stalker="Change the type of the vectorscope.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky&#10;&quot;Points&quot; is way too expensive to use right now. I will improve later"
+        data-stalker="Change the type of the vectorscope.&#10;Consumes the performance, yes. Select &quot;None&quot; if you need no funky"
       >
         <Name>Vectorscope Mode</Name>
         { (
