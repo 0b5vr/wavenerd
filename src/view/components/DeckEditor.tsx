@@ -44,8 +44,9 @@ export const DeckEditor: React.FC<{
   codeState: RecoilState<string>;
   onCompile: () => void;
   onApply: () => void;
+  onApplyImmediately: () => void;
   className?: string;
-}> = ( { codeState, onCompile, onApply, className } ) => {
+}> = ( { codeState, onCompile, onApply, onApplyImmediately, className } ) => {
   const [ isDragging, setIsDragging ] = useState( false );
   const setCode = useSetRecoilState( codeState );
   const [ hasEdited, setHasEdited ] = useState( false );
@@ -59,6 +60,9 @@ export const DeckEditor: React.FC<{
         },
         'Ctrl-R': () => {
           onApply();
+        },
+        'Shift-Ctrl-R': () => {
+          onApplyImmediately();
         },
       } );
     },

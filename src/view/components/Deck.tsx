@@ -74,6 +74,16 @@ export const Deck: React.FC<{
     [ handleCompile ]
   );
 
+  const handleApplyImmediately = useCallback(
+    async () => {
+      if ( deck.cueStatus === 'none' ) {
+        await handleCompile();
+      }
+      deck.applyCueImmediately();
+    },
+    [ handleCompile ]
+  );
+
   return (
     <Root
       className={ className }
@@ -82,12 +92,14 @@ export const Deck: React.FC<{
         codeState={ codeState }
         onCompile={ handleCompile }
         onApply={ handleApply }
+        onApplyImmediately={ handleApplyImmediately }
       />
       <StyledStatusBar
         errorState={ errorState }
         cueStatusState={ cueStatusState }
         onCompile={ handleCompile }
         onApply={ handleApply }
+        onApplyImmediately={ handleApplyImmediately }
       />
       <StyledVectorscope
         analyserState={ analyserState }

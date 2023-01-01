@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css } from 'styled-components';
 import { Colors } from '../constants/Colors';
@@ -6,7 +7,6 @@ import IconBuild from '~icons/mdi/hammer';
 import IconCheck from '~icons/mdi/check-bold';
 import IconError from '~icons/mdi/close-octagon';
 import IconPlay from '~icons/mdi/play';
-import React from 'react';
 
 // == styles =======================================================================================
 const StyleIcon = css`
@@ -92,12 +92,21 @@ const Root = styled.div`
 export const DeckStatusBar: React.FC<{
   onCompile: () => void;
   onApply: () => void;
+  onApplyImmediately: () => void;
   cueStatusState: RecoilState<'none' | 'compiling' | 'ready' | 'applying'>;
   errorState: RecoilState<string | null>;
   className?: string;
-}> = ( { className, onCompile, onApply, cueStatusState, errorState } ) => {
+}> = ( { className, onCompile, onApply, onApplyImmediately, cueStatusState, errorState } ) => {
   const cueStatus = useRecoilValue( cueStatusState );
   const error = useRecoilValue( errorState );
+
+  const handleClickApply = useCallback( ( event: React.MouseEvent ) => {
+    if ( event.shiftKey ) {
+      onApplyImmediately();
+    } else {
+      onApply();
+    }
+  }, [ onApplyImmediately, onApply ] );
 
   let content: React.ReactNode;
   if ( error != null ) {
@@ -145,8 +154,8 @@ export const DeckStatusBar: React.FC<{
         data-stalker="Compile the shader code (Ctrl+S)"
       />
       <StyledIconApply
-        onClick={ onApply }
-        data-stalker="Apply the compiled shader code (Ctrl+R)"
+        onClick={ handleClickApply }
+        data-stalker="Apply the compiled shader code (Ctrl+R)&#10;Shift+Ctrl+R to apply immediately"
       />
     </Root>
   );
