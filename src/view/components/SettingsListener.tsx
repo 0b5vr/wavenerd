@@ -1,10 +1,11 @@
-import { settingsLatencyBlocksState, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 function SettingsListener(): null {
   const setLatencyBlocks = useSetRecoilState( settingsLatencyBlocksState );
+  const setMasterReverbGain = useSetRecoilState( settingsMasterReverbGain );
   const setXFaderMode = useSetRecoilState( settingsXFaderModeState );
   const setVectorscopeMode = useSetRecoilState( settingsVectorscopeModeState );
   const setVectorscopeOpacity = useSetRecoilState( settingsVectorscopeOpacityState );
@@ -19,6 +20,14 @@ function SettingsListener(): null {
         setLatencyBlocks( blocks );
       } );
       setLatencyBlocks( SETTINGSMAN.latencyBlocks );
+
+      const handleChangeMasterReverbGain = SETTINGSMAN.on(
+        'changeMasterReverbGain',
+        ( { gain } ) => {
+          setMasterReverbGain( gain );
+        },
+      );
+      setMasterReverbGain( SETTINGSMAN.masterReverbGain );
 
       const handleChangeXFaderMode = SETTINGSMAN.on( 'changeXFaderMode', ( { mode } ) => {
         setXFaderMode( mode );
@@ -63,6 +72,7 @@ function SettingsListener(): null {
 
       return () => {
         SETTINGSMAN.off( 'changeLatencyBlocks', handleChangeLatencyBlocks );
+        SETTINGSMAN.off( 'changeMasterReverbGain', handleChangeMasterReverbGain );
         SETTINGSMAN.off( 'changeXFaderMode', handleChangeXFaderMode );
         SETTINGSMAN.off( 'changeVectorscopeMode', handleChangeVectorscopeMode );
         SETTINGSMAN.off( 'changeVectorscopeOpacity', handleChangeVectorscopeOpacity );

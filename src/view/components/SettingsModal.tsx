@@ -1,7 +1,7 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
-import { settingsIsOpeningState, settingsLatencyBlocksState, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
@@ -45,6 +45,7 @@ export const SettingsModal: React.FC<{
 }> = ( { mixer } ) => {
   const isOpening = useRecoilValue( settingsIsOpeningState );
   const latencyBlocks = useRecoilValue( settingsLatencyBlocksState );
+  const masterReverbGain = useRecoilValue( settingsMasterReverbGain );
   const xFaderMode = useRecoilValue( settingsXFaderModeState );
   const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
   const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
@@ -70,45 +71,43 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.latencyBlocks = valueValid;
   }, [] );
 
+  const handleChangeMasterReverbGain = useCallback( ( event: React.ChangeEvent ) => {
+    const gain = ( event.target as HTMLInputElement ).value;
+    SETTINGSMAN.masterReverbGain = parseFloat( gain );
+  }, [] );
+
   const handleChangeXFaderCurveMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-
     SETTINGSMAN.xfaderMode = mode as XFaderModeType;
   }, [] );
 
   const handleChangeVectorscopeMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-
     SETTINGSMAN.vectorscopeMode = mode as VectorscopeModeType;
   }, [] );
 
   const handleChangeVectorscopeOpacity = useCallback( ( event: React.ChangeEvent ) => {
     const opacity = ( event.target as HTMLInputElement ).value;
-
     SETTINGSMAN.vectorscopeOpacity = parseFloat( opacity );
   }, [] );
 
   const handleChangeVectorscopeColor = useCallback( ( event: React.ChangeEvent ) => {
     const color = ( event.target as HTMLInputElement ).value;
-
     SETTINGSMAN.vectorscopeColor = color;
   }, [] );
 
   const handleChangeSpectrumMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-
     SETTINGSMAN.spectrumMode = mode as SpectrumModeType;
   }, [] );
 
   const handleChangeSpectrumOpacity = useCallback( ( event: React.ChangeEvent ) => {
     const opacity = ( event.target as HTMLInputElement ).value;
-
     SETTINGSMAN.spectrumOpacity = parseFloat( opacity );
   }, [] );
 
   const handleChangeSpectrumColor = useCallback( ( event: React.ChangeEvent ) => {
     const color = ( event.target as HTMLInputElement ).value;
-
     SETTINGSMAN.spectrumColor = color;
   }, [] );
 
@@ -132,6 +131,20 @@ export const SettingsModal: React.FC<{
           />
         ) }
         ({ latencyTime.toFixed( 0 ) } ms)
+      </Line>
+
+      <Line
+        data-stalker="Add a reverb to the master (cheating)"
+      >
+        <Name>Master Reverb Gain</Name>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={ masterReverbGain }
+          onChange={ handleChangeMasterReverbGain }
+        /><br />
       </Line>
 
       <Line

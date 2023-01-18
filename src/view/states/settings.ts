@@ -13,6 +13,11 @@ export const settingsLatencyBlocksState = atom( {
   default: 32,
 } );
 
+export const settingsMasterReverbGain = atom( {
+  key: 'settingsMasterReverbGain',
+  default: 0.0,
+} );
+
 export const settingsXFaderModeState = atom<XFaderModeType>( {
   key: 'settingsXFaderModeState',
   default: 'transition',

@@ -9,6 +9,7 @@ export type SpectrumModeType = 'none' | 'line';
 
 interface SettingsManagerStorageType {
   latencyBlocks: number;
+  masterReverbGain: number;
   xfaderMode: XFaderModeType;
   vectorscopeMode: VectorscopeModeType;
   vectorscopeOpacity: number;
@@ -20,6 +21,7 @@ interface SettingsManagerStorageType {
 
 interface SettingsManagerEvents {
   changeLatencyBlocks: { blocks: number };
+  changeMasterReverbGain: { gain: number };
   changeXFaderMode: { mode: XFaderModeType };
   changeVectorscopeMode: { mode: VectorscopeModeType };
   changeVectorscopeOpacity: { opacity: number };
@@ -44,6 +46,14 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public set latencyBlocks( blocks: number ) {
     this.__storage.set( 'latencyBlocks', blocks );
     this.__emit( 'changeLatencyBlocks', { blocks } );
+  }
+
+  public get masterReverbGain(): number {
+    return this.__storage.get( 'masterReverbGain' ) ?? 0.0;
+  }
+  public set masterReverbGain( gain: number ) {
+    this.__storage.set( 'masterReverbGain', gain );
+    this.__emit( 'changeMasterReverbGain', { gain } );
   }
 
   public get vectorscopeMode(): VectorscopeModeType {

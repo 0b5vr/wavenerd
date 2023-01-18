@@ -3,6 +3,7 @@ import { ClockRealtime } from '@0b5vr/experimental';
 import { MIDIMAN } from './MIDIManager';
 import { MIDIParams } from './MIDIParams';
 import { Mixer } from './Mixer';
+import { Reverb } from './Reverb';
 import { SETTINGSMAN } from './SettingsManager';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
@@ -30,6 +31,14 @@ const mixer = new Mixer( audio );
 deckA.node.connect( mixer.inputA );
 deckB.node.connect( mixer.inputB );
 mixer.output.connect( audio.destination );
+
+const reverb = new Reverb( audio );
+reverb.gain.value = 0.0;
+mixer.output.connect( reverb.input );
+reverb.connect( audio.destination );
+SETTINGSMAN.on( 'changeMasterReverbGain', ( { gain } ) => {
+  reverb.gain.value = gain;
+} );
 
 const clock = new ClockRealtime();
 clock.play();
