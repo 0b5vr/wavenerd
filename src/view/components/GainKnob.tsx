@@ -12,7 +12,8 @@ const StyledKnob = styled( Knob )`
 `;
 
 const Label = styled.div`
-  font-size: 10px;
+  font: 400 10px 'Poppins', sans-serif;
+  line-height: 1;
   color: ${ Colors.fore };
 `;
 
@@ -64,6 +65,7 @@ export const GainKnob: React.FC<{
   return (
     <Root
       className={ className }
+      data-stalker="Deck Gain"
     >
       <Label>Gain</Label>
       <StyledKnob

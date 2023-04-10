@@ -1,4 +1,4 @@
-.cm-s-monokai-sharp.CodeMirror { background: #191a1f; color: #d0edff; font-size: 12px; }
+.cm-s-monokai-sharp.CodeMirror { background: #191a1f; color: #d0edff; font-size: 12px; font-family: unset; }
 .cm-s-monokai-sharp div.CodeMirror-selected { background: #474f57; }
 .cm-s-monokai-sharp .CodeMirror-line::selection, .cm-s-monokai-sharp .CodeMirror-line > span::selection, .cm-s-monokai-sharp .CodeMirror-line > span > span::selection { background: #474f57; }
 .cm-s-monokai-sharp .CodeMirror-line::-moz-selection, .cm-s-monokai-sharp .CodeMirror-line > span::-moz-selection, .cm-s-monokai-sharp .CodeMirror-line > span > span::-moz-selection { background: #474f57; }

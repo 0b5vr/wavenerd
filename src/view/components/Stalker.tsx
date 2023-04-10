@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // == styles =======================================================================================
 const Root = styled.div`
   position: fixed;
-  font: 500 12px monospace;
+  font: 400 12px 'Poppins', sans-serif;
   padding: 2px 4px;
   margin: 8px 16px;
   white-space: pre-line;

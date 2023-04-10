@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 // == styles =======================================================================================
 const Label = styled.div`
+  font: 400 10px 'Poppins', sans-serif;
+  line-height: 1;
   width: 40px;
 `;
 
@@ -40,7 +42,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   background: ${ Colors.back3 };
-  font: 500 10px monospace;
+  font-size: 10px;
   line-height: 1.1;
 `;
 

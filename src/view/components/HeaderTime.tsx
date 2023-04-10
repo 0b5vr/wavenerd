@@ -5,12 +5,12 @@ import { useRecoilValue } from 'recoil';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  font: 500 10px monospace;
-  line-height: 1.0;
+  font: 400 10px 'Poppins', sans-serif;
+  line-height: 1;
 `;
 
 const Value = styled.div`
-  font: 500 16px monospace;
+  font-size: 16px;
   line-height: 1.0;
   min-width: 64px;
 `;

@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  font: 500 10px monospace;
-  line-height: 1.0;
+  font: 400 10px 'Poppins', sans-serif;
+  line-height: 1;
   user-select: none;
   color: ${ Colors.foredark };
 `;
@@ -77,6 +77,7 @@ export const HeaderNudge: React.FC<{
       className={ className }
       ref={ refRoot }
       onMouseDown={ handleMouseDown }
+      data-stalker="Nudge the beat (drag left and right)"
     >
       <Label>Nudge</Label>
       <CenterLine />

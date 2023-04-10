@@ -65,6 +65,7 @@ export const Modal: React.FC<{
       <Plane onClick={ noopStopPropagation }>
         <Close
           onClick={ handleClickClose }
+          data-stalker="Close"
         />
         { children }
       </Plane>

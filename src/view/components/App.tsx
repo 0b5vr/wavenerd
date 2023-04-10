@@ -81,7 +81,7 @@ const Root = styled.div`
   flex-direction: column;
   color: ${ Colors.fore };
   background: ${ Colors.back2 };
-  font-family: monospace;
+  font-family: 'Roboto Mono', monospace;
 
   * {
     box-sizing: border-box;

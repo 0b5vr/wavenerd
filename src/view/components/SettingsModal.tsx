@@ -19,12 +19,13 @@ const Sans = styled.div`
 `;
 
 const Name = styled.div`
-  width: 12em;
+  width: 16em;
 `;
 
 const Line = styled.div`
   display: flex;
   align-items: center;
+  font: 400 12px 'Poppins', sans-serif;
 
   & + & {
     margin-top: 4px;

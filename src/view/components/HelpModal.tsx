@@ -3,6 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
+import IconSettings from '~icons/mdi/cog';
 import { Modal } from './Modal';
 import React from 'react';
 import { helpIsOpeningState } from '../states/help';
@@ -20,15 +21,16 @@ const IconsInContent = styled.svg`
 
 const Content = styled.div`
   padding: 0 16px;
-  height: 480px;
+  height: 80vh;
   overflow-y: scroll;
+  font: 400 14px 'Roboto', sans-serif;
 
   h2 {
-    margin: 32px 0 16px;
+    margin: 32px 0 8px;
   }
 
   p {
-    margin: 16px 0;
+    margin: 8px 0;
   }
 
   a {
@@ -38,6 +40,7 @@ const Content = styled.div`
 
   code {
     padding: 0px 4px;
+    font: 400 14px 'Roboto Mono', sans-serif;
     background-color: ${ Colors.back1 };
     color: ${ Colors.foresub };
     border-radius: 4px;

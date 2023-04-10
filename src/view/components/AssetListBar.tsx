@@ -33,7 +33,8 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   background: ${ Colors.back4 };
-  font: 500 16px monospace;
+  font: 400 16px 'Poppins', sans-serif;
+  line-height: 1;
 
   * {
     flex-shrink: 0;
@@ -78,6 +79,7 @@ export const AssetListBar: React.FC<{
       <IconButton
         as={ IconFolder }
         onClick={ handleClickOpen }
+        data-stalker="Open local file... (you can also drag and drop)"
       />
     </Root>
   );

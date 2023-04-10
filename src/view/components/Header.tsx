@@ -18,8 +18,8 @@ import { settingsIsOpeningState } from '../states/settings';
 
 // == styles =======================================================================================
 const Logo = styled.div`
-  font: 500 24px monospace;
-  line-height: 1.0;
+  font: 400 24px 'Poppins', sans-serif;
+  line-height: 1;
   margin-left: 8px;
 `;
 

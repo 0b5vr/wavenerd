@@ -79,7 +79,8 @@ const Text = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  font: 500 16px monospace;
+  font: 400 16px 'Poppins', sans-serif;
+  line-height: 1;
   background: ${ Colors.back4 };
   overflow: hidden;
 

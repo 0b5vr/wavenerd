@@ -31,7 +31,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   background: ${ Colors.back3 };
-  font: 500 12px monospace;
+  font-size: 12px;
 
   * {
     flex-shrink: 0;
