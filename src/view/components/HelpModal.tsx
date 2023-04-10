@@ -81,7 +81,7 @@ export const HelpModal: React.FC = () => {
           clicking <IconsInContent as={ IconApply } /> on the bottom of the editor.<br />
           The cued shader will be applied when it reaches the next bar.
         </p>
-        <h2>How do I make the sound?</h2>
+        <h2>How do I make a sound?</h2>
         <p>
           This would be the most simple example:
         </p>
@@ -95,6 +95,10 @@ export const HelpModal: React.FC = () => {
         <p>
           which just generates the sine wave in 440Hz.
         </p>
+        <h2>How do I make a <i>serious</i> sound?</h2>
+        <p>
+          Mmmmmm... <a href="https://github.com/0b5vr/wavenerd-dubplates" target="_blank" rel="noreferrer">Take a look at my codes?</a>
+        </p>
         <h2>Why is the input time vec4?</h2>
         <p>
           It gives you four different kind of times.<br />
@@ -102,6 +106,11 @@ export const HelpModal: React.FC = () => {
           (a beat, a bar, sixteen bars, infinity).<br />
           It&apos;s since the precision of time goes worse in longer live coding performances.
           Thank you floating point number very cool
+        </p>
+        <h2>Why is the audio stuttery sometimes?</h2>
+        <p>
+          Maybe your processor is not catching up with audio generation.
+          You can change the latency from the setting screen <IconsInContent as={ IconSettings } />.
         </p>
         <h2>Keyboard shortcuts</h2>
         <p>
