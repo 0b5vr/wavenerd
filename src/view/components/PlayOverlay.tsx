@@ -13,7 +13,8 @@ const StyledIconPlay = styled( IconPlay )`
 `;
 
 const Description = styled.div`
-  font-size: 16px;
+  font: 400 16px 'Poppins', sans-serif;
+  line-height: 1;
 `;
 
 const Underlay = styled.div`
