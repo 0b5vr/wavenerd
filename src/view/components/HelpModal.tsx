@@ -79,7 +79,7 @@ export const HelpModal: React.FC = () => {
         <p>
           After you compiled the shader, you can cue the shader by
           clicking <IconsInContent as={ IconApply } /> on the bottom of the editor.<br />
-          The cued shader will be applied when it reaches the next bar.
+          The cued shader will be applied when it reaches the next bar (= every 4 beats).
         </p>
         <h2>How do I make a sound?</h2>
         <p>
