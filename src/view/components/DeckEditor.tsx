@@ -1,9 +1,9 @@
 /* eslint-disable sort-imports */
 
 import CodeMirror from 'codemirror';
-import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
-import React, { useCallback, useEffect, useState } from 'react';
-import { RecoilState, useSetRecoilState } from 'recoil';
+import { Controlled as ReactCodeMirror } from 'react-codemirror2';
+import React, { useCallback, useState } from 'react';
+import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/mode/clike/clike';
@@ -11,7 +11,6 @@ import 'codemirror/keymap/sublime';
 import '../codemirror-themes/monokai-sharp.css';
 import '../codemirror-themes/chromacoder-green.css';
 import 'codemirror/lib/codemirror.css';
-import { defaultCode } from '../../defaultCode';
 import { Colors } from '../constants/Colors';
 
 // == styles =======================================================================================
@@ -42,14 +41,22 @@ const Root = styled.div`
 // == component ====================================================================================
 export const DeckEditor: React.FC<{
   codeState: RecoilState<string>;
+  hasEditState: RecoilState<boolean>;
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
   className?: string;
-}> = ( { codeState, onCompile, onApply, onApplyImmediately, className } ) => {
+}> = ( {
+  codeState,
+  hasEditState,
+  onCompile,
+  onApply,
+  onApplyImmediately,
+  className,
+} ) => {
   const [ isDragging, setIsDragging ] = useState( false );
-  const setCode = useSetRecoilState( codeState );
-  const [ hasEdited, setHasEdited ] = useState( false );
+  const [ code, setCode ] = useRecoilState( codeState );
+  const setHasEdit = useSetRecoilState( hasEditState );
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleEditorDidMount = useCallback(
@@ -73,21 +80,10 @@ export const DeckEditor: React.FC<{
     [ onCompile, onApply ]
   );
 
-  useEffect( () => {
-    // prevent terrible consequence
-    window.addEventListener( 'beforeunload', ( event ) => {
-      if ( hasEdited ) {
-        const confirmationMessage = 'You will lose all of your changes on the editor!';
-        event.returnValue = confirmationMessage;
-        return confirmationMessage;
-      }
-    } );
-  }, [ hasEdited ] );
-
   const handleChange = useCallback(
     ( editor: CodeMirror.Editor, data: CodeMirror.EditorChange, value: string ) => {
       setCode( value );
-      setHasEdited( true );
+      setHasEdit( true );
     },
     []
   );
@@ -147,7 +143,7 @@ export const DeckEditor: React.FC<{
       className={ className }
     >
       <StyledReactCodeMirror
-        value={ defaultCode }
+        value={ code }
         options={ {
           mode: 'x-shader/x-fragment',
           keyMap: 'sublime',
@@ -155,7 +151,7 @@ export const DeckEditor: React.FC<{
           lineNumbers: true
         } }
         editorDidMount={ handleEditorDidMount }
-        onChange={ handleChange }
+        onBeforeChange={ handleChange }
         onDragOver={ handleDragOver }
         onDragLeave={ handleDragLeave }
         onDrop={ handleDrop }

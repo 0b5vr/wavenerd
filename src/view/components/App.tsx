@@ -1,6 +1,6 @@
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { analyserInAState, analyserInBState } from '../states/mixer';
-import { deckACodeState, deckACueStatusState, deckAErrorState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckShowBState } from '../states/deck';
+import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';
 import { AssetList } from './AssetList';
 import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
@@ -116,10 +116,13 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
       <DeckRow>
         <StyledDeck
           codeState={ deckACodeState }
+          hasEditState={ deckAHasEditState }
           errorState={ deckAErrorState }
           analyserState={ analyserInAState }
           cueStatusState={ deckACueStatusState }
           deck={ deckA }
+          storageKeyName="a"
+          gainParamName="gainA"
         />
         <SamplesColumn>
           <StyledAssetList
@@ -132,17 +135,20 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
         { showB && (
           <StyledDeck
             codeState={ deckBCodeState }
+            hasEditState={ deckBHasEditState }
             errorState={ deckBErrorState }
             analyserState={ analyserInBState }
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
+            storageKeyName="b"
+            gainParamName="gainB"
           />
         ) }
       </DeckRow>
       <FaderRow>
         <StyledDeckKnobs
           deck={ deckA }
-          midiParamNamePrefix={ 'deckA-' }
+          midiParamNamePrefix="deckA-"
         />
         <StyledXFader
           mixer={ mixer }
@@ -150,15 +156,13 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
         { showB && (
           <StyledDeckKnobs
             deck={ deckB }
-            midiParamNamePrefix={ 'deckB-' }
+            midiParamNamePrefix="deckB-"
           />
         ) }
       </FaderRow>
       <SettingsModal mixer={ mixer } />
       <HelpModal />
-      <PlayOverlay
-        audio={ deckA.audio }
-      />
+      <PlayOverlay hostDeck={ deckA } />
       <ContextMenu />
       <Stalker />
     </Root>

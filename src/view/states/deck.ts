@@ -1,15 +1,26 @@
 import { atom, selector, useRecoilCallback } from 'recoil';
+import { deckCodeStorage } from '../../deckCodeStorage';
 import { defaultCode } from '../../defaultCode';
 
 // == atoms ========================================================================================
 export const deckACodeState = atom( {
   key: 'deckACodeState',
-  default: defaultCode
+  default: deckCodeStorage.get( 'a' ) ?? defaultCode
 } );
 
 export const deckBCodeState = atom( {
   key: 'deckBCodeState',
-  default: defaultCode
+  default: deckCodeStorage.get( 'b' ) ?? defaultCode
+} );
+
+export const deckAHasEditState = atom( {
+  key: 'deckAHasEditState',
+  default: false,
+} );
+
+export const deckBHasEditState = atom( {
+  key: 'deckBHasEditState',
+  default: false,
 } );
 
 export const deckACueStatusState = atom<'none' | 'compiling' | 'ready' | 'applying'>( {
