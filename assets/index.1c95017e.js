@@ -218,8 +218,12 @@ vec2 mainAudio( vec4 time ) {
   height: 100%;
   overflow: scroll;
 
-  & .CodeMirror {
-    height: 100%;
+  .cm-editor {
+    min-height: 100%;
+  }
+
+  .cm-scroller {
+    line-height: 1.2;
   }
 `,cD=A.div`
   display: ${({isDragging:t})=>t?"block":"none"};
