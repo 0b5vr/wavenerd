@@ -1,21 +1,19 @@
 /* eslint-disable sort-imports */
 
-import CodeMirror from 'codemirror';
-import { Controlled as ReactCodeMirror } from 'react-codemirror2';
+import { KeyBinding, keymap } from '@codemirror/view';
+import { defaultKeymap } from '@codemirror/commands';
+import { cpp } from '@codemirror/lang-cpp';
+import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useState } from 'react';
 import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import 'codemirror/addon/comment/comment';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/keymap/sublime';
-import '../codemirror-themes/monokai-sharp.css';
-import '../codemirror-themes/chromacoder-green.css';
-import 'codemirror/lib/codemirror.css';
 import { Colors } from '../constants/Colors';
+import { monokaiSharp } from '../codemirror/monokai-sharp';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
   height: 100%;
+  overflow: scroll;
 
   & .CodeMirror {
     height: 100%;
@@ -58,30 +56,38 @@ export const DeckEditor: React.FC<{
   const [ code, setCode ] = useRecoilState( codeState );
   const setHasEdit = useSetRecoilState( hasEditState );
 
-  // -- event handlers -----------------------------------------------------------------------------
-  const handleEditorDidMount = useCallback(
-    ( editor: CodeMirror.Editor ) => {
-      editor.addKeyMap( {
-        'Ctrl-S': () => {
-          onCompile();
-        },
-        'Ctrl-R': () => {
-          onApply();
-        },
-        'Shift-Ctrl-R': () => {
-          onApplyImmediately();
-        },
-        'Ctrl-B': () => {
-          editor.execCommand( 'selectBetweenBrackets' );
-          editor.execCommand( 'toggleCommentIndented' );
-        },
-      } );
+  // -- keymap -------------------------------------------------------------------------------------
+  const customKeymap: KeyBinding[] = [
+    ...defaultKeymap,
+    {
+      key: 'Mod-s',
+      preventDefault: true,
+      run: () => {
+        onCompile();
+        return false;
+      },
     },
-    [ onCompile, onApply ]
-  );
+    {
+      key: 'Mod-r',
+      preventDefault: true,
+      run: () => {
+        onApply();
+        return false;
+      },
+    },
+    {
+      key: 'Shift-Mod-r',
+      preventDefault: true,
+      run: () => {
+        onApplyImmediately();
+        return false;
+      },
+    },
+  ];
 
+  // -- event handlers -----------------------------------------------------------------------------
   const handleChange = useCallback(
-    ( editor: CodeMirror.Editor, data: CodeMirror.EditorChange, value: string ) => {
+    ( value: string ) => {
       setCode( value );
       setHasEdit( true );
     },
@@ -89,14 +95,13 @@ export const DeckEditor: React.FC<{
   );
 
   const handleFile = useCallback(
-    ( files: FileList, editor: CodeMirror.Editor ) => {
+    ( files: FileList ) => {
       const file = files && files[ 0 ];
       if ( file ) {
         const reader = new FileReader();
         reader.onload = () => {
           const code = reader.result as string;
           setCode( code );
-          editor.setValue( code );
         };
         reader.readAsText( file );
       }
@@ -105,7 +110,7 @@ export const DeckEditor: React.FC<{
   );
 
   const handleDragOver = useCallback(
-    ( editor: CodeMirror.Editor, event?: any ) => {
+    ( event: React.DragEvent ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -115,7 +120,7 @@ export const DeckEditor: React.FC<{
   );
 
   const handleDragLeave = useCallback(
-    ( editor: CodeMirror.Editor, event?: any ) => {
+    ( event: React.DragEvent ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -125,14 +130,14 @@ export const DeckEditor: React.FC<{
   );
 
   const handleDrop = useCallback(
-    ( editor: CodeMirror.Editor, event?: any ) => {
+    ( event: React.DragEvent ) => {
       event.preventDefault();
       event.stopPropagation();
 
       setIsDragging( false );
 
       const files = event.dataTransfer.files;
-      handleFile( files, editor );
+      handleFile( files );
     },
     [ handleFile ]
   );
@@ -144,14 +149,12 @@ export const DeckEditor: React.FC<{
     >
       <StyledReactCodeMirror
         value={ code }
-        options={ {
-          mode: 'x-shader/x-fragment',
-          keyMap: 'sublime',
-          theme: 'monokai-sharp',
-          lineNumbers: true
-        } }
-        editorDidMount={ handleEditorDidMount }
-        onBeforeChange={ handleChange }
+        extensions={[
+          cpp(),
+          keymap.of( customKeymap ),
+        ]}
+        theme={ monokaiSharp }
+        onChange={ handleChange }
         onDragOver={ handleDragOver }
         onDragLeave={ handleDragLeave }
         onDrop={ handleDrop }

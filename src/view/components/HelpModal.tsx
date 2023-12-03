@@ -117,7 +117,6 @@ export const HelpModal: React.FC = () => {
           <code>Ctrl + S</code>: Compile the code<br />
           <code>Ctrl + R</code>: Apply the code<br />
           <code>Shift + Ctrl + R</code>: Apply the code immediately<br />
-          <code>Ctrl + B</code>: Comment out inside the current bracket<br />
         </p>
         <h2>How to use params</h2>
         <p>
