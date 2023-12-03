@@ -15,8 +15,12 @@ const StyledReactCodeMirror = styled( ReactCodeMirror )`
   height: 100%;
   overflow: scroll;
 
-  & .CodeMirror {
-    height: 100%;
+  .cm-editor {
+    min-height: 100%;
+  }
+
+  .cm-scroller {
+    line-height: 1.2;
   }
 `;
 
