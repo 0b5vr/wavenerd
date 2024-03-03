@@ -1,3 +1,5 @@
+import 'simplebar-react/dist/simplebar.min.css';
+
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { analyserInAState, analyserInBState } from '../states/mixer';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';

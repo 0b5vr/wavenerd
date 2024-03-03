@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import { Colors } from '../constants/Colors';
+import SimpleBar from 'simplebar-react';
 import { sanitizeAssetName } from './utils/sanitizeAssetName';
 import styled from 'styled-components';
 
@@ -12,8 +13,8 @@ const StyledEntry = styled( AssetListEntry )`
   margin: 2px;
 `;
 
-const Body = styled.div`
-  overflow-y: scroll;
+const Body = styled( SimpleBar )`
+  height: 0;
   flex-basis: 0;
   flex-grow: 1;
 `;

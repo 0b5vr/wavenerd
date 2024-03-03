@@ -9,11 +9,11 @@ import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Colors } from '../constants/Colors';
 import { monokaiSharp } from '../codemirror/monokai-sharp';
+import SimpleBar from 'simplebar-react';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
   height: 100%;
-  overflow: scroll;
 
   .cm-editor {
     min-height: 100%;
@@ -22,6 +22,11 @@ const StyledReactCodeMirror = styled( ReactCodeMirror )`
   .cm-scroller {
     line-height: 1.2;
   }
+`;
+
+const StyledSimpleBar = styled( SimpleBar )`
+  width: 100%;
+  height: 100%;
 `;
 
 const Overlay = styled.div<{ isDragging: boolean }>`
@@ -151,18 +156,20 @@ export const DeckEditor: React.FC<{
     <Root
       className={ className }
     >
-      <StyledReactCodeMirror
-        value={ code }
-        extensions={[
-          cpp(),
-          keymap.of( customKeymap ),
-        ]}
-        theme={ monokaiSharp }
-        onChange={ handleChange }
-        onDragOver={ handleDragOver }
-        onDragLeave={ handleDragLeave }
-        onDrop={ handleDrop }
-      />
+      <StyledSimpleBar>
+        <StyledReactCodeMirror
+          value={ code }
+          extensions={[
+            cpp(),
+            keymap.of( customKeymap ),
+          ]}
+          theme={ monokaiSharp }
+          onChange={ handleChange }
+          onDragOver={ handleDragOver }
+          onDragLeave={ handleDragLeave }
+          onDrop={ handleDrop }
+        />
+      </StyledSimpleBar>
       <Overlay
         isDragging={ isDragging }
       />

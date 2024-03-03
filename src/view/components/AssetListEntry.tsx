@@ -14,6 +14,7 @@ const ButtonDelete = styled( IconBin )`
   display: none;
   width: 16px;
   height: 16px;
+  margin-right: 8px;
 
   fill: ${ Colors.fore };
   cursor: pointer;

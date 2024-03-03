@@ -18,16 +18,19 @@ const constblue = '#8a8aff';
 const monokaiSharpTheme = EditorView.theme( {
   '&': {
     color: white,
-    backgroundColor: black,
   },
   '.cm-content': {
     caretColor: white,
+    backgroundColor: black,
   },
   '.cm-cursor, .cm-dropCursor': {
     borderLeftColor: white,
   },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
     backgroundColor: white + '44',
+  },
+  '.cm-scroller': {
+    overflow: 'visible',
   },
   '.cm-panels': {
     backgroundColor: gray2,
