@@ -5,11 +5,14 @@ import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useState } from 'react';
-import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
+import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Colors } from '../constants/Colors';
-import { monokaiSharp } from '../codemirror/monokai-sharp';
+import { monokaiSharp } from '../codemirror/monokaiSharp';
+import { chromaCoder } from '../codemirror/chromaCoder';
 import SimpleBar from 'simplebar-react';
+import { backlayer } from '../codemirror/backlayer';
+import { settingsThemeState } from '../states/settings';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -64,6 +67,9 @@ export const DeckEditor: React.FC<{
   const [ isDragging, setIsDragging ] = useState( false );
   const [ code, setCode ] = useRecoilState( codeState );
   const setHasEdit = useSetRecoilState( hasEditState );
+
+  const themeString = useRecoilValue( settingsThemeState );
+  const theme = themeString === 'monokaiSharp' ? monokaiSharp : chromaCoder;
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [
@@ -162,8 +168,9 @@ export const DeckEditor: React.FC<{
           extensions={[
             cpp(),
             keymap.of( customKeymap ),
+            backlayer,
           ]}
-          theme={ monokaiSharp }
+          theme={ theme }
           onChange={ handleChange }
           onDragOver={ handleDragOver }
           onDragLeave={ handleDragLeave }

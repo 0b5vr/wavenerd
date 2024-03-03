@@ -1,4 +1,4 @@
-import { settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -13,6 +13,7 @@ function SettingsListener(): null {
   const setSpectrumMode = useSetRecoilState( settingsSpectrumModeState );
   const setSpectrumOpacity = useSetRecoilState( settingsSpectrumOpacityState );
   const setSpectrumColor = useSetRecoilState( settingsSpectrumColorState );
+  const setTheme = useSetRecoilState( settingsThemeState );
 
   useEffect(
     () => {
@@ -70,6 +71,12 @@ function SettingsListener(): null {
         } );
       setSpectrumColor( SETTINGSMAN.spectrumColor );
 
+      const handleChangeTheme
+        = SETTINGSMAN.on( 'changeTheme', ( { theme } ) => {
+          setTheme( theme );
+        } );
+      setTheme( SETTINGSMAN.theme );
+
       return () => {
         SETTINGSMAN.off( 'changeLatencyBlocks', handleChangeLatencyBlocks );
         SETTINGSMAN.off( 'changeMasterReverbGain', handleChangeMasterReverbGain );
@@ -80,6 +87,7 @@ function SettingsListener(): null {
         SETTINGSMAN.off( 'changeSpectrumMode', handleChangeSpectrumMode );
         SETTINGSMAN.off( 'changeSpectrumOpacity', handleChangeSpectrumOpacity );
         SETTINGSMAN.off( 'changeSpectrumColor', handleChangeSpectrumColor );
+        SETTINGSMAN.off( 'changeTheme', handleChangeTheme );
       };
     },
     []

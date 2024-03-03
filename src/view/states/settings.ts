@@ -52,3 +52,8 @@ export const settingsSpectrumColorState = atom<string>( {
   key: 'settingsSpectrumColorState',
   default: '#ffffff',
 } );
+
+export const settingsThemeState = atom<string>( {
+  key: 'settingsThemeState',
+  default: 'monokaiSharp',
+} );

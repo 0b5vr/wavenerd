@@ -17,6 +17,7 @@ interface SettingsManagerStorageType {
   spectrumMode: SpectrumModeType;
   spectrumOpacity: number;
   spectrumColor: string;
+  theme: string;
 }
 
 interface SettingsManagerEvents {
@@ -29,6 +30,7 @@ interface SettingsManagerEvents {
   changeSpectrumMode: { mode: SpectrumModeType };
   changeSpectrumOpacity: { opacity: number };
   changeSpectrumColor: { color: string };
+  changeTheme: { theme: string };
 }
 
 export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
@@ -102,6 +104,14 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public set spectrumColor( color: string ) {
     this.__storage.set( 'spectrumColor', color );
     this.__emit( 'changeSpectrumColor', { color } );
+  }
+
+  public get theme(): string {
+    return this.__storage.get( 'theme' ) ?? 'dark';
+  }
+  public set theme( theme: string ) {
+    this.__storage.set( 'theme', theme );
+    this.__emit( 'changeTheme', { theme } );
   }
 
   private __storage: ThrottledJSONStorage<SettingsManagerStorageType>;

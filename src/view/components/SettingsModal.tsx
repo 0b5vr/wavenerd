@@ -1,7 +1,7 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
-import { settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
@@ -54,6 +54,7 @@ export const SettingsModal: React.FC<{
   const spectrumMode = useRecoilValue( settingsSpectrumModeState );
   const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
   const spectrumColor = useRecoilValue( settingsSpectrumColorState );
+  const theme = useRecoilValue( settingsThemeState );
 
   const latencyTime = useMemo( () => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
@@ -110,6 +111,11 @@ export const SettingsModal: React.FC<{
   const handleChangeSpectrumColor = useCallback( ( event: React.ChangeEvent ) => {
     const color = ( event.target as HTMLInputElement ).value;
     SETTINGSMAN.spectrumColor = color;
+  }, [] );
+
+  const handleChangeTheme = useCallback( ( event: React.ChangeEvent ) => {
+    const theme = ( event.target as HTMLSelectElement ).value;
+    SETTINGSMAN.theme = theme;
   }, [] );
 
   if ( !isOpening ) {
@@ -240,6 +246,18 @@ export const SettingsModal: React.FC<{
           value={ spectrumColor }
           onChange={ handleChangeSpectrumColor }
         />
+      </Line>
+      <Line
+        data-stalker="Change the appearance theme."
+      >
+        <Name>Theme</Name>
+        <select
+          value={ theme }
+          onChange={ handleChangeTheme }
+        >
+          <option value="monokaiSharp">Monokai Sharp</option>
+          <option value="chromaCoder">ChromaCoder</option>
+        </select>
       </Line>
     </Modal>
   );
