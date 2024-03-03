@@ -44,6 +44,7 @@ export function createCMTheme( {
   const theme = EditorView.theme( {
     '&': {
       width: 'fit-content',
+      minWidth: '100%',
       color: text,
       backgroundColor: background,
     },
