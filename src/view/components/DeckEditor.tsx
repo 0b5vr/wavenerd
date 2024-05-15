@@ -71,7 +71,10 @@ export const DeckEditor: React.FC<{
   const setHasEdit = useSetRecoilState( hasEditState );
 
   const themeString = useRecoilValue( settingsThemeState );
-  const theme = themeString === 'monokaiSharp' ? monokaiSharp : chromaCoder;
+  const theme =
+    themeString === 'monokaiSharp' ? monokaiSharp :
+    themeString === 'chromaCoder' ? chromaCoder :
+    monokaiSharp;
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [
