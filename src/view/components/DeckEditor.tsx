@@ -41,7 +41,7 @@ const Overlay = styled.div<{ isDragging: boolean }>`
   height: 100%;
   background: ${ Colors.fore };
   opacity: 0.125;
-  pointer-events: none;
+  pointer-events: ${ ( { isDragging } ) => isDragging ? 'auto' : 'none' };
 `;
 
 const Root = styled.div<{ background: string }>`
@@ -167,6 +167,9 @@ export const DeckEditor: React.FC<{
     <Root
       background={ theme.background }
       className={ className }
+      onDragOver={ handleDragOver }
+      onDragLeave={ handleDragLeave }
+      onDrop={ handleDrop }
     >
       <StyledSimpleBar>
         <StyledReactCodeMirror
@@ -178,9 +181,6 @@ export const DeckEditor: React.FC<{
           ]}
           theme={ theme.extensions }
           onChange={ handleChange }
-          onDragOver={ handleDragOver }
-          onDragLeave={ handleDragLeave }
-          onDrop={ handleDrop }
         />
       </StyledSimpleBar>
       <Overlay
