@@ -44,8 +44,10 @@ const Overlay = styled.div<{ isDragging: boolean }>`
   pointer-events: none;
 `;
 
-const Root = styled.div`
+const Root = styled.div<{ background: string }>`
   transform: translateZ(0);
+
+  background: ${ ( { background } ) => background };
 `;
 
 // == component ====================================================================================
@@ -160,6 +162,7 @@ export const DeckEditor: React.FC<{
   // -- component ----------------------------------------------------------------------------------
   return (
     <Root
+      background={ theme.background }
       className={ className }
     >
       <StyledSimpleBar>
@@ -170,7 +173,7 @@ export const DeckEditor: React.FC<{
             keymap.of( customKeymap ),
             backlayer,
           ]}
-          theme={ theme }
+          theme={ theme.extensions }
           onChange={ handleChange }
           onDragOver={ handleDragOver }
           onDragLeave={ handleDragLeave }

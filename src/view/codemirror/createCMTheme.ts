@@ -40,13 +40,13 @@ export function createCMTheme( {
   extensions: Extension[],
   highlightStyle: HighlightStyle,
   theme: Extension,
+  background: string,
   } {
   const theme = EditorView.theme( {
     '&': {
       width: 'fit-content',
       minWidth: '100%',
       color: text,
-      backgroundColor: background,
     },
     '.cm-content': {
       caretColor: text,
@@ -170,5 +170,5 @@ export function createCMTheme( {
 
   const extensions = [ theme, syntaxHighlighting( highlightStyle ) ];
 
-  return { extensions, highlightStyle, theme };
+  return { background, extensions, highlightStyle, theme };
 }

@@ -12,7 +12,7 @@ const yellow = '#f7f025';
 const blue = '#00aaff';
 const constblue = '#8a8aff';
 
-const { extensions: chromaCoder } = createCMTheme( {
+export const chromaCoder = createCMTheme( {
   text: white,
   background,
   keywords: red,
@@ -30,5 +30,3 @@ const { extensions: chromaCoder } = createCMTheme( {
   searchSelected: orange + '88',
   backlayer: '#000000',
 } );
-
-export { chromaCoder };

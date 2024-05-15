@@ -11,7 +11,7 @@ const yellow = '#f7f025';
 const blue = '#00aaff';
 const constblue = '#8a8aff';
 
-const { extensions: monokaiSharp } = createCMTheme( {
+export const monokaiSharp = createCMTheme( {
   text: white,
   background: black,
   keywords: red,
@@ -29,5 +29,3 @@ const { extensions: monokaiSharp } = createCMTheme( {
   searchSelected: orange + '88',
   backlayer: 'none',
 } );
-
-export { monokaiSharp };
