@@ -113,11 +113,15 @@ export const HelpModal: React.FC = () => {
           You can change the latency from the setting screen <IconsInContent as={ IconSettings } />.
         </p>
         <h2>Keyboard shortcuts</h2>
-        <p>
-          <code>Ctrl + S</code>: Compile the code<br />
-          <code>Ctrl + R</code>: Apply the code<br />
-          <code>Shift + Ctrl + R</code>: Apply the code immediately<br />
-        </p>
+        <ul>
+          <li><code>Ctrl + S</code>: Compile the code</li>
+          <li><code>Ctrl + R</code>: Apply the code</li>
+          <li><code>Shift + Ctrl + R</code>: Apply the code immediately</li>
+          <li><code>Ctrl + ,</code>: Jump to the previous bracket</li>
+          <li><code>Ctrl + .</code>: Jump to the next bracket</li>
+          <li><code>Shift + Ctrl + ,</code>: Extend / shrink selection to the previous sibling bracket</li>
+          <li><code>Shift + Ctrl + .</code>: Extend / shrink selection to the next sibling bracket</li>
+        </ul>
         <h2>How to use params</h2>
         <p>
           Knobs can be used as interactive params.<br />

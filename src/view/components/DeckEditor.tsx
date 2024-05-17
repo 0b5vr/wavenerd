@@ -13,6 +13,7 @@ import { chromaCoder } from '../codemirror/chromaCoder';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
 import { settingsThemeState } from '../states/settings';
+import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -79,6 +80,7 @@ export const DeckEditor: React.FC<{
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [
     ...defaultKeymap,
+    ...braceJumpKeymap,
     {
       key: 'Mod-s',
       preventDefault: true,
