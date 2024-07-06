@@ -1,7 +1,7 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback } from 'react';
-import { Colors } from '../constants/Colors';
 import { MIDIMAN } from '../../MIDIManager';
+import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
@@ -16,7 +16,7 @@ const Head = styled.div`
   left: 45%;
   width: 10%;
   height: 35%;
-  background: ${ Colors.back1 };
+  background: ${ ThemeVars.back1 };
   border-radius: 10000px;
   pointer-events: none;
 `;
@@ -36,8 +36,8 @@ const Body = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10000px;
-  background: linear-gradient(to bottom, ${ Colors.fore }, ${ Colors.foresub });
-  box-shadow: 0 0 0 2px ${ Colors.back1 }, 0 4px 8px 2px #0008;
+  background: linear-gradient(to bottom, ${ ThemeVars.fore }, ${ ThemeVars.foresub });
+  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.shadow };
 `;
 
 const Root = styled.div<{ isLearning: boolean }>`
@@ -50,7 +50,7 @@ const Root = styled.div<{ isLearning: boolean }>`
 
   box-shadow: ${ ( { isLearning } ) => (
     isLearning
-      ? `0 0 0 2px ${ Colors.accent }`
+      ? `0 0 0 2px ${ ThemeVars.accent }`
       : 'none'
   ) };
 `;

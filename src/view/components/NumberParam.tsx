@@ -1,6 +1,6 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Colors } from '../constants/Colors';
+import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';
@@ -38,8 +38,8 @@ const Input = styled.input< { isInvalid: boolean } >`
   left: 0;
   font-family: monospace;
   border: none;
-  background: ${ ( { isInvalid } ) => ( isInvalid ? Colors.errorBright : Colors.foresub ) };
-  color: ${ Colors.back1 };
+  background: ${ ( { isInvalid } ) => ( isInvalid ? ThemeVars.inputBackInvalid : ThemeVars.inputBack ) };
+  color: ${ ThemeVars.inputFore };
 `;
 
 const Value = styled.div`

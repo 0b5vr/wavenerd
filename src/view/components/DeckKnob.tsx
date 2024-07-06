@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { Colors } from '../constants/Colors';
 import { Knob } from './Knob';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
@@ -13,13 +13,13 @@ const StyledKnob = styled( Knob )`
 
 const Label = styled.div`
   font: 500 10px 'Roboto', sans-serif;
-  color: ${ Colors.foresub };
+  color: ${ ThemeVars.foresub };
   line-height: 1;
 `;
 
 const Value = styled.div`
   font-size: 10px;
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
 `;
 
 const Root = styled.div<{ isLearning: boolean }>`
@@ -32,7 +32,7 @@ const Root = styled.div<{ isLearning: boolean }>`
 
   box-shadow: ${ ( { isLearning } ) => (
     isLearning
-      ? `0 0 0 2px ${ Colors.accent }`
+      ? `0 0 0 2px ${ ThemeVars.accent }`
       : 'none'
   ) };
 `;

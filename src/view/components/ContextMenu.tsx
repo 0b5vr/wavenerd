@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { contextMenuCommandsState, contextMenuIsOpeningState, contextMenuPositionState, useResetContextMenuAction } from '../states/contextMenu';
-import { Colors } from '../constants/Colors';
 import { ContextMenuEntry } from './ContextMenuEntry';
 import { ContextMenuHr } from './ContextMenuHr';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
@@ -12,8 +12,8 @@ const Container = styled.div`
   overflow: hidden;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  background: ${ Colors.back2 };
-  filter: drop-shadow( 0 0 2px ${ Colors.black } );
+  background: ${ ThemeVars.back2 };
+  filter: drop-shadow( 0 0 2px ${ ThemeVars.black } );
   font-size: 0.8rem;
 `;
 

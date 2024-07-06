@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Colors } from '../constants/Colors';
 import IconBin from '~icons/mdi/delete';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -16,7 +16,7 @@ const ButtonDelete = styled( IconBin )`
   height: 16px;
   margin-right: 8px;
 
-  fill: ${ Colors.fore };
+  fill: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {
@@ -31,7 +31,7 @@ const ButtonDelete = styled( IconBin )`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ Colors.back3 };
+  background: ${ ThemeVars.back3 };
   font-size: 12px;
 
   * {

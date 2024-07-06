@@ -1,6 +1,6 @@
-import { Colors } from '../constants/Colors';
 import { NumberParam } from './NumberParam';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckBPMState } from '../states/deck';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 // == styles =======================================================================================
 const Label = styled.div`
   font: 500 8px 'Roboto', sans-serif;
-  color: ${ Colors.foresub };
+  color: ${ ThemeVars.foresub };
   line-height: 1;
 `;
 

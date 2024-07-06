@@ -3,8 +3,8 @@ import 'simplebar-react/dist/simplebar.min.css';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { analyserInAState, analyserInBState } from '../states/mixer';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';
+import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
-import { Colors } from '../constants/Colors';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
@@ -21,9 +21,11 @@ import React from 'react';
 import { SettingsListener } from './SettingsListener';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
-import styled from 'styled-components';
+import { settingsThemeState } from '../states/settings';
+import { themes } from '../themes/themes';
 
 // == styles =======================================================================================
 const StyledHeader = styled( Header )`
@@ -73,7 +75,18 @@ const StyledXFader = styled( XFader )`
   margin: 4px 16px;
 `;
 
-const Root = styled.div`
+function themeVarsCss( themeString: string ): ReturnType<typeof css> {
+  const theme = themes[ themeString ] ?? themes[ 'monokaiSharp' ]!;
+  const map = Object.entries( theme.ui )
+  .map( ( [ key, value ] ) => {
+    const cssKey = ThemeVars[ key as keyof typeof ThemeVars ]
+    .slice( 4, -1 ); // var(--hoge) -> --hoge
+    return `${ cssKey }: ${ value };`;
+  } );
+  return css`${ map.join( '' ) }`;
+}
+
+const Root = styled.div<{ themeString: string }>`
   position: fixed;
   left: 0;
   top: 0;
@@ -81,13 +94,15 @@ const Root = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  color: ${ Colors.fore };
-  background: ${ Colors.back2 };
+  color: ${ ThemeVars.fore };
+  background: ${ ThemeVars.back2 };
   font-family: 'Roboto Mono', monospace;
 
   * {
     box-sizing: border-box;
   }
+
+  ${ ( { themeString } ) => themeVarsCss( themeString ) };
 `;
 
 // == component ====================================================================================
@@ -99,6 +114,7 @@ interface Props {
 
 const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
+  const themeString = useRecoilValue( settingsThemeState );
 
   return <>
     <SettingsListener />
@@ -111,7 +127,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
       deckA={ deckA }
       deckB={ deckB }
     />
-    <Root>
+    <Root themeString={ themeString }>
       <StyledHeader
         hostDeck={ deckA }
       />

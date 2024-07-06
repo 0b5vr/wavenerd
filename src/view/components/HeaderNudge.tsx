@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Colors } from '../constants/Colors';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import styled from 'styled-components';
@@ -9,13 +9,13 @@ const Label = styled.div`
   font: 400 10px 'Roboto', sans-serif;
   line-height: 1;
   user-select: none;
-  color: ${ Colors.foredark };
+  color: ${ ThemeVars.foredark };
 `;
 
 const Rect = styled.div`
   position: absolute;
   height: 100%;
-  background: ${ Colors.fore };
+  background: ${ ThemeVars.fore };
   mix-blend-mode: difference;
 `;
 
@@ -24,14 +24,14 @@ const CenterLine = styled.div`
   left: calc( 50% - 0.5px );
   width: 1px;
   height: 100%;
-  background: ${ Colors.fore };
+  background: ${ ThemeVars.fore };
 `;
 
 const Root = styled.div`
   position: relative;
   width: 48px;
   height: calc( 100% - 8px );
-  background: ${ Colors.back2 };
+  background: ${ ThemeVars.back2 };
   display: flex;
   justify-content: center;
   align-items: center;

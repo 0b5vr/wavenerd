@@ -1,48 +1,36 @@
 import { EditorView, Extension } from '@uiw/react-codemirror';
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
+import { Theme } from '../themes/Theme';
 import { tags } from '@lezer/highlight';
 
-export function createCMTheme( {
-  text,
-  background,
-  keywords,
-  types,
-  constants,
-  strings,
-  comments,
-  invalid,
-  panels,
-  tooltips,
-  gutterText,
-  gutterBackground,
-  foldPlaceholders,
-  searchMatch,
-  searchSelected,
-  backlayer,
-}: {
-  text: string,
-  background: string,
-  keywords: string,
-  types: string,
-  constants: string,
-  strings: string,
-  comments: string,
-  invalid: string,
-  panels: string,
-  tooltips: string,
-  gutterText: string,
-  gutterBackground: string,
-  foldPlaceholders: string,
-  searchMatch: string,
-  searchSelected: string,
-  backlayer: string,
-} ): {
+export function createCMTheme( theme: Theme ): {
   extensions: Extension[],
   highlightStyle: HighlightStyle,
   theme: Extension,
   background: string,
   } {
-  const theme = EditorView.theme( {
+  const {
+    text,
+    background,
+    keywords,
+    processors,
+    operators,
+    types,
+    constants,
+    strings,
+    comments,
+    invalid,
+    panels,
+    tooltips,
+    gutterText,
+    gutterBackground,
+    foldPlaceholders,
+    searchMatch,
+    searchSelected,
+    backlayer,
+  } = theme.code;
+
+  const cmTheme = EditorView.theme( {
     '&': {
       width: 'fit-content',
       minWidth: '100%',
@@ -127,11 +115,21 @@ export function createCMTheme( {
       tag: [
         tags.keyword,
         tags.modifier,
+      ],
+      color: keywords,
+    },
+    {
+      tag: [
         tags.processingInstruction,
+      ],
+      color: processors,
+    },
+    {
+      tag: [
         tags.operator,
         tags.operatorKeyword,
       ],
-      color: keywords,
+      color: operators,
     },
     {
       tag: [
@@ -168,7 +166,7 @@ export function createCMTheme( {
     },
   ] );
 
-  const extensions = [ theme, syntaxHighlighting( highlightStyle ) ];
+  const extensions = [ cmTheme, syntaxHighlighting( highlightStyle ) ];
 
-  return { background, extensions, highlightStyle, theme };
+  return { background, extensions, highlightStyle, theme: cmTheme };
 }

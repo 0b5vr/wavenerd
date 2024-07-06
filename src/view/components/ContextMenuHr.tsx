@@ -1,11 +1,11 @@
-import { Colors } from '../constants/Colors';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 const ContextMenuHr = styled.div`
   margin: 0.25rem 0;
   height: 0.125rem;
   width: 100%;
-  background: ${ Colors.back3 };
+  background: ${ ThemeVars.back3 };
 `;
 
 export { ContextMenuHr };

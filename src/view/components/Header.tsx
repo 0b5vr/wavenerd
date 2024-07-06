@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { Colors } from '../constants/Colors';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderNudge } from './HeaderNudge';
@@ -11,6 +10,7 @@ import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconSettings from '~icons/mdi/cog';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
 import { helpIsOpeningState } from '../states/help';
@@ -47,7 +47,7 @@ const StyleIcon = css`
   width: 24px;
   height: 24px;
   margin: 4px 4px 4px 0;
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {
@@ -87,8 +87,9 @@ const Margin = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ Colors.back3 };
-  border-bottom: solid 1px ${ Colors.back1 };
+  background: ${ ThemeVars.back3 };
+  border-bottom: solid 2px ${ ThemeVars.back1 };
+  box-sizing: content-box;
 
   & > * {
     flex-grow: 0;
@@ -144,7 +145,7 @@ export const Header: React.FC<{
       <Margin />
       <StyledIconBBox
         onClick={ handleClickToggleB }
-        style={ { color: showB ? Colors.fore : Colors.gray } }
+        style={ { color: showB ? ThemeVars.fore : ThemeVars.gray } }
         data-stalker="Toggle Deck B"
       />
       <StyledIconHelp

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
-import { Colors } from '../constants/Colors';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
 import IconCheck from '~icons/mdi/check-bold';
@@ -9,6 +8,7 @@ import IconCircle from '~icons/mdi/circle-medium';
 import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
+import { ThemeVars } from '../themes/ThemeVars';
 import { useMidiValue } from '../utils/useMidiValue';
 
 // == styles =======================================================================================
@@ -21,7 +21,7 @@ const StyleIcon = css`
 const StyleIconButton = css`
   ${ StyleIcon }
 
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {
@@ -35,39 +35,39 @@ const StyleIconButton = css`
 
 const StyledIconHasChange = styled( IconCircle )`
   ${ StyleIcon }
-  color: ${ Colors.accentbright };
+  color: ${ ThemeVars.accentBright };
 `;
 
 const StyledIconPlay = styled( IconPlay )`
   ${ StyleIcon }
-  color: ${ Colors.gray };
+  color: ${ ThemeVars.gray };
 `;
 
 const StyledIconBuilding = styled( IconBuild )`
   ${ StyleIcon }
-  color: ${ Colors.accent };
+  color: ${ ThemeVars.accent };
 `;
 
 const StyledIconError = styled( IconError )`
   ${ StyleIcon }
-  color: ${ Colors.error };
+  color: ${ ThemeVars.error };
 `;
 
 const StyledIconMute = styled( IconMute )`
   ${ StyleIcon }
-  color: ${ Colors.error };
+  color: ${ ThemeVars.error };
 `;
 
 const StyledIconCheck = styled( IconCheck )`
   ${ StyleIcon }
-  color: ${ Colors.green };
+  color: ${ ThemeVars.green };
 `;
 
 const StyledIconApplying = styled( IconApply )`
   position: absolute;
   width: 100%;
   height: 100%;
-  color: ${ Colors.accent };
+  color: ${ ThemeVars.accent };
 `;
 
 const IconStopwatchContainer = styled.div`
@@ -85,9 +85,9 @@ const StyledIconApply = styled( IconApply )`
 
 const animationBlink = ( altColor: string, duration: string, timing: string ) => css`
   animation: ${ keyframes`
-    0% { color: ${ Colors.fore }; }
+    0% { color: ${ ThemeVars.fore }; }
     50% { color: ${ altColor }; }
-    100% { color: ${ Colors.fore }; }
+    100% { color: ${ ThemeVars.fore }; }
   ` } ${ duration } ${ timing } infinite;
 `;
 
@@ -103,23 +103,23 @@ const Text = styled.div`
 `;
 
 const TextGray = styled( Text )`
-  color: ${ Colors.gray };
+  color: ${ ThemeVars.gray };
 `;
 
 const TextHasChangeBlink = styled( Text )`
-  ${ animationBlink( Colors.accentbright, '2s', 'ease-in-out' ) }
+  ${ animationBlink( ThemeVars.accentBright, '2s', 'ease-in-out' ) }
 `;
 
 const TextReadyBlink = styled( Text )`
-  ${ animationBlink( Colors.green, '2s', 'ease-in-out' ) }
+  ${ animationBlink( ThemeVars.green, '2s', 'ease-in-out' ) }
 `;
 
 const TextApplyingBlink = styled( Text )`
-  ${ animationBlink( Colors.accent, '0.2s', 'step-start' ) }
+  ${ animationBlink( ThemeVars.accent, '0.2s', 'step-start' ) }
 `;
 
 const TextErrorBlink = styled( Text )`
-  ${ animationBlink( Colors.error, '0.5s', 'step-start' ) }
+  ${ animationBlink( ThemeVars.error, '0.5s', 'step-start' ) }
 `;
 
 const Root = styled.div`
@@ -127,7 +127,7 @@ const Root = styled.div`
   align-items: center;
   font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
-  background: ${ Colors.back4 };
+  background: ${ ThemeVars.back3 };
   overflow: hidden;
 
   * {

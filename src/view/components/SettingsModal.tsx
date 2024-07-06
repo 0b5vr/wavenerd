@@ -3,9 +3,9 @@ import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
 import { settingsEditorFontState, settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
 import { NumberParam } from './NumberParam';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == constants ====================================================================================
@@ -34,7 +34,8 @@ const Line = styled.div`
 
 const StyledNumberParam = styled( NumberParam )`
   display: inline-block;
-  background: ${ Colors.back4 };
+  color: ${ ThemeVars.inputFore };
+  background: ${ ThemeVars.inputBack };
   padding: 2px;
   border-radius: 4px;
   width: 4em;
@@ -42,8 +43,8 @@ const StyledNumberParam = styled( NumberParam )`
 
 const StyledSelect = styled.select`
   display: inline-block;
-  background: ${ Colors.back4 };
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.inputFore };
+  background: ${ ThemeVars.inputBack };
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -51,8 +52,8 @@ const StyledSelect = styled.select`
 
 const StyledColorInput = styled.input`
   display: inline-block;
-  background: ${ Colors.back4 };
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.inputFore };
+  background: ${ ThemeVars.inputBack };
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -61,8 +62,8 @@ const StyledColorInput = styled.input`
 
 const StyledTextInput = styled.input`
   display: inline-block;
-  background: ${ Colors.back4 };
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.inputFore };
+  background: ${ ThemeVars.inputBack };
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -292,6 +293,7 @@ export const SettingsModal: React.FC<{
         >
           <option value="monokaiSharp">Monokai Sharp</option>
           <option value="chromaCoder">ChromaCoder</option>
+          <option value="solarizedDark">Solarized Dark</option>
         </StyledSelect>
       </Line>
       <Line

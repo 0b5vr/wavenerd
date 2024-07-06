@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { Colors } from '../constants/Colors';
 import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -17,7 +17,6 @@ const IconButton = styled.svg`
   height: 20px;
   margin: 2px;
 
-  color: ${ Colors.fore };
   cursor: pointer;
 
   &:hover {
@@ -32,7 +31,7 @@ const IconButton = styled.svg`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ Colors.back4 };
+  background: ${ ThemeVars.back3 };
   font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 

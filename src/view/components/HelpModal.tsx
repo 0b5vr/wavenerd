@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { Colors } from '../constants/Colors';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
 import IconSettings from '~icons/mdi/cog';
 import { Modal } from './Modal';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import { helpIsOpeningState } from '../states/help';
 import styled from 'styled-components';
 
@@ -16,7 +16,7 @@ const IconsInContent = styled.svg`
   width: 1em;
   height: 1em;
   transform: scale(1.25);
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
 `;
 
 const Content = styled.div`
@@ -34,15 +34,15 @@ const Content = styled.div`
   }
 
   a {
-    color: ${ Colors.accent };
+    color: ${ ThemeVars.accent };
     text-decoration: none;
   }
 
   code {
     padding: 0px 4px;
     font: 400 14px 'Roboto Mono', sans-serif;
-    background-color: ${ Colors.back1 };
-    color: ${ Colors.foresub };
+    background-color: ${ ThemeVars.back1 };
+    color: ${ ThemeVars.foresub };
     border-radius: 4px;
   }
 `;

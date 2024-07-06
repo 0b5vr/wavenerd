@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Colors } from '../constants/Colors';
 import IconClose from '~icons/mdi/close';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -11,7 +11,7 @@ const Close = styled( IconClose )`
   width: 32px;
   height: 32px;
   padding: 3px;
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
   cursor: pointer;
   border-radius: 16px;
 
@@ -32,8 +32,8 @@ const Plane = styled.div`
   max-height: calc( 100% - 32px );
   overflow: visible;
   border-radius: 4px;
-  background: ${ Colors.back2 };
-  box-shadow: 0 0 8px 0 ${ Colors.black };
+  background: ${ ThemeVars.back2 };
+  box-shadow: 0 0 8px 0 ${ ThemeVars.black };
 `;
 
 const Root = styled.div`

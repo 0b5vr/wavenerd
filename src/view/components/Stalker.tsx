@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Colors } from '../constants/Colors';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -9,8 +9,8 @@ const Root = styled.div`
   padding: 4px 8px;
   margin: 8px 16px;
   white-space: pre-line;
-  color: ${ Colors.foresub };
-  background: ${ Colors.back1 };
+  color: ${ ThemeVars.foresub };
+  background: ${ ThemeVars.back1 };
   box-shadow: 0 2px 4px 2px #0008;
   border-radius: 4px;
   z-index: 10000;

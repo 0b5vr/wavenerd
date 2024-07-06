@@ -1,14 +1,14 @@
 import { deckBPMState, deckBeatsState } from '../states/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
-import { Colors } from '../constants/Colors';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 
 // == styles =======================================================================================
 const Label = styled.div`
   font: 500 8px 'Roboto', sans-serif;
-  color: ${ Colors.foresub };
+  color: ${ ThemeVars.foresub };
   line-height: 1;
 `;
 

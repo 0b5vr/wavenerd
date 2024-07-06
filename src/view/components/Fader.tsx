@@ -1,7 +1,7 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback, useRef } from 'react';
-import { Colors } from '../constants/Colors';
 import { MIDIMAN } from '../../MIDIManager';
+import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
@@ -17,7 +17,7 @@ const Gutter = styled.div`
   top: calc( 50% - 3px );
   width: 100%;
   height: 6px;
-  background: ${ Colors.black };
+  background: ${ ThemeVars.back1 };
   pointer-events: none;
 `;
 
@@ -26,7 +26,7 @@ const Ruler = styled.div`
   top: 0px;
   width: 2px;
   height: 100%;
-  background: ${ Colors.gray };
+  background: ${ ThemeVars.gray };
   pointer-events: none;
 `;
 
@@ -36,7 +36,7 @@ const KnobLine = styled.div`
   left: 7px;
   width: 2px;
   height: calc( 100% - 4px );
-  background: ${ Colors.back1 };
+  background: ${ ThemeVars.back1 };
   border-radius: 1px;
   pointer-events: none;
 `;
@@ -46,9 +46,9 @@ const Knob = styled.div`
   top: 4px;
   width: 16px;
   height: calc( 100% - 8px );
-  background: linear-gradient(to bottom, ${ Colors.fore }, ${ Colors.foresub });
+  background: linear-gradient(to bottom, ${ ThemeVars.fore }, ${ ThemeVars.foresub });
   pointer-events: none;
-  box-shadow: 0 0 0 2px ${ Colors.back1 }, 0 4px 8px 2px #0008;
+  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.shadow };
 `;
 
 const Root = styled.div<{ isLearning: boolean | undefined }>`
@@ -57,7 +57,7 @@ const Root = styled.div<{ isLearning: boolean | undefined }>`
 
   box-shadow: ${ ( { isLearning } ) => (
     isLearning
-      ? `0 0 0 2px ${ Colors.accent }`
+      ? `0 0 0 2px ${ ThemeVars.accent }`
       : 'none'
   ) };
 `;

@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
-import { Colors } from '../constants/Colors';
 import SimpleBar from 'simplebar-react';
+import { ThemeVars } from '../themes/ThemeVars';
 import { sanitizeAssetName } from './utils/sanitizeAssetName';
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ const Root = styled.div<{ isDragging: boolean }>`
   display: flex;
   flex-direction: column;
   position: relative;
-  background: ${ ( { isDragging } ) => isDragging ? Colors.back3 : Colors.back1 };
+  background: ${ ( { isDragging } ) => isDragging ? ThemeVars.back3 : ThemeVars.back1 };
 `;
 
 // == components ===================================================================================

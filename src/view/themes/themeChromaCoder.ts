@@ -1,0 +1,78 @@
+import { Theme } from './Theme';
+
+const back1 = '#000000';
+const back2 = '#121212';
+const back3 = '#303030';
+const back4 = '#484848';
+
+const gray = '#999999';
+
+const fore = '#ffffff';
+const foresub = '#bbbbbb';
+const foredark = '#999999';
+
+const background = '#00ff00';
+
+const invalidred = '#ff0000';
+const red = '#ff2255';
+const redDark = '#990011';
+const orange = '#ff5a1f';
+const yellow = '#f7f025';
+const blue = '#5599ff';
+const blueBright = '#82beff';
+const cyan = '#00ccff';
+const constblue = '#ae78ff';
+
+export const themeChromaCoder: Theme = {
+  ui: {
+    black: '#000000',
+    white: '#ffffff',
+
+    back1,
+    back2,
+    back3,
+
+    inputBack: back4,
+    inputFore: fore,
+    inputBackInvalid: redDark,
+
+    fore,
+    foresub,
+    foredark,
+
+    gray,
+
+    shadow: '#0008',
+
+    accent: blue,
+    accentBright: blueBright,
+    green: cyan,
+    error: red,
+
+    levelMeter0: '#697681',
+    levelMeter1: '#8b9eab',
+    levelMeter2: '#aec5d5',
+    levelMeter3: '#d0edff',
+    levelMeterPeak: red,
+  },
+  code: {
+    text: fore,
+    background,
+    keywords: red,
+    processors: red,
+    operators: red,
+    types: cyan,
+    constants: constblue,
+    strings: yellow,
+    comments: gray,
+    invalid: invalidred,
+    panels: back3,
+    tooltips: back3,
+    gutterText: gray,
+    gutterBackground: back1,
+    foldPlaceholders: gray,
+    searchMatch: yellow + '22',
+    searchSelected: orange + '88',
+    backlayer: '#000000',
+  },
+};

@@ -1,7 +1,7 @@
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { Colors } from '../constants/Colors';
 import IconPlay from '~icons/mdi/play';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { playOverlayIsOpeningState } from '../states/playOverlay';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import styled from 'styled-components';
 const StyledIconPlay = styled( IconPlay )`
   width: 128px;
   height: 128px;
-  fill: ${ Colors.fore };
+  fill: ${ ThemeVars.fore };
 `;
 
 const Description = styled.div`
@@ -24,7 +24,7 @@ const Underlay = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background: ${ Colors.black };
+  background: ${ ThemeVars.black };
   opacity: 0.8;
 `;
 

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import { Colors } from '../constants/Colors';
 import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
 import IconRewind from '~icons/mdi/skip-previous';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckIsPlayingState } from '../states/deck';
 import { useRecoilValue } from 'recoil';
@@ -14,7 +14,7 @@ const StyleIconButton = css`
   height: 28px;
   margin: 2px;
 
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {

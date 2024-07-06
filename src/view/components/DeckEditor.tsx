@@ -7,13 +7,12 @@ import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
 import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { Colors } from '../constants/Colors';
-import { monokaiSharp } from '../codemirror/monokaiSharp';
-import { chromaCoder } from '../codemirror/chromaCoder';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
 import { settingsEditorFontState, settingsThemeState } from '../states/settings';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
+import { cmThemes } from '../codemirror/cmThemes';
+import { ThemeVars } from '../themes/ThemeVars';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -40,7 +39,7 @@ const Overlay = styled.div<{ isDragging: boolean }>`
   top: 0;
   width: 100%;
   height: 100%;
-  background: ${ Colors.fore };
+  background: ${ ThemeVars.fore };
   opacity: 0.125;
   pointer-events: ${ ( { isDragging } ) => isDragging ? 'auto' : 'none' };
 `;
@@ -72,10 +71,7 @@ export const DeckEditor: React.FC<{
   const setHasEdit = useSetRecoilState( hasEditState );
 
   const themeString = useRecoilValue( settingsThemeState );
-  const theme =
-    themeString === 'monokaiSharp' ? monokaiSharp :
-    themeString === 'chromaCoder' ? chromaCoder :
-    monokaiSharp;
+  const theme = cmThemes[ themeString ] ?? cmThemes[ 'monokaiSharp' ]!;
 
   const editorFont = useRecoilValue( settingsEditorFontState );
   const fontExtension = useMemo( () => {

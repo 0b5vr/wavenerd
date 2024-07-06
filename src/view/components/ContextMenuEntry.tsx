@@ -1,5 +1,5 @@
-import { Colors } from '../constants/Colors';
 import React from 'react';
+import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -10,7 +10,7 @@ const Name = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${ Colors.fore };
+  color: ${ ThemeVars.fore };
 `;
 
 const Root = styled.div<{ isSelected?: boolean }>`
@@ -20,12 +20,12 @@ const Root = styled.div<{ isSelected?: boolean }>`
   border-radius: 0.25rem;
   justify-content: space-between;
   background: ${ ( { isSelected } ) => (
-    isSelected ? Colors.back3 : 'none'
+    isSelected ? ThemeVars.back3 : 'none'
   ) };
   cursor: pointer;
 
   &:hover {
-    background: ${ Colors.back3 };
+    background: ${ ThemeVars.back3 };
   }
 
   &:active {
