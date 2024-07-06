@@ -8,7 +8,7 @@ import IconCircle from '~icons/mdi/circle-medium';
 import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import { useMidiValue } from '../utils/useMidiValue';
 
 // == styles =======================================================================================

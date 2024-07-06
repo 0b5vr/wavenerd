@@ -1,6 +1,6 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';

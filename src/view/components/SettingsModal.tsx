@@ -5,7 +5,7 @@ import { settingsEditorFontState, settingsIsOpeningState, settingsLatencyBlocksS
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Modal } from './Modal';
 import { NumberParam } from './NumberParam';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import styled from 'styled-components';
 
 // == constants ====================================================================================

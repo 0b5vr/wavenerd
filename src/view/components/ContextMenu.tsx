@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { contextMenuCommandsState, contextMenuIsOpeningState, contextMenuPositionState, useResetContextMenuAction } from '../states/contextMenu';
 import { ContextMenuEntry } from './ContextMenuEntry';
 import { ContextMenuHr } from './ContextMenuHr';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import IconBin from '~icons/mdi/delete';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import styled from 'styled-components';
 
 // == styles =======================================================================================

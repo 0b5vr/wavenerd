@@ -1,6 +1,6 @@
 import { NumberParam } from './NumberParam';
 import React from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckBPMState } from '../states/deck';
 import styled from 'styled-components';

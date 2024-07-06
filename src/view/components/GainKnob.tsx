@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Knob } from './Knob';
 import { Mixer } from '../../Mixer';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
 

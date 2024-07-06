@@ -1,7 +1,7 @@
 import { deckBPMState, deckBeatsState } from '../states/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import React from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 

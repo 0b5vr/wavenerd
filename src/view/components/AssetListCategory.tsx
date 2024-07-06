@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../themes/fuck';
 import { sanitizeAssetName } from './utils/sanitizeAssetName';
 import styled from 'styled-components';
 
