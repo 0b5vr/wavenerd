@@ -26,25 +26,34 @@ const Fg = styled.div<{ theme: string }>`
   width: 100%;
   height: 100%;
 
-  ${ ( { theme } ) => theme === 'monokaiSharp' && `
-    background: linear-gradient(
-      #ff0066 20%,
-      #faffb8 20%,
-      #c5f0a4 47%,
-      #35b0ab 73%,
-      #226b80 100%
-    );
-  ` }
+  ${ ( { theme } ) => {
+    theme =
+      theme === 'monokaiSharp' ? 'monokaiSharp' :
+      theme === 'chromaCoder' ? 'chromaCoder' :
+      'monokaiSharp';
 
-  ${ ( { theme } ) => theme === 'chromaCoder' && `
-    background: linear-gradient(
-      #ff0066 20%,
-      #d0edff 20%,
-      #aec5d5 47%,
-      #8b9eab 73%,
-      #697681 100%
-    );
-  ` }
+    if ( theme === 'chromaCoder' ) {
+      return `
+        background: linear-gradient(
+          #ff0066 20%,
+          #d0edff 20%,
+          #aec5d5 47%,
+          #8b9eab 73%,
+          #697681 100%
+        );
+      `;
+    } else {
+      return `
+        background: linear-gradient(
+          #ff0066 20%,
+          #faffb8 20%,
+          #c5f0a4 47%,
+          #35b0ab 73%,
+          #226b80 100%
+        );
+      `;
+    }
+  } }
 `;
 
 const Root = styled.div`
