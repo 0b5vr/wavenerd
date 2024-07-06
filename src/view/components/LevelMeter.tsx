@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
 

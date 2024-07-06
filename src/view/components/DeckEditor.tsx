@@ -12,7 +12,7 @@ import { backlayer } from '../codemirror/backlayer';
 import { settingsEditorFontState, settingsThemeState } from '../states/settings';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { cmThemes } from '../codemirror/cmThemes';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`

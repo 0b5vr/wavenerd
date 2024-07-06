@@ -1,4 +1,4 @@
-import { ThemeVars } from './fuck';
+import { ThemeVars } from './ThemeVars';
 
 export interface Theme {
   ui: Record<keyof typeof ThemeVars, string>;

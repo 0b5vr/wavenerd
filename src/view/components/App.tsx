@@ -21,7 +21,7 @@ import React from 'react';
 import { SettingsListener } from './SettingsListener';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import { settingsThemeState } from '../states/settings';

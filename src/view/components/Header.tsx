@@ -10,7 +10,7 @@ import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconSettings from '~icons/mdi/cog';
 import React from 'react';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
 import { helpIsOpeningState } from '../states/help';

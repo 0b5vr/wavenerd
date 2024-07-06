@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
 import IconRewind from '~icons/mdi/skip-previous';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckIsPlayingState } from '../states/deck';
 import { useRecoilValue } from 'recoil';

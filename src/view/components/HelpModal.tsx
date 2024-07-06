@@ -5,7 +5,7 @@ import IconBuild from '~icons/mdi/hammer';
 import IconSettings from '~icons/mdi/cog';
 import { Modal } from './Modal';
 import React from 'react';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import { helpIsOpeningState } from '../states/help';
 import styled from 'styled-components';
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Knob } from './Knob';
-import { ThemeVars } from '../themes/fuck';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
