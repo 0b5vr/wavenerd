@@ -87,7 +87,8 @@ const Margin = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ Colors.back4 };
+  background: ${ Colors.back3 };
+  border-bottom: solid 1px ${ Colors.back1 };
 
   & > * {
     flex-grow: 0;

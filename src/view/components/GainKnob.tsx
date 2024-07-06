@@ -12,9 +12,9 @@ const StyledKnob = styled( Knob )`
 `;
 
 const Label = styled.div`
-  font: 400 10px 'Poppins', sans-serif;
+  font: 500 8px 'Roboto', sans-serif;
+  color: ${ Colors.foresub };
   line-height: 1;
-  color: ${ Colors.fore };
 `;
 
 const Value = styled.div`
@@ -24,6 +24,7 @@ const Value = styled.div`
 
 const Root = styled.div`
   display: flex;
+  gap: 4px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -67,7 +68,7 @@ export const GainKnob: React.FC<{
       className={ className }
       data-stalker="Deck Gain"
     >
-      <Label>Gain</Label>
+      <Label>GAIN</Label>
       <StyledKnob
         midiParamName={ paramName }
         deltaValuePerPixel={ 1.0 / 256.0 }

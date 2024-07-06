@@ -42,6 +42,7 @@ export const DeckKnobs: React.FC<{
           deck={ deck }
           midiParamNamePrefix={ midiParamNamePrefix }
           paramName={ paramName }
+          stalker={ `param_${ paramName }` }
         />
       ) ) }
     </Root>

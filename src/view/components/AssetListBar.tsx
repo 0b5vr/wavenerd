@@ -33,7 +33,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   background: ${ Colors.back4 };
-  font: 400 16px 'Poppins', sans-serif;
+  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 
   * {

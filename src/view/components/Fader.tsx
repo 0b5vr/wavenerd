@@ -14,10 +14,10 @@ import { useRect } from '../utils/useRect';
 const Gutter = styled.div`
   position: absolute;
   left: 0;
-  top: calc( 50% - 4px );
+  top: calc( 50% - 3px );
   width: 100%;
-  height: 8px;
-  background: ${ Colors.back1 };
+  height: 6px;
+  background: ${ Colors.black };
   pointer-events: none;
 `;
 
@@ -30,13 +30,25 @@ const Ruler = styled.div`
   pointer-events: none;
 `;
 
+const KnobLine = styled.div`
+  position: absolute;
+  top: 2px;
+  left: 7px;
+  width: 2px;
+  height: calc( 100% - 4px );
+  background: ${ Colors.back1 };
+  border-radius: 1px;
+  pointer-events: none;
+`;
+
 const Knob = styled.div`
   position: absolute;
   top: 4px;
   width: 16px;
   height: calc( 100% - 8px );
-  background: ${ Colors.fore };
+  background: linear-gradient(to bottom, ${ Colors.fore }, ${ Colors.foresub });
   pointer-events: none;
+  box-shadow: 0 0 0 2px ${ Colors.back1 }, 0 4px 8px 2px #0008;
 `;
 
 const Root = styled.div<{ isLearning: boolean | undefined }>`
@@ -129,7 +141,9 @@ export const Fader: React.FC<{
         style={ {
           left: `calc( ${ 100.0 * value }% - 8px )`
         } }
-      />
+      >
+        <KnobLine />
+      </Knob>
     </Root>
   );
 };

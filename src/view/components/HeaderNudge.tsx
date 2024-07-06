@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  font: 400 10px 'Poppins', sans-serif;
+  font: 400 10px 'Roboto', sans-serif;
   line-height: 1;
   user-select: none;
   color: ${ Colors.foredark };

@@ -5,13 +5,14 @@ import styled from 'styled-components';
 // == styles =======================================================================================
 const Root = styled.div`
   position: fixed;
-  font: 400 12px 'Poppins', sans-serif;
-  padding: 2px 4px;
+  font: 400 12px 'Roboto', sans-serif;
+  padding: 4px 8px;
   margin: 8px 16px;
   white-space: pre-line;
+  color: ${ Colors.foresub };
   background: ${ Colors.back1 };
+  box-shadow: 0 2px 4px 2px #0008;
   border-radius: 4px;
-  opacity: 0.8;
   z-index: 10000;
 `;
 

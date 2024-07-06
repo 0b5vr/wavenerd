@@ -34,8 +34,9 @@ const Input = styled.input< { isInvalid: boolean } >`
   display: block;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   font-family: monospace;
-  padding: 0.1rem;
   border: none;
   background: ${ ( { isInvalid } ) => ( isInvalid ? Colors.errorBright : Colors.foresub ) };
   color: ${ Colors.back1 };

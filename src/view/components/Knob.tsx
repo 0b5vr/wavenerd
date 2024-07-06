@@ -15,19 +15,33 @@ const Head = styled.div`
   top: 10%;
   left: 45%;
   width: 10%;
-  height: 40%;
+  height: 35%;
   background: ${ Colors.back1 };
+  border-radius: 10000px;
   pointer-events: none;
 `;
 
-const Body = styled.div`
+const HeadContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background: ${ Colors.fore };
+`;
+
+const Body = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10000px;
+  background: linear-gradient(to bottom, ${ Colors.fore }, ${ Colors.foresub });
+  box-shadow: 0 0 0 2px ${ Colors.back1 }, 0 4px 8px 2px #0008;
 `;
 
 const Root = styled.div<{ isLearning: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -107,13 +121,14 @@ export const Knob: React.FC<{
       onContextMenu={ handleContextMenu }
       className={ className }
     >
-      <Body
+      <Body />
+      <HeadContainer
         style={ {
           transform: `rotate( ${ 210 + 300.0 * value }deg )`
         } }
       >
         <Head />
-      </Body>
+      </HeadContainer>
     </Root>
   );
 };

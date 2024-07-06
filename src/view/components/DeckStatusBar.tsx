@@ -40,7 +40,7 @@ const StyledIconHasChange = styled( IconCircle )`
 
 const StyledIconPlay = styled( IconPlay )`
   ${ StyleIcon }
-  color: ${ Colors.foresub };
+  color: ${ Colors.gray };
 `;
 
 const StyledIconBuilding = styled( IconBuild )`
@@ -91,10 +91,19 @@ const animationBlink = ( altColor: string, duration: string, timing: string ) =>
   ` } ${ duration } ${ timing } infinite;
 `;
 
-const Text = styled.div`
-  margin-left: 4px;
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   flex-grow: 1;
   flex-shrink: 1;
+`;
+
+const Text = styled.div`
+`;
+
+const TextGray = styled( Text )`
+  color: ${ Colors.gray };
 `;
 
 const TextHasChangeBlink = styled( Text )`
@@ -116,7 +125,7 @@ const TextErrorBlink = styled( Text )`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  font: 400 16px 'Poppins', sans-serif;
+  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
   background: ${ Colors.back4 };
   overflow: hidden;
@@ -162,48 +171,52 @@ export const DeckStatusBar: React.FC<{
   let content: React.ReactNode;
 
   if ( error != null ) {
-    content = <>
+    content = <Content>
       <StyledIconError />
       <Text>{ error }</Text>
-    </>;
+    </Content>;
   } else if ( cueStatus === 'compiling' ) {
-    content = <>
-      <StyledIconBuilding
-        data-stalker="Compiling..."
-      />
+    content = <Content
+      data-stalker="The shader code is being compiled"
+    >
+      <StyledIconBuilding />
       <TextApplyingBlink>Compiling...</TextApplyingBlink>
-    </>;
+    </Content>;
   } else if ( cueStatus === 'ready' ) {
-    content = <>
-      <StyledIconCheck
-        data-stalker="A shader is successfully compiled and ready to be applied"
-      />
+    content = <Content
+      data-stalker="A shader is successfully compiled and ready to be applied&#10;Ctrl+R to apply the shader at the next bar"
+    >
+      <StyledIconCheck />
       <TextReadyBlink>Ready to apply</TextReadyBlink>
-    </>;
+    </Content>;
   } else if ( cueStatus === 'applying' ) {
-    content = <>
-      <IconStopwatchContainer
-        data-stalker="Applying..."
-      >
+    content = <Content
+      data-stalker="The shader will be applied at the next bar"
+    >
+      <IconStopwatchContainer>
         <StyledIconApplying />
       </IconStopwatchContainer>
       <TextApplyingBlink>Applying...</TextApplyingBlink>
-    </>;
+    </Content>;
   } else if ( hasEdit ) {
-    content = <>
+    content = <Content
+      data-stalker="The code has been edited&#10;Ctrl+S to compile or Ctrl+R to apply"
+    >
       <StyledIconHasChange />
-      <TextHasChangeBlink>The code has been edited. Ctrl+R to apply</TextHasChangeBlink>
-    </>;
+      <TextHasChangeBlink>The code has been edited</TextHasChangeBlink>
+    </Content>;
   } else if ( gainValue === 0.0 ) {
-    content = <>
+    content = <Content
+      data-stalker="Gain is -INF dB so no sound is output from the deck&#10;Turn the gain knob!"
+    >
       <StyledIconMute />
-      <TextErrorBlink>Gain is -INF dB. Turn the gain knob!</TextErrorBlink>
-    </>;
+      <TextErrorBlink>Gain is -INF dB</TextErrorBlink>
+    </Content>;
   } else {
-    content = <>
+    content = <Content>
       <StyledIconPlay />
-      <Text>Playing</Text>
-    </>;
+      <TextGray>Playing</TextGray>
+    </Content>;
   }
 
   return (

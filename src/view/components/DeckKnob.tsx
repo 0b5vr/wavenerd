@@ -7,14 +7,14 @@ import { useMidiValue } from '../utils/useMidiValue';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )`
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
 `;
 
 const Label = styled.div`
-  font: 400 10px 'Poppins', sans-serif;
+  font: 500 10px 'Roboto', sans-serif;
+  color: ${ Colors.foresub };
   line-height: 1;
-  color: ${ Colors.fore };
 `;
 
 const Value = styled.div`
@@ -24,6 +24,7 @@ const Value = styled.div`
 
 const Root = styled.div<{ isLearning: boolean }>`
   display: flex;
+  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -41,8 +42,9 @@ export const DeckKnob: React.FC<{
   paramName: string;
   midiParamNamePrefix: string;
   deck: WavenerdDeck;
+  stalker?: string;
   className?: string;
-}> = ( { paramName, midiParamNamePrefix, deck, className } ) => {
+}> = ( { paramName, midiParamNamePrefix, deck, stalker, className } ) => {
   const value = useMidiValue( midiParamNamePrefix + paramName );
 
   const handleChange = useCallback(
@@ -61,13 +63,13 @@ export const DeckKnob: React.FC<{
     <Root
       isLearning={ false }
       className={ className }
+      data-stalker={ stalker }
     >
       <Label>{ paramName }</Label>
       <StyledKnob
         midiParamName={ midiParamNamePrefix + paramName }
         deltaValuePerPixel={ 1.0 / 64.0 }
         onChange={ handleChange }
-        data-stalker={ paramName }
       />
       <Value>{ valueStr }</Value>
     </Root>

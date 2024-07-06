@@ -14,7 +14,7 @@ const StyledIconPlay = styled( IconPlay )`
 `;
 
 const Description = styled.div`
-  font: 400 16px 'Poppins', sans-serif;
+  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 `;
 
@@ -25,7 +25,7 @@ const Underlay = styled.div`
   width: 100%;
   height: 100%;
   background: ${ Colors.black };
-  opacity: 0.5;
+  opacity: 0.8;
 `;
 
 const Content = styled.div`

@@ -1,3 +1,4 @@
+import { Colors } from '../constants/Colors';
 import { NumberParam } from './NumberParam';
 import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -7,12 +8,13 @@ import { useRecoilValue } from 'recoil';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  font: 400 10px 'Poppins', sans-serif;
+  font: 500 8px 'Roboto', sans-serif;
+  color: ${ Colors.foresub };
   line-height: 1;
 `;
 
 const Value = styled( NumberParam )`
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.0;
   min-width: 64px;
 `;
@@ -20,7 +22,7 @@ const Value = styled( NumberParam )`
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: right;
+  text-align: center;
 `;
 
 // == components ===================================================================================
@@ -33,7 +35,7 @@ export const HeaderBPM: React.FC<{
   return (
     <Root
       className={ className }
-      data-stalker="Beat Per Minute"
+      data-stalker="Beat Per Minute&#10;Drag up/down to change BPM, Double click to edit"
     >
       <Label>BPM</Label>
       <Value
