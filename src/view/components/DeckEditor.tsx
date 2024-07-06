@@ -1,10 +1,10 @@
 /* eslint-disable sort-imports */
 
-import { KeyBinding, keymap } from '@codemirror/view';
+import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror from '@uiw/react-codemirror';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { Colors } from '../constants/Colors';
@@ -12,7 +12,7 @@ import { monokaiSharp } from '../codemirror/monokaiSharp';
 import { chromaCoder } from '../codemirror/chromaCoder';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
-import { settingsThemeState } from '../states/settings';
+import { settingsEditorFontState, settingsThemeState } from '../states/settings';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 
 // == styles =======================================================================================
@@ -76,6 +76,16 @@ export const DeckEditor: React.FC<{
     themeString === 'monokaiSharp' ? monokaiSharp :
     themeString === 'chromaCoder' ? chromaCoder :
     monokaiSharp;
+
+  const editorFont = useRecoilValue( settingsEditorFontState );
+  const fontExtension = useMemo( () => {
+    const theme = EditorView.theme( {
+      '.cm-scroller': {
+        font: editorFont,
+      },
+    } );
+    return [ theme ];
+  }, [ editorFont ] );
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [
@@ -176,12 +186,15 @@ export const DeckEditor: React.FC<{
       <StyledSimpleBar>
         <StyledReactCodeMirror
           value={ code }
-          extensions={[
+          extensions={ [
             cpp(),
             keymap.of( customKeymap ),
             backlayer,
-          ]}
-          theme={ theme.extensions }
+          ] }
+          theme={ [
+            theme.extensions,
+            fontExtension,
+          ] }
           onChange={ handleChange }
         />
       </StyledSimpleBar>

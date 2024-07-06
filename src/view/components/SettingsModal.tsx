@@ -1,7 +1,7 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
-import { settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsEditorFontState, settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { Colors } from '../constants/Colors';
 import { Modal } from './Modal';
@@ -40,6 +40,35 @@ const StyledNumberParam = styled( NumberParam )`
   width: 4em;
 `;
 
+const StyledSelect = styled.select`
+  display: inline-block;
+  background: ${ Colors.back4 };
+  color: ${ Colors.fore };
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+`;
+
+const StyledColorInput = styled.input`
+  display: inline-block;
+  background: ${ Colors.back4 };
+  color: ${ Colors.fore };
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+  width: 3em;
+`;
+
+const StyledTextInput = styled.input`
+  display: inline-block;
+  background: ${ Colors.back4 };
+  color: ${ Colors.fore };
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+  width: 12em;
+`;
+
 // == components ===================================================================================
 export const SettingsModal: React.FC<{
   mixer: Mixer,
@@ -55,6 +84,7 @@ export const SettingsModal: React.FC<{
   const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
   const spectrumColor = useRecoilValue( settingsSpectrumColorState );
   const theme = useRecoilValue( settingsThemeState );
+  const editorFont = useRecoilValue( settingsEditorFontState );
 
   const latencyTime = useMemo( () => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
@@ -118,6 +148,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.theme = theme;
   }, [] );
 
+  const handleChangeEditorFont = useCallback( ( event: React.ChangeEvent ) => {
+    const font = ( event.target as HTMLSelectElement ).value;
+    SETTINGSMAN.editorFont = font;
+  }, [] );
+
   if ( !isOpening ) {
     return null;
   }
@@ -159,7 +194,7 @@ export const SettingsModal: React.FC<{
       >
         <Name>X Fader Curve Mode</Name>
         { (
-          <select
+          <StyledSelect
             value={ xFaderMode }
             onChange={ handleChangeXFaderCurveMode }
           >
@@ -167,7 +202,7 @@ export const SettingsModal: React.FC<{
             <option value="cut">Cut</option>
             <option value="linear">Linear</option>
             <option value="transition">Transition</option>
-          </select>
+          </StyledSelect>
         ) }<br />
       </Line>
 
@@ -176,14 +211,14 @@ export const SettingsModal: React.FC<{
       >
         <Name>Vectorscope Mode</Name>
         { (
-          <select
+          <StyledSelect
             value={ vectorscopeMode }
             onChange={ handleChangeVectorscopeMode }
           >
             <option value="none">None</option>
             <option value="line">Line</option>
             <option value="points">Points</option>
-          </select>
+          </StyledSelect>
         ) }<br />
       </Line>
       <Line
@@ -203,7 +238,7 @@ export const SettingsModal: React.FC<{
         data-stalker="Change the color of the vectorscope."
       >
         <Name>Vectorscope Color</Name>
-        <input
+        <StyledColorInput
           type="color"
           value={ vectorscopeColor }
           onChange={ handleChangeVectorscopeColor }
@@ -215,13 +250,13 @@ export const SettingsModal: React.FC<{
       >
         <Name>Spectrum Mode</Name>
         { (
-          <select
+          <StyledSelect
             value={ spectrumMode }
             onChange={ handleChangeSpectrumMode }
           >
             <option value="none">None</option>
             <option value="line">Line</option>
-          </select>
+          </StyledSelect>
         ) }<br />
       </Line>
       <Line
@@ -241,7 +276,7 @@ export const SettingsModal: React.FC<{
         data-stalker="Change the color of the spectrum."
       >
         <Name>spectrum Color</Name>
-        <input
+        <StyledColorInput
           type="color"
           value={ spectrumColor }
           onChange={ handleChangeSpectrumColor }
@@ -251,13 +286,22 @@ export const SettingsModal: React.FC<{
         data-stalker="Change the appearance theme."
       >
         <Name>Theme</Name>
-        <select
+        <StyledSelect
           value={ theme }
           onChange={ handleChangeTheme }
         >
           <option value="monokaiSharp">Monokai Sharp</option>
           <option value="chromaCoder">ChromaCoder</option>
-        </select>
+        </StyledSelect>
+      </Line>
+      <Line
+        data-stalker="Change the font of the editor.&#10;The syntax is same as the CSS font property."
+      >
+        <Name>Editor Font</Name>
+        <StyledTextInput
+          value={ editorFont }
+          onChange={ handleChangeEditorFont }
+        />
       </Line>
     </Modal>
   );

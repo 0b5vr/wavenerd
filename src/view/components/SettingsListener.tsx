@@ -1,4 +1,4 @@
-import { settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
+import { settingsEditorFontState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -14,6 +14,7 @@ function SettingsListener(): null {
   const setSpectrumOpacity = useSetRecoilState( settingsSpectrumOpacityState );
   const setSpectrumColor = useSetRecoilState( settingsSpectrumColorState );
   const setTheme = useSetRecoilState( settingsThemeState );
+  const setEditorFont = useSetRecoilState( settingsEditorFontState );
 
   useEffect(
     () => {
@@ -77,6 +78,12 @@ function SettingsListener(): null {
         } );
       setTheme( SETTINGSMAN.theme );
 
+      const handleChangeEditorFont
+        = SETTINGSMAN.on( 'changeEditorFont', ( { font } ) => {
+          setEditorFont( font );
+        } );
+      setEditorFont( SETTINGSMAN.editorFont );
+
       return () => {
         SETTINGSMAN.off( 'changeLatencyBlocks', handleChangeLatencyBlocks );
         SETTINGSMAN.off( 'changeMasterReverbGain', handleChangeMasterReverbGain );
@@ -88,6 +95,7 @@ function SettingsListener(): null {
         SETTINGSMAN.off( 'changeSpectrumOpacity', handleChangeSpectrumOpacity );
         SETTINGSMAN.off( 'changeSpectrumColor', handleChangeSpectrumColor );
         SETTINGSMAN.off( 'changeTheme', handleChangeTheme );
+        SETTINGSMAN.off( 'changeEditorFont', handleChangeEditorFont );
       };
     },
     []

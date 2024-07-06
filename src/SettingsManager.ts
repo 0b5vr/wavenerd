@@ -18,6 +18,7 @@ interface SettingsManagerStorageType {
   spectrumOpacity: number;
   spectrumColor: string;
   theme: string;
+  editorFont: string;
 }
 
 interface SettingsManagerEvents {
@@ -31,6 +32,7 @@ interface SettingsManagerEvents {
   changeSpectrumOpacity: { opacity: number };
   changeSpectrumColor: { color: string };
   changeTheme: { theme: string };
+  changeEditorFont: { font: string };
 }
 
 export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
@@ -112,6 +114,14 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public set theme( theme: string ) {
     this.__storage.set( 'theme', theme );
     this.__emit( 'changeTheme', { theme } );
+  }
+
+  public get editorFont(): string {
+    return this.__storage.get( 'editorFont' ) ?? '12px "Roboto Mono", monospace';
+  }
+  public set editorFont( font: string ) {
+    this.__storage.set( 'editorFont', font );
+    this.__emit( 'changeEditorFont', { font } );
   }
 
   private __storage: ThrottledJSONStorage<SettingsManagerStorageType>;

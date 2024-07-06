@@ -57,3 +57,8 @@ export const settingsThemeState = atom<string>( {
   key: 'settingsThemeState',
   default: 'monokaiSharp',
 } );
+
+export const settingsEditorFontState = atom<string>( {
+  key: 'settingsEditorFontState',
+  default: '12px "Roboto Mono", monospace',
+} );
