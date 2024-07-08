@@ -127,7 +127,8 @@ const Root = styled.div`
   align-items: center;
   font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
-  background: ${ ThemeVars.back3 };
+  background: ${ ThemeVars.barBg };
+  color: ${ ThemeVars.barFg };
   overflow: hidden;
 
   * {

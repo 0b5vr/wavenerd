@@ -21,27 +21,27 @@ const invalidred = '#ff0000';
 const redDark = '#920000';
 const blueBright = '#67b9ff';
 
-export const themeSolarizedDark: Theme = {
+export const themeSolarizedLight: Theme = {
   ui: {
     black: '#000000',
     white: '#ffffff',
 
-    back1: base03,
-    back2: base02,
-    back3: base02,
+    back1: base3,
+    back2: base2,
+    back3: base2,
 
-    inputBack: base01,
-    inputFore: base3,
+    inputBack: base1,
+    inputFore: base03,
     inputBackInvalid: redDark,
 
-    fore: base1,
-    foresub: base0,
-    foredark: base0,
+    fore: base01,
+    foresub: base00,
+    foredark: base00,
 
-    gray: base00,
+    gray: base0,
 
-    knobColor: `linear-gradient(to bottom, ${ base3 }, ${ base2 })`,
-    knobShadow: base03,
+    knobColor: `linear-gradient(to bottom, ${ base02 }, ${ base03 })`,
+    knobShadow: base1,
 
     accent: blue,
     accentBright: blueBright,
@@ -56,24 +56,24 @@ export const themeSolarizedDark: Theme = {
     )`,
   },
   code: {
-    text: base0,
-    background: base03,
+    text: base00,
+    background: base3,
     keywords: green,
     processors: red,
     operators: green,
     types: blue,
     constants: magenta,
     strings: yellow,
-    comments: base01,
+    comments: base1,
     invalid: invalidred,
-    panels: base02,
-    tooltips: base02,
-    gutterText: base01,
-    gutterBackground: base02,
-    foldPlaceholders: base01,
+    panels: base2,
+    tooltips: base2,
+    gutterText: base1,
+    gutterBackground: base2,
+    foldPlaceholders: base1,
     searchMatch: yellow + '22',
     searchSelected: orange + '88',
     backlayer: 'none',
-    dark: true,
+    dark: false,
   },
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
 import { deckTimeState } from '../states/deck';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
@@ -7,8 +6,8 @@ import { useRecoilValue } from 'recoil';
 // == styles =======================================================================================
 const Label = styled.div`
   font: 500 8px 'Roboto', sans-serif;
-  color: ${ ThemeVars.foresub };
   line-height: 1;
+  opacity: 0.7;
 `;
 
 const Value = styled.div`

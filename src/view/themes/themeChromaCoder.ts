@@ -42,18 +42,22 @@ export const themeChromaCoder: Theme = {
 
     gray,
 
-    shadow: '#0008',
+    knobColor: `linear-gradient(to bottom, ${ fore }, ${ foresub })`,
+    knobShadow: '#0008',
 
     accent: blue,
     accentBright: blueBright,
     green: cyan,
     error: red,
 
-    levelMeter0: '#697681',
-    levelMeter1: '#8b9eab',
-    levelMeter2: '#aec5d5',
-    levelMeter3: '#d0edff',
-    levelMeterPeak: red,
+    levelMeter: `linear-gradient(
+      to bottom,
+      ${ red } 20%,
+      #d0edff 20%,
+      #aec5d5 47%,
+      #8b9eab 73%,
+      #697681 100%
+    )`,
   },
   code: {
     text: fore,
@@ -74,5 +78,6 @@ export const themeChromaCoder: Theme = {
     searchMatch: yellow + '22',
     searchSelected: orange + '88',
     backlayer: '#000000',
+    dark: true,
   },
 };

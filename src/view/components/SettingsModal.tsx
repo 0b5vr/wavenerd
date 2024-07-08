@@ -7,6 +7,7 @@ import { Modal } from './Modal';
 import { NumberParam } from './NumberParam';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
+import { themes } from '../themes/themes';
 
 // == constants ====================================================================================
 const BLOCK_SIZE = 128;
@@ -291,9 +292,9 @@ export const SettingsModal: React.FC<{
           value={ theme }
           onChange={ handleChangeTheme }
         >
-          <option value="monokaiSharp">Monokai Sharp</option>
-          <option value="chromaCoder">ChromaCoder</option>
-          <option value="solarizedDark">Solarized Dark</option>
+          { Object.entries( themes ).map( ( [ key, { displayName } ] ) => (
+            <option key={ key } value={ key }>{ displayName }</option>
+          ) ) }
         </StyledSelect>
       </Line>
       <Line

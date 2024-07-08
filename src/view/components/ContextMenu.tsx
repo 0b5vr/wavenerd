@@ -12,7 +12,8 @@ const Container = styled.div`
   overflow: hidden;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  background: ${ ThemeVars.back2 };
+  background: ${ ThemeVars.contextMenuBg };
+  color: ${ ThemeVars.contextMenuFg };
   filter: drop-shadow( 0 0 2px ${ ThemeVars.black } );
   font-size: 0.8rem;
 `;

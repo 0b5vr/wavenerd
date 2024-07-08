@@ -11,8 +11,8 @@ import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
 import { settingsEditorFontState, settingsThemeState } from '../states/settings';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
-import { cmThemes } from '../codemirror/cmThemes';
 import { ThemeVars } from '../themes/ThemeVars';
+import { themes } from '../themes/themes';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -71,7 +71,7 @@ export const DeckEditor: React.FC<{
   const setHasEdit = useSetRecoilState( hasEditState );
 
   const themeString = useRecoilValue( settingsThemeState );
-  const theme = cmThemes[ themeString ] ?? cmThemes[ 'monokaiSharp' ]!;
+  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
 
   const editorFont = useRecoilValue( settingsEditorFontState );
   const fontExtension = useMemo( () => {

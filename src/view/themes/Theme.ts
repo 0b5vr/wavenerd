@@ -1,7 +1,7 @@
 import { ThemeVars } from './ThemeVars';
 
 export interface Theme {
-  ui: Record<keyof typeof ThemeVars, string>;
+  ui: Partial<Record<keyof typeof ThemeVars, string>>;
   code: {
     text: string;
     background: string;
@@ -21,5 +21,6 @@ export interface Theme {
     searchMatch: string;
     searchSelected: string;
     backlayer: string;
+    dark: boolean;
   };
 }

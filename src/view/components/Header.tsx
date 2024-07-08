@@ -47,7 +47,6 @@ const StyleIcon = css`
   width: 24px;
   height: 24px;
   margin: 4px 4px 4px 0;
-  color: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {
@@ -78,6 +77,7 @@ const StyledIconGitHub = styled( IconGitHub )`
 const AnchorGit = styled.a`
   display: block;
   height: 32px;
+  color: ${ ThemeVars.headerFg };
 `;
 
 const Margin = styled.div`
@@ -87,7 +87,8 @@ const Margin = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ ThemeVars.back3 };
+  background: ${ ThemeVars.headerBg };
+  color: ${ ThemeVars.headerFg };
   border-bottom: solid 2px ${ ThemeVars.back1 };
   box-sizing: content-box;
 
@@ -145,7 +146,7 @@ export const Header: React.FC<{
       <Margin />
       <StyledIconBBox
         onClick={ handleClickToggleB }
-        style={ { color: showB ? ThemeVars.fore : ThemeVars.gray } }
+        style={ { opacity: showB ? 1.0 : 0.5 } }
         data-stalker="Toggle Deck B"
       />
       <StyledIconHelp

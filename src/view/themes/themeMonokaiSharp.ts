@@ -41,18 +41,22 @@ export const themeMonokaiSharp: Theme = {
 
     gray: '#697681',
 
-    shadow: '#0008',
+    knobColor: `linear-gradient(to bottom, ${ fore }, ${ foresub })`,
+    knobShadow: '#0008',
 
     accent: blue,
     accentBright: blueBright,
     green: green,
     error: red,
 
-    levelMeter0: '#226b80',
-    levelMeter1: '#35b0ab',
-    levelMeter2: '#c5f0a4',
-    levelMeter3: '#faffb8',
-    levelMeterPeak: red,
+    levelMeter: `linear-gradient(
+      to bottom,
+      ${ red } 20%,
+      #faffb8 20%,
+      #c5f0a4 47%,
+      #35b0ab 73%,
+      #226b80 100%
+    )`,
   },
   code: {
     text: fore,
@@ -73,5 +77,6 @@ export const themeMonokaiSharp: Theme = {
     searchMatch: yellow + '22',
     searchSelected: orange + '88',
     backlayer: 'none',
+    dark: true,
   },
 };

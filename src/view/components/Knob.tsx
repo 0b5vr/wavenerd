@@ -16,7 +16,7 @@ const Head = styled.div`
   left: 45%;
   width: 10%;
   height: 35%;
-  background: ${ ThemeVars.back1 };
+  background: ${ ThemeVars.knobNotch };
   border-radius: 10000px;
   pointer-events: none;
 `;
@@ -36,8 +36,8 @@ const Body = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10000px;
-  background: linear-gradient(to bottom, ${ ThemeVars.fore }, ${ ThemeVars.foresub });
-  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.shadow };
+  background: ${ ThemeVars.knobColor };
+  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
 `;
 
 const Root = styled.div<{ isLearning: boolean }>`

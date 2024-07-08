@@ -28,6 +28,7 @@ export function createCMTheme( theme: Theme ): {
     searchMatch,
     searchSelected,
     backlayer,
+    dark,
   } = theme.code;
 
   const cmTheme = EditorView.theme( {
@@ -50,6 +51,10 @@ export function createCMTheme( theme: Theme ): {
     },
     '.cm-panels': {
       backgroundColor: panels,
+      color: text,
+    },
+    '.cm-button': {
+      background,
       color: text,
     },
     '.cm-panels.cm-panels-top': {
@@ -107,10 +112,10 @@ export function createCMTheme( theme: Theme ): {
     '.cm-backlayer': {
       backgroundColor: backlayer,
     },
-  }, { dark: true } );
+  }, { dark } );
 
   // -- syntax highlighting --------------------------------------------------------------------------
-  const highlightStyle =  HighlightStyle.define( [
+  const highlightStyle = HighlightStyle.define( [
     {
       tag: [
         tags.keyword,

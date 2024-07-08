@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Knob } from './Knob';
 import { Mixer } from '../../Mixer';
-import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { useMidiValue } from '../utils/useMidiValue';
 
@@ -13,13 +12,12 @@ const StyledKnob = styled( Knob )`
 
 const Label = styled.div`
   font: 500 8px 'Roboto', sans-serif;
-  color: ${ ThemeVars.foresub };
   line-height: 1;
+  opacity: 0.7;
 `;
 
 const Value = styled.div`
   font-size: 10px;
-  color: ${ ThemeVars.fore };
 `;
 
 const Root = styled.div`

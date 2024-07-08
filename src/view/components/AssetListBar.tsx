@@ -31,7 +31,8 @@ const IconButton = styled.svg`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ ThemeVars.back3 };
+  background: ${ ThemeVars.barBg };
+  color: ${ ThemeVars.barFg };
   font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 

@@ -76,11 +76,15 @@ const StyledXFader = styled( XFader )`
 `;
 
 function themeVarsCss( themeString: string ): ReturnType<typeof css> {
-  const theme = themes[ themeString ] ?? themes[ 'monokaiSharp' ]!;
+  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).theme;
   const map = Object.entries( theme.ui )
   .map( ( [ key, value ] ) => {
-    const cssKey = ThemeVars[ key as keyof typeof ThemeVars ]
-    .slice( 4, -1 ); // var(--hoge) -> --hoge
+    const cssVar = ThemeVars[ key as keyof typeof ThemeVars ];
+    if ( cssVar == null ) { return ''; }
+
+    const cssKey = cssVar.match( /^var\(([a-z0-9-]+)/ )?.[ 1 ];
+    if ( cssKey == null ) { return ''; }
+
     return `${ cssKey }: ${ value };`;
   } );
   return css`${ map.join( '' ) }`;

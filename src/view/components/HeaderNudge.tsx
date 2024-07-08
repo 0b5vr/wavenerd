@@ -9,13 +9,13 @@ const Label = styled.div`
   font: 400 10px 'Roboto', sans-serif;
   line-height: 1;
   user-select: none;
-  color: ${ ThemeVars.foredark };
+  color: ${ ThemeVars.headerBg };
 `;
 
 const Rect = styled.div`
   position: absolute;
   height: 100%;
-  background: ${ ThemeVars.fore };
+  background: #fff;
   mix-blend-mode: difference;
 `;
 
@@ -24,14 +24,14 @@ const CenterLine = styled.div`
   left: calc( 50% - 0.5px );
   width: 1px;
   height: 100%;
-  background: ${ ThemeVars.fore };
+  background: ${ ThemeVars.headerBg };
 `;
 
 const Root = styled.div`
   position: relative;
   width: 48px;
   height: calc( 100% - 8px );
-  background: ${ ThemeVars.back2 };
+  background: ${ ThemeVars.headerFg };
   display: flex;
   justify-content: center;
   align-items: center;

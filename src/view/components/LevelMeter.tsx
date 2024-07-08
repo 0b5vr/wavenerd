@@ -25,13 +25,7 @@ const Fg = styled.div`
   width: 100%;
   height: 100%;
 
-  background: linear-gradient(
-    ${ ThemeVars.levelMeterPeak } 20%,
-    ${ ThemeVars.levelMeter3 } 20%,
-    ${ ThemeVars.levelMeter2 } 47%,
-    ${ ThemeVars.levelMeter1 } 73%,
-    ${ ThemeVars.levelMeter0 } 100%
-  );
+  background: ${ ThemeVars.levelMeter };
 `;
 
 const Root = styled.div`

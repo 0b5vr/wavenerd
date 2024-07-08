@@ -32,7 +32,8 @@ const Plane = styled.div`
   max-height: calc( 100% - 32px );
   overflow: visible;
   border-radius: 4px;
-  background: ${ ThemeVars.back2 };
+  background: ${ ThemeVars.modalBg };
+  color: ${ ThemeVars.modalFg };
   box-shadow: 0 0 8px 0 ${ ThemeVars.black };
 `;
 

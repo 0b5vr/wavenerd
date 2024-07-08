@@ -14,7 +14,6 @@ const StyleIconButton = css`
   height: 28px;
   margin: 2px;
 
-  color: ${ ThemeVars.fore };
   cursor: pointer;
 
   &:hover {

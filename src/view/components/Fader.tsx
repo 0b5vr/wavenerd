@@ -17,7 +17,7 @@ const Gutter = styled.div`
   top: calc( 50% - 3px );
   width: 100%;
   height: 6px;
-  background: ${ ThemeVars.back1 };
+  background: ${ ThemeVars.knobGutter };
   pointer-events: none;
 `;
 
@@ -26,7 +26,7 @@ const Ruler = styled.div`
   top: 0px;
   width: 2px;
   height: 100%;
-  background: ${ ThemeVars.gray };
+  background: ${ ThemeVars.knobGuide };
   pointer-events: none;
 `;
 
@@ -36,7 +36,7 @@ const KnobLine = styled.div`
   left: 7px;
   width: 2px;
   height: calc( 100% - 4px );
-  background: ${ ThemeVars.back1 };
+  background: ${ ThemeVars.knobNotch };
   border-radius: 1px;
   pointer-events: none;
 `;
@@ -46,9 +46,9 @@ const Knob = styled.div`
   top: 4px;
   width: 16px;
   height: calc( 100% - 8px );
-  background: linear-gradient(to bottom, ${ ThemeVars.fore }, ${ ThemeVars.foresub });
+  background: ${ ThemeVars.knobColor };
   pointer-events: none;
-  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.shadow };
+  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
 `;
 
 const Root = styled.div<{ isLearning: boolean | undefined }>`
