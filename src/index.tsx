@@ -33,7 +33,7 @@ deckB.node.connect( mixer.inputB );
 mixer.output.connect( audio.destination );
 
 const reverb = new Reverb( audio );
-reverb.gain.value = 0.0;
+reverb.gain.value = SETTINGSMAN.masterReverbGain;
 mixer.output.connect( reverb.input );
 reverb.connect( audio.destination );
 SETTINGSMAN.on( 'changeMasterReverbGain', ( { gain } ) => {
