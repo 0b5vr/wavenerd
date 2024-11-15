@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@0b5vr/experimental/-/experimental-0.8.0.tgz#3abfdde3714313ea67d19bd2123ab19135361fad"
   integrity sha512-h1KHFiYYWvB4lvsabK80Slypc6q+ap+cho0nhkDVxoSIk6zOm4YPCRHTDU1LI/gPh1wR60ZzJQasr+pYbLWa5g==
 
-"@0b5vr/wavenerd-deck@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@0b5vr/wavenerd-deck/-/wavenerd-deck-0.6.0.tgz#e3995692436ac387b5a046b17e963494fe8b39c0"
-  integrity sha512-rRxkfKBVAN6U436SqcCGwCgySo6D7g7GnWXqdv4rSTXlPjLKAC+vg33sPwL3BE8STWLo0pVfoPMGfSywJ9RVrA==
+"@0b5vr/wavenerd-deck@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@0b5vr/wavenerd-deck/-/wavenerd-deck-0.6.1.tgz#62835d749b7666e346d7b976450275241860a526"
+  integrity sha512-U0iGdCQLGWatSRnj9ib8+B+iWwnQ9npHGp9a4ZyOEsJksT2CHEMPZKhJeyK76evEq07HrpF1VaIDL16yVoyJNg==
 
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"
