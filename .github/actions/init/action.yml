@@ -2,21 +2,28 @@ name: Init
 
 runs:
   using: 'composite'
+
   steps:
     - name: Setup Node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
-        node-version: '16'
         registry-url: 'https://registry.npmjs.org'
+        node-version-file: './.node-version'
+
     - name: Setup Git Config
       shell: bash
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+
     - name: Cache Deps
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+
+    - name: Fetch Deps
+      shell: bash
+      run: yarn install --frozen-lockfile
