@@ -61,6 +61,7 @@ export const DeckKnob: React.FC<{
     >
       <StyledKnob
         midiParamName={ midiParamNamePrefix + paramName }
+        resetValue={ 0.0 }
         deltaValuePerPixel={ 1.0 / 64.0 }
         onChange={ handleChange }
       />

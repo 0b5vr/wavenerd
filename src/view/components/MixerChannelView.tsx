@@ -45,7 +45,7 @@ function valueToDisplayDB( value: number ): string {
 }
 
 function valueToDisplayEQ( value: number ): string {
-  if ( value > 0.5 ) {
+  if ( value >= 0.5 ) {
     return `+${ ( ( value - 0.5 ) * 200.0 ).toFixed() }%`;
   } else {
     return `-${ ( ( 0.5 - value ) * 200.0 ).toFixed() }%`;
@@ -70,6 +70,7 @@ function MixerGainKnob( { label, stalkerText, paramName, onChange }: {
       <StyledKnob
         size={ 40 }
         midiParamName={ paramName }
+        resetValue={ 0.5 }
         deltaValuePerPixel={ 1.0 / 256.0 }
         onChange={ onChange }
         stalkerText={ stalkerTextWithValue }
@@ -96,6 +97,7 @@ function MixerEQKnob( { label, stalkerText, paramName, onChange }: {
       <StyledKnob
         size={ 24 }
         midiParamName={ paramName }
+        resetValue={ 0.5 }
         deltaValuePerPixel={ 1.0 / 256.0 }
         onChange={ onChange }
         stalkerText={ stalkerTextWithValue }

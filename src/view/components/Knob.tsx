@@ -5,6 +5,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
+import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiLearning } from '../utils/useMidiLearning';
 import { useMidiValue } from '../utils/useMidiValue';
 import { useOpenContextMenuAction } from '../states/contextMenu';
@@ -58,6 +59,7 @@ const Root = styled.div<{ isLearning: boolean }>`
 // == components ===================================================================================
 interface Props {
   midiParamName: string;
+  resetValue: number;
   deltaValuePerPixel: number;
   onChange?: ( value: number ) => void;
   className?: string;
@@ -65,7 +67,7 @@ interface Props {
 }
 
 export const Knob: React.FC<Props> = ( props ) => {
-  const { midiParamName, deltaValuePerPixel, onChange, className, stalkerText } = props;
+  const { midiParamName, deltaValuePerPixel, resetValue, onChange, className, stalkerText } = props;
   const isLearning = useMidiLearning( midiParamName );
   const openContextMenu = useOpenContextMenuAction();
 
@@ -78,10 +80,17 @@ export const Knob: React.FC<Props> = ( props ) => {
 
   const value = useMidiValue( midiParamName, handleValueChange );
 
+  const checkDoubleClick = useDoubleTap();
+
   const handleClick = useCallback(
     ( event: React.MouseEvent<HTMLDivElement> ) => {
       mouseCombo( {
         [ MouseComboBit.LMB ]: () => {
+          if ( checkDoubleClick() ) {
+            MIDIMAN.setValue( midiParamName, resetValue );
+            return;
+          }
+
           const y0 = event.clientY;
           const v0 = MIDIMAN.midi( midiParamName );
 
@@ -92,10 +101,10 @@ export const Knob: React.FC<Props> = ( props ) => {
               MIDIMAN.setValue( midiParamName, v );
             }
           );
-        }
+        },
       } )( event );
     },
-    [ midiParamName, deltaValuePerPixel ]
+    [ resetValue, midiParamName, deltaValuePerPixel ]
   );
 
   const handleContextMenu = useCallback(
