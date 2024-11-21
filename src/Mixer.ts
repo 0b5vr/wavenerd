@@ -90,8 +90,8 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.analyserInB = new Analyser( audio );
     this.analyserOut = new Analyser( audio );
 
-    this.__channelA.output.connect( this.analyserInA.input );
-    this.__channelB.output.connect( this.analyserInB.input );
+    this.__channelA.outputForAnal.connect( this.analyserInA.input );
+    this.__channelB.outputForAnal.connect( this.analyserInB.input );
     this.__gainNodeOut.connect( this.analyserOut.input );
 
     this.levelMeterInA = new LevelMeter( this.analyserInA );

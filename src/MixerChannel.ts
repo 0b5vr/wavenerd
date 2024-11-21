@@ -4,6 +4,7 @@ import { EventEmittable } from './utils/EventEmittable';
 export interface MixerChannelChangeEvent {
   gain?: number;
   eq?: MixerEQChangeEvent;
+  volume?: number;
 }
 
 interface MixerChannelEvents {
@@ -29,6 +30,19 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     this.__emit( 'change', { gain: value } );
   }
 
+  private __volume = 1.0;
+  public get volume(): number {
+    return this.__volume;
+  }
+  public set volume( value: number ) {
+    this.__volume = value;
+
+    const time = this.__audio.currentTime + 0.005;
+    this.__gainNodeOut.gain.linearRampToValueAtTime( this.__volume, time );
+
+    this.__emit( 'change', { volume: value } );
+  }
+
   private __eq: MixerEQ;
   public get eq(): MixerEQ {
     return this.__eq;
@@ -43,6 +57,10 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
 
   public get output(): AudioNode {
     return this.__gainNodeOut;
+  }
+
+  public get outputForAnal(): AudioNode {
+    return this.__eq.output;
   }
 
   public constructor( audio: AudioContext ) {

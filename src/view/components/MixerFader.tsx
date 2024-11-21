@@ -1,0 +1,159 @@
+import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
+import React, { useCallback, useRef } from 'react';
+import { MIDIMAN } from '../../MIDIManager';
+import { ThemeVars } from '../themes/ThemeVars';
+import { registerMouseEvent } from '../utils/registerMouseEvent';
+import { saturate } from '@0b5vr/experimental';
+import styled from 'styled-components';
+import { useMidiLearning } from '../utils/useMidiLearning';
+import { useMidiValue } from '../utils/useMidiValue';
+import { useOpenContextMenuAction } from '../states/contextMenu';
+import { useRect } from '../utils/useRect';
+
+// == styles =======================================================================================
+const Gutter = styled.div`
+  position: absolute;
+  top: 0;
+  left: calc( 50% - 3px );
+  width: 6px;
+  height: 100%;
+  background: ${ ThemeVars.knobGutter };
+  pointer-events: none;
+`;
+
+const GutterGlow = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: calc( 50% - 1px );
+  width: 2px;
+  background: ${ ThemeVars.accent };
+  pointer-events: none;
+`;
+
+const Ruler = styled.div`
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 2px;
+  background: ${ ThemeVars.knobGuide };
+  pointer-events: none;
+`;
+
+const KnobLine = styled.div`
+  position: absolute;
+  left: 2px;
+  top: 3px;
+  width: calc( 100% - 4px );
+  height: 2px;
+  background: ${ ThemeVars.knobNotch };
+  border-radius: 1px;
+  pointer-events: none;
+`;
+
+const Knob = styled.div`
+  position: absolute;
+  top: 4px;
+  width: 100%;
+  height: 8px;
+  background: ${ ThemeVars.knobColor };
+  pointer-events: none;
+  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
+`;
+
+const Root = styled.div<{ isLearning: boolean | undefined }>`
+  position: relative;
+  cursor: pointer;
+
+  box-shadow: ${ ( { isLearning } ) => (
+    isLearning
+      ? `0 0 0 2px ${ ThemeVars.accent }`
+      : 'none'
+  ) };
+`;
+
+// == components ===================================================================================
+export const MixerFader: React.FC<{
+  midiParamName: string;
+  stalkerText?: string;
+  onChange?: ( value: number ) => void;
+  className?: string;
+}> = ( { midiParamName, stalkerText, onChange, className } ) => {
+  const isLearning = useMidiLearning( midiParamName );
+  const refRoot = useRef<HTMLDivElement>( null );
+  const rectRoot = useRect( refRoot );
+  const openContextMenu = useOpenContextMenuAction();
+
+  const handleValueChange = useCallback(
+    ( value: number ) => {
+      onChange?.( value );
+    },
+    [ onChange ]
+  );
+
+  const value = useMidiValue( midiParamName, handleValueChange );
+
+  const handleClick = useCallback(
+    ( event: React.MouseEvent<HTMLDivElement> ) => {
+      mouseCombo( {
+        [ MouseComboBit.LMB ]: () => {
+          const bottom = event.clientY - event.nativeEvent.offsetY + rectRoot.height;
+          const y0 = ( bottom - event.clientY );
+          const v0 = saturate( y0 / rectRoot.height );
+          MIDIMAN.setValue( midiParamName, v0 );
+
+          registerMouseEvent(
+            ( event ) => {
+              const y = ( bottom - event.clientY );
+              const v = saturate( y / rectRoot.height );
+              MIDIMAN.setValue( midiParamName, v );
+            }
+          );
+        }
+      } )( event );
+    },
+    [ midiParamName, rectRoot.height ]
+  );
+
+  const handleContextMenu = useCallback(
+    ( event: React.MouseEvent<HTMLDivElement> ) => {
+      event.preventDefault();
+
+      openContextMenu( {
+        x: event.clientX,
+        y: event.clientY,
+        commands: [
+          {
+            name: 'Learn MIDI',
+            callback: () => {
+              MIDIMAN.learn( midiParamName );
+            }
+          }
+        ]
+      } );
+    },
+    [ midiParamName, openContextMenu ]
+  );
+
+  return (
+    <Root
+      isLearning={ isLearning }
+      ref={ refRoot }
+      onMouseDown={ handleClick }
+      onContextMenu={ handleContextMenu }
+      className={ className }
+      data-stalker={ stalkerText }
+    >
+      <Ruler style={ { top: '0px' } } />
+      <Ruler style={ { top: 'calc( 100% - 2px )' } } />
+      <Gutter />
+      <GutterGlow style={ { height: `${ 100.0 * value }%` } } />
+      <Knob
+        style={ {
+          top: `calc( ${ 100.0 * ( 1.0 - value ) }% - 4px )`
+        } }
+      >
+        <KnobLine />
+      </Knob>
+    </Root>
+  );
+};

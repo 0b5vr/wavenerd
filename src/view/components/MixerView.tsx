@@ -34,11 +34,13 @@ export const MixerView: React.FC<{
       <StyledMixerChannelA
         paramPrefix="/mixer/channelA"
         channel={ mixer.channelA }
+        side='A'
       />
       <StyledLevelMeters />
       <StyledMixerChannelB
         paramPrefix="/mixer/channelB"
         channel={ mixer.channelB }
+        side='B'
       />
     </Root>
   );

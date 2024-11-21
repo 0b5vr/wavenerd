@@ -56,7 +56,7 @@ const StyledAssetList = styled( AssetList )`
 `;
 
 const StyledMixerView = styled( MixerView )`
-  height: 192px;
+  height: 180px;
 `;
 
 const FaderRow = styled.div`
