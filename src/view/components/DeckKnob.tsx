@@ -12,19 +12,14 @@ const StyledKnob = styled( Knob )`
 `;
 
 const Label = styled.div`
-  font: 500 10px 'Roboto', sans-serif;
+  font: 500 8px 'Roboto', sans-serif;
   color: ${ ThemeVars.foresub };
   line-height: 1;
 `;
 
-const Value = styled.div`
-  font-size: 10px;
-  color: ${ ThemeVars.fore };
-`;
-
 const Root = styled.div<{ isLearning: boolean }>`
   display: flex;
-  gap: 2px;
+  gap: 4px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -54,24 +49,22 @@ export const DeckKnob: React.FC<{
     [ deck, paramName ]
   );
 
-  const valueStr = useMemo(
-    () => value.toFixed( 3 ),
-    [ value ],
-  );
+  const stalkerWithValue = useMemo( () => {
+    return `${ stalker }: ${ value.toFixed( 3 ) }`;
+  }, [ stalker, value ] );
 
   return (
     <Root
       isLearning={ false }
       className={ className }
-      data-stalker={ stalker }
+      data-stalker={ stalkerWithValue }
     >
-      <Label>{ paramName }</Label>
       <StyledKnob
         midiParamName={ midiParamNamePrefix + paramName }
         deltaValuePerPixel={ 1.0 / 64.0 }
         onChange={ handleChange }
       />
-      <Value>{ valueStr }</Value>
+      <Label>{ paramName }</Label>
     </Root>
   );
 };
