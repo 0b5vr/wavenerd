@@ -9,13 +9,13 @@ import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
-import { GainSection } from './GainSection';
 import { Header } from './Header';
 import { HelpModal } from './HelpModal';
 import { MIDIListener } from './MIDIListener';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
+import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
 import { SettingsListener } from './SettingsListener';
@@ -55,8 +55,8 @@ const StyledAssetList = styled( AssetList )`
   flex-grow: 1;
 `;
 
-const StyledGainSection = styled( GainSection )`
-  height: 96px;
+const StyledMixerView = styled( MixerView )`
+  height: 192px;
 `;
 
 const FaderRow = styled.div`
@@ -150,7 +150,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           <StyledAssetList
             hostDeck={ deckA }
           />
-          <StyledGainSection
+          <StyledMixerView
             mixer={ mixer }
           />
         </SamplesColumn>

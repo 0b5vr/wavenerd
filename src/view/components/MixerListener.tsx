@@ -30,10 +30,12 @@ function MixerListener( { mixer }: {
   const [ executorXFaderValue ] = useState( new RateLimitedExecutor( 50 ) );
   useEffect(
     () => {
-      const handleChangeXFader = mixer.on( 'changeXFader', ( { value } ) => {
-        executorXFaderValue.cue( () => {
-          setXFaderValue( value );
-        } );
+      const handleChange = mixer.on( 'change', ( { xfaderPos } ) => {
+        if ( xfaderPos != null ) {
+          executorXFaderValue.cue( () => {
+            setXFaderValue( xfaderPos );
+          } );
+        }
       } );
 
       const handleUpdateAnalyserInA = mixer.analyserInA.on( 'update', ( event ) => {
@@ -57,7 +59,7 @@ function MixerListener( { mixer }: {
       } );
 
       return () => {
-        mixer.off( 'changeXFader', handleChangeXFader );
+        mixer.off( 'change', handleChange );
         mixer.analyserInA.off( 'update', handleUpdateAnalyserInA );
         mixer.analyserInB.off( 'update', handleUpdateAnalyserInB );
         mixer.levelMeterInA.off( 'update', handleUpdateLevelMeterInA );

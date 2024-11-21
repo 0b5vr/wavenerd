@@ -56,12 +56,16 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-export const Knob: React.FC<{
+interface Props {
   midiParamName: string;
   deltaValuePerPixel: number;
   onChange?: ( value: number ) => void;
   className?: string;
-}> = ( { midiParamName, deltaValuePerPixel, onChange, className } ) => {
+  stalkerText?: string;
+}
+
+export const Knob: React.FC<Props> = ( props ) => {
+  const { midiParamName, deltaValuePerPixel, onChange, className, stalkerText } = props;
   const isLearning = useMidiLearning( midiParamName );
   const openContextMenu = useOpenContextMenuAction();
 
@@ -120,6 +124,7 @@ export const Knob: React.FC<{
       onMouseDown={ handleClick }
       onContextMenu={ handleContextMenu }
       className={ className }
+      data-stalker={ stalkerText }
     >
       <Body />
       <HeadContainer
