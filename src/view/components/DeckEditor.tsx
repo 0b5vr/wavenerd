@@ -5,14 +5,15 @@ import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
-import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
-import { settingsEditorFontState, settingsThemeState } from '../states/settings';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
+import { settingsAtom } from '../stores/atoms/settings';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -69,19 +70,18 @@ export const DeckEditor: React.FC<{
   const [ isDragging, setIsDragging ] = useState( false );
   const [ code, setCode ] = useRecoilState( codeState );
   const setHasEdit = useSetRecoilState( hasEditState );
+  const settings = useAtomValue( settingsAtom );
 
-  const themeString = useRecoilValue( settingsThemeState );
-  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
+  const theme = ( themes[ settings.theme ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
 
-  const editorFont = useRecoilValue( settingsEditorFontState );
   const fontExtension = useMemo( () => {
     const theme = EditorView.theme( {
       '.cm-scroller': {
-        font: editorFont,
+        font: settings.editorFont,
       },
     } );
     return [ theme ];
-  }, [ editorFont ] );
+  }, [ settings.editorFont ] );
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [

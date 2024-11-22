@@ -21,9 +21,11 @@ const deckOptions = {
 const deckA = new WavenerdDeck( deckOptions );
 const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
 
-SETTINGSMAN.on( 'changeLatencyBlocks', ( { blocks } ) => {
-  deckA.latencyBlocks = blocks;
-  deckB.latencyBlocks = blocks;
+SETTINGSMAN.on( 'change', ( { latencyBlocks } ) => {
+  if ( latencyBlocks ) {
+    deckA.latencyBlocks = latencyBlocks;
+    deckB.latencyBlocks = latencyBlocks;
+  }
 } );
 
 const mixer = new Mixer( audio );
@@ -33,11 +35,11 @@ deckB.node.connect( mixer.inputB );
 mixer.output.connect( audio.destination );
 
 const reverb = new Reverb( audio );
-reverb.gain.value = SETTINGSMAN.masterReverbGain;
+reverb.gain.value = SETTINGSMAN.values.masterReverbGain;
 mixer.output.connect( reverb.input );
 reverb.connect( audio.destination );
-SETTINGSMAN.on( 'changeMasterReverbGain', ( { gain } ) => {
-  reverb.gain.value = gain;
+SETTINGSMAN.on( 'change', ( { masterReverbGain } ) => {
+  masterReverbGain && ( reverb.gain.value = masterReverbGain );
 } );
 
 const clock = new ClockRealtime();

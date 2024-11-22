@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { HeaderBPM } from './HeaderBPM';
@@ -9,12 +10,12 @@ import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconSettings from '~icons/mdi/cog';
-import React from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
 import { helpIsOpeningState } from '../states/help';
-import { settingsIsOpeningState } from '../states/settings';
+import { settingsIsOpeningAtom } from '../stores/atoms/settings';
+import { useSetAtom } from 'jotai';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -103,6 +104,8 @@ export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
+  const setSettingsIsOpening = useSetAtom( settingsIsOpeningAtom );
+
   const showB = useRecoilValue( deckShowBState );
 
   const handleClickToggleB = useRecoilCallback(
@@ -120,12 +123,9 @@ export const Header: React.FC<{
     []
   );
 
-  const handleClickSettings = useRecoilCallback(
-    ( { set } ) => () => {
-      set( settingsIsOpeningState, true );
-    },
-    [],
-  );
+  const handleClickSettings = useCallback( () => {
+    setSettingsIsOpening( true );
+  }, [] );
 
   return (
     <Root

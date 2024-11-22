@@ -17,16 +17,18 @@ import { Mixer } from '../../Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
-import { SettingsListener } from './SettingsListener';
+import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
-import { settingsThemeState } from '../states/settings';
+import { settingsAtom } from '../stores/atoms/settings';
 import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
+import { useAtomValue } from 'jotai';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
+import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled( Header )`
@@ -119,13 +121,13 @@ interface Props {
 
 const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
-  const themeString = useRecoilValue( settingsThemeState );
+  const themeString = useAtomValue( settingsAtom ).theme;
 
   useAnalyserSubscribers( mixer );
   useMidiSubscribers( MIDIMAN );
+  useSettingsSubscribers( SETTINGSMAN );
 
   return <>
-    <SettingsListener />
     <DeckListener
       hostDeck={ deckA }
       deckA={ deckA }

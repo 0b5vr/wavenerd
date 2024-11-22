@@ -98,8 +98,8 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.levelMeterInB = new LevelMeter( this.analyserInB );
     this.levelMeterOut = new LevelMeter( this.analyserOut );
 
-    SETTINGSMAN.on( 'changeXFaderMode', () => {
-      this.__updateXFaderGains();
+    SETTINGSMAN.on( 'change', ( { xfaderMode } ) => {
+      xfaderMode && ( this.__updateXFaderGains() );
     } );
 
     this.__channelA.on( 'change', ( event ) => this.__emit( 'change', { channelA: event } ) );
@@ -123,7 +123,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
   private __getXFaderValue(): [ number, number ] {
     const x = this.__xFaderPos;
-    const mode = SETTINGSMAN.xfaderMode;
+    const mode = SETTINGSMAN.values.xfaderMode;
 
     return (
       mode === 'constantPower' ? xfaderCurveConstantPower( x ) :
