@@ -1,11 +1,12 @@
+import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { RecoilState, useRecoilValue } from 'recoil';
 import { settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState } from '../states/settings';
 import { AnalyserResult } from '../../Analyser';
 import { VectorscopeRenderer } from '../renderers/VectorscopeRenderer';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
 import { useFrames } from '../utils/useFrames';
+import { useRecoilValue } from 'recoil';
 import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
@@ -18,7 +19,7 @@ const Root = styled.div``;
 
 // == components ===================================================================================
 export const DeckVectorscope: React.FC<{
-  analyserState: RecoilState<AnalyserResult>;
+  analyserState: PrimitiveAtom<AnalyserResult>;
   className?: string;
 }> = ( { analyserState, className } ) => {
   const [ renderer, setRenderer ] = useState<VectorscopeRenderer>();
@@ -26,7 +27,7 @@ export const DeckVectorscope: React.FC<{
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { timeDomainL, timeDomainR } = useRecoilValue( analyserState );
+  const { timeDomainL, timeDomainR } = useAtomValue( analyserState );
   const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
   const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
   const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );

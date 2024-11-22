@@ -1,8 +1,8 @@
-import { levelMeterInAState, levelMeterInBState, levelMeterOutState } from '../states/mixer';
+import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../stores/atoms/analyser';
 import { LevelMeter } from './LevelMeter';
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const StyledLevelMeterA = styled( LevelMeter )`
@@ -32,9 +32,9 @@ const Root = styled.div`
 export const LevelMeters: React.FC<{
   className?: string;
 }> = ( { className } ) => {
-  const levelMeterInA = useRecoilValue( levelMeterInAState );
-  const levelMeterInB = useRecoilValue( levelMeterInBState );
-  const levelMeterOut = useRecoilValue( levelMeterOutState );
+  const levelMeterInA = useAtomValue( levelMeterInAAtom );
+  const levelMeterInB = useAtomValue( levelMeterInBAtom );
+  const levelMeterOut = useAtomValue( levelMeterOutAtom );
 
   return (
     <Root

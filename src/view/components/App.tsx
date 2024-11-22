@@ -1,7 +1,7 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import { analyserInAState, analyserInBState } from '../states/mixer';
+import { analyserInAAtom, analyserInBAtom } from '../stores/atoms/analyser';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
@@ -14,7 +14,6 @@ import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
-import { MixerListener } from './MixerListener';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
@@ -26,6 +25,7 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import { settingsThemeState } from '../states/settings';
 import { themes } from '../themes/themes';
+import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 
 // == styles =======================================================================================
@@ -121,13 +121,11 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
   const themeString = useRecoilValue( settingsThemeState );
 
+  useAnalyserSubscribers( mixer );
   useMidiSubscribers( MIDIMAN );
 
   return <>
     <SettingsListener />
-    <MixerListener
-      mixer={ mixer }
-    />
     <DeckListener
       hostDeck={ deckA }
       deckA={ deckA }
@@ -142,7 +140,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           codeState={ deckACodeState }
           hasEditState={ deckAHasEditState }
           errorState={ deckAErrorState }
-          analyserState={ analyserInAState }
+          analyserState={ analyserInAAtom }
           cueStatusState={ deckACueStatusState }
           deck={ deckA }
           storageKeyName="a"
@@ -159,7 +157,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
             codeState={ deckBCodeState }
             hasEditState={ deckBHasEditState }
             errorState={ deckBErrorState }
-            analyserState={ analyserInBState }
+            analyserState={ analyserInBAtom }
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
             storageKeyName="b"
