@@ -41,7 +41,10 @@ interface SettingsManagerEvents {
 
 export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public get values(): Settings {
-    return this.__storage.values;
+    return {
+      ...defaultSettings,
+      ...this.__storage.values,
+    };
   }
 
   public set( key: keyof Settings, value: Settings[ keyof Settings ] ): void {
