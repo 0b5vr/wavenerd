@@ -13,7 +13,7 @@ import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
-import { helpIsOpeningState } from '../states/help';
+import { helpIsOpeningAtom } from '../stores/atoms/help';
 import { settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useSetAtom } from 'jotai';
 
@@ -105,6 +105,7 @@ export const Header: React.FC<{
   className?: string;
 }> = ( { hostDeck, className } ) => {
   const setSettingsIsOpening = useSetAtom( settingsIsOpeningAtom );
+  const setHelpIsOpening = useSetAtom( helpIsOpeningAtom );
 
   const showB = useRecoilValue( deckShowBState );
 
@@ -116,12 +117,9 @@ export const Header: React.FC<{
     [],
   );
 
-  const handleClickHelp = useRecoilCallback(
-    ( { set } ) => () => {
-      set( helpIsOpeningState, true );
-    },
-    []
-  );
+  const handleClickHelp = useCallback( () => {
+    setHelpIsOpening( true );
+  }, [] );
 
   const handleClickSettings = useCallback( () => {
     setSettingsIsOpening( true );
