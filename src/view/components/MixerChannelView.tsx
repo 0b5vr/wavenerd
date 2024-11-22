@@ -1,9 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Knob } from './Knob';
-import { MixerChannel } from '../../MixerChannel';
 import { MixerFader } from './MixerFader';
 import styled from 'styled-components';
-import { useMidiValue } from '../utils/useMidiValue';
+import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )<{ size: number }>`
@@ -75,11 +74,10 @@ function valueToDisplayEQ( value: number ): string {
 }
 
 // == microcomponents ==============================================================================
-function MixerGainKnob( { label, stalkerText, paramName, onChange }: {
+function MixerGainKnob( { label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-  onChange: ( v: number ) => void;
 } ): JSX.Element {
   const value = useMidiValue( paramName );
 
@@ -94,7 +92,6 @@ function MixerGainKnob( { label, stalkerText, paramName, onChange }: {
         midiParamName={ paramName }
         resetValue={ 0.5 }
         deltaValuePerPixel={ 1.0 / 256.0 }
-        onChange={ onChange }
         stalkerText={ stalkerTextWithValue }
       />
       <Label>{ label }</Label>
@@ -102,11 +99,10 @@ function MixerGainKnob( { label, stalkerText, paramName, onChange }: {
   );
 }
 
-function MixerEQKnob( { label, stalkerText, paramName, onChange }: {
+function MixerEQKnob( { label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-  onChange: ( v: number ) => void;
 } ): JSX.Element {
   const value = useMidiValue( paramName );
 
@@ -121,7 +117,6 @@ function MixerEQKnob( { label, stalkerText, paramName, onChange }: {
         midiParamName={ paramName }
         resetValue={ 0.5 }
         deltaValuePerPixel={ 1.0 / 256.0 }
-        onChange={ onChange }
         stalkerText={ stalkerTextWithValue }
       />
       <Label>{ label }</Label>
@@ -129,15 +124,13 @@ function MixerEQKnob( { label, stalkerText, paramName, onChange }: {
   );
 }
 
-function MixerFaderI( { paramName, stalkerText, onChange }: {
+function MixerFaderI( { paramName, stalkerText }: {
   paramName: string;
   stalkerText: string;
-  onChange: ( v: number ) => void;
 } ): JSX.Element {
   return (
     <StyledMixerFader
       midiParamName={ paramName }
-      onChange={ onChange }
       stalkerText={ stalkerText }
     />
   );
@@ -146,30 +139,9 @@ function MixerFaderI( { paramName, stalkerText, onChange }: {
 // == components ===================================================================================
 export const MixerChannelView: React.FC<{
   paramPrefix: string;
-  channel: MixerChannel;
   side: 'A' | 'B';
   className?: string;
-}> = ( { paramPrefix, channel, side, className } ) => {
-  const handleChangeGain = useCallback( ( v: number ) => {
-    channel.gain = 4.0 * v * v;
-  }, [ channel ] );
-
-  const handleChangeHigh = useCallback( ( v: number ) => {
-    channel.eq.high = 4.0 * v * v;
-  }, [ channel ] );
-
-  const handleChangeMid = useCallback( ( v: number ) => {
-    channel.eq.mid = 4.0 * v * v;
-  }, [ channel ] );
-
-  const handleChangeLow = useCallback( ( v: number ) => {
-    channel.eq.low = 4.0 * v * v;
-  }, [ channel ] );
-
-  const handleChangeVolume = useCallback( ( v: number ) => {
-    channel.volume = v * v;
-  }, [ channel ] );
-
+}> = ( { paramPrefix, side, className } ) => {
   return (
     <Root
       className={ className }
@@ -178,32 +150,27 @@ export const MixerChannelView: React.FC<{
         label="GAIN"
         stalkerText="Deck Gain"
         paramName={ paramPrefix + '/gain' }
-        onChange={ handleChangeGain }
       />
       <EQsAndFader side={ side }>
         <MixerFaderI
           paramName={ paramPrefix + '/volume' }
           stalkerText="Deck Volume"
-          onChange={ handleChangeVolume }
         />
         <EQs>
           <MixerEQKnob
             label="HI"
             stalkerText="Deck EQ High"
-            paramName={ paramPrefix + '/high' }
-            onChange={ handleChangeHigh }
+            paramName={ paramPrefix + '/eq/high' }
           />
           <MixerEQKnob
             label="MID"
             stalkerText="Deck EQ Mid"
-            paramName={ paramPrefix + '/mid' }
-            onChange={ handleChangeMid }
+            paramName={ paramPrefix + '/eq/mid' }
           />
           <MixerEQKnob
             label="LO"
             stalkerText="Deck EQ Low"
-            paramName={ paramPrefix + '/low' }
-            onChange={ handleChangeLow }
+            paramName={ paramPrefix + '/eq/low' }
           />
         </EQs>
       </EQsAndFader>

@@ -1,9 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Knob } from './Knob';
 import { ThemeVars } from '../themes/ThemeVars';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
-import { useMidiValue } from '../utils/useMidiValue';
+import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )`
@@ -35,19 +34,16 @@ const Root = styled.div<{ isLearning: boolean }>`
 // == components ===================================================================================
 export const DeckKnob: React.FC<{
   paramName: string;
-  midiParamNamePrefix: string;
-  deck: WavenerdDeck;
+  paramPrefix: string;
   stalker?: string;
   className?: string;
-}> = ( { paramName, midiParamNamePrefix, deck, stalker, className } ) => {
-  const value = useMidiValue( midiParamNamePrefix + paramName );
-
-  const handleChange = useCallback(
-    ( v: number ) => {
-      deck.setParam( paramName, v );
-    },
-    [ deck, paramName ]
+}> = ( { paramName, paramPrefix, stalker, className } ) => {
+  const paramFullname = useMemo(
+    () => `${ paramPrefix }/${ paramName }`,
+    [ paramPrefix, paramName ],
   );
+
+  const value = useMidiValue( paramFullname );
 
   const stalkerWithValue = useMemo( () => {
     return `${ stalker }: ${ value.toFixed( 3 ) }`;
@@ -60,10 +56,9 @@ export const DeckKnob: React.FC<{
       data-stalker={ stalkerWithValue }
     >
       <StyledKnob
-        midiParamName={ midiParamNamePrefix + paramName }
+        midiParamName={ paramFullname }
         resetValue={ 0.0 }
         deltaValuePerPixel={ 1.0 / 64.0 }
-        onChange={ handleChange }
       />
       <Label>{ paramName }</Label>
     </Root>

@@ -11,7 +11,7 @@ import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
 import { Header } from './Header';
 import { HelpModal } from './HelpModal';
-import { MIDIListener } from './MIDIListener';
+import { MIDIMAN } from '../../MIDIManager';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerListener } from './MixerListener';
@@ -26,6 +26,7 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import { settingsThemeState } from '../states/settings';
 import { themes } from '../themes/themes';
+import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled( Header )`
@@ -120,9 +121,10 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
   const themeString = useRecoilValue( settingsThemeState );
 
+  useMidiSubscribers( MIDIMAN );
+
   return <>
     <SettingsListener />
-    <MIDIListener />
     <MixerListener
       mixer={ mixer }
     />
@@ -144,15 +146,13 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           cueStatusState={ deckACueStatusState }
           deck={ deckA }
           storageKeyName="a"
-          gainParamName="gainA"
+          gainParamName="/mixer/channel_a/gain"
         />
         <SamplesColumn>
           <StyledAssetList
             hostDeck={ deckA }
           />
-          <StyledMixerView
-            mixer={ mixer }
-          />
+          <StyledMixerView />
         </SamplesColumn>
         { showB && (
           <StyledDeck
@@ -163,24 +163,14 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
             storageKeyName="b"
-            gainParamName="gainB"
+            gainParamName="/mixer/channel_b/gain"
           />
         ) }
       </DeckRow>
       <FaderRow>
-        <StyledDeckKnobs
-          deck={ deckA }
-          midiParamNamePrefix="deckA-"
-        />
-        <StyledXFader
-          mixer={ mixer }
-        />
-        { showB && (
-          <StyledDeckKnobs
-            deck={ deckB }
-            midiParamNamePrefix="deckB-"
-          />
-        ) }
+        <StyledDeckKnobs paramPrefix="/deck_a" />
+        <StyledXFader />
+        { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
       </FaderRow>
       <SettingsModal mixer={ mixer } />
       <HelpModal />

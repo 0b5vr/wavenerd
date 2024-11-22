@@ -1,6 +1,5 @@
 import { DeckKnob } from './DeckKnob';
 import React from 'react';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -19,10 +18,9 @@ const Root = styled.div`
 
 // == components ===================================================================================
 export const DeckKnobs: React.FC<{
-  deck: WavenerdDeck;
-  midiParamNamePrefix: string;
+  paramPrefix: string;
   className?: string;
-}> = ( { deck, midiParamNamePrefix, className } ) => {
+}> = ( { paramPrefix, className } ) => {
   const paramNames = [
     'knob0',
     'knob1',
@@ -39,8 +37,7 @@ export const DeckKnobs: React.FC<{
       { paramNames.map( ( paramName ) => (
         <StyledDeckKnob
           key={ paramName }
-          deck={ deck }
-          midiParamNamePrefix={ midiParamNamePrefix }
+          paramPrefix={ paramPrefix }
           paramName={ paramName }
           stalker={ `param_${ paramName }` }
         />

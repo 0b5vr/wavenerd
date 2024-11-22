@@ -6,8 +6,8 @@ import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';
-import { useMidiLearning } from '../utils/useMidiLearning';
-import { useMidiValue } from '../utils/useMidiValue';
+import { useMidiLearning } from '../stores/hooks/useMidiLearning';
+import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useOpenContextMenuAction } from '../states/contextMenu';
 
 // == styles =======================================================================================
@@ -61,24 +61,16 @@ interface Props {
   midiParamName: string;
   resetValue: number;
   deltaValuePerPixel: number;
-  onChange?: ( value: number ) => void;
   className?: string;
   stalkerText?: string;
 }
 
 export const Knob: React.FC<Props> = ( props ) => {
-  const { midiParamName, deltaValuePerPixel, resetValue, onChange, className, stalkerText } = props;
+  const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
   const isLearning = useMidiLearning( midiParamName );
   const openContextMenu = useOpenContextMenuAction();
 
-  const handleValueChange = useCallback(
-    ( value: number ) => {
-      onChange?.( value );
-    },
-    [ onChange ]
-  );
-
-  const value = useMidiValue( midiParamName, handleValueChange );
+  const value = useMidiValue( midiParamName );
 
   const checkDoubleClick = useDoubleTap();
 

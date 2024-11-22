@@ -1,5 +1,4 @@
 import { LevelMeters } from './LevelMeters';
-import { Mixer } from '../../Mixer';
 import { MixerChannelView } from './MixerChannelView';
 import React from 'react';
 import styled from 'styled-components';
@@ -24,23 +23,20 @@ const Root = styled.div`
 
 // == components ===================================================================================
 export const MixerView: React.FC<{
-  mixer: Mixer;
   className?: string;
-}> = ( { mixer, className } ) => {
+}> = ( { className } ) => {
   return (
     <Root
       className={ className }
     >
       <StyledMixerChannelA
-        paramPrefix="/mixer/channelA"
-        channel={ mixer.channelA }
-        side='A'
+        paramPrefix="/mixer/channel_a"
+        side="A"
       />
       <StyledLevelMeters />
       <StyledMixerChannelB
-        paramPrefix="/mixer/channelB"
-        channel={ mixer.channelB }
-        side='B'
+        paramPrefix="/mixer/channel_b"
+        side="B"
       />
     </Root>
   );
