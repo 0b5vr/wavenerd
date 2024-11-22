@@ -1,52 +1,67 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
-import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useOpenContextMenuAction } from '../states/contextMenu';
+import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
-const Head = styled.div`
+const Gutter = styled.div`
   position: absolute;
-  top: 10%;
-  left: 45%;
-  width: 10%;
-  height: 35%;
-  background: ${ ThemeVars.knobNotch };
-  border-radius: 10000px;
+  top: 0;
+  left: calc( 50% - 3px );
+  width: 6px;
+  height: 100%;
+  background: ${ ThemeVars.knobGutter };
   pointer-events: none;
 `;
 
-const HeadContainer = styled.div`
+const GutterGlow = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  bottom: 0;
+  left: calc( 50% - 1px );
+  width: 2px;
+  background: ${ ThemeVars.accent };
+  pointer-events: none;
 `;
 
-const Body = styled.div`
+const Ruler = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
   width: 100%;
-  height: 100%;
-  border-radius: 10000px;
+  height: 2px;
+  background: ${ ThemeVars.knobGuide };
+  pointer-events: none;
+`;
+
+const KnobLine = styled.div`
+  position: absolute;
+  left: 2px;
+  top: 3px;
+  width: calc( 100% - 4px );
+  height: 2px;
+  background: ${ ThemeVars.knobNotch };
+  border-radius: 1px;
+  pointer-events: none;
+`;
+
+const Knob = styled.div`
+  position: absolute;
+  top: 4px;
+  width: 100%;
+  height: 8px;
   background: ${ ThemeVars.knobColor };
+  pointer-events: none;
   box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
 `;
 
-const Root = styled.div<{ isLearning: boolean }>`
+const Root = styled.div<{ isLearning: boolean | undefined }>`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
 
   box-shadow: ${ ( { isLearning } ) => (
@@ -57,46 +72,38 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-interface Props {
+export const MixerFader: React.FC<{
   midiParamName: string;
-  resetValue: number;
-  deltaValuePerPixel: number;
-  className?: string;
   stalkerText?: string;
-}
-
-export const Knob: React.FC<Props> = ( props ) => {
-  const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
+  className?: string;
+}> = ( { midiParamName, stalkerText, className } ) => {
   const isLearning = useMidiLearning( midiParamName );
+  const refRoot = useRef<HTMLDivElement>( null );
+  const rectRoot = useRect( refRoot );
   const openContextMenu = useOpenContextMenuAction();
 
   const value = useMidiValue( midiParamName );
-
-  const checkDoubleClick = useDoubleTap();
 
   const handleClick = useCallback(
     ( event: React.MouseEvent<HTMLDivElement> ) => {
       mouseCombo( {
         [ MouseComboBit.LMB ]: () => {
-          if ( checkDoubleClick() ) {
-            MIDIMAN.setValue( midiParamName, resetValue );
-            return;
-          }
-
-          const y0 = event.clientY;
-          const v0 = MIDIMAN.midi( midiParamName );
+          const bottom = event.clientY - event.nativeEvent.offsetY + rectRoot.height;
+          const y0 = ( bottom - event.clientY );
+          const v0 = saturate( y0 / rectRoot.height );
+          MIDIMAN.setValue( midiParamName, v0 );
 
           registerMouseEvent(
             ( event ) => {
-              const y = ( y0 - event.clientY );
-              const v = saturate( v0 + y * deltaValuePerPixel );
+              const y = ( bottom - event.clientY );
+              const v = saturate( y / rectRoot.height );
               MIDIMAN.setValue( midiParamName, v );
             }
           );
-        },
+        }
       } )( event );
     },
-    [ resetValue, midiParamName, deltaValuePerPixel ]
+    [ midiParamName, rectRoot.height ]
   );
 
   const handleContextMenu = useCallback(
@@ -122,19 +129,23 @@ export const Knob: React.FC<Props> = ( props ) => {
   return (
     <Root
       isLearning={ isLearning }
+      ref={ refRoot }
       onMouseDown={ handleClick }
       onContextMenu={ handleContextMenu }
       className={ className }
       data-stalker={ stalkerText }
     >
-      <Body />
-      <HeadContainer
+      <Ruler style={ { top: '0px' } } />
+      <Ruler style={ { top: 'calc( 100% - 2px )' } } />
+      <Gutter />
+      <GutterGlow style={ { height: `${ 100.0 * value }%` } } />
+      <Knob
         style={ {
-          transform: `rotate( ${ 210 + 300.0 * value }deg )`
+          top: `calc( ${ 100.0 * ( 1.0 - value ) }% - 4px )`
         } }
       >
-        <Head />
-      </HeadContainer>
+        <KnobLine />
+      </Knob>
     </Root>
   );
 };

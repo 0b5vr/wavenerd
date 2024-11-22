@@ -1,7 +1,7 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import { analyserInAState, analyserInBState } from '../states/mixer';
+import { analyserInAAtom, analyserInBAtom } from '../stores/atoms/analyser';
 import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
@@ -9,23 +9,26 @@ import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
 import { DeckListener } from './DeckListener';
-import { GainSection } from './GainSection';
 import { Header } from './Header';
 import { HelpModal } from './HelpModal';
-import { MIDIListener } from './MIDIListener';
+import { MIDIMAN } from '../../MIDIManager';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
-import { MixerListener } from './MixerListener';
+import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
-import { SettingsListener } from './SettingsListener';
+import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
-import { settingsThemeState } from '../states/settings';
+import { settingsAtom } from '../stores/atoms/settings';
 import { themes } from '../themes/themes';
+import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
+import { useAtomValue } from 'jotai';
+import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
+import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled( Header )`
@@ -55,8 +58,8 @@ const StyledAssetList = styled( AssetList )`
   flex-grow: 1;
 `;
 
-const StyledGainSection = styled( GainSection )`
-  height: 96px;
+const StyledMixerView = styled( MixerView )`
+  height: 180px;
 `;
 
 const FaderRow = styled.div`
@@ -118,14 +121,13 @@ interface Props {
 
 const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
-  const themeString = useRecoilValue( settingsThemeState );
+  const themeString = useAtomValue( settingsAtom ).theme;
+
+  useAnalyserSubscribers( mixer );
+  useMidiSubscribers( MIDIMAN );
+  useSettingsSubscribers( SETTINGSMAN );
 
   return <>
-    <SettingsListener />
-    <MIDIListener />
-    <MixerListener
-      mixer={ mixer }
-    />
     <DeckListener
       hostDeck={ deckA }
       deckA={ deckA }
@@ -140,47 +142,35 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           codeState={ deckACodeState }
           hasEditState={ deckAHasEditState }
           errorState={ deckAErrorState }
-          analyserState={ analyserInAState }
+          analyserState={ analyserInAAtom }
           cueStatusState={ deckACueStatusState }
           deck={ deckA }
           storageKeyName="a"
-          gainParamName="gainA"
+          gainParamName="/mixer/channel_a/gain"
         />
         <SamplesColumn>
           <StyledAssetList
             hostDeck={ deckA }
           />
-          <StyledGainSection
-            mixer={ mixer }
-          />
+          <StyledMixerView />
         </SamplesColumn>
         { showB && (
           <StyledDeck
             codeState={ deckBCodeState }
             hasEditState={ deckBHasEditState }
             errorState={ deckBErrorState }
-            analyserState={ analyserInBState }
+            analyserState={ analyserInBAtom }
             cueStatusState={ deckBCueStatusState }
             deck={ deckB }
             storageKeyName="b"
-            gainParamName="gainB"
+            gainParamName="/mixer/channel_b/gain"
           />
         ) }
       </DeckRow>
       <FaderRow>
-        <StyledDeckKnobs
-          deck={ deckA }
-          midiParamNamePrefix="deckA-"
-        />
-        <StyledXFader
-          mixer={ mixer }
-        />
-        { showB && (
-          <StyledDeckKnobs
-            deck={ deckB }
-            midiParamNamePrefix="deckB-"
-          />
-        ) }
+        <StyledDeckKnobs paramPrefix="/deck_a" />
+        <StyledXFader />
+        { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
       </FaderRow>
       <SettingsModal mixer={ mixer } />
       <HelpModal />

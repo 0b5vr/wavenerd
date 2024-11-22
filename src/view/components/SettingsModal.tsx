@@ -1,8 +1,8 @@
 import { Mixer, XFaderModeType } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
 import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
-import { settingsEditorFontState, settingsIsOpeningState, settingsLatencyBlocksState, settingsMasterReverbGain, settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState, settingsThemeState, settingsVectorscopeColorState, settingsVectorscopeModeState, settingsVectorscopeOpacityState, settingsXFaderModeState } from '../states/settings';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { settingsAtom, settingsIsOpeningAtom } from '../stores/atoms/settings';
+import { useAtom, useAtomValue } from 'jotai';
 import { Modal } from './Modal';
 import { NumberParam } from './NumberParam';
 import { ThemeVars } from '../themes/ThemeVars';
@@ -75,84 +75,72 @@ const StyledTextInput = styled.input`
 export const SettingsModal: React.FC<{
   mixer: Mixer,
 }> = ( { mixer } ) => {
-  const isOpening = useRecoilValue( settingsIsOpeningState );
-  const latencyBlocks = useRecoilValue( settingsLatencyBlocksState );
-  const masterReverbGain = useRecoilValue( settingsMasterReverbGain );
-  const xFaderMode = useRecoilValue( settingsXFaderModeState );
-  const vectorscopeMode = useRecoilValue( settingsVectorscopeModeState );
-  const vectorscopeOpacity = useRecoilValue( settingsVectorscopeOpacityState );
-  const vectorscopeColor = useRecoilValue( settingsVectorscopeColorState );
-  const spectrumMode = useRecoilValue( settingsSpectrumModeState );
-  const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
-  const spectrumColor = useRecoilValue( settingsSpectrumColorState );
-  const theme = useRecoilValue( settingsThemeState );
-  const editorFont = useRecoilValue( settingsEditorFontState );
+  const [ isOpening, setOpening ] = useAtom( settingsIsOpeningAtom );
+  const settings = useAtomValue( settingsAtom );
 
+  const latencyBlocks = settings.latencyBlocks;
   const latencyTime = useMemo( () => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
   ), [ latencyBlocks ] );
 
-  const handleClose = useRecoilCallback(
-    ( { set } ) => () => {
-      set( settingsIsOpeningState, false );
-    },
-    [],
-  );
+  const handleClose = useCallback( () => {
+    setOpening( false );
+  }, [] );
 
   const handleChangeLatencyBlocks = useCallback( ( value: number ) => {
     const valueValid = Math.max( 1, value );
 
-    SETTINGSMAN.latencyBlocks = valueValid;
+    SETTINGSMAN.set( 'latencyBlocks', valueValid );
   }, [] );
 
   const handleChangeMasterReverbGain = useCallback( ( event: React.ChangeEvent ) => {
     const gain = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.masterReverbGain = parseFloat( gain );
+    SETTINGSMAN.set( 'masterReverbGain', parseFloat( gain ) );
   }, [] );
 
   const handleChangeXFaderCurveMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.xfaderMode = mode as XFaderModeType;
+    SETTINGSMAN.set( 'xfaderMode', mode as XFaderModeType );
   }, [] );
 
   const handleChangeVectorscopeMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.vectorscopeMode = mode as VectorscopeModeType;
+    SETTINGSMAN.set( 'vectorscopeMode', mode as VectorscopeModeType );
   }, [] );
 
   const handleChangeVectorscopeOpacity = useCallback( ( event: React.ChangeEvent ) => {
     const opacity = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.vectorscopeOpacity = parseFloat( opacity );
+    SETTINGSMAN.set( 'vectorscopeOpacity', parseFloat( opacity ) );
   }, [] );
 
   const handleChangeVectorscopeColor = useCallback( ( event: React.ChangeEvent ) => {
     const color = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.vectorscopeColor = color;
+    SETTINGSMAN.set( 'vectorscopeColor', color );
   }, [] );
 
   const handleChangeSpectrumMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.spectrumMode = mode as SpectrumModeType;
+    SETTINGSMAN.set( 'spectrumMode', mode as SpectrumModeType );
   }, [] );
 
   const handleChangeSpectrumOpacity = useCallback( ( event: React.ChangeEvent ) => {
     const opacity = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.spectrumOpacity = parseFloat( opacity );
+    SETTINGSMAN.set( 'spectrumOpacity', parseFloat( opacity ) );
   }, [] );
 
   const handleChangeSpectrumColor = useCallback( ( event: React.ChangeEvent ) => {
     const color = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.spectrumColor = color;
+    SETTINGSMAN.set( 'spectrumColor', color );
   }, [] );
 
   const handleChangeTheme = useCallback( ( event: React.ChangeEvent ) => {
     const theme = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.theme = theme;
+    SETTINGSMAN.set( 'theme', theme );
   }, [] );
 
   const handleChangeEditorFont = useCallback( ( event: React.ChangeEvent ) => {
     const font = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.editorFont = font;
+    SETTINGSMAN.set( 'editorFont', font );
   }, [] );
 
   if ( !isOpening ) {
@@ -186,7 +174,7 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ masterReverbGain }
+          value={ settings.masterReverbGain }
           onChange={ handleChangeMasterReverbGain }
         /><br />
       </Line>
@@ -197,7 +185,7 @@ export const SettingsModal: React.FC<{
         <Name>X Fader Curve Mode</Name>
         { (
           <StyledSelect
-            value={ xFaderMode }
+            value={ settings.xfaderMode }
             onChange={ handleChangeXFaderCurveMode }
           >
             <option value="constantPower">Constant Power</option>
@@ -214,7 +202,7 @@ export const SettingsModal: React.FC<{
         <Name>Vectorscope Mode</Name>
         { (
           <StyledSelect
-            value={ vectorscopeMode }
+            value={ settings.vectorscopeMode }
             onChange={ handleChangeVectorscopeMode }
           >
             <option value="none">None</option>
@@ -232,7 +220,7 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ vectorscopeOpacity }
+          value={ settings.vectorscopeOpacity }
           onChange={ handleChangeVectorscopeOpacity }
         /><br />
       </Line>
@@ -242,7 +230,7 @@ export const SettingsModal: React.FC<{
         <Name>Vectorscope Color</Name>
         <StyledColorInput
           type="color"
-          value={ vectorscopeColor }
+          value={ settings.vectorscopeColor }
           onChange={ handleChangeVectorscopeColor }
         />
       </Line>
@@ -253,7 +241,7 @@ export const SettingsModal: React.FC<{
         <Name>Spectrum Mode</Name>
         { (
           <StyledSelect
-            value={ spectrumMode }
+            value={ settings.spectrumMode }
             onChange={ handleChangeSpectrumMode }
           >
             <option value="none">None</option>
@@ -270,7 +258,7 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ spectrumOpacity }
+          value={ settings.spectrumOpacity }
           onChange={ handleChangeSpectrumOpacity }
         /><br />
       </Line>
@@ -280,7 +268,7 @@ export const SettingsModal: React.FC<{
         <Name>spectrum Color</Name>
         <StyledColorInput
           type="color"
-          value={ spectrumColor }
+          value={ settings.spectrumColor }
           onChange={ handleChangeSpectrumColor }
         />
       </Line>
@@ -289,7 +277,7 @@ export const SettingsModal: React.FC<{
       >
         <Name>Theme</Name>
         <StyledSelect
-          value={ theme }
+          value={ settings.theme }
           onChange={ handleChangeTheme }
         >
           { Object.entries( themes ).map( ( [ key, { displayName } ] ) => (
@@ -302,7 +290,7 @@ export const SettingsModal: React.FC<{
       >
         <Name>Editor Font</Name>
         <StyledTextInput
-          value={ editorFont }
+          value={ settings.editorFont }
           onChange={ handleChangeEditorFont }
         />
       </Line>

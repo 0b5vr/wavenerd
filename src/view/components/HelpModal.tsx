@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import React, { useCallback } from 'react';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
 import IconSettings from '~icons/mdi/cog';
 import { Modal } from './Modal';
-import React from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
-import { helpIsOpeningState } from '../states/help';
+import { helpIsOpeningAtom } from '../stores/atoms/help';
 import styled from 'styled-components';
+import { useAtom } from 'jotai';
 
 // == styles =======================================================================================
 const IconsInContent = styled.svg`
@@ -49,14 +49,11 @@ const Content = styled.div`
 
 // == components ===================================================================================
 export const HelpModal: React.FC = () => {
-  const isOpening = useRecoilValue( helpIsOpeningState );
+  const [ isOpening, setOpening ] = useAtom( helpIsOpeningAtom );
 
-  const handleClose = useRecoilCallback(
-    ( { set } ) => () => {
-      set( helpIsOpeningState, false );
-    },
-    [],
-  );
+  const handleClose = useCallback( () => {
+    setOpening( false );
+  }, [] );
 
   if ( !isOpening ) {
     return null;

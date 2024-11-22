@@ -5,6 +5,7 @@ import { DeckEditor } from './DeckEditor';
 import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
 import { DeckVectorscope } from './DeckVectorscope';
+import { PrimitiveAtom } from 'jotai';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckCodeStorage } from '../../deckCodeStorage';
 import styled from 'styled-components';
@@ -57,7 +58,7 @@ export const Deck: React.FC<{
   errorState: RecoilState<string | null>;
   codeState: RecoilState<string>;
   hasEditState: RecoilState<boolean>;
-  analyserState: RecoilState<AnalyserResult>;
+  analyserState: PrimitiveAtom<AnalyserResult>;
   className?: string;
 }> = ( {
   className,

@@ -25,8 +25,13 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   private __values: { [ key: string ]: number };
   public get values(): { [ key: string ]: number } {
-    return this.__values;
+    return {
+      ...this.defaultValues,
+      ...this.__values,
+    };
   }
+
+  public defaultValues: { [ key: string ]: number };
 
   private __noteMap: { [ note: number ]: string };
   private __ccMap: { [ cc: number ]: string };
@@ -38,6 +43,8 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
     this.__storage = new ThrottledJSONStorage( 'wavenerd-midiManager' );
 
+    this.defaultValues = {};
+
     this.__values = this.__storage.get( 'values' ) ?? {};
     this.__noteMap = this.__storage.get( 'noteMap' ) ?? {};
     this.__ccMap = this.__storage.get( 'ccMap' ) ?? {};
@@ -45,7 +52,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
   }
 
   public midi( key: string ): number {
-    return this.__values[ key ] ?? 0.0;
+    return this.values[ key ] ?? 0.0;
   }
 
   public async initMidi(): Promise<void> {
@@ -71,10 +78,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
     this.__storage.set( 'values', this.__values );
 
-    this.__emit( 'paramChange', {
-      key,
-      value
-    } );
+    this.__emit( 'paramChange', { key, value } );
   }
 
   private __handleMidiMessage( event: WebMidi.MIDIMessageEvent ): void {
@@ -124,4 +128,19 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 }
 
 export const MIDIMAN = new MidiManager();
+MIDIMAN.defaultValues = {
+  '/mixer/xfader_pos': 0.5,
+
+  '/mixer/channel_a/gain': 0.5,
+  '/mixer/channel_a/eq/high': 0.5,
+  '/mixer/channel_a/eq/mid': 0.5,
+  '/mixer/channel_a/eq/low': 0.5,
+  '/mixer/channel_a/volume': 1.0,
+
+  '/mixer/channel_b/gain': 0.5,
+  '/mixer/channel_b/eq/high': 0.5,
+  '/mixer/channel_b/eq/mid': 0.5,
+  '/mixer/channel_b/eq/low': 0.5,
+  '/mixer/channel_b/volume': 1.0,
+};
 MIDIMAN.initMidi();

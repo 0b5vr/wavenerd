@@ -5,8 +5,8 @@ import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
-import { useMidiLearning } from '../utils/useMidiLearning';
-import { useMidiValue } from '../utils/useMidiValue';
+import { useMidiLearning } from '../stores/hooks/useMidiLearning';
+import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useOpenContextMenuAction } from '../states/contextMenu';
 import { useRect } from '../utils/useRect';
 
@@ -65,22 +65,14 @@ const Root = styled.div<{ isLearning: boolean | undefined }>`
 // == components ===================================================================================
 export const Fader: React.FC<{
   midiParamName: string;
-  onChange?: ( value: number ) => void;
   className?: string;
-}> = ( { midiParamName, onChange, className } ) => {
+}> = ( { midiParamName, className } ) => {
   const isLearning = useMidiLearning( midiParamName );
   const refRoot = useRef<HTMLDivElement>( null );
   const rectRoot = useRect( refRoot );
   const openContextMenu = useOpenContextMenuAction();
 
-  const handleValueChange = useCallback(
-    ( value: number ) => {
-      onChange?.( value );
-    },
-    [ onChange ]
-  );
-
-  const value = useMidiValue( midiParamName, handleValueChange );
+  const value = useMidiValue( midiParamName );
 
   const handleClick = useCallback(
     ( event: React.MouseEvent<HTMLDivElement> ) => {

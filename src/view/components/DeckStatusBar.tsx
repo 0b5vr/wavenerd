@@ -9,7 +9,7 @@ import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
 import { ThemeVars } from '../themes/ThemeVars';
-import { useMidiValue } from '../utils/useMidiValue';
+import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
 const StyleIcon = css`

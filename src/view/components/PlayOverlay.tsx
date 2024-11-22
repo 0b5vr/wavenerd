@@ -1,9 +1,7 @@
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import React, { useCallback, useState } from 'react';
 import IconPlay from '~icons/mdi/play';
-import React from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { playOverlayIsOpeningState } from '../states/playOverlay';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -54,16 +52,13 @@ export const PlayOverlay: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const isOpening = useRecoilValue( playOverlayIsOpeningState );
+  const [ isOpening, setIsOpening ] = useState( true );
 
-  const handleClick = useRecoilCallback(
-    ( { set } ) => () => {
-      hostDeck.audio.resume();
-      hostDeck.play();
-      set( playOverlayIsOpeningState, false );
-    },
-    [ hostDeck ]
-  );
+  const handleClick = useCallback( () => {
+    hostDeck.audio.resume();
+    hostDeck.play();
+    setIsOpening( false );
+  }, [ hostDeck ] );
 
   if ( !isOpening ) {
     return null;

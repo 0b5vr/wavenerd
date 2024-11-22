@@ -1,8 +1,8 @@
+import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { RecoilState, useRecoilValue } from 'recoil';
-import { settingsSpectrumColorState, settingsSpectrumModeState, settingsSpectrumOpacityState } from '../states/settings';
 import { AnalyserResult } from '../../Analyser';
 import { SpectrumRenderer } from '../renderers/SpectrumRenderer';
+import { settingsAtom } from '../stores/atoms/settings';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
 import { useFrames } from '../utils/useFrames';
@@ -18,7 +18,7 @@ const Root = styled.div``;
 
 // == param ========================================================================================
 interface Param {
-  analyserState: RecoilState<AnalyserResult>;
+  analyserState: PrimitiveAtom<AnalyserResult>;
   className?: string;
 }
 
@@ -29,10 +29,8 @@ export const DeckSpectrum: React.FC<Param> = ( { analyserState, className } ) =>
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { frequencyL } = useRecoilValue( analyserState );
-  const spectrumMode = useRecoilValue( settingsSpectrumModeState );
-  const spectrumOpacity = useRecoilValue( settingsSpectrumOpacityState );
-  const spectrumColor = useRecoilValue( settingsSpectrumColorState );
+  const { frequencyL } = useAtomValue( analyserState );
+  const { spectrumMode, spectrumOpacity, spectrumColor } = useAtomValue( settingsAtom );
 
   // setup the renderer
   useEffect( () => {

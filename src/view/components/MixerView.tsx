@@ -1,6 +1,5 @@
-import { GainKnob } from './GainKnob';
 import { LevelMeters } from './LevelMeters';
-import { Mixer } from '../../Mixer';
+import { MixerChannelView } from './MixerChannelView';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -10,11 +9,11 @@ const StyledLevelMeters = styled( LevelMeters )`
   margin: 4px 0;
 `;
 
-const StyledGainKnobA = styled( GainKnob )`
+const StyledMixerChannelA = styled( MixerChannelView )`
   flex-grow: 3;
 `;
 
-const StyledGainKnobB = styled( GainKnob )`
+const StyledMixerChannelB = styled( MixerChannelView )`
   flex-grow: 3;
 `;
 
@@ -23,24 +22,21 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const GainSection: React.FC<{
-  mixer: Mixer;
+export const MixerView: React.FC<{
   className?: string;
-}> = ( { mixer, className } ) => {
+}> = ( { className } ) => {
   return (
     <Root
       className={ className }
     >
-      <StyledGainKnobA
-        paramName="gainA"
-        mixer={ mixer }
-        channel="A"
+      <StyledMixerChannelA
+        paramPrefix="/mixer/channel_a"
+        side="A"
       />
       <StyledLevelMeters />
-      <StyledGainKnobB
-        paramName="gainB"
-        mixer={ mixer }
-        channel="B"
+      <StyledMixerChannelB
+        paramPrefix="/mixer/channel_b"
+        side="B"
       />
     </Root>
   );
