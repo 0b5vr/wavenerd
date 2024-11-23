@@ -1,3 +1,5 @@
+const LATEST_VERSION = 2024_11_23;
+
 const nameMap20241123: Record<string, string> = {
   'XFader': '/mixer/xfader_pos',
   'gainA': '/mixer/channel_a/gain',
@@ -68,10 +70,7 @@ function migrate20241123( data: any ): any {
 
 export function migrateMIDIManagerStorage( key: string ): void {
   const rawData = localStorage.getItem( key );
-
-  if ( rawData == null ) { return; }
-
-  let data = JSON.parse( rawData );
+  let data = rawData ? JSON.parse( rawData ) : { version: LATEST_VERSION };
 
   data = migrate20241123( data );
 
