@@ -12,8 +12,7 @@ import { backlayer } from '../codemirror/backlayer';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
-import { settingsAtom } from '../stores/atoms/settings';
-import { useAtomValue } from 'jotai';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -70,18 +69,19 @@ export const DeckEditor: React.FC<{
   const [ isDragging, setIsDragging ] = useState( false );
   const [ code, setCode ] = useRecoilState( codeState );
   const setHasEdit = useSetRecoilState( hasEditState );
-  const settings = useAtomValue( settingsAtom );
+  const themeString = useSettings( 'theme' );
+  const editorFont = useSettings( 'editorFont' );
 
-  const theme = ( themes[ settings.theme ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
+  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
 
   const fontExtension = useMemo( () => {
     const theme = EditorView.theme( {
       '.cm-scroller': {
-        font: settings.editorFont,
+        font: editorFont,
       },
     } );
     return [ theme ];
-  }, [ settings.editorFont ] );
+  }, [ editorFont ] );
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [

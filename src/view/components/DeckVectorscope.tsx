@@ -2,11 +2,11 @@ import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { AnalyserResult } from '../../Analyser';
 import { VectorscopeRenderer } from '../renderers/VectorscopeRenderer';
-import { settingsAtom } from '../stores/atoms/settings';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
 import { useFrames } from '../utils/useFrames';
 import { useRect } from '../utils/useRect';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const Canvas = styled.canvas`
@@ -27,7 +27,9 @@ export const DeckVectorscope: React.FC<{
   const rectCanvas = useRect( refCanvas );
 
   const { timeDomainL, timeDomainR } = useAtomValue( analyserState );
-  const { vectorscopeMode, vectorscopeOpacity, vectorscopeColor } = useAtomValue( settingsAtom );
+  const vectorscopeMode = useSettings( 'vectorscopeMode' );
+  const vectorscopeOpacity = useSettings( 'vectorscopeOpacity' );
+  const vectorscopeColor = useSettings( 'vectorscopeColor' );
 
   // setup the renderer
   useEffect( () => {

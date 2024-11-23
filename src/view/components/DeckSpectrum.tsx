@@ -2,11 +2,11 @@ import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { AnalyserResult } from '../../Analyser';
 import { SpectrumRenderer } from '../renderers/SpectrumRenderer';
-import { settingsAtom } from '../stores/atoms/settings';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
 import { useFrames } from '../utils/useFrames';
 import { useRect } from '../utils/useRect';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const Canvas = styled.canvas`
@@ -30,7 +30,9 @@ export const DeckSpectrum: React.FC<Param> = ( { analyserState, className } ) =>
   const rectCanvas = useRect( refCanvas );
 
   const { frequencyL } = useAtomValue( analyserState );
-  const { spectrumMode, spectrumOpacity, spectrumColor } = useAtomValue( settingsAtom );
+  const spectrumMode = useSettings( 'spectrumMode' );
+  const spectrumOpacity = useSettings( 'spectrumOpacity' );
+  const spectrumColor = useSettings( 'spectrumColor' );
 
   // setup the renderer
   useEffect( () => {

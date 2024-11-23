@@ -23,11 +23,10 @@ import { Stalker } from './Stalker';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
-import { settingsAtom } from '../stores/atoms/settings';
 import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
-import { useAtomValue } from 'jotai';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
+import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 
 // == styles =======================================================================================
@@ -121,7 +120,7 @@ interface Props {
 
 const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
   const showB = useRecoilValue( deckShowBState );
-  const themeString = useAtomValue( settingsAtom ).theme;
+  const themeString = useSettings( 'theme' );
 
   useAnalyserSubscribers( mixer );
   useMidiSubscribers( MIDIMAN );
