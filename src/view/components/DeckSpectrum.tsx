@@ -76,7 +76,8 @@ export const DeckSpectrum: React.FC<Param> = ( { analyserState, className } ) =>
 
   // handle resize
   useEffect( () => {
-    renderer?.resize( rectCanvas.width, rectCanvas.height );
+    const ratio = window.devicePixelRatio;
+    renderer?.resize( rectCanvas.width * ratio, rectCanvas.height * ratio );
   }, [ renderer, rectCanvas ] );
 
   return (
