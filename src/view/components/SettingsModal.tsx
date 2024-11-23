@@ -103,6 +103,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.set( 'xfaderMode', mode as XFaderModeType );
   }, [] );
 
+  const handleChangeEQMode = useCallback( ( event: React.ChangeEvent ) => {
+    const mode = ( event.target as HTMLSelectElement ).value;
+    SETTINGSMAN.set( 'eqMode', mode );
+  }, [] );
+
   const handleChangeVectorscopeMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
     SETTINGSMAN.set( 'vectorscopeMode', mode as VectorscopeModeType );
@@ -192,6 +197,21 @@ export const SettingsModal: React.FC<{
             <option value="cut">Cut</option>
             <option value="linear">Linear</option>
             <option value="transition">Transition</option>
+          </StyledSelect>
+        ) }<br />
+      </Line>
+
+      <Line
+        data-stalker="Change the equalizer mode. Setting this to &quot;None&quot; will also hide the EQ knobs from the UI."
+      >
+        <Name>Equalizer Mode</Name>
+        { (
+          <StyledSelect
+            value={ settings.eqMode }
+            onChange={ handleChangeEQMode }
+          >
+            <option value="none">None</option>
+            <option value="isolator">Isolator</option>
           </StyledSelect>
         ) }<br />
       </Line>

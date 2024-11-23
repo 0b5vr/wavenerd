@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { Knob } from './Knob';
 import { MixerFader } from './MixerFader';
+import { settingsAtom } from '../stores/atoms/settings';
 import styled from 'styled-components';
+import { useAtomValue } from 'jotai';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
@@ -12,7 +14,7 @@ const StyledKnob = styled( Knob )<{ size: number }>`
 
 const StyledMixerFader = styled( MixerFader )`
   width: 32px;
-  height: calc( 100% - 8px );
+  height: 96px;
 `;
 
 const Label = styled.div`
@@ -142,6 +144,8 @@ export const MixerChannelView: React.FC<{
   side: 'A' | 'B';
   className?: string;
 }> = ( { paramPrefix, side, className } ) => {
+  const { eqMode } = useAtomValue( settingsAtom );
+
   return (
     <Root
       className={ className }
@@ -156,7 +160,7 @@ export const MixerChannelView: React.FC<{
           paramName={ paramPrefix + '/volume' }
           stalkerText="Deck Volume"
         />
-        <EQs>
+        { eqMode !== 'none' && <EQs>
           <MixerEQKnob
             label="HI"
             stalkerText="Deck EQ High"
@@ -172,7 +176,7 @@ export const MixerChannelView: React.FC<{
             stalkerText="Deck EQ Low"
             paramName={ paramPrefix + '/eq/low' }
           />
-        </EQs>
+        </EQs> }
       </EQsAndFader>
     </Root>
   );

@@ -34,9 +34,14 @@ const Ruler = styled.div`
   position: absolute;
   top: 0px;
   width: 100%;
-  height: 2px;
+  height: 1px;
   background: ${ ThemeVars.knobGuide };
   pointer-events: none;
+`;
+
+const ShortRuler = styled( Ruler )`
+  width: 50%;
+  left: 25%;
 `;
 
 const KnobLine = styled.div`
@@ -136,7 +141,16 @@ export const MixerFader: React.FC<{
       data-stalker={ stalkerText }
     >
       <Ruler style={ { top: '0px' } } />
-      <Ruler style={ { top: 'calc( 100% - 2px )' } } />
+      <ShortRuler style={ { top: 'calc( 0.1 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.2 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.3 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.4 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.5 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.6 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.7 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.8 * ( 100% - 1px ) )' } } />
+      <ShortRuler style={ { top: 'calc( 0.9 * ( 100% - 1px ) )' } } />
+      <Ruler style={ { top: 'calc( 100% - 1px )' } } />
       <Gutter />
       <GutterGlow style={ { height: `${ 100.0 * value }%` } } />
       <Knob

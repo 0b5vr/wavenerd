@@ -1,9 +1,9 @@
+import { SETTINGSMAN, Settings } from './SettingsManager';
 import { App } from './view/components/App';
 import { ClockRealtime } from '@0b5vr/experimental';
 import { MIDIMAN } from './MIDIManager';
 import { Mixer } from './Mixer';
 import { Reverb } from './Reverb';
-import { SETTINGSMAN } from './SettingsManager';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 
@@ -96,6 +96,18 @@ for ( const [ key, value ] of Object.entries( MIDIMAN.values ) ) {
 }
 
 MIDIMAN.on( 'paramChange', ( { key, value } ) => applyMidiParam( { key, value } ) );
+
+// == settings =====================================================================================
+function applySettings( settings: Partial<Settings> ) {
+  if ( settings.eqMode != null ) {
+    mixer.channelA.replaceEQ( settings.eqMode );
+    mixer.channelB.replaceEQ( settings.eqMode );
+  }
+}
+
+applySettings( SETTINGSMAN.values );
+
+SETTINGSMAN.on( 'change', ( { eqMode } ) => applySettings( { eqMode } ) );
 
 // == dom ==========================================================================================
 const root = createRoot( document.getElementById( 'root' )! );

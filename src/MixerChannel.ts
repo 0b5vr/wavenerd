@@ -1,9 +1,14 @@
 import { MixerEQ, MixerEQChangeEvent } from './MixerEQ';
 import { EventEmittable } from './utils/EventEmittable';
+import { MixerEQIsolator } from './MixerEQIsolator';
+import { MixerEQNone } from './MixerEQNone';
+
+export type MixerEQMode = 'none' | 'isolator';
 
 export interface MixerChannelChangeEvent {
   gain?: number;
   eq?: MixerEQChangeEvent;
+  eqMode?: MixerEQMode;
   volume?: number;
 }
 
@@ -48,8 +53,11 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     return this.__eq;
   }
 
+  private __eqChangeHandler: ( event: MixerEQChangeEvent ) => void;
+
   private __gainNode: GainNode;
   private __gainNodeOut: GainNode;
+  private __gainNodeOutForAnal: GainNode;
 
   public get input(): AudioNode {
     return this.__gainNode;
@@ -60,7 +68,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
   }
 
   public get outputForAnal(): AudioNode {
-    return this.__eq.output;
+    return this.__gainNodeOutForAnal;
   }
 
   public constructor( audio: AudioContext ) {
@@ -69,12 +77,44 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     this.__audio = audio;
 
     this.__gainNode = audio.createGain();
-    this.__eq = new MixerEQ( audio );
     this.__gainNodeOut = audio.createGain();
+    this.__gainNodeOutForAnal = audio.createGain();
 
-    this.__eq.on( 'change', ( event ) => this.__emit( 'change', { eq: event } ) );
+    this.__eq = new MixerEQNone( audio );
+
+    this.__eqChangeHandler = this.__eq.on( 'change', ( event ) => (
+      this.__emit( 'change', { eq: event } )
+    ) );
 
     this.__gainNode.connect( this.__eq.input );
     this.__eq.output.connect( this.__gainNodeOut );
+    this.__eq.output.connect( this.__gainNodeOutForAnal );
+  }
+
+  public replaceEQ( mode: MixerEQMode ): void {
+    const { low, mid, high } = this.__eq;
+
+    this.__eq.off( 'change', this.__eqChangeHandler );
+
+    this.__gainNode.disconnect();
+    this.__eq.output.disconnect();
+
+    if ( mode === 'none' ) {
+      this.__eq = new MixerEQNone( this.__audio );
+    } else if ( mode === 'isolator' ) {
+      this.__eq = new MixerEQIsolator( this.__audio );
+    }
+
+    this.__eq.low = low;
+    this.__eq.mid = mid;
+    this.__eq.high = high;
+
+    this.__eqChangeHandler = this.__eq.on( 'change', ( event ) => (
+      this.__emit( 'change', { eq: event } )
+    ) );
+
+    this.__gainNode.connect( this.__eq.input );
+    this.__eq.output.connect( this.__gainNodeOut );
+    this.__eq.output.connect( this.__gainNodeOutForAnal );
   }
 }

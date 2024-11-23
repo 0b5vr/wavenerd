@@ -1,4 +1,5 @@
 import { EventEmittable } from './utils/EventEmittable';
+import { MixerEQMode } from './MixerChannel';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 
 export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
@@ -11,6 +12,7 @@ export interface Settings {
   latencyBlocks: number;
   masterReverbGain: number;
   xfaderMode: XFaderModeType;
+  eqMode: MixerEQMode;
   vectorscopeMode: VectorscopeModeType;
   vectorscopeOpacity: number;
   vectorscopeColor: string;
@@ -25,6 +27,7 @@ export const defaultSettings: Settings = {
   latencyBlocks: 32,
   masterReverbGain: 0.0,
   xfaderMode: 'transition',
+  eqMode: 'none',
   vectorscopeMode: 'none',
   vectorscopeOpacity: 0.2,
   vectorscopeColor: '#ffffff',
