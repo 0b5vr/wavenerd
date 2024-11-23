@@ -6,27 +6,26 @@ import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const StyledLevelMeterA = styled( LevelMeter )`
-  flex-grow: 1;
+  width: 2px;
   margin-right: 4px;
 `;
 
 const StyledLevelMeterB = styled( LevelMeter )`
-  flex-grow: 1;
+  width: 2px;
   margin-left: 4px;
 `;
 
 const StyledLevelMeterL = styled( LevelMeter )`
-  flex-grow: 2;
+  width: 4px;
   margin-right: 2px;
 `;
 
 const StyledLevelMeterR = styled( LevelMeter )`
-  flex-grow: 2;
+  width: 4px;
 `;
 
 const Root = styled.div`
   display: flex;
-  width: 100%;
   height: 100%;
 `;
 
