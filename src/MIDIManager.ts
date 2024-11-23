@@ -10,9 +10,9 @@ interface MidiManagerStorageType {
 }
 
 interface MidiManagerEvents {
-  noteOn: { note: number; velocity: number };
-  noteOff: { note: number; velocity: number };
-  ccChange: { cc: number; value: number };
+  noteOn: { channel: number, note: number; velocity: number, paramKey: string | null };
+  noteOff: { channel: number, note: number; velocity: number, paramKey: string | null };
+  cc: { channel: number, cc: number; value: number, paramKey: string | null };
   paramChange: { key: string; value: number };
   learn: { key: string | null };
 }
@@ -102,19 +102,19 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
           this.clearLearn();
         }
 
-        paramKey = this.__noteMap[ channel ][ note ];
+        paramKey = this.__noteMap[ channel ][ note ] ?? null;
         value = velocity;
 
-        this.__emit( 'noteOn', { note, velocity } );
+        this.__emit( 'noteOn', { channel, note, velocity, paramKey } );
 
       } else if ( isNoteOff ) {
         const note = event.data[ 1 ];
         const velocity = event.data[ 2 ] / 127.0;
 
-        paramKey = this.__noteMap[ channel ][ note ];
+        paramKey = this.__noteMap[ channel ][ note ] ?? null;
         value = 0.0;
 
-        this.__emit( 'noteOff', { note, velocity } );
+        this.__emit( 'noteOff', { channel, note, velocity, paramKey } );
 
       } else if ( isCC ) {
         const cc = event.data[ 1 ];
@@ -125,10 +125,10 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
           this.clearLearn();
         }
 
-        paramKey = this.__ccMap[ channel ][ cc ];
+        paramKey = this.__ccMap[ channel ][ cc ] ?? null;
         value = event.data[ 2 ] / 127.0;
 
-        this.__emit( 'ccChange', { cc, value } );
+        this.__emit( 'cc', { channel, cc, value, paramKey } );
       }
     }
 

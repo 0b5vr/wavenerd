@@ -12,6 +12,7 @@ import { DeckListener } from './DeckListener';
 import { Header } from './Header';
 import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
+import { MIDIModal } from './MIDIModal';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../Mixer';
 import { MixerView } from './MixerView';
@@ -172,6 +173,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
         { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
       </FaderRow>
       <SettingsModal mixer={ mixer } />
+      <MIDIModal />
       <HelpModal />
       <PlayOverlay hostDeck={ deckA } />
       <ContextMenu />

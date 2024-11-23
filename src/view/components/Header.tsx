@@ -9,13 +9,15 @@ import { HeaderTransport } from './HeaderTransport';
 import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
+import IconMIDI from '~icons/mdi/midi-port';
 import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBState } from '../states/deck';
 import { helpIsOpeningAtom } from '../stores/atoms/help';
+import { midiModalIsOpeningAtom } from '../stores/atoms/midi';
 import { settingsIsOpeningAtom } from '../stores/atoms/settings';
-import { useSetAtom } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -67,6 +69,10 @@ const StyledIconSettings = styled( IconSettings )`
   ${ StyleIcon };
 `;
 
+const StyledIconMIDI = styled( IconMIDI )`
+  ${ StyleIcon };
+`;
+
 const StyledIconHelp = styled( IconHelp )`
   ${ StyleIcon };
 `;
@@ -104,9 +110,6 @@ export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const setSettingsIsOpening = useSetAtom( settingsIsOpeningAtom );
-  const setHelpIsOpening = useSetAtom( helpIsOpeningAtom );
-
   const showB = useRecoilValue( deckShowBState );
 
   const handleClickToggleB = useRecoilCallback(
@@ -117,13 +120,17 @@ export const Header: React.FC<{
     [],
   );
 
-  const handleClickHelp = useCallback( () => {
-    setHelpIsOpening( true );
-  }, [] );
+  const handleClickMIDI = useAtomCallback( useCallback( ( _, set ) => {
+    set( midiModalIsOpeningAtom, true );
+  }, [] ) );
 
-  const handleClickSettings = useCallback( () => {
-    setSettingsIsOpening( true );
-  }, [] );
+  const handleClickHelp = useAtomCallback( useCallback( ( _, set ) => {
+    set( helpIsOpeningAtom, true );
+  }, [] ) );
+
+  const handleClickSettings = useAtomCallback( useCallback( ( _, set ) => {
+    set( settingsIsOpeningAtom, true );
+  }, [] ) );
 
   return (
     <Root
@@ -147,13 +154,17 @@ export const Header: React.FC<{
         style={ { opacity: showB ? 1.0 : 0.5 } }
         data-stalker="Toggle Deck B"
       />
-      <StyledIconHelp
-        onClick={ handleClickHelp }
-        data-stalker="Show help"
+      <StyledIconMIDI
+        onClick={ handleClickMIDI }
+        data-stalker="MIDI"
       />
       <StyledIconSettings
         onClick={ handleClickSettings }
         data-stalker="Settings"
+      />
+      <StyledIconHelp
+        onClick={ handleClickHelp }
+        data-stalker="Show help"
       />
       <AnchorGit
         href="https://github.com/0b5vr/wavenerd/"
