@@ -1,11 +1,12 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
+import { migrateMIDIManagerStorage } from './migrateMIDIManagerStorage';
 
 interface MidiManagerStorageType {
-  values: { [ key: string ]: number };
-  noteMap: { [ note: number ]: string };
-  ccMap: { [ cc: number ]: string };
-  ccValues: number[];
+  version?: number;
+  values?: { [ key: string ]: number };
+  noteMap?: { [ note: string ]: string }[];
+  ccMap?: { [ cc: string ]: string }[];
 }
 
 interface MidiManagerEvents {
@@ -17,12 +18,6 @@ interface MidiManagerEvents {
 }
 
 export class MidiManager extends EventEmittable<MidiManagerEvents> {
-  private __ccValues: number[];
-
-  public get ccValues(): number[] {
-    return this.__ccValues;
-  }
-
   private __values: { [ key: string ]: number };
   public get values(): { [ key: string ]: number } {
     return {
@@ -33,22 +28,22 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   public defaultValues: { [ key: string ]: number };
 
-  private __noteMap: { [ note: number ]: string };
-  private __ccMap: { [ cc: number ]: string };
+  private __noteMap: { [ note: number ]: string }[];
+  private __ccMap: { [ cc: number ]: string }[];
   private __storage: ThrottledJSONStorage<MidiManagerStorageType>;
   private __learningParam: string | null = null;
 
   public constructor() {
     super();
 
+    migrateMIDIManagerStorage( 'wavenerd-midiManager' );
     this.__storage = new ThrottledJSONStorage( 'wavenerd-midiManager' );
 
     this.defaultValues = {};
 
     this.__values = this.__storage.get( 'values' ) ?? {};
-    this.__noteMap = this.__storage.get( 'noteMap' ) ?? {};
-    this.__ccMap = this.__storage.get( 'ccMap' ) ?? {};
-    this.__ccValues = this.__storage.get( 'ccValues' ) ?? [ ...Array( 128 ) ].fill( 0 );
+    this.__noteMap = this.__storage.get( 'noteMap' ) ?? [ ...Array( 16 ) ].map( () => ( {} ) );
+    this.__ccMap = this.__storage.get( 'ccMap' ) ?? [ ...Array( 16 ) ].map( () => ( {} ) );
   }
 
   public midi( key: string ): number {
@@ -73,6 +68,11 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     this.__emit( 'learn', { key } );
   }
 
+  public clearLearn(): void {
+    this.__learningParam = null;
+    this.__emit( 'learn', { key: null } );
+  }
+
   public setValue( key: string, value: number ): void {
     this.__values[ key ] = value;
 
@@ -85,40 +85,51 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     let paramKey = '';
     let value = 0;
 
-    if ( event.data && event.data[ 0 ] === 128 || event.data[ 0 ] === 144 ) { // channel 0, note on / off
-      if ( this.__learningParam ) {
-        this.__noteMap[ event.data[ 1 ] ] = this.__learningParam;
-        this.__storage.set( 'noteMap', this.__noteMap );
-        this.__learningParam = null;
-        this.__emit( 'learn', { key: null } );
+    if ( event.data ) {
+      const isNoteOff = event.data[ 0 ] >= 128 && event.data[ 0 ] <= 143;
+      const isNoteOn = event.data[ 0 ] >= 144 && event.data[ 0 ] <= 159;
+      const isCC = event.data[ 0 ] >= 176 && event.data[ 0 ] <= 191;
+
+      const channel = event.data[ 0 ] % 16;
+
+      if ( isNoteOn ) {
+        const note = event.data[ 1 ];
+        const velocity = event.data[ 2 ] / 127.0;
+
+        if ( this.__learningParam ) {
+          this.__noteMap[ channel ][ note ] = this.__learningParam;
+          this.__storage.set( 'noteMap', this.__noteMap );
+          this.clearLearn();
+        }
+
+        paramKey = this.__noteMap[ channel ][ note ];
+        value = velocity;
+
+        this.__emit( 'noteOn', { note, velocity } );
+
+      } else if ( isNoteOff ) {
+        const note = event.data[ 1 ];
+        const velocity = event.data[ 2 ] / 127.0;
+
+        paramKey = this.__noteMap[ channel ][ note ];
+        value = 0.0;
+
+        this.__emit( 'noteOff', { note, velocity } );
+
+      } else if ( isCC ) {
+        const cc = event.data[ 1 ];
+
+        if ( this.__learningParam ) {
+          this.__ccMap[ channel ][ cc ] = this.__learningParam;
+          this.__storage.set( 'ccMap', this.__ccMap );
+          this.clearLearn();
+        }
+
+        paramKey = this.__ccMap[ channel ][ cc ];
+        value = event.data[ 2 ] / 127.0;
+
+        this.__emit( 'ccChange', { cc, value } );
       }
-
-      paramKey = this.__noteMap[ event.data[ 1 ] ];
-      value = event.data[ 0 ] === 128 ? 0.0 : event.data[ 2 ] / 127.0;
-
-      this.__emit( event.data[ 0 ] === 128 ? 'noteOff' : 'noteOn', {
-        note: event.data[ 1 ],
-        velocity: event.data[ 2 ] / 127.0
-      } );
-
-    } else if ( event.data && event.data[ 0 ] === 176 ) { // channel 0, control changes
-      if ( this.__learningParam ) {
-        this.__ccMap[ event.data[ 1 ] ] = this.__learningParam;
-        this.__storage.set( 'ccMap', this.__ccMap );
-        this.__learningParam = null;
-        this.__emit( 'learn', { key: null } );
-      }
-
-      paramKey = this.__ccMap[ event.data[ 1 ] ];
-      value = event.data[ 2 ] / 127.0;
-
-      this.__ccValues[ event.data[ 1 ] ] = event.data[ 2 ] / 127.0;
-      this.__storage.set( 'ccValues', this.__ccValues );
-
-      this.__emit( 'ccChange', {
-        cc: event.data[ 1 ],
-        value: event.data[ 2 ] / 127.0
-      } );
     }
 
     if ( paramKey ) {
