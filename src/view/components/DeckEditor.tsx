@@ -44,10 +44,8 @@ const Overlay = styled.div<{ isDragging: boolean }>`
   pointer-events: ${ ( { isDragging } ) => isDragging ? 'auto' : 'none' };
 `;
 
-const Root = styled.div<{ background: string }>`
+const Root = styled.div`
   transform: translateZ(0);
-
-  background: ${ ( { background } ) => background };
 `;
 
 // == component ====================================================================================
@@ -173,7 +171,6 @@ export const DeckEditor: React.FC<{
   // -- component ----------------------------------------------------------------------------------
   return (
     <Root
-      background={ theme.background }
       className={ className }
       onDragOver={ handleDragOver }
       onDragLeave={ handleDragLeave }

@@ -6,6 +6,7 @@ import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
 import { DeckVectorscope } from './DeckVectorscope';
 import { PrimitiveAtom } from 'jotai';
+import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckCodeStorage } from '../../deckCodeStorage';
 import styled from 'styled-components';
@@ -47,6 +48,7 @@ const StyledSpectrogram = styled( DeckSpectrum )`
 
 const Root = styled.div`
   position: relative;
+  background: ${ ThemeVars.codeBackground };
 `;
 
 // == components ===================================================================================
@@ -126,6 +128,12 @@ export const Deck: React.FC<{
     <Root
       className={ className }
     >
+      <StyledVectorscope
+        analyserState={ analyserState }
+      />
+      <StyledSpectrogram
+        analyserState={ analyserState }
+      />
       <StyledEditor
         codeState={ codeState }
         hasEditState={ hasEditState }
@@ -141,12 +149,6 @@ export const Deck: React.FC<{
         onApply={ handleApply }
         onApplyImmediately={ handleApplyImmediately }
         gainParamName={ gainParamName }
-      />
-      <StyledVectorscope
-        analyserState={ analyserState }
-      />
-      <StyledSpectrogram
-        analyserState={ analyserState }
       />
     </Root>
   );

@@ -37,6 +37,8 @@ export const themeShadertoyLight: Theme = {
     back2: barBg,
     back3: headerBg,
 
+    codeBackground: background,
+
     barBg,
     headerBg,
     headerFg: white,

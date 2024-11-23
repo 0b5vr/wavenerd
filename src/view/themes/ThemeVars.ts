@@ -5,6 +5,8 @@ const back1 = 'var(--back1)';
 const back2 = 'var(--back2)';
 const back3 = 'var(--back3)';
 
+const codeBackground = 'var(--code-background)';
+
 const fore = 'var(--fore)';
 const foresub = 'var(--foresub)';
 const foredark = 'var(--foredark)';
@@ -47,6 +49,8 @@ export const ThemeVars = {
   back1,
   back2,
   back3,
+
+  codeBackground,
 
   fore,
   foresub,

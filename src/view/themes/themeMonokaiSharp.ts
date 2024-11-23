@@ -31,6 +31,8 @@ export const themeMonokaiSharp: Theme = {
     back2,
     back3,
 
+    codeBackground: back1,
+
     inputBack: back4,
     inputFore: fore,
     inputBackInvalid: redDark,

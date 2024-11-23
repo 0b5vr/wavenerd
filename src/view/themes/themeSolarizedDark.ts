@@ -30,6 +30,8 @@ export const themeSolarizedDark: Theme = {
     back2: base02,
     back3: base02,
 
+    codeBackground: base03,
+
     inputBack: base01,
     inputFore: base3,
     inputBackInvalid: redDark,

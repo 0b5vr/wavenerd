@@ -1,9 +1,9 @@
 import { Theme } from './Theme';
 
 const back1 = '#000000';
-const back2 = '#121212';
-const back3 = '#303030';
-const back4 = '#484848';
+const back2 = '#090909';
+const back3 = '#181818';
+const back4 = '#282828';
 
 const gray = '#999999';
 
@@ -31,6 +31,8 @@ export const themeChromaCoder: Theme = {
     back1,
     back2,
     back3,
+
+    codeBackground: background,
 
     inputBack: back4,
     inputFore: fore,
