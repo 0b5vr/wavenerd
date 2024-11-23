@@ -39,6 +39,7 @@
     "rimraf": "^3.0.2",
     "simplebar-react": "^3.2.4",
     "styled-components": "^5.3.5",
+    "symbol-observable": "^4.0.0",
     "throttle-debounce": "^5.0.2",
     "typescript": "^5.6.3",
     "unplugin-icons": "^0.14.3",
