@@ -75,7 +75,7 @@ const StyledDeckKnobs = styled( DeckKnobs )`
 
 const StyledXFader = styled( XFader )`
   width: ${ Metrics.xFaderWidth }px;
-  margin: 4px 16px;
+  margin: 8px 16px;
 `;
 
 function themeVarsCss( themeString: string ): ReturnType<typeof css> {
