@@ -26,6 +26,8 @@ const StyledLevelMeterR = styled( LevelMeter )`
 
 const Root = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
 `;
 
 // == components ===================================================================================

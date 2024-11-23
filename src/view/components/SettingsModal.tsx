@@ -93,6 +93,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.set( 'latencyBlocks', valueValid );
   }, [] );
 
+  const handleChangeChannelRouting = useCallback( ( event: React.ChangeEvent ) => {
+    const routing = ( event.target as HTMLInputElement ).value;
+    SETTINGSMAN.set( 'channelRouting', routing );
+  }, [] );
+
   const handleChangeMasterReverbGain = useCallback( ( event: React.ChangeEvent ) => {
     const gain = ( event.target as HTMLInputElement ).value;
     SETTINGSMAN.set( 'masterReverbGain', parseFloat( gain ) );
@@ -171,6 +176,16 @@ export const SettingsModal: React.FC<{
       </Line>
 
       <Line
+        data-stalker="Channel routing.&#10;Available source: master, cue, deckA, deckB.&#10;I recommend VB-Audio Matrix to bind two or more channels at once.&#10;I will implement a proper UI for this later 😅"
+      >
+        <Name>Channel routing</Name>
+        <StyledTextInput
+          value={ settings.channelRouting }
+          onChange={ handleChangeChannelRouting }
+        />
+      </Line>
+
+      <Line
         data-stalker="Add a reverb to the master (cheating)"
       >
         <Name>Master Reverb Gain</Name>
@@ -202,7 +217,7 @@ export const SettingsModal: React.FC<{
       </Line>
 
       <Line
-        data-stalker="Change the equalizer mode. Setting this to &quot;None&quot; will also hide the EQ knobs from the UI."
+        data-stalker="Change the equalizer mode.&#10;None: Disables the equalizer. This will also hide the EQ knobs from the UI.&#10;Isolator: The &quot;isolator&quot; style equalizer. Turning all knobs to the left will kill the sound."
       >
         <Name>Equalizer Mode</Name>
         { (

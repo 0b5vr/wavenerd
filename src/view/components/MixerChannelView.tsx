@@ -1,9 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Knob } from './Knob';
 import { MixerFader } from './MixerFader';
 import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
+import { ThemeVars } from '../themes/ThemeVars';
+import IconCue from '~icons/mdi/headphones';
+import { MIDIMAN } from '../../MIDIManager';
+import { useOpenContextMenuAction } from '../states/contextMenu';
+import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )<{ size: number }>`
@@ -16,7 +21,7 @@ const StyledMixerFader = styled( MixerFader )`
   height: 96px;
 `;
 
-const Label = styled.div`
+const KnobLabel = styled.div`
   font: 500 8px 'Roboto', sans-serif;
   line-height: 1;
   opacity: 0.7;
@@ -31,7 +36,20 @@ const KnobAndStuff = styled.div`
   cursor: pointer;
 `;
 
-const EQsAndFader = styled.div<{ side: 'A' | 'B' }>`
+const CueButtonRoot = styled.div<{ active: boolean, islearning: boolean | undefined }>`
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  color: ${ ( { active } ) => active ? ThemeVars.accent : ThemeVars.gray };
+
+  box-shadow: ${ ( { islearning } ) => (
+    islearning
+      ? `0 0 0 2px ${ ThemeVars.accent }`
+      : 'none'
+  ) };
+`;
+
+const Row = styled.div<{ side: 'A' | 'B' }>`
   display: flex;
   gap: 8px;
   flex-direction: ${ ( { side } ) => side === 'A' ? 'row' : 'row-reverse' };
@@ -95,7 +113,7 @@ function MixerGainKnob( { label, stalkerText, paramName }: {
         deltaValuePerPixel={ 1.0 / 256.0 }
         stalkerText={ stalkerTextWithValue }
       />
-      <Label>{ label }</Label>
+      <KnobLabel>{ label }</KnobLabel>
     </KnobAndStuff>
   );
 }
@@ -120,7 +138,7 @@ function MixerEQKnob( { label, stalkerText, paramName }: {
         deltaValuePerPixel={ 1.0 / 256.0 }
         stalkerText={ stalkerTextWithValue }
       />
-      <Label>{ label }</Label>
+      <KnobLabel>{ label }</KnobLabel>
     </KnobAndStuff>
   );
 }
@@ -137,28 +155,74 @@ function MixerFaderI( { paramName, stalkerText }: {
   );
 }
 
+function CueButton( { paramName, stalkerText }: {
+  paramName: string;
+  stalkerText: string;
+} ): JSX.Element {
+  const value = useMidiValue( paramName );
+  const openContextMenu = useOpenContextMenuAction();
+  const isLearning = useMidiLearning( paramName );
+
+  const handleClick = useCallback( () => {
+    const currentValue = MIDIMAN.values[ paramName ];
+    MIDIMAN.setValue( paramName, currentValue > 0.0 ? 0.0 : 1.0 );
+  }, [] );
+
+  const handleContextMenu = useCallback( ( event: React.MouseEvent ) => {
+    event.preventDefault();
+
+    openContextMenu( {
+      x: event.clientX,
+      y: event.clientY,
+      commands: [
+        {
+          name: 'Learn MIDI',
+          callback: () => {
+            MIDIMAN.learn( paramName );
+          }
+        }
+      ]
+    } );
+  }, [ paramName, openContextMenu ] );
+
+  return (
+    <CueButtonRoot
+      active={ value > 0.0 }
+      islearning={ isLearning }
+      onClick={ handleClick }
+      onContextMenu={ handleContextMenu }
+      data-stalker={ stalkerText }
+    >
+      <IconCue />
+    </CueButtonRoot>
+  );
+}
+
 // == components ===================================================================================
 export const MixerChannelView: React.FC<{
   paramPrefix: string;
+  cueParamName: string;
   side: 'A' | 'B';
   className?: string;
-}> = ( { paramPrefix, side, className } ) => {
+}> = ( { paramPrefix, cueParamName, side, className } ) => {
   const eqMode = useSettings( 'eqMode' );
 
   return (
     <Root
       className={ className }
     >
-      <MixerGainKnob
-        label="GAIN"
-        stalkerText="Deck Gain"
-        paramName={ paramPrefix + '/gain' }
-      />
-      <EQsAndFader side={ side }>
-        <MixerFaderI
-          paramName={ paramPrefix + '/volume' }
-          stalkerText="Deck Volume"
+      <Row side={ side }>
+        <MixerGainKnob
+          label="GAIN"
+          stalkerText="Deck Gain"
+          paramName={ paramPrefix + '/gain' }
         />
+        <CueButton
+          paramName={ cueParamName }
+          stalkerText="Deck Cue"
+        />
+      </Row>
+      <Row side={ side }>
         { eqMode !== 'none' && <EQs>
           <MixerEQKnob
             label="HI"
@@ -176,7 +240,11 @@ export const MixerChannelView: React.FC<{
             paramName={ paramPrefix + '/eq/low' }
           />
         </EQs> }
-      </EQsAndFader>
+        <MixerFaderI
+          paramName={ paramPrefix + '/volume' }
+          stalkerText="Deck Volume"
+        />
+      </Row>
     </Root>
   );
 };
