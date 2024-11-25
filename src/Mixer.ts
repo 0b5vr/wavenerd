@@ -1,5 +1,6 @@
 import { MixerChannel, MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
+import { DCRemoval } from './DCRemoval';
 import { EventEmittable } from './utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
 import { SETTINGSMAN } from './SettingsManager';
@@ -46,6 +47,17 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__emit( 'change', { xfaderPos: value } );
   }
 
+  private __dcRemoval = false;
+  public get dcRemoval(): boolean {
+    return this.__dcRemoval;
+  }
+  public set dcRemoval( value: boolean ) {
+    this.__dcRemoval = value;
+    this.__dcRemovalUnit.active = value;
+  }
+
+  private __dcRemovalUnit: DCRemoval;
+
   private __gainXFaderA: GainNode;
   private __gainXFaderB: GainNode;
   private __gainNodeOut: GainNode;
@@ -81,10 +93,13 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__gainXFaderB = audio.createGain();
     this.__gainNodeOut = audio.createGain();
 
+    this.__dcRemovalUnit = new DCRemoval( audio );
+
     this.__channelA.output.connect( this.__gainXFaderA );
     this.__channelB.output.connect( this.__gainXFaderB );
-    this.__gainXFaderA.connect( this.__gainNodeOut );
-    this.__gainXFaderB.connect( this.__gainNodeOut );
+    this.__gainXFaderA.connect( this.__dcRemovalUnit.input );
+    this.__gainXFaderB.connect( this.__dcRemovalUnit.input );
+    this.__dcRemovalUnit.output.connect( this.__gainNodeOut );
 
     this.analyserInA = new Analyser( audio );
     this.analyserInB = new Analyser( audio );

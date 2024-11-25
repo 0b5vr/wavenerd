@@ -103,6 +103,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.set( 'masterReverbGain', parseFloat( gain ) );
   }, [] );
 
+  const handleChangeMasterDCRemoval = useCallback( ( event: React.ChangeEvent ) => {
+    const checked = ( event.target as HTMLInputElement ).checked;
+    SETTINGSMAN.set( 'masterDCRemoval', checked );
+  }, [] );
+
   const handleChangeXFaderCurveMode = useCallback( ( event: React.ChangeEvent ) => {
     const mode = ( event.target as HTMLSelectElement ).value;
     SETTINGSMAN.set( 'xfaderMode', mode as XFaderModeType );
@@ -182,6 +187,17 @@ export const SettingsModal: React.FC<{
         <StyledTextInput
           value={ settings.channelRouting }
           onChange={ handleChangeChannelRouting }
+        />
+      </Line>
+
+      <Line
+        data-stalker="Remove the DC offset from the master output.&#10;You usually want to keep this switch on to prevent damaging your speakers unless you are going to draw your masterpiece onto your oscilloscope."
+      >
+        <Name>Master DC Removal</Name>
+        <input
+          type="checkbox"
+          checked={ settings.masterDCRemoval }
+          onChange={ handleChangeMasterDCRemoval }
         />
       </Line>
 

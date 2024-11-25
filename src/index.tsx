@@ -120,6 +120,10 @@ function applySettings( settings: Partial<Settings> ) {
     deckB.latencyBlocks = settings.latencyBlocks;
   }
 
+  if ( settings.masterDCRemoval != null ) {
+    mixer.dcRemoval = settings.masterDCRemoval;
+  }
+
   if ( settings.masterReverbGain != null ) {
     reverb.gain.value = settings.masterReverbGain;
   }

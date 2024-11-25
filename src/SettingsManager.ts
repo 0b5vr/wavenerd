@@ -11,6 +11,7 @@ export type SpectrumModeType = 'none' | 'line';
 export interface Settings {
   latencyBlocks: number;
   channelRouting: string;
+  masterDCRemoval: boolean;
   masterReverbGain: number;
   xfaderMode: XFaderModeType;
   eqMode: MixerEQMode;
@@ -27,6 +28,7 @@ export interface Settings {
 export const defaultSettings: Settings = {
   latencyBlocks: 32,
   channelRouting: 'master:0,master:1,cue:0,cue:1',
+  masterDCRemoval: true,
   masterReverbGain: 0.0,
   xfaderMode: 'transition',
   eqMode: 'none',
