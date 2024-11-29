@@ -1,13 +1,11 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback, useRef } from 'react';
+import { MIDILearnable } from './MidiLearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
-import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
-import { useAtomCallback } from 'jotai/utils';
-import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useRect } from '../utils/useRect';
 
@@ -52,15 +50,9 @@ const Knob = styled.div`
   box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
 `;
 
-const Root = styled.div<{ isLearning: boolean | undefined }>`
+const Root = styled.div`
   position: relative;
   cursor: pointer;
-
-  box-shadow: ${ ( { isLearning } ) => (
-    isLearning
-      ? `0 0 0 2px ${ ThemeVars.accent }`
-      : 'none'
-  ) };
 `;
 
 // == components ===================================================================================
@@ -68,7 +60,6 @@ export const Fader: React.FC<{
   midiParamName: string;
   className?: string;
 }> = ( { midiParamName, className } ) => {
-  const isLearning = useMidiLearning( midiParamName );
   const refRoot = useRef<HTMLDivElement>( null );
   const rectRoot = useRect( refRoot );
 
@@ -96,31 +87,10 @@ export const Fader: React.FC<{
     [ midiParamName, rectRoot.width ]
   );
 
-  const handleContextMenu = useAtomCallback( useCallback(
-    ( _, set, event: React.MouseEvent<HTMLDivElement> ) => {
-      event.preventDefault();
-
-      set( openContextMenuAtom, {
-        position: [ event.clientX, event.clientY ],
-        commands: [
-          {
-            name: 'Learn MIDI',
-            callback: () => {
-              MIDIMAN.learn( midiParamName );
-            }
-          }
-        ]
-      } );
-    },
-    [ midiParamName ],
-  ) );
-
   return (
     <Root
-      isLearning={ isLearning }
       ref={ refRoot }
       onMouseDown={ handleClick }
-      onContextMenu={ handleContextMenu }
       className={ className }
       data-stalker="X Fader"
     >
@@ -135,6 +105,7 @@ export const Fader: React.FC<{
       >
         <KnobLine />
       </Knob>
+      <MIDILearnable paramName={ midiParamName } />
     </Root>
   );
 };

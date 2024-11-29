@@ -1,13 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import IconCue from '~icons/mdi/headphones';
 import { Knob } from './Knob';
+import { MIDILearnable } from './MidiLearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { MixerFader } from './MixerFader';
 import { ThemeVars } from '../themes/ThemeVars';
-import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import styled from 'styled-components';
-import { useAtomCallback } from 'jotai/utils';
-import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 
@@ -37,17 +35,17 @@ const KnobAndStuff = styled.div`
   cursor: pointer;
 `;
 
-const CueButtonRoot = styled.div<{ active: boolean, islearning: boolean | undefined }>`
+const StyledIconCue = styled( IconCue )`
+  width: 100%;
+  height: 100%;
+`;
+
+const CueButtonRoot = styled.div<{ active: boolean }>`
+  position: relative;
   width: 20px;
   height: 20px;
   margin: 2px;
   color: ${ ( { active } ) => active ? ThemeVars.accent : ThemeVars.gray };
-
-  box-shadow: ${ ( { islearning } ) => (
-    islearning
-      ? `0 0 0 2px ${ ThemeVars.accent }`
-      : 'none'
-  ) };
 `;
 
 const Row = styled.div<{ side: 'A' | 'B' }>`
@@ -161,41 +159,20 @@ function CueButton( { paramName, stalkerText }: {
   stalkerText: string;
 } ): JSX.Element {
   const value = useMidiValue( paramName );
-  const isLearning = useMidiLearning( paramName );
 
   const handleClick = useCallback( () => {
     const currentValue = MIDIMAN.values[ paramName ];
     MIDIMAN.setValue( paramName, currentValue > 0.0 ? 0.0 : 1.0 );
   }, [] );
 
-  const handleContextMenu = useAtomCallback( useCallback(
-    ( _, set, event: React.MouseEvent ) => {
-      event.preventDefault();
-
-      set( openContextMenuAtom, {
-        position: [ event.clientX, event.clientY ],
-        commands: [
-          {
-            name: 'Learn MIDI',
-            callback: () => {
-              MIDIMAN.learn( paramName );
-            }
-          }
-        ]
-      } );
-    },
-    [ paramName ],
-  ) );
-
   return (
     <CueButtonRoot
       active={ value > 0.0 }
-      islearning={ isLearning }
       onClick={ handleClick }
-      onContextMenu={ handleContextMenu }
       data-stalker={ stalkerText }
     >
-      <IconCue />
+      <StyledIconCue />
+      <MIDILearnable paramName={ paramName } />
     </CueButtonRoot>
   );
 }

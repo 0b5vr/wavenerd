@@ -1,14 +1,12 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback } from 'react';
+import { MIDILearnable } from './MidiLearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
-import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
-import { useAtomCallback } from 'jotai/utils';
 import { useDoubleTap } from '../utils/useDoubleTap';
-import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
@@ -42,19 +40,13 @@ const Body = styled.div`
   box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
 `;
 
-const Root = styled.div<{ isLearning: boolean }>`
+const Root = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
-  box-shadow: ${ ( { isLearning } ) => (
-    isLearning
-      ? `0 0 0 2px ${ ThemeVars.accent }`
-      : 'none'
-  ) };
 `;
 
 // == components ===================================================================================
@@ -68,7 +60,6 @@ interface Props {
 
 export const Knob: React.FC<Props> = ( props ) => {
   const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
-  const isLearning = useMidiLearning( midiParamName );
 
   const value = useMidiValue( midiParamName );
 
@@ -99,30 +90,9 @@ export const Knob: React.FC<Props> = ( props ) => {
     [ resetValue, midiParamName, deltaValuePerPixel ]
   );
 
-  const handleContextMenu = useAtomCallback( useCallback(
-    ( _, set, event: React.MouseEvent<HTMLDivElement> ) => {
-      event.preventDefault();
-
-      set( openContextMenuAtom, {
-        position: [ event.clientX, event.clientY ],
-        commands: [
-          {
-            name: 'Learn MIDI',
-            callback: () => {
-              MIDIMAN.learn( midiParamName );
-            }
-          }
-        ]
-      } );
-    },
-    [ midiParamName ],
-  ) );
-
   return (
     <Root
-      isLearning={ isLearning }
       onMouseDown={ handleClick }
-      onContextMenu={ handleContextMenu }
       className={ className }
       data-stalker={ stalkerText }
     >
@@ -134,6 +104,7 @@ export const Knob: React.FC<Props> = ( props ) => {
       >
         <Head />
       </HeadContainer>
+      <MIDILearnable paramName={ midiParamName } />
     </Root>
   );
 };
