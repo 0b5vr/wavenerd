@@ -3,10 +3,9 @@ import styled, { css } from 'styled-components';
 import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
 import IconRewind from '~icons/mdi/skip-previous';
-import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckIsPlayingState } from '../states/deck';
-import { useRecoilValue } from 'recoil';
+import { deckIsPlayingAtom } from '../stores/atoms/deck';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const StyleIconButton = css`
@@ -46,7 +45,7 @@ export const HeaderTransport: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const isPlaying = useRecoilValue( deckIsPlayingState );
+  const isPlaying = useAtomValue( deckIsPlayingAtom );
 
   const handleClickRewind = useCallback( () => {
     hostDeck.rewind();

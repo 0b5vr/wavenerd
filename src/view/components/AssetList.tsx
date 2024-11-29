@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import { deckSortedImageListState, deckSortedSampleListState, deckSortedWavetableListState } from '../states/deck';
+import { deckSortedImageListAtom, deckSortedSampleListAtom, deckSortedWavetableListAtom } from '../stores/atoms/deck';
 import { AssetListCategory } from './AssetListCategory';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { loadFileAsImage } from './utils/loadFileAsImage';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const StyledAssetListCategory = styled( AssetListCategory )`
@@ -20,9 +20,9 @@ export const AssetList: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const sortedSampleList = useRecoilValue( deckSortedSampleListState );
-  const sortedWavetableList = useRecoilValue( deckSortedWavetableListState );
-  const sortedImageList = useRecoilValue( deckSortedImageListState );
+  const sortedSampleList = useAtomValue( deckSortedSampleListAtom );
+  const sortedWavetableList = useAtomValue( deckSortedWavetableListAtom );
+  const sortedImageList = useAtomValue( deckSortedImageListAtom );
 
   const handleLoadSample = useCallback(
     async ( name: string, file: File ) => {

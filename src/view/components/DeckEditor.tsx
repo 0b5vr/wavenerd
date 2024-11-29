@@ -5,7 +5,6 @@ import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
-import { RecoilState, useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
@@ -13,6 +12,7 @@ import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
+import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled( ReactCodeMirror )`
@@ -50,23 +50,23 @@ const Root = styled.div`
 
 // == component ====================================================================================
 export const DeckEditor: React.FC<{
-  codeState: RecoilState<string>;
-  hasEditState: RecoilState<boolean>;
+  codeAtom: PrimitiveAtom<string>;
+  hasEditAtom: PrimitiveAtom<boolean>;
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
   className?: string;
 }> = ( {
-  codeState,
-  hasEditState,
+  codeAtom,
+  hasEditAtom,
   onCompile,
   onApply,
   onApplyImmediately,
   className,
 } ) => {
   const [ isDragging, setIsDragging ] = useState( false );
-  const [ code, setCode ] = useRecoilState( codeState );
-  const setHasEdit = useSetRecoilState( hasEditState );
+  const [ code, setCode ] = useAtom( codeAtom );
+  const setHasEdit = useSetAtom( hasEditAtom );
   const themeString = useSettings( 'theme' );
   const editorFont = useSettings( 'editorFont' );
 

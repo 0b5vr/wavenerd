@@ -18,18 +18,18 @@ const Root = styled.div``;
 
 // == param ========================================================================================
 interface Param {
-  analyserState: PrimitiveAtom<AnalyserResult>;
+  analyserAtom: PrimitiveAtom<AnalyserResult>;
   className?: string;
 }
 
 // == component ====================================================================================
-export const DeckSpectrum: React.FC<Param> = ( { analyserState, className } ) => {
+export const DeckSpectrum: React.FC<Param> = ( { analyserAtom, className } ) => {
   const [ renderer, setRenderer ] = useState<SpectrumRenderer>();
   const refCanvas = useRef<HTMLCanvasElement>( null );
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { frequencyL } = useAtomValue( analyserState );
+  const { frequencyL } = useAtomValue( analyserAtom );
   const spectrumMode = useSettings( 'spectrumMode' );
   const spectrumOpacity = useSettings( 'spectrumOpacity' );
   const spectrumColor = useSettings( 'spectrumColor' );

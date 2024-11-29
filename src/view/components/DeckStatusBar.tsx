@@ -1,5 +1,5 @@
+import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useCallback } from 'react';
-import { RecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
@@ -141,9 +141,9 @@ export const DeckStatusBar: React.FC<{
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
-  cueStatusState: RecoilState<'none' | 'compiling' | 'ready' | 'applying'>;
-  hasEditState: RecoilState<boolean>;
-  errorState: RecoilState<string | null>;
+  cueStatusAtom: PrimitiveAtom<'none' | 'compiling' | 'ready' | 'applying'>;
+  hasEditAtom: PrimitiveAtom<boolean>;
+  errorAtom: PrimitiveAtom<string | null>;
   gainParamName: string;
   className?: string;
 }> = ( {
@@ -151,14 +151,14 @@ export const DeckStatusBar: React.FC<{
   onCompile,
   onApply,
   onApplyImmediately,
-  cueStatusState,
-  hasEditState,
-  errorState,
+  cueStatusAtom,
+  hasEditAtom,
+  errorAtom,
   gainParamName,
 } ) => {
-  const cueStatus = useRecoilValue( cueStatusState );
-  const error = useRecoilValue( errorState );
-  const hasEdit = useRecoilValue( hasEditState );
+  const cueStatus = useAtomValue( cueStatusAtom );
+  const error = useAtomValue( errorAtom );
+  const hasEdit = useAtomValue( hasEditAtom );
   const gainValue = useMidiValue( gainParamName );
 
   const handleClickApply = useCallback( ( event: React.MouseEvent ) => {

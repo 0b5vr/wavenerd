@@ -1,7 +1,7 @@
 import React from 'react';
-import { deckTimeState } from '../states/deck';
+import { deckTimeAtom } from '../stores/atoms/deck';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Label = styled.div`
@@ -26,7 +26,7 @@ const Root = styled.div`
 export const HeaderTime: React.FC<{
   className?: string;
 }> = ( { className } ) => {
-  const time = useRecoilValue( deckTimeState );
+  const time = useAtomValue( deckTimeAtom );
 
   return (
     <Root

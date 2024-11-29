@@ -18,15 +18,15 @@ const Root = styled.div``;
 
 // == components ===================================================================================
 export const DeckVectorscope: React.FC<{
-  analyserState: PrimitiveAtom<AnalyserResult>;
+  analyserAtom: PrimitiveAtom<AnalyserResult>;
   className?: string;
-}> = ( { analyserState, className } ) => {
+}> = ( { analyserAtom, className } ) => {
   const [ renderer, setRenderer ] = useState<VectorscopeRenderer>();
   const refCanvas = useRef<HTMLCanvasElement>( null );
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { timeDomainL, timeDomainR } = useAtomValue( analyserState );
+  const { timeDomainL, timeDomainR } = useAtomValue( analyserAtom );
   const vectorscopeMode = useSettings( 'vectorscopeMode' );
   const vectorscopeOpacity = useSettings( 'vectorscopeOpacity' );
   const vectorscopeColor = useSettings( 'vectorscopeColor' );

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderNudge } from './HeaderNudge';
@@ -13,11 +12,12 @@ import IconMIDI from '~icons/mdi/midi-port';
 import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckShowBState } from '../states/deck';
+import { deckShowBAtom } from '../stores/atoms/deck';
 import { helpIsOpeningAtom } from '../stores/atoms/help';
 import { midiModalIsOpeningAtom } from '../stores/atoms/midi';
 import { settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useAtomCallback } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -110,15 +110,11 @@ export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const showB = useRecoilValue( deckShowBState );
+  const showB = useAtomValue( deckShowBAtom );
 
-  const handleClickToggleB = useRecoilCallback(
-    ( { set, snapshot } ) => async () => {
-      const current = await snapshot.getPromise( deckShowBState );
-      set( deckShowBState, !current );
-    },
-    [],
-  );
+  const handleClickToggleB = useAtomCallback( useCallback( ( get, set ) => {
+    set( deckShowBAtom, !get( deckShowBAtom ) );
+  }, [] ) );
 
   const handleClickMIDI = useAtomCallback( useCallback( ( _, set ) => {
     set( midiModalIsOpeningAtom, true );

@@ -1,9 +1,9 @@
 import { NumberParam } from './NumberParam';
 import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckBPMState } from '../states/deck';
+import { deckBPMAtom } from '../stores/atoms/deck';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Label = styled.div`
@@ -29,7 +29,7 @@ export const HeaderBPM: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
 }> = ( { hostDeck, className } ) => {
-  const bpm = useRecoilValue( deckBPMState );
+  const bpm = useAtomValue( deckBPMAtom );
 
   return (
     <Root

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { RecoilState, useRecoilCallback, useRecoilState } from 'recoil';
 import { AnalyserResult } from '../../Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckSpectrum } from './DeckSpectrum';
@@ -10,6 +9,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckCodeStorage } from '../../deckCodeStorage';
 import styled from 'styled-components';
+import { useAtomCallback } from 'jotai/utils';
 
 // == styles =======================================================================================
 const StyledEditor = styled( DeckEditor )`
@@ -56,48 +56,42 @@ export const Deck: React.FC<{
   deck: WavenerdDeck;
   gainParamName: string;
   storageKeyName: 'a' | 'b';
-  cueStatusState: RecoilState<'none' | 'ready' | 'applying' | 'compiling'>;
-  errorState: RecoilState<string | null>;
-  codeState: RecoilState<string>;
-  hasEditState: RecoilState<boolean>;
-  analyserState: PrimitiveAtom<AnalyserResult>;
+  cueStatusAtom: PrimitiveAtom<'none' | 'ready' | 'applying' | 'compiling'>;
+  errorAtom: PrimitiveAtom<string | null>;
+  codeAtom: PrimitiveAtom<string>;
+  hasEditAtom: PrimitiveAtom<boolean>;
+  analyserAtom: PrimitiveAtom<AnalyserResult>;
   className?: string;
 }> = ( {
   className,
-  cueStatusState,
-  errorState,
-  codeState,
-  hasEditState,
-  analyserState,
+  cueStatusAtom,
+  errorAtom,
+  codeAtom,
+  hasEditAtom,
+  analyserAtom,
   deck,
   gainParamName,
   storageKeyName,
 } ) => {
-  const [ hasEdit, setHasEdit ] = useRecoilState( hasEditState );
-
   // prevent terrible consequence
+  const handleBeforeUnload = useAtomCallback( useCallback( ( get ) => {
+    const hasEdit = get( hasEditAtom );
+    if ( hasEdit ) {
+      return 'You will lose all of your changes on the editor!';
+    }
+  }, [ hasEditAtom ] ) );
+
   useEffect( () => {
-    const callback = ( event: BeforeUnloadEvent ) => {
-      if ( hasEdit ) {
-        const confirmationMessage = 'You will lose all of your changes on the editor!';
-        event.returnValue = confirmationMessage;
-        return confirmationMessage;
-      }
-    };
+    window.addEventListener( 'beforeunload', handleBeforeUnload );
+    return () => window.removeEventListener( 'beforeunload', handleBeforeUnload );
+  }, [ handleBeforeUnload ] );
 
-    window.addEventListener( 'beforeunload', callback );
-    return () => window.removeEventListener( 'beforeunload', callback );
-  }, [ hasEdit ] );
-
-  const handleCompile = useRecoilCallback(
-    ( { snapshot } ) => async () => {
-      const code = await snapshot.getPromise( codeState );
-      await deck.compile( code );
-      deckCodeStorage.set( storageKeyName, code );
-      setHasEdit( false );
-    },
-    [ deck ]
-  );
+  const handleCompile = useAtomCallback( useCallback( async ( get, set ) => {
+    const code = get( codeAtom );
+    await deck.compile( code );
+    deckCodeStorage.set( storageKeyName, code );
+    set( hasEditAtom, false );
+  }, [ codeAtom, hasEditAtom, deck, storageKeyName ] ) );
 
   const handleApply = useCallback(
     async () => {
@@ -129,22 +123,22 @@ export const Deck: React.FC<{
       className={ className }
     >
       <StyledVectorscope
-        analyserState={ analyserState }
+        analyserAtom={ analyserAtom }
       />
       <StyledSpectrogram
-        analyserState={ analyserState }
+        analyserAtom={ analyserAtom }
       />
       <StyledEditor
-        codeState={ codeState }
-        hasEditState={ hasEditState }
+        codeAtom={ codeAtom }
+        hasEditAtom={ hasEditAtom }
         onCompile={ handleCompile }
         onApply={ handleApply }
         onApplyImmediately={ handleApplyImmediately }
       />
       <StyledStatusBar
-        errorState={ errorState }
-        cueStatusState={ cueStatusState }
-        hasEditState={ hasEditState }
+        errorAtom={ errorAtom }
+        cueStatusAtom={ cueStatusAtom }
+        hasEditAtom={ hasEditAtom }
         onCompile={ handleCompile }
         onApply={ handleApply }
         onApplyImmediately={ handleApplyImmediately }

@@ -1,8 +1,8 @@
-import { deckBPMState, deckBeatsState } from '../states/deck';
+import { deckBPMAtom, deckBeatsAtom } from '../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Label = styled.div`
@@ -27,8 +27,8 @@ const Root = styled.div`
 export const HeaderBeatIndicators: React.FC<{
   className?: string;
 }> = ( { className } ) => {
-  const bpm = useRecoilValue( deckBPMState );
-  const { beat, bar, sixteenBar } = useRecoilValue( deckBeatsState );
+  const bpm = useAtomValue( deckBPMAtom );
+  const { beat, bar, sixteenBar } = useAtomValue( deckBeatsAtom );
 
   const beatSeconds = BeatManager.CalcBeatSeconds( bpm );
   const barSeconds = BeatManager.CalcBarSeconds( bpm );

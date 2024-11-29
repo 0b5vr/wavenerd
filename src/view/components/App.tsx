@@ -1,14 +1,12 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
-import { RecoilRoot, useRecoilValue } from 'recoil';
 import { analyserInAAtom, analyserInBAtom } from '../stores/atoms/analyser';
-import { deckACodeState, deckACueStatusState, deckAErrorState, deckAHasEditState, deckBCodeState, deckBCueStatusState, deckBErrorState, deckBHasEditState, deckShowBState } from '../states/deck';
+import { deckACodeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom, deckShowBAtom } from '../stores/atoms/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
-import { DeckListener } from './DeckListener';
 import { Header } from './Header';
 import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
@@ -18,6 +16,7 @@ import { Mixer } from '../../Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
@@ -26,6 +25,8 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
+import { useAtomValue } from 'jotai';
+import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
@@ -120,30 +121,26 @@ interface Props {
 }
 
 const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
-  const showB = useRecoilValue( deckShowBState );
+  const showB = useAtomValue( deckShowBAtom );
   const themeString = useSettings( 'theme' );
 
   useAnalyserSubscribers( mixer );
   useMidiSubscribers( MIDIMAN );
   useSettingsSubscribers( SETTINGSMAN );
+  useDeckSubscribers( deckA, deckA, deckB );
 
   return <>
-    <DeckListener
-      hostDeck={ deckA }
-      deckA={ deckA }
-      deckB={ deckB }
-    />
     <Root themeString={ themeString }>
       <StyledHeader
         hostDeck={ deckA }
       />
       <DeckRow>
         <StyledDeck
-          codeState={ deckACodeState }
-          hasEditState={ deckAHasEditState }
-          errorState={ deckAErrorState }
-          analyserState={ analyserInAAtom }
-          cueStatusState={ deckACueStatusState }
+          codeAtom={ deckACodeAtom }
+          hasEditAtom={ deckAHasEditAtom }
+          errorAtom={ deckAErrorAtom }
+          analyserAtom={ analyserInAAtom }
+          cueStatusAtom={ deckACueStatusAtom }
           deck={ deckA }
           storageKeyName="a"
           gainParamName="/mixer/channel_a/gain"
@@ -156,11 +153,11 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
         </SamplesColumn>
         { showB && (
           <StyledDeck
-            codeState={ deckBCodeState }
-            hasEditState={ deckBHasEditState }
-            errorState={ deckBErrorState }
-            analyserState={ analyserInBAtom }
-            cueStatusState={ deckBCueStatusState }
+            codeAtom={ deckBCodeAtom }
+            hasEditAtom={ deckBHasEditAtom }
+            errorAtom={ deckBErrorAtom }
+            analyserAtom={ analyserInBAtom }
+            cueStatusAtom={ deckBCueStatusAtom }
             deck={ deckB }
             storageKeyName="b"
             gainParamName="/mixer/channel_b/gain"
