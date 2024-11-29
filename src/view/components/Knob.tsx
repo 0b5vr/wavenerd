@@ -2,13 +2,14 @@ import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback } from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
+import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
+import { useAtomCallback } from 'jotai/utils';
 import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
-import { useOpenContextMenuAction } from '../states/contextMenu';
 
 // == styles =======================================================================================
 const Head = styled.div`
@@ -68,7 +69,6 @@ interface Props {
 export const Knob: React.FC<Props> = ( props ) => {
   const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
   const isLearning = useMidiLearning( midiParamName );
-  const openContextMenu = useOpenContextMenuAction();
 
   const value = useMidiValue( midiParamName );
 
@@ -99,13 +99,12 @@ export const Knob: React.FC<Props> = ( props ) => {
     [ resetValue, midiParamName, deltaValuePerPixel ]
   );
 
-  const handleContextMenu = useCallback(
-    ( event: React.MouseEvent<HTMLDivElement> ) => {
+  const handleContextMenu = useAtomCallback( useCallback(
+    ( _, set, event: React.MouseEvent<HTMLDivElement> ) => {
       event.preventDefault();
 
-      openContextMenu( {
-        x: event.clientX,
-        y: event.clientY,
+      set( openContextMenuAtom, {
+        position: [ event.clientX, event.clientY ],
         commands: [
           {
             name: 'Learn MIDI',
@@ -116,8 +115,8 @@ export const Knob: React.FC<Props> = ( props ) => {
         ]
       } );
     },
-    [ midiParamName, openContextMenu ]
-  );
+    [ midiParamName ],
+  ) );
 
   return (
     <Root

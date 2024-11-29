@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { ContextMenuCommand } from '../types/ContextMenuCommand';
 import { ThemeVars } from '../themes/ThemeVars';
+import { resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import styled from 'styled-components';
+import { useAtomCallback } from 'jotai/utils';
 
 // == styles =======================================================================================
 const Name = styled.div`
@@ -36,19 +39,28 @@ const Root = styled.div<{ isSelected?: boolean }>`
 // == components ===================================================================================
 interface ContextMenuEntryProps {
   className?: string;
-  name: string;
-  onClick?: ( event: React.MouseEvent<HTMLDivElement> ) => void;
+  command: ContextMenuCommand;
 }
 
 export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = ( props ) => {
-  const { className, name: text, onClick } = props;
+  const { className, command } = props;
+
+  const name = command.name;
+
+  const handleClick = useAtomCallback( useCallback(
+    ( _, set ) => {
+      command.callback();
+      set( resetContextMenuAtom );
+    },
+    [ command ],
+  ) );
 
   return (
     <Root
       className={ className }
-      onClick={ onClick }
+      onClick={ handleClick }
     >
-      <Name>{ text }</Name>
+      <Name>{ name }</Name>
     </Root>
   );
 };

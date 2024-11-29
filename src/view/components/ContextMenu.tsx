@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { contextMenuCommandsState, contextMenuIsOpeningState, contextMenuPositionState, useResetContextMenuAction } from '../states/contextMenu';
+import { contextMenuCommandsAtom, contextMenuIsOpeningAtom, contextMenuPositionAtom, resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import { ContextMenuEntry } from './ContextMenuEntry';
 import { ContextMenuHr } from './ContextMenuHr';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useAtomCallback } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Container = styled.div`
@@ -38,24 +39,23 @@ const Root = styled.div`
 
 // == component ====================================================================================
 export const ContextMenu: React.FC = () => {
-  const isOpening = useRecoilValue( contextMenuIsOpeningState );
-  const position = useRecoilValue( contextMenuPositionState );
-  const commands = useRecoilValue( contextMenuCommandsState );
-  const resetContextMenu = useResetContextMenuAction();
+  const isOpening = useAtomValue( contextMenuIsOpeningAtom );
+  const [ x, y ] = useAtomValue( contextMenuPositionAtom );
+  const commands = useAtomValue( contextMenuCommandsAtom );
 
-  const handleClickBG = useCallback(
-    () => {
-      resetContextMenu();
+  const handleClickBG = useAtomCallback( useCallback(
+    ( _, set ) => {
+      set( resetContextMenuAtom );
     },
-    []
-  );
+    [],
+  ) );
 
-  const handleContextMenuBG = useCallback(
-    () => {
-      resetContextMenu();
+  const handleContextMenuBG = useAtomCallback( useCallback(
+    ( _, set ) => {
+      set( resetContextMenuAtom );
     },
-    []
-  );
+    [],
+  ) );
 
   const style: React.CSSProperties = useMemo(
     () => {
@@ -63,15 +63,15 @@ export const ContextMenu: React.FC = () => {
       const height = document.documentElement.clientHeight;
 
       const ret: React.CSSProperties = {};
-      ( position.x < width - 240 )
-        ? ( ret.left = position.x )
-        : ( ret.right = width - position.x );
-      ( position.y < height - 120 )
-        ? ( ret.top = position.y )
-        : ( ret.bottom = height - position.y );
+      ( x < width - 240 )
+        ? ( ret.left = x )
+        : ( ret.right = width - x );
+      ( y < height - 120 )
+        ? ( ret.top = y )
+        : ( ret.bottom = height - y );
       return ret;
     },
-    [ position ]
+    [ x, y ],
   );
 
   // -- component ----------------------------------------------------------------------------------
@@ -94,11 +94,7 @@ export const ContextMenu: React.FC = () => {
             : (
               <ContextMenuEntry
                 key={ iCommand }
-                name={ command.name }
-                onClick={ () => {
-                  command.callback();
-                  resetContextMenu();
-                } }
+                command={ command }
               />
             )
         ) ) }

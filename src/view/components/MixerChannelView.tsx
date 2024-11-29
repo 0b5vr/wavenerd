@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
+import IconCue from '~icons/mdi/headphones';
 import { Knob } from './Knob';
+import { MIDIMAN } from '../../MIDIManager';
 import { MixerFader } from './MixerFader';
+import { ThemeVars } from '../themes/ThemeVars';
+import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import styled from 'styled-components';
+import { useAtomCallback } from 'jotai/utils';
+import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
-import { ThemeVars } from '../themes/ThemeVars';
-import IconCue from '~icons/mdi/headphones';
-import { MIDIMAN } from '../../MIDIManager';
-import { useOpenContextMenuAction } from '../states/contextMenu';
-import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 
 // == styles =======================================================================================
 const StyledKnob = styled( Knob )<{ size: number }>`
@@ -160,7 +161,6 @@ function CueButton( { paramName, stalkerText }: {
   stalkerText: string;
 } ): JSX.Element {
   const value = useMidiValue( paramName );
-  const openContextMenu = useOpenContextMenuAction();
   const isLearning = useMidiLearning( paramName );
 
   const handleClick = useCallback( () => {
@@ -168,22 +168,24 @@ function CueButton( { paramName, stalkerText }: {
     MIDIMAN.setValue( paramName, currentValue > 0.0 ? 0.0 : 1.0 );
   }, [] );
 
-  const handleContextMenu = useCallback( ( event: React.MouseEvent ) => {
-    event.preventDefault();
+  const handleContextMenu = useAtomCallback( useCallback(
+    ( _, set, event: React.MouseEvent ) => {
+      event.preventDefault();
 
-    openContextMenu( {
-      x: event.clientX,
-      y: event.clientY,
-      commands: [
-        {
-          name: 'Learn MIDI',
-          callback: () => {
-            MIDIMAN.learn( paramName );
+      set( openContextMenuAtom, {
+        position: [ event.clientX, event.clientY ],
+        commands: [
+          {
+            name: 'Learn MIDI',
+            callback: () => {
+              MIDIMAN.learn( paramName );
+            }
           }
-        }
-      ]
-    } );
-  }, [ paramName, openContextMenu ] );
+        ]
+      } );
+    },
+    [ paramName ],
+  ) );
 
   return (
     <CueButtonRoot

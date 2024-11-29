@@ -2,12 +2,13 @@ import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback, useRef } from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
+import { openContextMenuAtom } from '../stores/atoms/contextMenu';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
+import { useAtomCallback } from 'jotai/utils';
 import { useMidiLearning } from '../stores/hooks/useMidiLearning';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
-import { useOpenContextMenuAction } from '../states/contextMenu';
 import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
@@ -85,7 +86,6 @@ export const MixerFader: React.FC<{
   const isLearning = useMidiLearning( midiParamName );
   const refRoot = useRef<HTMLDivElement>( null );
   const rectRoot = useRect( refRoot );
-  const openContextMenu = useOpenContextMenuAction();
 
   const value = useMidiValue( midiParamName );
 
@@ -111,13 +111,12 @@ export const MixerFader: React.FC<{
     [ midiParamName, rectRoot.height ]
   );
 
-  const handleContextMenu = useCallback(
-    ( event: React.MouseEvent<HTMLDivElement> ) => {
+  const handleContextMenu = useAtomCallback( useCallback(
+    ( _, set, event: React.MouseEvent<HTMLDivElement> ) => {
       event.preventDefault();
 
-      openContextMenu( {
-        x: event.clientX,
-        y: event.clientY,
+      set( openContextMenuAtom, {
+        position: [ event.clientX, event.clientY ],
         commands: [
           {
             name: 'Learn MIDI',
@@ -125,11 +124,11 @@ export const MixerFader: React.FC<{
               MIDIMAN.learn( midiParamName );
             }
           }
-        ]
+        ],
       } );
     },
-    [ midiParamName, openContextMenu ]
-  );
+    [ midiParamName ],
+  ) );
 
   return (
     <Root
