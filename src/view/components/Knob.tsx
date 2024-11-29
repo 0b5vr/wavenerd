@@ -1,6 +1,6 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import React, { useCallback } from 'react';
-import { MIDILearnable } from './MidiLearnable';
+import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';

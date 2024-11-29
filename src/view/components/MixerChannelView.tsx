@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import IconCue from '~icons/mdi/headphones';
 import { Knob } from './Knob';
-import { MIDILearnable } from './MidiLearnable';
+import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { MixerFader } from './MixerFader';
 import { ThemeVars } from '../themes/ThemeVars';
