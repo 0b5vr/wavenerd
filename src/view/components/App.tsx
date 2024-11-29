@@ -16,7 +16,6 @@ import { Mixer } from '../../Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
-import { RecoilRoot } from 'recoil';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
@@ -180,13 +179,11 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
 };
 
 const App: React.FC<Props> = ( { deckA, deckB, mixer } ) => (
-  <RecoilRoot>
-    <OutOfContextApp
-      deckA={ deckA }
-      deckB={ deckB }
-      mixer={ mixer }
-    />
-  </RecoilRoot>
+  <OutOfContextApp
+    deckA={ deckA }
+    deckB={ deckB }
+    mixer={ mixer }
+  />
 );
 
 export { App };
