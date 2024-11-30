@@ -158,6 +158,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.set( 'editorFont', font );
   }, [] );
 
+  const handleChangeEditorFontVariantLigatures = useCallback( ( event: React.ChangeEvent ) => {
+    const ligatures = ( event.target as HTMLSelectElement ).value;
+    SETTINGSMAN.set( 'editorFontVariantLigatures', ligatures );
+  }, [] );
+
   if ( !isOpening ) {
     return null;
   }
@@ -300,6 +305,7 @@ export const SettingsModal: React.FC<{
           </StyledSelect>
         ) }<br />
       </Line>
+
       <Line
         data-stalker="Change the opacity of the spectrum."
       >
@@ -313,6 +319,7 @@ export const SettingsModal: React.FC<{
           onChange={ handleChangeSpectrumOpacity }
         /><br />
       </Line>
+
       <Line
         data-stalker="Change the color of the spectrum."
       >
@@ -323,6 +330,7 @@ export const SettingsModal: React.FC<{
           onChange={ handleChangeSpectrumColor }
         />
       </Line>
+
       <Line
         data-stalker="Change the appearance theme."
       >
@@ -336,6 +344,7 @@ export const SettingsModal: React.FC<{
           ) ) }
         </StyledSelect>
       </Line>
+
       <Line
         data-stalker="Change the font of the editor.&#10;The syntax is same as the CSS font property."
       >
@@ -344,6 +353,19 @@ export const SettingsModal: React.FC<{
           value={ settings.editorFont }
           onChange={ handleChangeEditorFont }
         />
+      </Line>
+
+      <Line
+        data-stalker="Whether to enable font variant ligatures in the editor."
+      >
+        <Name>Editor Font Variant Ligatures</Name>
+        <StyledSelect
+          value={ settings.editorFontVariantLigatures }
+          onChange={ handleChangeEditorFontVariantLigatures }
+        >
+          <option value="none">None</option>
+          <option value="normal">Normal</option>
+        </StyledSelect>
       </Line>
     </Modal>
   );

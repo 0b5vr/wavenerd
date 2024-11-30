@@ -68,18 +68,20 @@ export const DeckEditor: React.FC<{
   const [ code, setCode ] = useAtom( codeAtom );
   const setHasEdit = useSetAtom( hasEditAtom );
   const themeString = useSettings( 'theme' );
-  const editorFont = useSettings( 'editorFont' );
+  const font = useSettings( 'editorFont' );
+  const fontVariantLigatures = useSettings( 'editorFontVariantLigatures' );
 
   const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
 
   const fontExtension = useMemo( () => {
     const theme = EditorView.theme( {
       '.cm-scroller': {
-        font: editorFont,
+        font,
+        fontVariantLigatures,
       },
     } );
     return [ theme ];
-  }, [ editorFont ] );
+  }, [ font, fontVariantLigatures ] );
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [

@@ -23,6 +23,7 @@ export interface Settings {
   spectrumColor: string;
   theme: string;
   editorFont: string;
+  editorFontVariantLigatures: string;
 }
 
 export const defaultSettings: Settings = {
@@ -40,6 +41,7 @@ export const defaultSettings: Settings = {
   spectrumColor: '#ffffff',
   theme: 'monokaiSharp',
   editorFont: '12px "Roboto Mono", monospace',
+  editorFontVariantLigatures: 'normal',
 };
 
 interface SettingsManagerEvents {
