@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { AnalyserResult } from '../../Analyser';
+import { Analyser } from '../../Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
@@ -60,7 +60,7 @@ export const Deck: React.FC<{
   errorAtom: PrimitiveAtom<string | null>;
   codeAtom: PrimitiveAtom<string>;
   hasEditAtom: PrimitiveAtom<boolean>;
-  analyserAtom: PrimitiveAtom<AnalyserResult>;
+  analyser: Analyser;
   className?: string;
 }> = ( {
   className,
@@ -68,7 +68,7 @@ export const Deck: React.FC<{
   errorAtom,
   codeAtom,
   hasEditAtom,
-  analyserAtom,
+  analyser,
   deck,
   gainParamName,
   storageKeyName,
@@ -122,12 +122,8 @@ export const Deck: React.FC<{
     <Root
       className={ className }
     >
-      <StyledVectorscope
-        analyserAtom={ analyserAtom }
-      />
-      <StyledSpectrogram
-        analyserAtom={ analyserAtom }
-      />
+      <StyledVectorscope analyser={ analyser } />
+      <StyledSpectrogram analyser={ analyser } />
       <StyledEditor
         codeAtom={ codeAtom }
         hasEditAtom={ hasEditAtom }

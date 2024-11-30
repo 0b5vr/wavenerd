@@ -1,6 +1,5 @@
-import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { AnalyserResult } from '../../Analyser';
+import { Analyser } from '../../Analyser';
 import { VectorscopeRenderer } from '../renderers/VectorscopeRenderer';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
@@ -18,15 +17,14 @@ const Root = styled.div``;
 
 // == components ===================================================================================
 export const DeckVectorscope: React.FC<{
-  analyserAtom: PrimitiveAtom<AnalyserResult>;
+  analyser: Analyser;
   className?: string;
-}> = ( { analyserAtom, className } ) => {
+}> = ( { analyser, className } ) => {
   const [ renderer, setRenderer ] = useState<VectorscopeRenderer>();
   const refCanvas = useRef<HTMLCanvasElement>( null );
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { timeDomainL, timeDomainR } = useAtomValue( analyserAtom );
   const vectorscopeMode = useSettings( 'vectorscopeMode' );
   const vectorscopeOpacity = useSettings( 'vectorscopeOpacity' );
   const vectorscopeColor = useSettings( 'vectorscopeColor' );
@@ -57,16 +55,11 @@ export const DeckVectorscope: React.FC<{
     ];
   }, [ renderer, vectorscopeMode, vectorscopeColor, vectorscopeOpacity ] );
 
-  // set data to the renderer
-  useEffect( () => {
-    if ( vectorscopeMode !== 'none' ) {
-      renderer?.setData( timeDomainL, timeDomainR );
-    }
-  }, [ timeDomainL, timeDomainR, renderer ] );
-
   // update the renderer
   useFrames( () => {
     if ( vectorscopeMode !== 'none' ) {
+      const { timeDomainL, timeDomainR } = analyser;
+      renderer?.setData( timeDomainL, timeDomainR );
       renderer?.render();
     }
   }, [ renderer ] );

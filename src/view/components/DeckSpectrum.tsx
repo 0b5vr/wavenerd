@@ -1,6 +1,5 @@
-import { PrimitiveAtom, useAtomValue } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { AnalyserResult } from '../../Analyser';
+import { Analyser } from '../../Analyser';
 import { SpectrumRenderer } from '../renderers/SpectrumRenderer';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';
@@ -18,18 +17,17 @@ const Root = styled.div``;
 
 // == param ========================================================================================
 interface Param {
-  analyserAtom: PrimitiveAtom<AnalyserResult>;
+  analyser: Analyser;
   className?: string;
 }
 
 // == component ====================================================================================
-export const DeckSpectrum: React.FC<Param> = ( { analyserAtom, className } ) => {
+export const DeckSpectrum: React.FC<Param> = ( { analyser, className } ) => {
   const [ renderer, setRenderer ] = useState<SpectrumRenderer>();
   const refCanvas = useRef<HTMLCanvasElement>( null );
   const canvas = useElement( refCanvas );
   const rectCanvas = useRect( refCanvas );
 
-  const { frequencyL } = useAtomValue( analyserAtom );
   const spectrumMode = useSettings( 'spectrumMode' );
   const spectrumOpacity = useSettings( 'spectrumOpacity' );
   const spectrumColor = useSettings( 'spectrumColor' );
@@ -60,16 +58,11 @@ export const DeckSpectrum: React.FC<Param> = ( { analyserAtom, className } ) => 
     ];
   }, [ renderer, spectrumMode, spectrumColor, spectrumOpacity ] );
 
-  // set data to the renderer
-  useEffect( () => {
-    if ( spectrumMode !== 'none' ) {
-      renderer?.setData( frequencyL );
-    }
-  }, [ frequencyL, renderer ] );
-
   // update the renderer
   useFrames( () => {
     if ( spectrumMode !== 'none' ) {
+      const { frequencyL } = analyser.update( 0 );
+      renderer?.setData( frequencyL );
       renderer?.render();
     }
   }, [ renderer ] );

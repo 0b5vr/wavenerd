@@ -1,4 +1,4 @@
-import { analyserInAAtom, analyserInBAtom, levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../atoms/analyser';
+import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../atoms/analyser';
 import { Mixer } from '../../../Mixer';
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
@@ -29,27 +29,6 @@ function useLevelMeterSubscribers( mixer: Mixer ) {
   }, [ mixer, setLevelMeterInA, setLevelMeterInB, setLevelMeterOut ] );
 }
 
-function useAnalSubscribers( mixer: Mixer ) {
-  const setAnalyserInA = useSetAtom( analyserInAAtom );
-  const setAnalyserInB = useSetAtom( analyserInBAtom );
-
-  useEffect( () => {
-    const handleUpdateAnalyserInA = mixer.analyserInA.on( 'update', ( event ) => {
-      setAnalyserInA( structuredClone( event ) );
-    } );
-
-    const handleUpdateAnalyserInB = mixer.analyserInB.on( 'update', ( event ) => {
-      setAnalyserInB( structuredClone( event ) );
-    } );
-
-    return () => {
-      mixer.analyserInA.off( 'update', handleUpdateAnalyserInA );
-      mixer.analyserInB.off( 'update', handleUpdateAnalyserInB );
-    };
-  }, [ mixer, setAnalyserInA, setAnalyserInB ] );
-}
-
 export function useAnalyserSubscribers( mixer: Mixer ) {
-  useAnalSubscribers( mixer );
   useLevelMeterSubscribers( mixer );
 }

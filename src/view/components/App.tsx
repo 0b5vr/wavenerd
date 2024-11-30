@@ -1,6 +1,5 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
-import { analyserInAAtom, analyserInBAtom } from '../stores/atoms/analyser';
 import { deckACodeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom, deckShowBAtom } from '../stores/atoms/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
@@ -138,8 +137,8 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
           codeAtom={ deckACodeAtom }
           hasEditAtom={ deckAHasEditAtom }
           errorAtom={ deckAErrorAtom }
-          analyserAtom={ analyserInAAtom }
           cueStatusAtom={ deckACueStatusAtom }
+          analyser={ mixer.analyserInA }
           deck={ deckA }
           storageKeyName="a"
           gainParamName="/mixer/channel_a/gain"
@@ -155,7 +154,7 @@ const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
             codeAtom={ deckBCodeAtom }
             hasEditAtom={ deckBHasEditAtom }
             errorAtom={ deckBErrorAtom }
-            analyserAtom={ analyserInBAtom }
+            analyser={ mixer.analyserInB }
             cueStatusAtom={ deckBCueStatusAtom }
             deck={ deckB }
             storageKeyName="b"
