@@ -29,6 +29,23 @@ const Ruler = styled.div`
   pointer-events: none;
 `;
 
+const ShortRuler = styled.div`
+  position: absolute;
+  top: 15%;
+  width: 1px;
+  height: 70%;
+  background: ${ ThemeVars.knobGuide };
+  pointer-events: none;
+`;
+
+const RulerContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 5%;
+  width: 90%;
+  height: 100%;
+`;
+
 const KnobLine = styled.div`
   position: absolute;
   top: 2px;
@@ -94,9 +111,19 @@ export const Fader: React.FC<{
       className={ className }
       data-stalker="X Fader"
     >
-      <Ruler style={ { left: 'calc( 5% - 1px )' } } />
-      <Ruler style={ { left: 'calc( 50% - 1px )' } } />
-      <Ruler style={ { left: 'calc( 95% - 1px )' } } />
+      <RulerContainer>
+        <Ruler style={ { left: '0px' } } />
+        <ShortRuler style={ { left: 'calc( 0.1 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.2 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.3 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.4 * ( 100% - 1px ) )' } } />
+        <Ruler style={ { left: 'calc( 0.5 * ( 100% - 2px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.6 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.7 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.8 * ( 100% - 1px ) )' } } />
+        <ShortRuler style={ { left: 'calc( 0.9 * ( 100% - 1px ) )' } } />
+        <Ruler style={ { left: 'calc( 100% - 2px )' } } />
+      </RulerContainer>
       <Gutter />
       <Knob
         style={ {
