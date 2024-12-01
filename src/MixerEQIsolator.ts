@@ -83,18 +83,18 @@ export class MixerEQIsolator extends MixerEQ {
 
     this.__convolverNodeLow.buffer = createCrossoverIR( {
       sampleRate: audio.sampleRate,
-      lpfFreq: 400.0,
+      lpfFreq: 250.0,
     } );
 
     this.__convolverNodeMid.buffer = createCrossoverIR( {
       sampleRate: audio.sampleRate,
-      hpfFreq: 400.0,
-      lpfFreq: 2000.0,
+      hpfFreq: 250.0,
+      lpfFreq: 2500.0,
     } );
 
     this.__convolverNodeHigh.buffer = createCrossoverIR( {
       sampleRate: audio.sampleRate,
-      hpfFreq: 2000.0,
+      hpfFreq: 2500.0,
     } );
 
     this.__gainNode.connect( this.__convolverNodeLow );
