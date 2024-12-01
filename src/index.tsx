@@ -140,7 +140,7 @@ SETTINGSMAN.on( 'change', ( settings ) => applySettings( settings ) );
 
 // == prevent browser shortcuts ====================================================================
 document.addEventListener( 'keydown', ( event ) => {
-  if ( event.ctrlKey ) {
+  if ( event.ctrlKey && event.key.match( /[derst]/ ) ) {
     event.preventDefault();
   }
 } );
