@@ -138,6 +138,13 @@ applySettings( SETTINGSMAN.values );
 
 SETTINGSMAN.on( 'change', ( settings ) => applySettings( settings ) );
 
+// == prevent browser shortcuts ====================================================================
+document.addEventListener( 'keydown', ( event ) => {
+  if ( event.ctrlKey ) {
+    event.preventDefault();
+  }
+} );
+
 // == dom ==========================================================================================
 const root = createRoot( document.getElementById( 'root' )! );
 root.render(
