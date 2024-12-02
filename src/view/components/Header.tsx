@@ -14,7 +14,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckShowBAtom } from '../stores/atoms/deck';
 import { helpIsOpeningAtom } from '../stores/atoms/help';
-import { midiModalIsOpeningAtom } from '../stores/atoms/midi';
+import { midiIndicatorAtom, midiModalIsOpeningAtom } from '../stores/atoms/midi';
 import { settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useAtomCallback } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
@@ -111,6 +111,7 @@ export const Header: React.FC<{
   className?: string;
 }> = ({ hostDeck, className }) => {
   const showB = useAtomValue(deckShowBAtom);
+  const midiIndicator = useAtomValue(midiIndicatorAtom);
 
   const handleClickToggleB = useAtomCallback(useCallback((get, set) => {
     set(deckShowBAtom, !get(deckShowBAtom));
@@ -152,6 +153,7 @@ export const Header: React.FC<{
       />
       <StyledIconMIDI
         onClick={handleClickMIDI}
+        style={{ opacity: midiIndicator ? 1.0 : 0.5 }}
         data-stalker="MIDI"
       />
       <StyledIconSettings
