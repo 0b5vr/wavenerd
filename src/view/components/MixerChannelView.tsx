@@ -78,7 +78,7 @@ function valueToDisplayDB( value: number ): string {
   if ( value === 0.0 ) {
     return '-INF dB';
   } else {
-    const db = 10.0 * Math.log10( 4.0 * value * value );
+    const db = 20.0 * Math.log10( 4.0 * value * value );
     return db.toFixed( 2 ) + ' dB';
   }
 }
