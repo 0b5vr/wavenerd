@@ -69,15 +69,15 @@ function applyMidiParam( { key, value }: { key: string, value: number } ) {
   ( key === '/mixer/xfader_pos' ) && ( mixer.xFaderPos = value );
 
   ( key === '/mixer/channel_a/gain' ) && ( mixer.channelA.gain = 4.0 * value * value );
-  ( key === '/mixer/channel_a/eq/high' ) && ( mixer.channelA.eq.high = 4.0 * value * value );
-  ( key === '/mixer/channel_a/eq/mid' ) && ( mixer.channelA.eq.mid = 4.0 * value * value );
-  ( key === '/mixer/channel_a/eq/low' ) && ( mixer.channelA.eq.low = 4.0 * value * value );
+  ( key === '/mixer/channel_a/eq/high' ) && ( mixer.channelA.eq.high = 2.0 * value );
+  ( key === '/mixer/channel_a/eq/mid' ) && ( mixer.channelA.eq.mid = 2.0 * value );
+  ( key === '/mixer/channel_a/eq/low' ) && ( mixer.channelA.eq.low = 2.0 * value );
   ( key === '/mixer/channel_a/volume' ) && ( mixer.channelA.volume = value * value );
 
   ( key === '/mixer/channel_b/gain' ) && ( mixer.channelB.gain = 4.0 * value * value );
-  ( key === '/mixer/channel_b/eq/high' ) && ( mixer.channelB.eq.high = 4.0 * value * value );
-  ( key === '/mixer/channel_b/eq/mid' ) && ( mixer.channelB.eq.mid = 4.0 * value * value );
-  ( key === '/mixer/channel_b/eq/low' ) && ( mixer.channelB.eq.low = 4.0 * value * value );
+  ( key === '/mixer/channel_b/eq/high' ) && ( mixer.channelB.eq.high = 2.0 * value );
+  ( key === '/mixer/channel_b/eq/mid' ) && ( mixer.channelB.eq.mid = 2.0 * value );
+  ( key === '/mixer/channel_b/eq/low' ) && ( mixer.channelB.eq.low = 2.0 * value );
   ( key === '/mixer/channel_b/volume' ) && ( mixer.channelB.volume = value * value );
 
   ( key === '/cue/channel_a' ) && ( cueMixer.gainA = value * value );
