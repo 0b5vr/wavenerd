@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 
-export function useFrames( fn: () => void, deps?: React.DependencyList ) {
-  useEffect( () => {
+export function useFrames(fn: () => void, deps?: React.DependencyList) {
+  useEffect(() => {
     let dead = false;
 
     const update = () => {
-      if ( dead ) { return; }
+      if (dead) { return; }
 
-      requestAnimationFrame( update );
+      requestAnimationFrame(update);
       fn();
     };
-    requestAnimationFrame( update );
+    requestAnimationFrame(update);
 
     return () => {
       dead = true;
     };
-  }, deps );
+  }, deps);
 }

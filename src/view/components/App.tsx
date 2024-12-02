@@ -30,8 +30,8 @@ import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 
 // == styles =======================================================================================
-const StyledHeader = styled( Header )`
-  height: ${ Metrics.headerHeight }px;
+const StyledHeader = styled(Header)`
+  height: ${Metrics.headerHeight}px;
 `;
 
 const DeckRow = styled.div`
@@ -42,7 +42,7 @@ const DeckRow = styled.div`
   gap: 2px;
 `;
 
-const StyledDeck = styled( Deck )`
+const StyledDeck = styled(Deck)`
   flex-grow: 1;
 `;
 
@@ -50,14 +50,14 @@ const SamplesColumn = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  width: ${ Metrics.sampleListWidth }px;
+  width: ${Metrics.sampleListWidth}px;
 `;
 
-const StyledAssetList = styled( AssetList )`
+const StyledAssetList = styled(AssetList)`
   flex-grow: 1;
 `;
 
-const StyledMixerView = styled( MixerView )`
+const StyledMixerView = styled(MixerView)`
   height: 180px;
 `;
 
@@ -68,28 +68,28 @@ const FaderRow = styled.div`
   height: 64px;
 `;
 
-const StyledDeckKnobs = styled( DeckKnobs )`
+const StyledDeckKnobs = styled(DeckKnobs)`
   flex-grow: 1;
 `;
 
-const StyledXFader = styled( XFader )`
-  width: ${ Metrics.xFaderWidth }px;
+const StyledXFader = styled(XFader)`
+  width: ${Metrics.xFaderWidth}px;
   margin: 8px 16px;
 `;
 
-function themeVarsCss( themeString: string ): ReturnType<typeof css> {
-  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).theme;
-  const map = Object.entries( theme.ui )
-  .map( ( [ key, value ] ) => {
-    const cssVar = ThemeVars[ key as keyof typeof ThemeVars ];
-    if ( cssVar == null ) { return ''; }
+function themeVarsCss(themeString: string): ReturnType<typeof css> {
+  const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
+  const map = Object.entries(theme.ui)
+    .map(([key, value]) => {
+      const cssVar = ThemeVars[key as keyof typeof ThemeVars];
+      if (cssVar == null) { return ''; }
 
-    const cssKey = cssVar.match( /^var\(([a-z0-9-]+)/ )?.[ 1 ];
-    if ( cssKey == null ) { return ''; }
+      const cssKey = cssVar.match(/^var\(([a-z0-9-]+)/)?.[1];
+      if (cssKey == null) { return ''; }
 
-    return `${ cssKey }: ${ value };`;
-  } );
-  return css`${ map.join( '' ) }`;
+      return `${cssKey}: ${value};`;
+    });
+  return css`${map.join('')}`;
 }
 
 const Root = styled.div<{ themeString: string }>`
@@ -100,15 +100,15 @@ const Root = styled.div<{ themeString: string }>`
   height: 100%;
   display: flex;
   flex-direction: column;
-  color: ${ ThemeVars.fore };
-  background: ${ ThemeVars.back2 };
+  color: ${ThemeVars.fore};
+  background: ${ThemeVars.back2};
   font-family: 'Roboto Mono', monospace;
 
   * {
     box-sizing: border-box;
   }
 
-  ${ ( { themeString } ) => themeVarsCss( themeString ) };
+  ${({ themeString }) => themeVarsCss(themeString)};
 `;
 
 // == component ====================================================================================
@@ -118,70 +118,72 @@ interface Props {
   mixer: Mixer;
 }
 
-const OutOfContextApp: React.FC<Props> = ( { deckA, deckB, mixer } ) => {
-  const showB = useAtomValue( deckShowBAtom );
-  const themeString = useSettings( 'theme' );
+const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer }) => {
+  const showB = useAtomValue(deckShowBAtom);
+  const themeString = useSettings('theme');
 
-  useAnalyserSubscribers( mixer );
-  useMidiSubscribers( MIDIMAN );
-  useSettingsSubscribers( SETTINGSMAN );
-  useDeckSubscribers( deckA, deckA, deckB );
+  useAnalyserSubscribers(mixer);
+  useMidiSubscribers(MIDIMAN);
+  useSettingsSubscribers(SETTINGSMAN);
+  useDeckSubscribers(deckA, deckA, deckB);
 
-  return <>
-    <Root themeString={ themeString }>
-      <StyledHeader
-        hostDeck={ deckA }
-      />
-      <DeckRow>
-        <StyledDeck
-          codeAtom={ deckACodeAtom }
-          hasEditAtom={ deckAHasEditAtom }
-          errorAtom={ deckAErrorAtom }
-          cueStatusAtom={ deckACueStatusAtom }
-          analyser={ mixer.analyserInA }
-          deck={ deckA }
-          storageKeyName="a"
-          gainParamName="/mixer/channel_a/gain"
+  return (
+    <>
+      <Root themeString={themeString}>
+        <StyledHeader
+          hostDeck={deckA}
         />
-        <SamplesColumn>
-          <StyledAssetList
-            hostDeck={ deckA }
-          />
-          <StyledMixerView />
-        </SamplesColumn>
-        { showB && (
+        <DeckRow>
           <StyledDeck
-            codeAtom={ deckBCodeAtom }
-            hasEditAtom={ deckBHasEditAtom }
-            errorAtom={ deckBErrorAtom }
-            analyser={ mixer.analyserInB }
-            cueStatusAtom={ deckBCueStatusAtom }
-            deck={ deckB }
-            storageKeyName="b"
-            gainParamName="/mixer/channel_b/gain"
+            codeAtom={deckACodeAtom}
+            hasEditAtom={deckAHasEditAtom}
+            errorAtom={deckAErrorAtom}
+            cueStatusAtom={deckACueStatusAtom}
+            analyser={mixer.analyserInA}
+            deck={deckA}
+            storageKeyName="a"
+            gainParamName="/mixer/channel_a/gain"
           />
-        ) }
-      </DeckRow>
-      <FaderRow>
-        <StyledDeckKnobs paramPrefix="/deck_a" />
-        <StyledXFader />
-        { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
-      </FaderRow>
-      <SettingsModal mixer={ mixer } />
-      <MIDIModal />
-      <HelpModal />
-      <PlayOverlay hostDeck={ deckA } />
-      <ContextMenu />
-      <Stalker />
-    </Root>
-  </>;
+          <SamplesColumn>
+            <StyledAssetList
+              hostDeck={deckA}
+            />
+            <StyledMixerView />
+          </SamplesColumn>
+          { showB && (
+            <StyledDeck
+              codeAtom={deckBCodeAtom}
+              hasEditAtom={deckBHasEditAtom}
+              errorAtom={deckBErrorAtom}
+              analyser={mixer.analyserInB}
+              cueStatusAtom={deckBCueStatusAtom}
+              deck={deckB}
+              storageKeyName="b"
+              gainParamName="/mixer/channel_b/gain"
+            />
+          ) }
+        </DeckRow>
+        <FaderRow>
+          <StyledDeckKnobs paramPrefix="/deck_a" />
+          <StyledXFader />
+          { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
+        </FaderRow>
+        <SettingsModal mixer={mixer} />
+        <MIDIModal />
+        <HelpModal />
+        <PlayOverlay hostDeck={deckA} />
+        <ContextMenu />
+        <Stalker />
+      </Root>
+    </>
+  );
 };
 
-const App: React.FC<Props> = ( { deckA, deckB, mixer } ) => (
+const App: React.FC<Props> = ({ deckA, deckB, mixer }) => (
   <OutOfContextApp
-    deckA={ deckA }
-    deckB={ deckB }
-    mixer={ mixer }
+    deckA={deckA}
+    deckB={deckB}
+    mixer={mixer}
   />
 );
 

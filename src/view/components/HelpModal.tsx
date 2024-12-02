@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback } from 'react';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
@@ -16,7 +15,7 @@ const IconsInContent = styled.svg`
   width: 1em;
   height: 1em;
   transform: scale(1.25);
-  color: ${ ThemeVars.fore };
+  color: ${ThemeVars.fore};
 `;
 
 const Content = styled.div`
@@ -34,30 +33,32 @@ const Content = styled.div`
   }
 
   a {
-    color: ${ ThemeVars.accent };
+    color: ${ThemeVars.accent};
     text-decoration: none;
   }
 
   code {
     padding: 0px 4px;
     font: 400 14px 'Roboto Mono', sans-serif;
-    background-color: ${ ThemeVars.back1 };
-    color: ${ ThemeVars.foresub };
+    background-color: ${ThemeVars.back1};
+    color: ${ThemeVars.foresub};
     border-radius: 4px;
   }
 `;
 
 // == components ===================================================================================
 export const HelpModal: React.FC = () => {
-  const [ isOpening, setOpening ] = useAtom( helpIsOpeningAtom );
+  const [isOpening, setOpening] = useAtom(helpIsOpeningAtom);
 
-  const handleClose = useCallback( () => {
-    setOpening( false );
-  }, [] );
+  const handleClose = useCallback(() => {
+    setOpening(false);
+  }, []);
 
-  if ( !isOpening ) {
+  if (!isOpening) {
     return null;
   }
+
+  /* eslint-disable @stylistic/jsx-one-expression-per-line */
 
   return (
     <Modal onClose={handleClose}>
@@ -70,12 +71,12 @@ export const HelpModal: React.FC = () => {
         </p>
         <h2>How to compile / apply</h2>
         <p>
-          You can compile shaders at anytime by clicking <IconsInContent as={ IconBuild } /> on the
+          You can compile shaders at anytime by clicking <IconsInContent as={IconBuild} /> on the
           bottom of the editor.
         </p>
         <p>
           After you compiled the shader, you can cue the shader by
-          clicking <IconsInContent as={ IconApply } /> on the bottom of the editor.<br />
+          clicking <IconsInContent as={IconApply} /> on the bottom of the editor.<br />
           The cued shader will be applied when it reaches the next bar (= every 4 beats).
         </p>
         <h2>How do I make a sound?</h2>
@@ -107,7 +108,7 @@ export const HelpModal: React.FC = () => {
         <h2>Why is the audio stuttery sometimes?</h2>
         <p>
           Maybe your processor is not catching up with audio generation.
-          You can change the latency from the setting screen <IconsInContent as={ IconSettings } />.
+          You can change the latency from the setting screen <IconsInContent as={IconSettings} />.
         </p>
         <h2>Keyboard shortcuts</h2>
         <ul>
@@ -157,4 +158,6 @@ export const HelpModal: React.FC = () => {
       </Content>
     </Modal>
   );
+
+  /* eslint-enable @stylistic/jsx-one-expression-per-line */
 };

@@ -56,9 +56,9 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
     };
   }
 
-  public set( key: keyof Settings, value: Settings[ keyof Settings ] ): void {
-    this.__storage.set( key, value );
-    this.__emit( 'change', { [ key ]: value } );
+  public set(key: keyof Settings, value: Settings[ keyof Settings ]): void {
+    this.__storage.set(key, value);
+    this.__emit('change', { [key]: value });
   }
 
   private __storage: ThrottledJSONStorage<Settings>;
@@ -66,7 +66,7 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public constructor() {
     super();
 
-    this.__storage = new ThrottledJSONStorage( 'wavenerd-settings' );
+    this.__storage = new ThrottledJSONStorage('wavenerd-settings');
   }
 }
 

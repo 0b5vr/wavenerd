@@ -26,23 +26,23 @@ const Logo = styled.div`
   margin-left: 8px;
 `;
 
-const StyledHeaderTransport = styled( HeaderTransport )`
+const StyledHeaderTransport = styled(HeaderTransport)`
   margin-left: 8px;
 `;
 
-const StyledHeaderTime = styled( HeaderTime )`
+const StyledHeaderTime = styled(HeaderTime)`
   margin-left: 8px;
 `;
 
-const StyledHeaderBeatIndicators = styled( HeaderBeatIndicators )`
+const StyledHeaderBeatIndicators = styled(HeaderBeatIndicators)`
   margin-left: 8px;
 `;
 
-const StyledHeaderBPM = styled( HeaderBPM )`
+const StyledHeaderBPM = styled(HeaderBPM)`
   margin-left: 8px;
 `;
 
-const StyledHeaderNudge = styled( HeaderNudge )`
+const StyledHeaderNudge = styled(HeaderNudge)`
   margin-left: 8px;
 `;
 
@@ -61,30 +61,30 @@ const StyleIcon = css`
   }
 `;
 
-const StyledIconBBox = styled( IconBBox )`
-  ${ StyleIcon };
+const StyledIconBBox = styled(IconBBox)`
+  ${StyleIcon};
 `;
 
-const StyledIconSettings = styled( IconSettings )`
-  ${ StyleIcon };
+const StyledIconSettings = styled(IconSettings)`
+  ${StyleIcon};
 `;
 
-const StyledIconMIDI = styled( IconMIDI )`
-  ${ StyleIcon };
+const StyledIconMIDI = styled(IconMIDI)`
+  ${StyleIcon};
 `;
 
-const StyledIconHelp = styled( IconHelp )`
-  ${ StyleIcon };
+const StyledIconHelp = styled(IconHelp)`
+  ${StyleIcon};
 `;
 
-const StyledIconGitHub = styled( IconGitHub )`
-  ${ StyleIcon };
+const StyledIconGitHub = styled(IconGitHub)`
+  ${StyleIcon};
 `;
 
 const AnchorGit = styled.a`
   display: block;
   height: 32px;
-  color: ${ ThemeVars.headerFg };
+  color: ${ThemeVars.headerFg};
 `;
 
 const Margin = styled.div`
@@ -94,9 +94,9 @@ const Margin = styled.div`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ ThemeVars.headerBg };
-  color: ${ ThemeVars.headerFg };
-  border-bottom: solid 2px ${ ThemeVars.back1 };
+  background: ${ThemeVars.headerBg};
+  color: ${ThemeVars.headerFg};
+  border-bottom: solid 2px ${ThemeVars.back1};
   box-sizing: content-box;
 
   & > * {
@@ -109,57 +109,57 @@ const Root = styled.div`
 export const Header: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ( { hostDeck, className } ) => {
-  const showB = useAtomValue( deckShowBAtom );
+}> = ({ hostDeck, className }) => {
+  const showB = useAtomValue(deckShowBAtom);
 
-  const handleClickToggleB = useAtomCallback( useCallback( ( get, set ) => {
-    set( deckShowBAtom, !get( deckShowBAtom ) );
-  }, [] ) );
+  const handleClickToggleB = useAtomCallback(useCallback((get, set) => {
+    set(deckShowBAtom, !get(deckShowBAtom));
+  }, []));
 
-  const handleClickMIDI = useAtomCallback( useCallback( ( _, set ) => {
-    set( midiModalIsOpeningAtom, true );
-  }, [] ) );
+  const handleClickMIDI = useAtomCallback(useCallback((_, set) => {
+    set(midiModalIsOpeningAtom, true);
+  }, []));
 
-  const handleClickHelp = useAtomCallback( useCallback( ( _, set ) => {
-    set( helpIsOpeningAtom, true );
-  }, [] ) );
+  const handleClickHelp = useAtomCallback(useCallback((_, set) => {
+    set(helpIsOpeningAtom, true);
+  }, []));
 
-  const handleClickSettings = useAtomCallback( useCallback( ( _, set ) => {
-    set( settingsIsOpeningAtom, true );
-  }, [] ) );
+  const handleClickSettings = useAtomCallback(useCallback((_, set) => {
+    set(settingsIsOpeningAtom, true);
+  }, []));
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <Logo>Wavenerd</Logo>
       <StyledHeaderTransport
-        hostDeck={ hostDeck }
+        hostDeck={hostDeck}
       />
       <StyledHeaderTime />
       <StyledHeaderBeatIndicators />
       <StyledHeaderBPM
-        hostDeck={ hostDeck }
+        hostDeck={hostDeck}
       />
       <StyledHeaderNudge
-        hostDeck={ hostDeck }
+        hostDeck={hostDeck}
       />
       <Margin />
       <StyledIconBBox
-        onClick={ handleClickToggleB }
-        style={ { opacity: showB ? 1.0 : 0.5 } }
+        onClick={handleClickToggleB}
+        style={{ opacity: showB ? 1.0 : 0.5 }}
         data-stalker="Toggle Deck B"
       />
       <StyledIconMIDI
-        onClick={ handleClickMIDI }
+        onClick={handleClickMIDI}
         data-stalker="MIDI"
       />
       <StyledIconSettings
-        onClick={ handleClickSettings }
+        onClick={handleClickSettings}
         data-stalker="Settings"
       />
       <StyledIconHelp
-        onClick={ handleClickHelp }
+        onClick={handleClickHelp}
         data-stalker="Show help"
       />
       <AnchorGit

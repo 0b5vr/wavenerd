@@ -17,40 +17,43 @@ const nullResult: RectResult = {
   left: 0,
   right: 0,
   top: 0,
-  width: 0
+  width: 0,
 };
 
-function getRect<T extends HTMLElement>( element?: T ): RectResult {
-  if ( element ) { return element.getBoundingClientRect(); }
-  else { return nullResult; }
+function getRect<T extends HTMLElement>(element?: T): RectResult {
+  if (element) {
+    return element.getBoundingClientRect();
+  } else {
+    return nullResult;
+  }
 }
 
 export function useRect<T extends HTMLElement>(
-  ref: React.RefObject<T>
+  ref: React.RefObject<T>,
 ): RectResult {
-  const [ rect, setRect ] = useState<RectResult>( nullResult );
+  const [rect, setRect] = useState<RectResult>(nullResult);
 
-  const handleResize = useCallback( () => {
-    if ( !ref.current ) { return; }
-    setRect( getRect( ref.current ) ); // Update client rect
-  }, [ ref ] );
+  const handleResize = useCallback(() => {
+    if (!ref.current) { return; }
+    setRect(getRect(ref.current)); // Update client rect
+  }, [ref]);
 
   useLayoutEffect(
     () => {
       const element = ref.current;
-      if ( !element ) { return; }
+      if (!element) { return; }
 
       handleResize();
 
-      const resizeObserver = new ResizeObserver( () => handleResize() );
-      resizeObserver.observe( element );
+      const resizeObserver = new ResizeObserver(() => handleResize());
+      resizeObserver.observe(element);
 
       return () => {
-        if ( !resizeObserver ) { return; }
+        if (!resizeObserver) { return; }
         resizeObserver.disconnect();
       };
     },
-    [ ref.current ]
+    [ref.current],
   );
 
   return rect;

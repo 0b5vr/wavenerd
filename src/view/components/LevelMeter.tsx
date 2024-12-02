@@ -25,7 +25,7 @@ const Fg = styled.div`
   width: 100%;
   height: 100%;
 
-  background: ${ ThemeVars.levelMeter };
+  background: ${ThemeVars.levelMeter};
 `;
 
 const Root = styled.div`
@@ -37,32 +37,32 @@ export const LevelMeter: React.FC<{
   level: number;
   peak: number;
   className?: string;
-}> = ( { level, peak, className } ) => {
+}> = ({ level, peak, className }) => {
   const p = useMemo(
-    () => saturate( peak * 0.8 ),
-    [ peak ]
+    () => saturate(peak * 0.8),
+    [peak],
   );
 
   const l = useMemo(
-    () => saturate( level * 0.8 ),
-    [ level ]
+    () => saturate(level * 0.8),
+    [level],
   );
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <Fg>
         <Bg
-          style={ {
-            height: `${ 100.0 - 100.0 * p }%`
-          } }
+          style={{
+            height: `${100.0 - 100.0 * p}%`,
+          }}
         />
         <Bg2
-          style={ {
-            top: `calc( ${ 100.0 - 100.0 * p }% + 2px )`,
-            height: `calc( ${ 100.0 * ( p - l ) }% - 2px )`
-          } }
+          style={{
+            top: `calc( ${100.0 - 100.0 * p}% + 2px )`,
+            height: `calc( ${100.0 * (p - l)}% - 2px )`,
+          }}
         />
       </Fg>
     </Root>

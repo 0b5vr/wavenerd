@@ -42,7 +42,7 @@ export const themeSolarizedDark: Theme = {
 
     gray: base00,
 
-    knobColor: `linear-gradient(to bottom, ${ base3 }, ${ base2 })`,
+    knobColor: `linear-gradient(to bottom, ${base3}, ${base2})`,
     knobShadow: base03,
 
     accent: blue,
@@ -52,9 +52,9 @@ export const themeSolarizedDark: Theme = {
 
     levelMeter: `linear-gradient(
       to bottom,
-      ${ red } 20%,
-      ${ yellow } 20%,
-      ${ cyan } 100%
+      ${red} 20%,
+      ${yellow} 20%,
+      ${cyan} 100%
     )`,
   },
   code: {

@@ -25,16 +25,16 @@ const Root = styled.div`
 // == components ===================================================================================
 export const HeaderTime: React.FC<{
   className?: string;
-}> = ( { className } ) => {
-  const time = useAtomValue( deckTimeAtom );
+}> = ({ className }) => {
+  const time = useAtomValue(deckTimeAtom);
 
   return (
     <Root
-      className={ className }
+      className={className}
       data-stalker="Current Global Time (time.w)"
     >
       <Label>TIME</Label>
-      <Value>{ time.toFixed( 2 ) }</Value>
+      <Value>{ time.toFixed(2) }</Value>
     </Root>
   );
 };

@@ -1,5 +1,3 @@
-/* eslint-disable sort-imports */
-
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
@@ -15,7 +13,7 @@ import { useSettings } from '../stores/hooks/useSettings';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 
 // == styles =======================================================================================
-const StyledReactCodeMirror = styled( ReactCodeMirror )`
+const StyledReactCodeMirror = styled(ReactCodeMirror)`
   height: 100%;
 
   .cm-editor {
@@ -27,21 +25,21 @@ const StyledReactCodeMirror = styled( ReactCodeMirror )`
   }
 `;
 
-const StyledSimpleBar = styled( SimpleBar )`
+const StyledSimpleBar = styled(SimpleBar)`
   width: 100%;
   height: 100%;
 `;
 
 const Overlay = styled.div<{ isDragging: boolean }>`
-  display: ${ ( { isDragging } ) => isDragging ? 'block' : 'none' };
+  display: ${({ isDragging }) => isDragging ? 'block' : 'none'};
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background: ${ ThemeVars.fore };
+  background: ${ThemeVars.fore};
   opacity: 0.125;
-  pointer-events: ${ ( { isDragging } ) => isDragging ? 'auto' : 'none' };
+  pointer-events: ${({ isDragging }) => isDragging ? 'auto' : 'none'};
 `;
 
 const Root = styled.div`
@@ -56,32 +54,32 @@ export const DeckEditor: React.FC<{
   onApply: () => void;
   onApplyImmediately: () => void;
   className?: string;
-}> = ( {
+}> = ({
   codeAtom,
   hasEditAtom,
   onCompile,
   onApply,
   onApplyImmediately,
   className,
-} ) => {
-  const [ isDragging, setIsDragging ] = useState( false );
-  const [ code, setCode ] = useAtom( codeAtom );
-  const setHasEdit = useSetAtom( hasEditAtom );
-  const themeString = useSettings( 'theme' );
-  const font = useSettings( 'editorFont' );
-  const fontVariantLigatures = useSettings( 'editorFontVariantLigatures' );
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [code, setCode] = useAtom(codeAtom);
+  const setHasEdit = useSetAtom(hasEditAtom);
+  const themeString = useSettings('theme');
+  const font = useSettings('editorFont');
+  const fontVariantLigatures = useSettings('editorFontVariantLigatures');
 
-  const theme = ( themes[ themeString ] ?? themes[ 'monokaiSharp' ] ).cmTheme;
+  const theme = (themes[themeString] ?? themes['monokaiSharp']).cmTheme;
 
-  const fontExtension = useMemo( () => {
-    const theme = EditorView.theme( {
+  const fontExtension = useMemo(() => {
+    const theme = EditorView.theme({
       '.cm-scroller': {
         font,
         fontVariantLigatures,
       },
-    } );
-    return [ theme ];
-  }, [ font, fontVariantLigatures ] );
+    });
+    return [theme];
+  }, [font, fontVariantLigatures]);
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = [
@@ -115,86 +113,86 @@ export const DeckEditor: React.FC<{
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleChange = useCallback(
-    ( value: string ) => {
-      setCode( value );
-      setHasEdit( true );
+    (value: string) => {
+      setCode(value);
+      setHasEdit(true);
     },
-    []
+    [],
   );
 
   const handleFile = useCallback(
-    ( files: FileList ) => {
-      const file = files && files[ 0 ];
-      if ( file ) {
+    (files: FileList) => {
+      const file = files && files[0];
+      if (file) {
         const reader = new FileReader();
         reader.onload = () => {
           const code = reader.result as string;
-          setCode( code );
+          setCode(code);
         };
-        reader.readAsText( file );
+        reader.readAsText(file);
       }
     },
-    []
+    [],
   );
 
   const handleDragOver = useCallback(
-    ( event: React.DragEvent ) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
-      setIsDragging( true );
+      setIsDragging(true);
     },
-    []
+    [],
   );
 
   const handleDragLeave = useCallback(
-    ( event: React.DragEvent ) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
-      setIsDragging( false );
+      setIsDragging(false);
     },
-    []
+    [],
   );
 
   const handleDrop = useCallback(
-    ( event: React.DragEvent ) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
-      setIsDragging( false );
+      setIsDragging(false);
 
       const files = event.dataTransfer.files;
-      handleFile( files );
+      handleFile(files);
     },
-    [ handleFile ]
+    [handleFile],
   );
 
   // -- component ----------------------------------------------------------------------------------
   return (
     <Root
-      className={ className }
-      onDragOver={ handleDragOver }
-      onDragLeave={ handleDragLeave }
-      onDrop={ handleDrop }
+      className={className}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       <StyledSimpleBar>
         <StyledReactCodeMirror
-          value={ code }
-          extensions={ [
+          value={code}
+          extensions={[
             cpp(),
-            keymap.of( customKeymap ),
+            keymap.of(customKeymap),
             backlayer,
-          ] }
-          theme={ [
+          ]}
+          theme={[
             theme.extensions,
             fontExtension,
-          ] }
-          onChange={ handleChange }
+          ]}
+          onChange={handleChange}
         />
       </StyledSimpleBar>
       <Overlay
-        isDragging={ isDragging }
+        isDragging={isDragging}
       />
     </Root>
   );

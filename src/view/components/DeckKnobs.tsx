@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
-const StyledDeckKnob = styled( DeckKnob )`
+const StyledDeckKnob = styled(DeckKnob)`
 `;
 
 const Root = styled.div`
@@ -20,7 +20,7 @@ const Root = styled.div`
 export const DeckKnobs: React.FC<{
   paramPrefix: string;
   className?: string;
-}> = ( { paramPrefix, className } ) => {
+}> = ({ paramPrefix, className }) => {
   const paramNames = [
     'knob0',
     'knob1',
@@ -33,15 +33,15 @@ export const DeckKnobs: React.FC<{
   ];
 
   return (
-    <Root className={ className }>
-      { paramNames.map( ( paramName ) => (
+    <Root className={className}>
+      { paramNames.map((paramName) => (
         <StyledDeckKnob
-          key={ paramName }
-          paramPrefix={ paramPrefix }
-          paramName={ paramName }
-          stalker={ `param_${ paramName }` }
+          key={paramName}
+          paramPrefix={paramPrefix}
+          paramName={paramName}
+          stalker={`param_${paramName}`}
         />
-      ) ) }
+      )) }
     </Root>
   );
 };

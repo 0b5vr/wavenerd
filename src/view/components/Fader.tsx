@@ -16,7 +16,7 @@ const Gutter = styled.div`
   top: calc( 50% - 3px );
   width: 100%;
   height: 6px;
-  background: ${ ThemeVars.knobGutter };
+  background: ${ThemeVars.knobGutter};
   pointer-events: none;
 `;
 
@@ -25,7 +25,7 @@ const Ruler = styled.div`
   top: 0px;
   width: 2px;
   height: 100%;
-  background: ${ ThemeVars.knobGuide };
+  background: ${ThemeVars.knobGuide};
   pointer-events: none;
 `;
 
@@ -34,7 +34,7 @@ const ShortRuler = styled.div`
   top: 15%;
   width: 1px;
   height: 70%;
-  background: ${ ThemeVars.knobGuide };
+  background: ${ThemeVars.knobGuide};
   pointer-events: none;
 `;
 
@@ -52,7 +52,7 @@ const KnobLine = styled.div`
   left: 7px;
   width: 2px;
   height: calc( 100% - 4px );
-  background: ${ ThemeVars.knobNotch };
+  background: ${ThemeVars.knobNotch};
   border-radius: 1px;
   pointer-events: none;
 `;
@@ -62,9 +62,9 @@ const Knob = styled.div`
   top: 4px;
   width: 16px;
   height: calc( 100% - 8px );
-  background: ${ ThemeVars.knobColor };
+  background: ${ThemeVars.knobColor};
   pointer-events: none;
-  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
+  box-shadow: 0 0 0 2px ${ThemeVars.back1}, 0 4px 8px 2px ${ThemeVars.knobShadow};
 `;
 
 const Root = styled.div`
@@ -76,63 +76,63 @@ const Root = styled.div`
 export const Fader: React.FC<{
   midiParamName: string;
   className?: string;
-}> = ( { midiParamName, className } ) => {
-  const refRoot = useRef<HTMLDivElement>( null );
-  const rectRoot = useRect( refRoot );
+}> = ({ midiParamName, className }) => {
+  const refRoot = useRef<HTMLDivElement>(null);
+  const rectRoot = useRect(refRoot);
 
-  const value = useMidiValue( midiParamName );
+  const value = useMidiValue(midiParamName);
 
   const handleClick = useCallback(
-    ( event: React.MouseEvent<HTMLDivElement> ) => {
-      mouseCombo( {
-        [ MouseComboBit.LMB ]: () => {
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      mouseCombo({
+        [MouseComboBit.LMB]: () => {
           const left = event.clientX - event.nativeEvent.offsetX;
-          const x0 = ( event.nativeEvent.offsetX );
-          const v0 = saturate( x0 / rectRoot.width );
-          MIDIMAN.setValue( midiParamName, v0 );
+          const x0 = (event.nativeEvent.offsetX);
+          const v0 = saturate(x0 / rectRoot.width);
+          MIDIMAN.setValue(midiParamName, v0);
 
           registerMouseEvent(
-            ( event ) => {
-              const x = ( event.clientX - left );
-              const v = saturate( x / rectRoot.width );
-              MIDIMAN.setValue( midiParamName, v );
-            }
+            (event) => {
+              const x = (event.clientX - left);
+              const v = saturate(x / rectRoot.width);
+              MIDIMAN.setValue(midiParamName, v);
+            },
           );
-        }
-      } )( event );
+        },
+      })(event);
     },
-    [ midiParamName, rectRoot.width ]
+    [midiParamName, rectRoot.width],
   );
 
   return (
     <Root
-      ref={ refRoot }
-      onMouseDown={ handleClick }
-      className={ className }
+      ref={refRoot}
+      onMouseDown={handleClick}
+      className={className}
       data-stalker="X Fader"
     >
       <RulerContainer>
-        <Ruler style={ { left: '0px' } } />
-        <ShortRuler style={ { left: 'calc( 0.1 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.2 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.3 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.4 * ( 100% - 1px ) )' } } />
-        <Ruler style={ { left: 'calc( 0.5 * ( 100% - 2px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.6 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.7 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.8 * ( 100% - 1px ) )' } } />
-        <ShortRuler style={ { left: 'calc( 0.9 * ( 100% - 1px ) )' } } />
-        <Ruler style={ { left: 'calc( 100% - 2px )' } } />
+        <Ruler style={{ left: '0px' }} />
+        <ShortRuler style={{ left: 'calc( 0.1 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.2 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.3 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.4 * ( 100% - 1px ) )' }} />
+        <Ruler style={{ left: 'calc( 0.5 * ( 100% - 2px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.6 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.7 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.8 * ( 100% - 1px ) )' }} />
+        <ShortRuler style={{ left: 'calc( 0.9 * ( 100% - 1px ) )' }} />
+        <Ruler style={{ left: 'calc( 100% - 2px )' }} />
       </RulerContainer>
       <Gutter />
       <Knob
-        style={ {
-          left: `calc( ${ 100.0 * value }% - 8px )`
-        } }
+        style={{
+          left: `calc( ${100.0 * value}% - 8px )`,
+        }}
       >
         <KnobLine />
       </Knob>
-      <MIDILearnable paramName={ midiParamName } />
+      <MIDILearnable paramName={midiParamName} />
     </Root>
   );
 };

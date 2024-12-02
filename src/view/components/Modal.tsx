@@ -4,14 +4,14 @@ import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
-const Close = styled( IconClose )`
+const Close = styled(IconClose)`
   position: absolute;
   right: 0px;
   top: -32px;
   width: 32px;
   height: 32px;
   padding: 3px;
-  color: ${ ThemeVars.fore };
+  color: ${ThemeVars.fore};
   cursor: pointer;
   border-radius: 16px;
 
@@ -32,9 +32,9 @@ const Plane = styled.div`
   max-height: calc( 100% - 32px );
   overflow: visible;
   border-radius: 4px;
-  background: ${ ThemeVars.modalBg };
-  color: ${ ThemeVars.modalFg };
-  box-shadow: 0 0 8px 0 ${ ThemeVars.black };
+  background: ${ThemeVars.modalBg};
+  color: ${ThemeVars.modalFg};
+  box-shadow: 0 0 8px 0 ${ThemeVars.black};
 `;
 
 const Root = styled.div`
@@ -51,21 +51,21 @@ const Root = styled.div`
 export const Modal: React.FC<{
   onClose?: () => void;
   children?: React.ReactNode;
-}> = ( { onClose, children } ) => {
+}> = ({ onClose, children }) => {
   const noopStopPropagation = useCallback(
-    ( event: React.MouseEvent ) => event.stopPropagation(),
+    (event: React.MouseEvent) => event.stopPropagation(),
     [],
   );
 
-  const handleClickClose = useCallback( () => {
+  const handleClickClose = useCallback(() => {
     onClose?.();
-  }, [ onClose ] );
+  }, [onClose]);
 
   return (
-    <Root onClick={ handleClickClose }>
-      <Plane onClick={ noopStopPropagation }>
+    <Root onClick={handleClickClose}>
+      <Plane onClick={noopStopPropagation}>
         <Close
-          onClick={ handleClickClose }
+          onClick={handleClickClose}
           data-stalker="Close"
         />
         { children }

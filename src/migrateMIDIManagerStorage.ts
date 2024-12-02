@@ -22,30 +22,30 @@ const nameMap20241123: Record<string, string> = {
   'deckB-knob7': '/deck_b/knob7',
 };
 
-function migrate20241123( data: any ): any {
-  if ( data.version != null && data.version >= 2024_11_23 ) { return data; }
+function migrate20241123(data: any): any {
+  if (data.version != null && data.version >= 2024_11_23) { return data; }
 
   // noteMap, 1 ch -> 16 ch
   const prevNoteMap: { [ note: string ]: string } | undefined = data.noteMap;
-  const newNoteMap: { [ note: string ]: string }[] = [ ...Array( 16 ) ].map( () => ( {} ) );
+  const newNoteMap: { [ note: string ]: string }[] = [...Array(16)].map(() => ({}));
 
   // noteMap, rename keys
-  if ( prevNoteMap != null ) {
-    for ( const [ note, prevKey ] of Object.entries( prevNoteMap ) ) {
-      const newKey = nameMap20241123[ prevKey ] ?? prevKey;
-      newNoteMap[ 0 ][ note ] = newKey;
+  if (prevNoteMap != null) {
+    for (const [note, prevKey] of Object.entries(prevNoteMap)) {
+      const newKey = nameMap20241123[prevKey] ?? prevKey;
+      newNoteMap[0][note] = newKey;
     }
   }
 
   // ccMap, 1 ch -> 16 ch
   const prevCCMap: { [ cc: string ]: string } | undefined = data.ccMap;
-  const newCCMap: { [ cc: string ]: string }[] = [ ...Array( 16 ) ].map( () => ( {} ) );
+  const newCCMap: { [ cc: string ]: string }[] = [...Array(16)].map(() => ({}));
 
   // ccMap, rename keys
-  if ( prevCCMap != null ) {
-    for ( const [ cc, prevKey ] of Object.entries( prevCCMap ) ) {
-      const newKey = nameMap20241123[ prevKey ] ?? prevKey;
-      newCCMap[ 0 ][ cc ] = newKey;
+  if (prevCCMap != null) {
+    for (const [cc, prevKey] of Object.entries(prevCCMap)) {
+      const newKey = nameMap20241123[prevKey] ?? prevKey;
+      newCCMap[0][cc] = newKey;
     }
   }
 
@@ -53,10 +53,10 @@ function migrate20241123( data: any ): any {
   const prevValues: { [ key: string ]: number } | undefined = data.values;
   const newValues: { [ key: string ]: number } = {};
 
-  if ( prevValues != null ) {
-    for ( const [ key, value ] of Object.entries( prevValues ) ) {
-      const newKey = nameMap20241123[ key ] ?? key;
-      newValues[ newKey ] = value;
+  if (prevValues != null) {
+    for (const [key, value] of Object.entries(prevValues)) {
+      const newKey = nameMap20241123[key] ?? key;
+      newValues[newKey] = value;
     }
   }
 
@@ -68,11 +68,11 @@ function migrate20241123( data: any ): any {
   };
 }
 
-export function migrateMIDIManagerStorage( key: string ): void {
-  const rawData = localStorage.getItem( key );
-  let data = rawData ? JSON.parse( rawData ) : { version: LATEST_VERSION };
+export function migrateMIDIManagerStorage(key: string): void {
+  const rawData = localStorage.getItem(key);
+  let data = rawData ? JSON.parse(rawData) : { version: LATEST_VERSION };
 
-  data = migrate20241123( data );
+  data = migrate20241123(data);
 
-  localStorage.setItem( key, JSON.stringify( data ) );
+  localStorage.setItem(key, JSON.stringify(data));
 }

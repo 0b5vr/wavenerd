@@ -12,7 +12,7 @@ const Label = styled.div`
   opacity: 0.7;
 `;
 
-const Value = styled( NumberParam )`
+const Value = styled(NumberParam)`
   font-size: 14px;
   line-height: 1.0;
   min-width: 64px;
@@ -28,24 +28,24 @@ const Root = styled.div`
 export const HeaderBPM: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ( { hostDeck, className } ) => {
-  const bpm = useAtomValue( deckBPMAtom );
+}> = ({ hostDeck, className }) => {
+  const bpm = useAtomValue(deckBPMAtom);
 
   return (
     <Root
-      className={ className }
+      className={className}
       data-stalker="Beat Per Minute&#10;Drag up/down to change BPM, Double click to edit"
     >
       <Label>BPM</Label>
       <Value
         type="float"
-        value={ bpm }
-        onChange={ ( value ) => {
-          hostDeck.bpm = Math.max( 40.0, value );
-        } }
-        fixedDigits={ 2 }
-        deltaCoarse={ 1.0 }
-        deltaFine={ 0.1 }
+        value={bpm}
+        onChange={(value) => {
+          hostDeck.bpm = Math.max(40.0, value);
+        }}
+        fixedDigits={2}
+        deltaCoarse={1.0}
+        deltaFine={0.1}
       />
     </Root>
   );

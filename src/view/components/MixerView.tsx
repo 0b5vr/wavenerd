@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
-const StyledKnob = styled( Knob )`
+const StyledKnob = styled(Knob)`
   width: 16px;
   height: 16px;
 `;
@@ -37,11 +37,11 @@ const CenterRow = styled.div`
   margin: 8px 0;
 `;
 
-const StyledMixerChannelA = styled( MixerChannelView )`
+const StyledMixerChannelA = styled(MixerChannelView)`
   flex-grow: 1;
 `;
 
-const StyledMixerChannelB = styled( MixerChannelView )`
+const StyledMixerChannelB = styled(MixerChannelView)`
   flex-grow: 1;
 `;
 
@@ -52,19 +52,19 @@ const Root = styled.div`
 // == children =====================================================================================
 function CueMixKnob(): JSX.Element {
   const paramName = '/cue/master_mix';
-  const value = useMidiValue( paramName );
+  const value = useMidiValue(paramName);
 
-  const stalkerTextWithValue = useMemo( () => {
-    return `Cue Master Mix: ${ ( value * 100.0 ).toFixed() }%`;
-  }, [ value ] );
+  const stalkerTextWithValue = useMemo(() => {
+    return `Cue Master Mix: ${(value * 100.0).toFixed()}%`;
+  }, [value]);
 
   return (
     <KnobAndStuff>
       <StyledKnob
-        midiParamName={ paramName }
-        resetValue={ 0.0 }
-        deltaValuePerPixel={ 1.0 / 64.0 }
-        stalkerText={ stalkerTextWithValue }
+        midiParamName={paramName}
+        resetValue={0.0}
+        deltaValuePerPixel={1.0 / 64.0}
+        stalkerText={stalkerTextWithValue}
       />
       <KnobLabel>MIX</KnobLabel>
     </KnobAndStuff>
@@ -74,10 +74,10 @@ function CueMixKnob(): JSX.Element {
 // == components ===================================================================================
 export const MixerView: React.FC<{
   className?: string;
-}> = ( { className } ) => {
+}> = ({ className }) => {
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <StyledMixerChannelA
         paramPrefix="/mixer/channel_a"

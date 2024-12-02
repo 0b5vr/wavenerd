@@ -24,16 +24,16 @@ const StyleIconButton = css`
   }
 `;
 
-const StyledIconRewind = styled( IconRewind )`
-  ${ StyleIconButton }
+const StyledIconRewind = styled(IconRewind)`
+  ${StyleIconButton}
 `;
 
-const StyledIconPlay = styled( IconPlay )`
-  ${ StyleIconButton }
+const StyledIconPlay = styled(IconPlay)`
+  ${StyleIconButton}
 `;
 
-const StyledIconPause = styled( IconPause )`
-  ${ StyleIconButton }
+const StyledIconPause = styled(IconPause)`
+  ${StyleIconButton}
 `;
 
 const Root = styled.div`
@@ -44,38 +44,38 @@ const Root = styled.div`
 export const HeaderTransport: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ( { hostDeck, className } ) => {
-  const isPlaying = useAtomValue( deckIsPlayingAtom );
+}> = ({ hostDeck, className }) => {
+  const isPlaying = useAtomValue(deckIsPlayingAtom);
 
-  const handleClickRewind = useCallback( () => {
+  const handleClickRewind = useCallback(() => {
     hostDeck.rewind();
-  }, [] );
+  }, []);
 
-  const handleClickPlay = useCallback( () => {
+  const handleClickPlay = useCallback(() => {
     hostDeck.play();
-  }, [] );
+  }, []);
 
-  const handleClickPause = useCallback( () => {
+  const handleClickPause = useCallback(() => {
     hostDeck.pause();
-  }, [] );
+  }, []);
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <StyledIconRewind
-        onClick={ handleClickRewind }
+        onClick={handleClickRewind}
         data-stalker="Rewind"
       />
       { !isPlaying && (
         <StyledIconPlay
-          onClick={ handleClickPlay }
+          onClick={handleClickPlay}
           data-stalker="Play"
         />
       ) }
       { isPlaying && (
         <StyledIconPause
-          onClick={ handleClickPause }
+          onClick={handleClickPause}
           data-stalker="Pause"
         />
       ) }

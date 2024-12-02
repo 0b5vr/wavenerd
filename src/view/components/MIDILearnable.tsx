@@ -1,3 +1,4 @@
+import React from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { openContextMenuAtom } from '../stores/atoms/contextMenu';
@@ -13,7 +14,7 @@ const LearningBorder = styled.div`
   top: 0px;
   width: 100%;
   height: 100%;
-  box-shadow: 0 0 0 2px ${ ThemeVars.accent };
+  box-shadow: 0 0 0 2px ${ThemeVars.accent};
 `;
 
 const Root = styled.div`
@@ -30,34 +31,34 @@ interface Props {
   className?: string;
 }
 
-export function MIDILearnable( props: Props ): JSX.Element {
+export function MIDILearnable(props: Props): JSX.Element {
   const { paramName, className } = props;
 
-  const isLearning = useMidiLearning( paramName );
+  const isLearning = useMidiLearning(paramName);
 
-  const handleContextMenu = useAtomCallback( useCallback(
-    ( _, set, event: React.MouseEvent<HTMLDivElement> ) => {
+  const handleContextMenu = useAtomCallback(useCallback(
+    (_, set, event: React.MouseEvent<HTMLDivElement>) => {
       event.preventDefault();
 
-      set( openContextMenuAtom, {
-        position: [ event.clientX, event.clientY ],
+      set(openContextMenuAtom, {
+        position: [event.clientX, event.clientY],
         commands: [
           {
             name: 'Learn MIDI',
             callback: () => {
-              MIDIMAN.learn( paramName );
-            }
-          }
-        ]
-      } );
+              MIDIMAN.learn(paramName);
+            },
+          },
+        ],
+      });
     },
-    [ paramName ],
-  ) );
+    [paramName],
+  ));
 
   return (
     <Root
-      className={ className }
-      onContextMenu={ handleContextMenu }
+      className={className}
+      onContextMenu={handleContextMenu}
     >
       { isLearning && <LearningBorder /> }
     </Root>

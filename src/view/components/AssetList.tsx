@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
-const StyledAssetListCategory = styled( AssetListCategory )`
+const StyledAssetListCategory = styled(AssetListCategory)`
 `;
 
 const Root = styled.div`
@@ -19,78 +19,78 @@ const Root = styled.div`
 export const AssetList: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ( { hostDeck, className } ) => {
-  const sortedSampleList = useAtomValue( deckSortedSampleListAtom );
-  const sortedWavetableList = useAtomValue( deckSortedWavetableListAtom );
-  const sortedImageList = useAtomValue( deckSortedImageListAtom );
+}> = ({ hostDeck, className }) => {
+  const sortedSampleList = useAtomValue(deckSortedSampleListAtom);
+  const sortedWavetableList = useAtomValue(deckSortedWavetableListAtom);
+  const sortedImageList = useAtomValue(deckSortedImageListAtom);
 
   const handleLoadSample = useCallback(
-    async ( name: string, file: File ) => {
+    async (name: string, file: File) => {
       const buffer = await file.arrayBuffer();
-      await hostDeck.loadSample( name, buffer );
+      await hostDeck.loadSample(name, buffer);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   const handleDeleteSample = useCallback(
-    ( name: string ) => {
-      hostDeck.deleteSample( name );
+    (name: string) => {
+      hostDeck.deleteSample(name);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   const handleLoadWavetable = useCallback(
-    async ( name: string, file: File ) => {
+    async (name: string, file: File) => {
       const buffer = await file.arrayBuffer();
-      const array = new Float32Array( buffer );
-      await hostDeck.loadWavetable( name, array );
+      const array = new Float32Array(buffer);
+      await hostDeck.loadWavetable(name, array);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   const handleDeleteWavetable = useCallback(
-    ( name: string ) => {
-      hostDeck.deleteWavetable( name );
+    (name: string) => {
+      hostDeck.deleteWavetable(name);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   const handleLoadImage = useCallback(
-    async ( name: string, file: File ) => {
-      const image = await loadFileAsImage( file );
-      await hostDeck.loadImage( name, image );
+    async (name: string, file: File) => {
+      const image = await loadFileAsImage(file);
+      await hostDeck.loadImage(name, image);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   const handleDeleteImage = useCallback(
-    ( name: string ) => {
-      hostDeck.deleteImage( name );
+    (name: string) => {
+      hostDeck.deleteImage(name);
     },
-    [ hostDeck ],
+    [hostDeck],
   );
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <StyledAssetListCategory
         title="Samples"
-        assets={ sortedSampleList }
-        onLoadAsset={ handleLoadSample }
-        onDeleteAsset={ handleDeleteSample }
+        assets={sortedSampleList}
+        onLoadAsset={handleLoadSample}
+        onDeleteAsset={handleDeleteSample}
       />
       <StyledAssetListCategory
         title="Wavetables"
-        assets={ sortedWavetableList }
-        onLoadAsset={ handleLoadWavetable }
-        onDeleteAsset={ handleDeleteWavetable }
+        assets={sortedWavetableList}
+        onLoadAsset={handleLoadWavetable}
+        onDeleteAsset={handleDeleteWavetable}
       />
       <StyledAssetListCategory
         title="Images"
-        assets={ sortedImageList }
-        onLoadAsset={ handleLoadImage }
-        onDeleteAsset={ handleDeleteImage }
+        assets={sortedImageList}
+        onLoadAsset={handleLoadImage}
+        onDeleteAsset={handleDeleteImage}
       />
     </Root>
   );

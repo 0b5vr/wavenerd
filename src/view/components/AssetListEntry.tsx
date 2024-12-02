@@ -10,13 +10,13 @@ const Name = styled.div`
   flex-shrink: 1;
 `;
 
-const ButtonDelete = styled( IconBin )`
+const ButtonDelete = styled(IconBin)`
   display: none;
   width: 16px;
   height: 16px;
   margin-right: 8px;
 
-  fill: ${ ThemeVars.fore };
+  fill: ${ThemeVars.fore};
   cursor: pointer;
 
   &:hover {
@@ -31,14 +31,14 @@ const ButtonDelete = styled( IconBin )`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ ThemeVars.back3 };
+  background: ${ThemeVars.back3};
   font-size: 12px;
 
   * {
     flex-shrink: 0;
   }
 
-  &:hover ${ ButtonDelete } {
+  &:hover ${ButtonDelete} {
     display: block;
   }
 `;
@@ -46,26 +46,26 @@ const Root = styled.div`
 // == components ===================================================================================
 export const AssetListEntry: React.FC<{
   name: string;
-  onDeleteAsset: ( name: string ) => void;
+  onDeleteAsset: (name: string) => void;
   className?: string;
-}> = ( { name, onDeleteAsset, className } ) => {
+}> = ({ name, onDeleteAsset, className }) => {
   const handleClickDelete = useCallback(
-    ( event: React.MouseEvent ) => {
+    (event: React.MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
-      onDeleteAsset( name );
+      onDeleteAsset(name);
     },
-    [ name ]
+    [name],
   );
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <Name>{ name }</Name>
       <ButtonDelete
-        onClick={ handleClickDelete }
+        onClick={handleClickDelete}
       />
     </Root>
   );

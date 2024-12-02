@@ -1,17 +1,17 @@
 import React, { useLayoutEffect, useState } from 'react';
 
 export function useElement<T extends HTMLElement | SVGElement>(
-  ref: React.RefObject<T>
+  ref: React.RefObject<T>,
 ): T | null {
-  const [ element, setElement ] = useState( ref.current );
+  const [element, setElement] = useState(ref.current);
 
   useLayoutEffect(
     () => {
-      if ( ref.current !== element ) {
-        setElement( ref.current );
+      if (ref.current !== element) {
+        setElement(ref.current);
       }
     },
-    [ element, ref ]
+    [element, ref],
   );
 
   return element;

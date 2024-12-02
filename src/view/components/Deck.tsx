@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 
 // == styles =======================================================================================
-const StyledEditor = styled( DeckEditor )`
+const StyledEditor = styled(DeckEditor)`
   position: absolute;
   left: 0;
   top: 0;
@@ -20,7 +20,7 @@ const StyledEditor = styled( DeckEditor )`
   height: calc( 100% - 24px );
 `;
 
-const StyledStatusBar = styled( DeckStatusBar )`
+const StyledStatusBar = styled(DeckStatusBar)`
   position: absolute;
   left: 0;
   bottom: 0;
@@ -28,7 +28,7 @@ const StyledStatusBar = styled( DeckStatusBar )`
   height: 24px;
 `;
 
-const StyledVectorscope = styled( DeckVectorscope )`
+const StyledVectorscope = styled(DeckVectorscope)`
   position: absolute;
   left: 0;
   top: 0;
@@ -37,7 +37,7 @@ const StyledVectorscope = styled( DeckVectorscope )`
   pointer-events: none;
 `;
 
-const StyledSpectrogram = styled( DeckSpectrum )`
+const StyledSpectrogram = styled(DeckSpectrum)`
   position: absolute;
   left: 0;
   top: 0;
@@ -48,7 +48,7 @@ const StyledSpectrogram = styled( DeckSpectrum )`
 
 const Root = styled.div`
   position: relative;
-  background: ${ ThemeVars.codeBackground };
+  background: ${ThemeVars.codeBackground};
 `;
 
 // == components ===================================================================================
@@ -62,7 +62,7 @@ export const Deck: React.FC<{
   hasEditAtom: PrimitiveAtom<boolean>;
   analyser: Analyser;
   className?: string;
-}> = ( {
+}> = ({
   className,
   cueStatusAtom,
   errorAtom,
@@ -72,73 +72,73 @@ export const Deck: React.FC<{
   deck,
   gainParamName,
   storageKeyName,
-} ) => {
+}) => {
   // prevent terrible consequence
-  const handleBeforeUnload = useAtomCallback( useCallback( ( get ) => {
-    const hasEdit = get( hasEditAtom );
-    if ( hasEdit ) {
+  const handleBeforeUnload = useAtomCallback(useCallback((get) => {
+    const hasEdit = get(hasEditAtom);
+    if (hasEdit) {
       return 'You will lose all of your changes on the editor!';
     }
-  }, [ hasEditAtom ] ) );
+  }, [hasEditAtom]));
 
-  useEffect( () => {
-    window.addEventListener( 'beforeunload', handleBeforeUnload );
-    return () => window.removeEventListener( 'beforeunload', handleBeforeUnload );
-  }, [ handleBeforeUnload ] );
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [handleBeforeUnload]);
 
-  const handleCompile = useAtomCallback( useCallback( async ( get, set ) => {
-    const code = get( codeAtom );
-    await deck.compile( code );
-    deckCodeStorage.set( storageKeyName, code );
-    set( hasEditAtom, false );
-  }, [ codeAtom, hasEditAtom, deck, storageKeyName ] ) );
+  const handleCompile = useAtomCallback(useCallback(async (get, set) => {
+    const code = get(codeAtom);
+    await deck.compile(code);
+    deckCodeStorage.set(storageKeyName, code);
+    set(hasEditAtom, false);
+  }, [codeAtom, hasEditAtom, deck, storageKeyName]));
 
   const handleApply = useCallback(
     async () => {
-      if ( deck.cueStatus === 'none' ) {
+      if (deck.cueStatus === 'none') {
         await handleCompile();
       }
       deck.applyCue();
     },
-    [ handleCompile ]
+    [handleCompile],
   );
 
   const handleApplyImmediately = useCallback(
     async () => {
-      if ( deck.cueStatus === 'none' ) {
+      if (deck.cueStatus === 'none') {
         await handleCompile();
       }
       deck.applyCueImmediately();
     },
-    [ handleCompile ]
+    [handleCompile],
   );
 
   // apply once on init
-  useEffect( () => {
+  useEffect(() => {
     handleApplyImmediately();
-  }, [ handleApplyImmediately ] );
+  }, [handleApplyImmediately]);
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
-      <StyledVectorscope analyser={ analyser } />
-      <StyledSpectrogram analyser={ analyser } />
+      <StyledVectorscope analyser={analyser} />
+      <StyledSpectrogram analyser={analyser} />
       <StyledEditor
-        codeAtom={ codeAtom }
-        hasEditAtom={ hasEditAtom }
-        onCompile={ handleCompile }
-        onApply={ handleApply }
-        onApplyImmediately={ handleApplyImmediately }
+        codeAtom={codeAtom}
+        hasEditAtom={hasEditAtom}
+        onCompile={handleCompile}
+        onApply={handleApply}
+        onApplyImmediately={handleApplyImmediately}
       />
       <StyledStatusBar
-        errorAtom={ errorAtom }
-        cueStatusAtom={ cueStatusAtom }
-        hasEditAtom={ hasEditAtom }
-        onCompile={ handleCompile }
-        onApply={ handleApply }
-        onApplyImmediately={ handleApplyImmediately }
-        gainParamName={ gainParamName }
+        errorAtom={errorAtom}
+        cueStatusAtom={cueStatusAtom}
+        hasEditAtom={hasEditAtom}
+        onCompile={handleCompile}
+        onApply={handleApply}
+        onApplyImmediately={handleApplyImmediately}
+        gainParamName={gainParamName}
       />
     </Root>
   );

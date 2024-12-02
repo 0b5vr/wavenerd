@@ -34,32 +34,32 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
   public frequencyL: Float32Array;
   public frequencyR: Float32Array;
 
-  public constructor( audio: AudioContext ) {
+  public constructor(audio: AudioContext) {
     super();
 
     this.__audio = audio;
 
-    this.__splitterNode = audio.createChannelSplitter( 2 );
+    this.__splitterNode = audio.createChannelSplitter(2);
     this.__analyserNodeL = audio.createAnalyser();
     this.__analyserNodeR = audio.createAnalyser();
 
     this.__analyserNodeL.fftSize = 4096;
     this.__analyserNodeR.fftSize = 4096;
 
-    this.__splitterNode.connect( this.__analyserNodeL, 0 );
-    this.__splitterNode.connect( this.__analyserNodeR, 1 );
+    this.__splitterNode.connect(this.__analyserNodeL, 0);
+    this.__splitterNode.connect(this.__analyserNodeR, 1);
 
-    this.timeDomainL = new Float32Array( ANALYSER_TIME_DOMAIN_SIZE );
-    this.timeDomainR = new Float32Array( ANALYSER_TIME_DOMAIN_SIZE );
-    this.frequencyL = new Float32Array( ANALYSER_FREQUENCY_SIZE );
-    this.frequencyR = new Float32Array( ANALYSER_FREQUENCY_SIZE );
+    this.timeDomainL = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
+    this.timeDomainR = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
+    this.frequencyL = new Float32Array(ANALYSER_FREQUENCY_SIZE);
+    this.frequencyR = new Float32Array(ANALYSER_FREQUENCY_SIZE);
   }
 
-  public update( deltaTime: number ): AnalyserResult {
-    this.__analyserNodeL.getFloatTimeDomainData( this.timeDomainL );
-    this.__analyserNodeR.getFloatTimeDomainData( this.timeDomainR );
-    this.__analyserNodeL.getFloatFrequencyData( this.frequencyL );
-    this.__analyserNodeR.getFloatFrequencyData( this.frequencyR );
+  public update(deltaTime: number): AnalyserResult {
+    this.__analyserNodeL.getFloatTimeDomainData(this.timeDomainL);
+    this.__analyserNodeR.getFloatTimeDomainData(this.timeDomainR);
+    this.__analyserNodeL.getFloatFrequencyData(this.frequencyL);
+    this.__analyserNodeR.getFloatFrequencyData(this.frequencyR);
 
     const ret = {
       deltaTime: deltaTime,
@@ -69,7 +69,7 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
       frequencyR: this.frequencyR,
     };
 
-    this.__emit( 'update', ret );
+    this.__emit('update', ret);
 
     return ret;
   }

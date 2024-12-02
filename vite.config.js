@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig( {
+export default defineConfig({
   optimizeDeps: {
     exclude: [
       '@0b5vr/wavenerd-deck',
@@ -11,7 +11,7 @@ export default defineConfig( {
   },
   plugins: [
     react(),
-    Icons( { compiler: 'jsx', jsx: 'react' } ),
+    Icons({ compiler: 'jsx', jsx: 'react' }),
   ],
   base: './',
-} );
+});

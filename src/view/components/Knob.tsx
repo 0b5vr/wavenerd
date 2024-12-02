@@ -16,7 +16,7 @@ const Head = styled.div`
   left: 45%;
   width: 10%;
   height: 35%;
-  background: ${ ThemeVars.knobNotch };
+  background: ${ThemeVars.knobNotch};
   border-radius: 10000px;
   pointer-events: none;
 `;
@@ -36,8 +36,8 @@ const Body = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10000px;
-  background: ${ ThemeVars.knobColor };
-  box-shadow: 0 0 0 2px ${ ThemeVars.back1 }, 0 4px 8px 2px ${ ThemeVars.knobShadow };
+  background: ${ThemeVars.knobColor};
+  box-shadow: 0 0 0 2px ${ThemeVars.back1}, 0 4px 8px 2px ${ThemeVars.knobShadow};
 `;
 
 const Root = styled.div`
@@ -58,53 +58,53 @@ interface Props {
   stalkerText?: string;
 }
 
-export const Knob: React.FC<Props> = ( props ) => {
+export const Knob: React.FC<Props> = (props) => {
   const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
 
-  const value = useMidiValue( midiParamName );
+  const value = useMidiValue(midiParamName);
 
   const checkDoubleClick = useDoubleTap();
 
   const handleClick = useCallback(
-    ( event: React.MouseEvent<HTMLDivElement> ) => {
-      mouseCombo( {
-        [ MouseComboBit.LMB ]: () => {
-          if ( checkDoubleClick() ) {
-            MIDIMAN.setValue( midiParamName, resetValue );
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      mouseCombo({
+        [MouseComboBit.LMB]: () => {
+          if (checkDoubleClick()) {
+            MIDIMAN.setValue(midiParamName, resetValue);
             return;
           }
 
           const y0 = event.clientY;
-          const v0 = MIDIMAN.midi( midiParamName );
+          const v0 = MIDIMAN.midi(midiParamName);
 
           registerMouseEvent(
-            ( event ) => {
-              const y = ( y0 - event.clientY );
-              const v = saturate( v0 + y * deltaValuePerPixel );
-              MIDIMAN.setValue( midiParamName, v );
-            }
+            (event) => {
+              const y = (y0 - event.clientY);
+              const v = saturate(v0 + y * deltaValuePerPixel);
+              MIDIMAN.setValue(midiParamName, v);
+            },
           );
         },
-      } )( event );
+      })(event);
     },
-    [ resetValue, midiParamName, deltaValuePerPixel ]
+    [resetValue, midiParamName, deltaValuePerPixel],
   );
 
   return (
     <Root
-      onMouseDown={ handleClick }
-      className={ className }
-      data-stalker={ stalkerText }
+      onMouseDown={handleClick}
+      className={className}
+      data-stalker={stalkerText}
     >
       <Body />
       <HeadContainer
-        style={ {
-          transform: `rotate( ${ 210 + 300.0 * value }deg )`
-        } }
+        style={{
+          transform: `rotate( ${210 + 300.0 * value}deg )`,
+        }}
       >
         <Head />
       </HeadContainer>
-      <MIDILearnable paramName={ midiParamName } />
+      <MIDILearnable paramName={midiParamName} />
     </Root>
   );
 };

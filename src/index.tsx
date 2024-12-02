@@ -1,5 +1,6 @@
 import 'symbol-observable';
 
+import React from 'react';
 import { SETTINGSMAN, Settings } from './SettingsManager';
 import { App } from './view/components/App';
 import { AudioDestinationRouter } from './AudioDestinationRouter';
@@ -11,8 +12,8 @@ import { Reverb } from './Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 
-const canvas = document.createElement( 'canvas' );
-const gl = canvas.getContext( 'webgl2' )!;
+const canvas = document.createElement('canvas');
+const gl = canvas.getContext('webgl2')!;
 
 const audio = new AudioContext();
 audio.suspend();
@@ -24,31 +25,31 @@ const deckOptions = {
   audio,
   latencyBlocks: 32,
 };
-const deckA = new WavenerdDeck( deckOptions );
-const deckB = new WavenerdDeck( { ...deckOptions, hostDeck: deckA } );
+const deckA = new WavenerdDeck(deckOptions);
+const deckB = new WavenerdDeck({ ...deckOptions, hostDeck: deckA });
 
-const mixer = new Mixer( audio );
+const mixer = new Mixer(audio);
 
-deckA.node.connect( mixer.inputA );
-deckB.node.connect( mixer.inputB );
-mixer.output.connect( master );
+deckA.node.connect(mixer.inputA);
+deckB.node.connect(mixer.inputB);
+mixer.output.connect(master);
 
-const reverb = new Reverb( audio );
+const reverb = new Reverb(audio);
 reverb.gain.value = SETTINGSMAN.values.masterReverbGain;
-mixer.output.connect( reverb.input );
-reverb.connect( master );
+mixer.output.connect(reverb.input);
+reverb.connect(master);
 
-const cueMixer = new CueMixer( audio );
-mixer.channelA.outputForAnal.connect( cueMixer.inputA );
-mixer.channelB.outputForAnal.connect( cueMixer.inputB );
-master.connect( cueMixer.inputMaster );
+const cueMixer = new CueMixer(audio);
+mixer.channelA.outputForAnal.connect(cueMixer.inputA);
+mixer.channelB.outputForAnal.connect(cueMixer.inputB);
+master.connect(cueMixer.inputMaster);
 
-const router = new AudioDestinationRouter( audio );
+const router = new AudioDestinationRouter(audio);
 
-router.addSource( 'master', master );
-router.addSource( 'cue', cueMixer.output );
-router.addSource( 'deckA', deckA.node );
-router.addSource( 'deckB', deckB.node );
+router.addSource('master', master);
+router.addSource('cue', cueMixer.output);
+router.addSource('deckA', deckA.node);
+router.addSource('deckB', deckB.node);
 
 const clock = new ClockRealtime();
 clock.play();
@@ -58,99 +59,99 @@ function update() {
 
   deckA.update();
   deckB.update();
-  mixer.updateAnalyser( clock.deltaTime );
+  mixer.updateAnalyser(clock.deltaTime);
 
-  setTimeout( update, 10 );
+  setTimeout(update, 10);
 }
 update();
 
 // == midi =========================================================================================
-function applyMidiParam( { key, value }: { key: string, value: number } ) {
-  ( key === '/mixer/xfader_pos' ) && ( mixer.xFaderPos = value );
+function applyMidiParam({ key, value }: { key: string; value: number }) {
+  if (key === '/mixer/xfader_pos') { mixer.xFaderPos = value; }
 
-  ( key === '/mixer/channel_a/gain' ) && ( mixer.channelA.gain = 4.0 * value * value );
-  ( key === '/mixer/channel_a/eq/high' ) && ( mixer.channelA.eq.high = 2.0 * value );
-  ( key === '/mixer/channel_a/eq/mid' ) && ( mixer.channelA.eq.mid = 2.0 * value );
-  ( key === '/mixer/channel_a/eq/low' ) && ( mixer.channelA.eq.low = 2.0 * value );
-  ( key === '/mixer/channel_a/volume' ) && ( mixer.channelA.volume = value * value );
+  if (key === '/mixer/channel_a/gain') { mixer.channelA.gain = 4.0 * value * value; }
+  if (key === '/mixer/channel_a/eq/high') { mixer.channelA.eq.high = 2.0 * value; }
+  if (key === '/mixer/channel_a/eq/mid') { mixer.channelA.eq.mid = 2.0 * value; }
+  if (key === '/mixer/channel_a/eq/low') { mixer.channelA.eq.low = 2.0 * value; }
+  if (key === '/mixer/channel_a/volume') { mixer.channelA.volume = value * value; }
 
-  ( key === '/mixer/channel_b/gain' ) && ( mixer.channelB.gain = 4.0 * value * value );
-  ( key === '/mixer/channel_b/eq/high' ) && ( mixer.channelB.eq.high = 2.0 * value );
-  ( key === '/mixer/channel_b/eq/mid' ) && ( mixer.channelB.eq.mid = 2.0 * value );
-  ( key === '/mixer/channel_b/eq/low' ) && ( mixer.channelB.eq.low = 2.0 * value );
-  ( key === '/mixer/channel_b/volume' ) && ( mixer.channelB.volume = value * value );
+  if (key === '/mixer/channel_b/gain') { mixer.channelB.gain = 4.0 * value * value; }
+  if (key === '/mixer/channel_b/eq/high') { mixer.channelB.eq.high = 2.0 * value; }
+  if (key === '/mixer/channel_b/eq/mid') { mixer.channelB.eq.mid = 2.0 * value; }
+  if (key === '/mixer/channel_b/eq/low') { mixer.channelB.eq.low = 2.0 * value; }
+  if (key === '/mixer/channel_b/volume') { mixer.channelB.volume = value * value; }
 
-  ( key === '/cue/channel_a' ) && ( cueMixer.gainA = value * value );
-  ( key === '/cue/channel_b' ) && ( cueMixer.gainB = value * value );
-  ( key === '/cue/master_mix' ) && ( cueMixer.masterMix = value * value );
+  if (key === '/cue/channel_a') { cueMixer.gainA = value * value; }
+  if (key === '/cue/channel_b') { cueMixer.gainB = value * value; }
+  if (key === '/cue/master_mix') { cueMixer.masterMix = value * value; }
 
-  ( key === '/deck_a/knob0' ) && ( deckA.setParam( 'knob0', value ) );
-  ( key === '/deck_a/knob1' ) && ( deckA.setParam( 'knob1', value ) );
-  ( key === '/deck_a/knob2' ) && ( deckA.setParam( 'knob2', value ) );
-  ( key === '/deck_a/knob3' ) && ( deckA.setParam( 'knob3', value ) );
-  ( key === '/deck_a/knob4' ) && ( deckA.setParam( 'knob4', value ) );
-  ( key === '/deck_a/knob5' ) && ( deckA.setParam( 'knob5', value ) );
-  ( key === '/deck_a/knob6' ) && ( deckA.setParam( 'knob6', value ) );
-  ( key === '/deck_a/knob7' ) && ( deckA.setParam( 'knob7', value ) );
+  if (key === '/deck_a/knob0') { deckA.setParam('knob0', value); }
+  if (key === '/deck_a/knob1') { deckA.setParam('knob1', value); }
+  if (key === '/deck_a/knob2') { deckA.setParam('knob2', value); }
+  if (key === '/deck_a/knob3') { deckA.setParam('knob3', value); }
+  if (key === '/deck_a/knob4') { deckA.setParam('knob4', value); }
+  if (key === '/deck_a/knob5') { deckA.setParam('knob5', value); }
+  if (key === '/deck_a/knob6') { deckA.setParam('knob6', value); }
+  if (key === '/deck_a/knob7') { deckA.setParam('knob7', value); }
 
-  ( key === '/deck_b/knob0' ) && ( deckB.setParam( 'knob0', value ) );
-  ( key === '/deck_b/knob1' ) && ( deckB.setParam( 'knob1', value ) );
-  ( key === '/deck_b/knob2' ) && ( deckB.setParam( 'knob2', value ) );
-  ( key === '/deck_b/knob3' ) && ( deckB.setParam( 'knob3', value ) );
-  ( key === '/deck_b/knob4' ) && ( deckB.setParam( 'knob4', value ) );
-  ( key === '/deck_b/knob5' ) && ( deckB.setParam( 'knob5', value ) );
-  ( key === '/deck_b/knob6' ) && ( deckB.setParam( 'knob6', value ) );
-  ( key === '/deck_b/knob7' ) && ( deckB.setParam( 'knob7', value ) );
+  if (key === '/deck_b/knob0') { deckB.setParam('knob0', value); }
+  if (key === '/deck_b/knob1') { deckB.setParam('knob1', value); }
+  if (key === '/deck_b/knob2') { deckB.setParam('knob2', value); }
+  if (key === '/deck_b/knob3') { deckB.setParam('knob3', value); }
+  if (key === '/deck_b/knob4') { deckB.setParam('knob4', value); }
+  if (key === '/deck_b/knob5') { deckB.setParam('knob5', value); }
+  if (key === '/deck_b/knob6') { deckB.setParam('knob6', value); }
+  if (key === '/deck_b/knob7') { deckB.setParam('knob7', value); }
 }
 
-for ( const [ key, value ] of Object.entries( MIDIMAN.values ) ) {
-  applyMidiParam( { key, value } );
+for (const [key, value] of Object.entries(MIDIMAN.values)) {
+  applyMidiParam({ key, value });
 }
 
-MIDIMAN.on( 'paramChange', ( { key, value } ) => applyMidiParam( { key, value } ) );
+MIDIMAN.on('paramChange', ({ key, value }) => applyMidiParam({ key, value }));
 
 // == settings =====================================================================================
-function applySettings( settings: Partial<Settings> ) {
-  if ( settings.channelRouting != null ) {
-    router.setRouting( settings.channelRouting );
+function applySettings(settings: Partial<Settings>) {
+  if (settings.channelRouting != null) {
+    router.setRouting(settings.channelRouting);
   }
 
-  if ( settings.latencyBlocks != null ) {
+  if (settings.latencyBlocks != null) {
     deckA.latencyBlocks = settings.latencyBlocks;
     deckB.latencyBlocks = settings.latencyBlocks;
   }
 
-  if ( settings.masterDCRemoval != null ) {
+  if (settings.masterDCRemoval != null) {
     mixer.dcRemoval = settings.masterDCRemoval;
   }
 
-  if ( settings.masterReverbGain != null ) {
+  if (settings.masterReverbGain != null) {
     reverb.gain.value = settings.masterReverbGain;
   }
 
-  if ( settings.eqMode != null ) {
-    mixer.channelA.replaceEQ( settings.eqMode );
-    mixer.channelB.replaceEQ( settings.eqMode );
+  if (settings.eqMode != null) {
+    mixer.channelA.replaceEQ(settings.eqMode);
+    mixer.channelB.replaceEQ(settings.eqMode);
   }
 }
 
-applySettings( SETTINGSMAN.values );
+applySettings(SETTINGSMAN.values);
 
-SETTINGSMAN.on( 'change', ( settings ) => applySettings( settings ) );
+SETTINGSMAN.on('change', (settings) => applySettings(settings));
 
 // == prevent browser shortcuts ====================================================================
-document.addEventListener( 'keydown', ( event ) => {
-  if ( event.ctrlKey && event.key.match( /[derst]/ ) ) {
+document.addEventListener('keydown', (event) => {
+  if (event.ctrlKey && event.key.match(/[derst]/)) {
     event.preventDefault();
   }
-} );
+});
 
 // == dom ==========================================================================================
-const root = createRoot( document.getElementById( 'root' )! );
+const root = createRoot(document.getElementById('root')!);
 root.render(
   <App
-    deckA={ deckA }
-    deckB={ deckB }
-    mixer={ mixer }
-  />
+    deckA={deckA}
+    deckB={deckB}
+    mixer={mixer}
+  />,
 );

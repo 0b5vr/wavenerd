@@ -3,12 +3,12 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Theme } from '../themes/Theme';
 import { tags } from '@lezer/highlight';
 
-export function createCMTheme( theme: Theme ): {
-  extensions: Extension[],
-  highlightStyle: HighlightStyle,
-  theme: Extension,
-  background: string,
-  } {
+export function createCMTheme(theme: Theme): {
+  extensions: Extension[];
+  highlightStyle: HighlightStyle;
+  theme: Extension;
+  background: string;
+} {
   const {
     text,
     background,
@@ -31,7 +31,7 @@ export function createCMTheme( theme: Theme ): {
     dark,
   } = theme.code;
 
-  const cmTheme = EditorView.theme( {
+  const cmTheme = EditorView.theme({
     '&': {
       width: 'fit-content',
       minWidth: '100%',
@@ -58,10 +58,10 @@ export function createCMTheme( theme: Theme ): {
       color: text,
     },
     '.cm-panels.cm-panels-top': {
-      borderBottom: `2px solid ${ background }`,
+      borderBottom: `2px solid ${background}`,
     },
     '.cm-panels.cm-panels-bottom': {
-      borderTop: `2px solid ${ background }`,
+      borderTop: `2px solid ${background}`,
     },
     '.cm-searchMatch': {
       backgroundColor: searchMatch,
@@ -81,7 +81,7 @@ export function createCMTheme( theme: Theme ): {
     '.cm-gutters': {
       backgroundColor: gutterBackground,
       color: gutterText,
-      border: 'none'
+      border: 'none',
     },
     '.cm-activeLineGutter': {
       backgroundColor: text + '11',
@@ -97,7 +97,7 @@ export function createCMTheme( theme: Theme ): {
     },
     '.cm-tooltip .cm-tooltip-arrow:before': {
       borderTopColor: 'transparent',
-      borderBottomColor: 'transparent'
+      borderBottomColor: 'transparent',
     },
     '.cm-tooltip .cm-tooltip-arrow:after': {
       borderTopColor: tooltips,
@@ -107,15 +107,15 @@ export function createCMTheme( theme: Theme ): {
       '& > ul > li[aria-selected]': {
         backgroundColor: tooltips,
         color: text,
-      }
+      },
     },
     '.cm-backlayer': {
       backgroundColor: backlayer,
     },
-  }, { dark } );
+  }, { dark });
 
   // -- syntax highlighting --------------------------------------------------------------------------
-  const highlightStyle = HighlightStyle.define( [
+  const highlightStyle = HighlightStyle.define([
     {
       tag: [
         tags.keyword,
@@ -140,8 +140,8 @@ export function createCMTheme( theme: Theme ): {
       tag: [
         tags.color,
         tags.typeName,
-        tags.constant( tags.name ),
-        tags.standard( tags.name ),
+        tags.constant(tags.name),
+        tags.standard(tags.name),
       ],
       color: types,
     },
@@ -169,9 +169,9 @@ export function createCMTheme( theme: Theme ): {
       tag: tags.invalid,
       color: invalid,
     },
-  ] );
+  ]);
 
-  const extensions = [ cmTheme, syntaxHighlighting( highlightStyle ) ];
+  const extensions = [cmTheme, syntaxHighlighting(highlightStyle)];
 
   return { background, extensions, highlightStyle, theme: cmTheme };
 }

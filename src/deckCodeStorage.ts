@@ -5,4 +5,4 @@ interface DeckCodeStorageType {
   b: string;
 }
 
-export const deckCodeStorage = new ThrottledJSONStorage<DeckCodeStorageType>( 'wavenerd-code' );
+export const deckCodeStorage = new ThrottledJSONStorage<DeckCodeStorageType>('wavenerd-code');

@@ -43,7 +43,7 @@ export const themeMonokaiSharp: Theme = {
 
     gray: '#697681',
 
-    knobColor: `linear-gradient(to bottom, ${ fore }, ${ foresub })`,
+    knobColor: `linear-gradient(to bottom, ${fore}, ${foresub})`,
     knobShadow: '#0008',
 
     accent: blue,
@@ -53,7 +53,7 @@ export const themeMonokaiSharp: Theme = {
 
     levelMeter: `linear-gradient(
       to bottom,
-      ${ red } 20%,
+      ${red} 20%,
       #faffb8 20%,
       #c5f0a4 47%,
       #35b0ab 73%,

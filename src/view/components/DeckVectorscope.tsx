@@ -19,60 +19,61 @@ const Root = styled.div``;
 export const DeckVectorscope: React.FC<{
   analyser: Analyser;
   className?: string;
-}> = ( { analyser, className } ) => {
-  const [ renderer, setRenderer ] = useState<VectorscopeRenderer>();
-  const refCanvas = useRef<HTMLCanvasElement>( null );
-  const canvas = useElement( refCanvas );
-  const rectCanvas = useRect( refCanvas );
+}> = ({ analyser, className }) => {
+  const [renderer, setRenderer] = useState<VectorscopeRenderer>();
+  const refCanvas = useRef<HTMLCanvasElement>(null);
+  const canvas = useElement(refCanvas);
+  const rectCanvas = useRect(refCanvas);
 
-  const vectorscopeMode = useSettings( 'vectorscopeMode' );
-  const vectorscopeOpacity = useSettings( 'vectorscopeOpacity' );
-  const vectorscopeColor = useSettings( 'vectorscopeColor' );
+  const vectorscopeMode = useSettings('vectorscopeMode');
+  const vectorscopeOpacity = useSettings('vectorscopeOpacity');
+  const vectorscopeColor = useSettings('vectorscopeColor');
 
   // setup the renderer
-  useEffect( () => {
-    if ( canvas == null ) { return; }
+  useEffect(() => {
+    if (canvas == null) { return; }
 
-    const renderer = new VectorscopeRenderer( canvas );
-    setRenderer( renderer );
+    const renderer = new VectorscopeRenderer(canvas);
+    setRenderer(renderer);
 
     return () => {
       renderer.dispose();
     };
-  }, [ canvas ] );
+  }, [canvas]);
 
   // set mode, color to the renderer
-  useEffect( () => {
-    if ( renderer == null ) { return; }
+  useEffect(() => {
+    if (renderer == null) { return; }
 
     renderer.mode = vectorscopeMode;
 
     renderer.color = [
-      parseInt( vectorscopeColor.slice( 1, 3 ), 16 ) / 255.0,
-      parseInt( vectorscopeColor.slice( 3, 5 ), 16 ) / 255.0,
-      parseInt( vectorscopeColor.slice( 5, 7 ), 16 ) / 255.0,
+      parseInt(vectorscopeColor.slice(1, 3), 16) / 255.0,
+      parseInt(vectorscopeColor.slice(3, 5), 16) / 255.0,
+      parseInt(vectorscopeColor.slice(5, 7), 16) / 255.0,
       vectorscopeOpacity,
     ];
-  }, [ renderer, vectorscopeMode, vectorscopeColor, vectorscopeOpacity ] );
+  }, [renderer, vectorscopeMode, vectorscopeColor, vectorscopeOpacity]);
 
   // update the renderer
-  useFrames( () => {
-    if ( vectorscopeMode !== 'none' ) {
+  useFrames(() => {
+    if (vectorscopeMode !== 'none') {
       const { timeDomainL, timeDomainR } = analyser;
-      renderer?.setData( timeDomainL, timeDomainR );
+      renderer?.setData(timeDomainL, timeDomainR);
       renderer?.render();
     }
-  }, [ renderer ] );
+  }, [renderer]);
 
   // handle resize
-  useEffect( () => {
+  useEffect(() => {
     const ratio = window.devicePixelRatio;
-    renderer?.resize( rectCanvas.width * ratio, rectCanvas.height * ratio );
-  }, [ renderer, rectCanvas ] );
+    renderer?.resize(rectCanvas.width * ratio, rectCanvas.height * ratio);
+  }, [renderer, rectCanvas]);
 
   return (
-    <Root className={ className }>
-      <Canvas ref={refCanvas}
+    <Root className={className}>
+      <Canvas
+        ref={refCanvas}
         style={{
           display: vectorscopeMode === 'none' ? 'none' : 'block',
         }}

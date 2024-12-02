@@ -13,7 +13,7 @@ const Name = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${ ThemeVars.fore };
+  color: ${ThemeVars.fore};
 `;
 
 const Root = styled.div<{ isSelected?: boolean }>`
@@ -22,13 +22,13 @@ const Root = styled.div<{ isSelected?: boolean }>`
   height: 1rem;
   border-radius: 0.25rem;
   justify-content: space-between;
-  background: ${ ( { isSelected } ) => (
+  background: ${({ isSelected }) => (
     isSelected ? ThemeVars.back3 : 'none'
-  ) };
+  )};
   cursor: pointer;
 
   &:hover {
-    background: ${ ThemeVars.back3 };
+    background: ${ThemeVars.back3};
   }
 
   &:active {
@@ -42,23 +42,23 @@ interface ContextMenuEntryProps {
   command: ContextMenuCommand;
 }
 
-export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = ( props ) => {
+export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = (props) => {
   const { className, command } = props;
 
   const name = command.name;
 
-  const handleClick = useAtomCallback( useCallback(
-    ( _, set ) => {
+  const handleClick = useAtomCallback(useCallback(
+    (_, set) => {
       command.callback();
-      set( resetContextMenuAtom );
+      set(resetContextMenuAtom);
     },
-    [ command ],
-  ) );
+    [command],
+  ));
 
   return (
     <Root
-      className={ className }
-      onClick={ handleClick }
+      className={className}
+      onClick={handleClick}
     >
       <Name>{ name }</Name>
     </Root>

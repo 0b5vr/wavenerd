@@ -10,9 +10,9 @@ interface MidiManagerStorageType {
 }
 
 interface MidiManagerEvents {
-  noteOn: { channel: number, note: number; velocity: number, paramKey: string | null };
-  noteOff: { channel: number, note: number; velocity: number, paramKey: string | null };
-  cc: { channel: number, cc: number; value: number, paramKey: string | null };
+  noteOn: { channel: number; note: number; velocity: number; paramKey: string | null };
+  noteOff: { channel: number; note: number; velocity: number; paramKey: string | null };
+  cc: { channel: number; cc: number; value: number; paramKey: string | null };
   paramChange: { key: string; value: number };
   learn: { key: string | null };
 }
@@ -36,104 +36,102 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
   public constructor() {
     super();
 
-    migrateMIDIManagerStorage( 'wavenerd-midiManager' );
-    this.__storage = new ThrottledJSONStorage( 'wavenerd-midiManager' );
+    migrateMIDIManagerStorage('wavenerd-midiManager');
+    this.__storage = new ThrottledJSONStorage('wavenerd-midiManager');
 
     this.defaultValues = {};
 
-    this.__values = this.__storage.get( 'values' ) ?? {};
-    this.__noteMap = this.__storage.get( 'noteMap' ) ?? [ ...Array( 16 ) ].map( () => ( {} ) );
-    this.__ccMap = this.__storage.get( 'ccMap' ) ?? [ ...Array( 16 ) ].map( () => ( {} ) );
+    this.__values = this.__storage.get('values') ?? {};
+    this.__noteMap = this.__storage.get('noteMap') ?? [...Array(16)].map(() => ({}));
+    this.__ccMap = this.__storage.get('ccMap') ?? [...Array(16)].map(() => ({}));
   }
 
-  public midi( key: string ): number {
-    return this.values[ key ] ?? 0.0;
+  public midi(key: string): number {
+    return this.values[key] ?? 0.0;
   }
 
   public async initMidi(): Promise<void> {
     const access = await navigator.requestMIDIAccess();
     const inputs = access.inputs;
-    Array.from( inputs.values() ).forEach( ( input ) => {
+    Array.from(inputs.values()).forEach((input) => {
       input.addEventListener(
         'midimessage',
-        ( event ) => this.__handleMidiMessage( event )
+        (event) => this.__handleMidiMessage(event),
       );
 
-      console.info( `Detected MIDI Device: ${ input.name }` );
-    } );
+      console.info(`Detected MIDI Device: ${input.name}`);
+    });
   }
 
-  public learn( key: string ): void {
+  public learn(key: string): void {
     this.__learningParam = key;
-    this.__emit( 'learn', { key } );
+    this.__emit('learn', { key });
   }
 
   public clearLearn(): void {
     this.__learningParam = null;
-    this.__emit( 'learn', { key: null } );
+    this.__emit('learn', { key: null });
   }
 
-  public setValue( key: string, value: number ): void {
-    this.__values[ key ] = value;
+  public setValue(key: string, value: number): void {
+    this.__values[key] = value;
 
-    this.__storage.set( 'values', this.__values );
+    this.__storage.set('values', this.__values);
 
-    this.__emit( 'paramChange', { key, value } );
+    this.__emit('paramChange', { key, value });
   }
 
-  private __handleMidiMessage( event: WebMidi.MIDIMessageEvent ): void {
+  private __handleMidiMessage(event: WebMidi.MIDIMessageEvent): void {
     let paramKey = '';
     let value = 0;
 
-    if ( event.data ) {
-      const isNoteOff = event.data[ 0 ] >= 128 && event.data[ 0 ] <= 143;
-      const isNoteOn = event.data[ 0 ] >= 144 && event.data[ 0 ] <= 159;
-      const isCC = event.data[ 0 ] >= 176 && event.data[ 0 ] <= 191;
+    if (event.data) {
+      const isNoteOff = event.data[0] >= 128 && event.data[0] <= 143;
+      const isNoteOn = event.data[0] >= 144 && event.data[0] <= 159;
+      const isCC = event.data[0] >= 176 && event.data[0] <= 191;
 
-      const channel = event.data[ 0 ] % 16;
+      const channel = event.data[0] % 16;
 
-      if ( isNoteOn ) {
-        const note = event.data[ 1 ];
-        const velocity = event.data[ 2 ] / 127.0;
+      if (isNoteOn) {
+        const note = event.data[1];
+        const velocity = event.data[2] / 127.0;
 
-        if ( this.__learningParam ) {
-          this.__noteMap[ channel ][ note ] = this.__learningParam;
-          this.__storage.set( 'noteMap', this.__noteMap );
+        if (this.__learningParam) {
+          this.__noteMap[channel][note] = this.__learningParam;
+          this.__storage.set('noteMap', this.__noteMap);
           this.clearLearn();
         }
 
-        paramKey = this.__noteMap[ channel ][ note ] ?? null;
+        paramKey = this.__noteMap[channel][note] ?? null;
         value = velocity;
 
-        this.__emit( 'noteOn', { channel, note, velocity, paramKey } );
+        this.__emit('noteOn', { channel, note, velocity, paramKey });
+      } else if (isNoteOff) {
+        const note = event.data[1];
+        const velocity = event.data[2] / 127.0;
 
-      } else if ( isNoteOff ) {
-        const note = event.data[ 1 ];
-        const velocity = event.data[ 2 ] / 127.0;
-
-        paramKey = this.__noteMap[ channel ][ note ] ?? null;
+        paramKey = this.__noteMap[channel][note] ?? null;
         value = 0.0;
 
-        this.__emit( 'noteOff', { channel, note, velocity, paramKey } );
+        this.__emit('noteOff', { channel, note, velocity, paramKey });
+      } else if (isCC) {
+        const cc = event.data[1];
 
-      } else if ( isCC ) {
-        const cc = event.data[ 1 ];
-
-        if ( this.__learningParam ) {
-          this.__ccMap[ channel ][ cc ] = this.__learningParam;
-          this.__storage.set( 'ccMap', this.__ccMap );
+        if (this.__learningParam) {
+          this.__ccMap[channel][cc] = this.__learningParam;
+          this.__storage.set('ccMap', this.__ccMap);
           this.clearLearn();
         }
 
-        paramKey = this.__ccMap[ channel ][ cc ] ?? null;
-        value = event.data[ 2 ] / 127.0;
+        paramKey = this.__ccMap[channel][cc] ?? null;
+        value = event.data[2] / 127.0;
 
-        this.__emit( 'cc', { channel, cc, value, paramKey } );
+        this.__emit('cc', { channel, cc, value, paramKey });
       }
     }
 
-    if ( paramKey ) {
-      this.setValue( paramKey, value );
+    if (paramKey) {
+      this.setValue(paramKey, value);
     }
   }
 }

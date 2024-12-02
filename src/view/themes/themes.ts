@@ -15,31 +15,31 @@ export const themes: Record<string, {
   'monokaiSharp': {
     displayName: 'Monokai Sharp',
     theme: themeMonokaiSharp,
-    cmTheme: createCMTheme( themeMonokaiSharp ),
+    cmTheme: createCMTheme(themeMonokaiSharp),
   },
   'chromaCoder': {
     displayName: 'ChromaCoder',
     theme: themeChromaCoder,
-    cmTheme: createCMTheme( themeChromaCoder ),
+    cmTheme: createCMTheme(themeChromaCoder),
   },
   'shadertoyDark': {
     displayName: 'Shadertoy Dark',
     theme: themeShadertoyDark,
-    cmTheme: createCMTheme( themeShadertoyDark ),
+    cmTheme: createCMTheme(themeShadertoyDark),
   },
   'shadertoyLight': {
     displayName: 'Shadertoy Light',
     theme: themeShadertoyLight,
-    cmTheme: createCMTheme( themeShadertoyLight ),
+    cmTheme: createCMTheme(themeShadertoyLight),
   },
   'solarizedDark': {
     displayName: 'Solarized Dark',
     theme: themeSolarizedDark,
-    cmTheme: createCMTheme( themeSolarizedDark ),
+    cmTheme: createCMTheme(themeSolarizedDark),
   },
   'solarizedLight': {
     displayName: 'Solarized Light',
     theme: themeSolarizedLight,
-    cmTheme: createCMTheme( themeSolarizedLight ),
+    cmTheme: createCMTheme(themeSolarizedLight),
   },
 };

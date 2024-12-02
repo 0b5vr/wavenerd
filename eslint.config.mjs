@@ -6,12 +6,25 @@ import stylistic from '@stylistic/eslint-plugin';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ['**/*.{js,ts,tsx}'] },
+  {
+    ignores: [
+      '**/dist/**/*',
+    ],
+  },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   stylistic.configs.customize({
     semi: true,
+    braceStyle: '1tbs',
+    arrowParens: true,
+    quoteProps: 'consistent',
   }),
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@stylistic/max-statements-per-line': ['error', { max: 2 }],
+    },
+  },
 ];

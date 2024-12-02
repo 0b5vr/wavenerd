@@ -53,7 +53,7 @@ export const themeShadertoyLight: Theme = {
 
     gray: gray8,
 
-    knobColor: `linear-gradient(to bottom, ${ gray2 }, ${ black })`,
+    knobColor: `linear-gradient(to bottom, ${gray2}, ${black})`,
     knobGutter: headerBg,
     knobShadow: '#0004',
 

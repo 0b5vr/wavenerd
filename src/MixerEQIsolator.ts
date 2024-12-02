@@ -11,39 +11,42 @@ export class MixerEQIsolator extends MixerEQ {
   public get low(): number {
     return this.__low;
   }
-  public set low( value: number ) {
+
+  public set low(value: number) {
     this.__low = value;
 
     const time = this.__audio.currentTime + 0.005;
-    this.__gainNodeLow.gain.linearRampToValueAtTime( this.__low, time );
+    this.__gainNodeLow.gain.linearRampToValueAtTime(this.__low, time);
 
-    this.__emit( 'change', { low: value } );
+    this.__emit('change', { low: value });
   }
 
   private __mid = 1.0;
   public get mid(): number {
     return this.__mid;
   }
-  public set mid( value: number ) {
+
+  public set mid(value: number) {
     this.__mid = value;
 
     const time = this.__audio.currentTime + 0.005;
-    this.__gainNodeMid.gain.linearRampToValueAtTime( this.__mid, time );
+    this.__gainNodeMid.gain.linearRampToValueAtTime(this.__mid, time);
 
-    this.__emit( 'change', { mid: value } );
+    this.__emit('change', { mid: value });
   }
 
   private __high = 1.0;
   public get high(): number {
     return this.__high;
   }
-  public set high( value: number ) {
+
+  public set high(value: number) {
     this.__high = value;
 
     const time = this.__audio.currentTime + 0.005;
-    this.__gainNodeHigh.gain.linearRampToValueAtTime( this.__high, time );
+    this.__gainNodeHigh.gain.linearRampToValueAtTime(this.__high, time);
 
-    this.__emit( 'change', { high: value } );
+    this.__emit('change', { high: value });
   }
 
   private __gainNode: GainNode;
@@ -63,7 +66,7 @@ export class MixerEQIsolator extends MixerEQ {
     return this.__gainNodeOut;
   }
 
-  public constructor( audio: AudioContext ) {
+  public constructor(audio: AudioContext) {
     super();
 
     this.__audio = audio;
@@ -81,36 +84,36 @@ export class MixerEQIsolator extends MixerEQ {
     this.__convolverNodeMid.normalize = false;
     this.__convolverNodeHigh.normalize = false;
 
-    this.__convolverNodeLow.buffer = createCrossoverIR( {
+    this.__convolverNodeLow.buffer = createCrossoverIR({
       sampleRate: audio.sampleRate,
       lpfFreq: 250.0,
-    } );
+    });
 
-    this.__convolverNodeMid.buffer = createCrossoverIR( {
+    this.__convolverNodeMid.buffer = createCrossoverIR({
       sampleRate: audio.sampleRate,
       hpfFreq: 250.0,
       lpfFreq: 2500.0,
-    } );
+    });
 
-    this.__convolverNodeHigh.buffer = createCrossoverIR( {
+    this.__convolverNodeHigh.buffer = createCrossoverIR({
       sampleRate: audio.sampleRate,
       hpfFreq: 2500.0,
-    } );
+    });
 
-    this.__gainNode.connect( this.__convolverNodeLow );
-    this.__gainNode.connect( this.__convolverNodeMid );
-    this.__gainNode.connect( this.__convolverNodeHigh );
+    this.__gainNode.connect(this.__convolverNodeLow);
+    this.__gainNode.connect(this.__convolverNodeMid);
+    this.__gainNode.connect(this.__convolverNodeHigh);
 
-    this.__convolverNodeLow.connect( this.__gainNodeLow );
-    this.__convolverNodeMid.connect( this.__gainNodeMid );
-    this.__convolverNodeHigh.connect( this.__gainNodeHigh );
+    this.__convolverNodeLow.connect(this.__gainNodeLow);
+    this.__convolverNodeMid.connect(this.__gainNodeMid);
+    this.__convolverNodeHigh.connect(this.__gainNodeHigh);
 
     this.low = 1.0;
     this.mid = 1.0;
     this.high = 1.0;
 
-    this.__gainNodeLow.connect( this.__gainNodeOut );
-    this.__gainNodeMid.connect( this.__gainNodeOut );
-    this.__gainNodeHigh.connect( this.__gainNodeOut );
+    this.__gainNodeLow.connect(this.__gainNodeOut);
+    this.__gainNodeMid.connect(this.__gainNodeOut);
+    this.__gainNodeHigh.connect(this.__gainNodeOut);
   }
 }

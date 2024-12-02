@@ -13,9 +13,9 @@ const Container = styled.div`
   overflow: hidden;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  background: ${ ThemeVars.contextMenuBg };
-  color: ${ ThemeVars.contextMenuFg };
-  filter: drop-shadow( 0 0 2px ${ ThemeVars.black } );
+  background: ${ThemeVars.contextMenuBg};
+  color: ${ThemeVars.contextMenuFg};
+  filter: drop-shadow( 0 0 2px ${ThemeVars.black} );
   font-size: 0.8rem;
 `;
 
@@ -39,23 +39,23 @@ const Root = styled.div`
 
 // == component ====================================================================================
 export const ContextMenu: React.FC = () => {
-  const isOpening = useAtomValue( contextMenuIsOpeningAtom );
-  const [ x, y ] = useAtomValue( contextMenuPositionAtom );
-  const commands = useAtomValue( contextMenuCommandsAtom );
+  const isOpening = useAtomValue(contextMenuIsOpeningAtom);
+  const [x, y] = useAtomValue(contextMenuPositionAtom);
+  const commands = useAtomValue(contextMenuCommandsAtom);
 
-  const handleClickBG = useAtomCallback( useCallback(
-    ( _, set ) => {
-      set( resetContextMenuAtom );
+  const handleClickBG = useAtomCallback(useCallback(
+    (_, set) => {
+      set(resetContextMenuAtom);
     },
     [],
-  ) );
+  ));
 
-  const handleContextMenuBG = useAtomCallback( useCallback(
-    ( _, set ) => {
-      set( resetContextMenuAtom );
+  const handleContextMenuBG = useAtomCallback(useCallback(
+    (_, set) => {
+      set(resetContextMenuAtom);
     },
     [],
-  ) );
+  ));
 
   const style: React.CSSProperties = useMemo(
     () => {
@@ -63,41 +63,48 @@ export const ContextMenu: React.FC = () => {
       const height = document.documentElement.clientHeight;
 
       const ret: React.CSSProperties = {};
-      ( x < width - 240 )
-        ? ( ret.left = x )
-        : ( ret.right = width - x );
-      ( y < height - 120 )
-        ? ( ret.top = y )
-        : ( ret.bottom = height - y );
+
+      if (x < width - 240) {
+        ret.left = x;
+      } else {
+        ret.right = width - x;
+      }
+
+      if (y < height - 120) {
+        ret.top = y;
+      } else {
+        ret.bottom = height - y;
+      }
+
       return ret;
     },
-    [ x, y ],
+    [x, y],
   );
 
   // -- component ----------------------------------------------------------------------------------
-  if ( !isOpening ) {
+  if (!isOpening) {
     return null;
   }
 
   return (
     <Root>
       <OverlayBG
-        onClick={ handleClickBG }
-        onContextMenu={ handleContextMenuBG }
+        onClick={handleClickBG}
+        onContextMenu={handleContextMenuBG}
       />
       <Container
-        style={ style }
+        style={style}
       >
-        { commands.map( ( command, iCommand ) => (
+        { commands.map((command, iCommand) => (
           command === 'hr'
-            ? <ContextMenuHr key={ iCommand } />
+            ? <ContextMenuHr key={iCommand} />
             : (
-              <ContextMenuEntry
-                key={ iCommand }
-                command={ command }
-              />
-            )
-        ) ) }
+                <ContextMenuEntry
+                  key={iCommand}
+                  command={command}
+                />
+              )
+        )) }
       </Container>
     </Root>
   );

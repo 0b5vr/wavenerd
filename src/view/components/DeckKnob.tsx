@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 
 // == styles =======================================================================================
-const StyledKnob = styled( Knob )`
+const StyledKnob = styled(Knob)`
   width: 28px;
   height: 28px;
 `;
 
 const Label = styled.div`
   font: 500 8px 'Roboto', sans-serif;
-  color: ${ ThemeVars.foresub };
+  color: ${ThemeVars.foresub};
   line-height: 1;
 `;
 
@@ -24,11 +24,11 @@ const Root = styled.div<{ isLearning: boolean }>`
   align-items: center;
   cursor: pointer;
 
-  box-shadow: ${ ( { isLearning } ) => (
+  box-shadow: ${({ isLearning }) => (
     isLearning
-      ? `0 0 0 2px ${ ThemeVars.accent }`
+      ? `0 0 0 2px ${ThemeVars.accent}`
       : 'none'
-  ) };
+  )};
 `;
 
 // == components ===================================================================================
@@ -37,28 +37,28 @@ export const DeckKnob: React.FC<{
   paramPrefix: string;
   stalker?: string;
   className?: string;
-}> = ( { paramName, paramPrefix, stalker, className } ) => {
+}> = ({ paramName, paramPrefix, stalker, className }) => {
   const paramFullname = useMemo(
-    () => `${ paramPrefix }/${ paramName }`,
-    [ paramPrefix, paramName ],
+    () => `${paramPrefix}/${paramName}`,
+    [paramPrefix, paramName],
   );
 
-  const value = useMidiValue( paramFullname );
+  const value = useMidiValue(paramFullname);
 
-  const stalkerWithValue = useMemo( () => {
-    return `${ stalker }: ${ value.toFixed( 3 ) }`;
-  }, [ stalker, value ] );
+  const stalkerWithValue = useMemo(() => {
+    return `${stalker}: ${value.toFixed(3)}`;
+  }, [stalker, value]);
 
   return (
     <Root
-      isLearning={ false }
-      className={ className }
-      data-stalker={ stalkerWithValue }
+      isLearning={false}
+      className={className}
+      data-stalker={stalkerWithValue}
     >
       <StyledKnob
-        midiParamName={ paramFullname }
-        resetValue={ 0.0 }
-        deltaValuePerPixel={ 1.0 / 64.0 }
+        midiParamName={paramFullname}
+        resetValue={0.0}
+        deltaValuePerPixel={1.0 / 64.0}
       />
       <Label>{ paramName }</Label>
     </Root>

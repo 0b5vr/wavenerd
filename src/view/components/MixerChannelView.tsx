@@ -10,12 +10,12 @@ import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
-const StyledKnob = styled( Knob )<{ size: number }>`
-  width: ${ ( props ) => props.size }px;
-  height: ${ ( props ) => props.size }px;
+const StyledKnob = styled(Knob)<{ size: number }>`
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
 `;
 
-const StyledMixerFader = styled( MixerFader )`
+const StyledMixerFader = styled(MixerFader)`
   width: 32px;
   height: 96px;
 `;
@@ -35,7 +35,7 @@ const KnobAndStuff = styled.div`
   cursor: pointer;
 `;
 
-const StyledIconCue = styled( IconCue )`
+const StyledIconCue = styled(IconCue)`
   width: 100%;
   height: 100%;
 `;
@@ -45,13 +45,13 @@ const CueButtonRoot = styled.div<{ active: boolean }>`
   width: 20px;
   height: 20px;
   margin: 2px;
-  color: ${ ( { active } ) => active ? ThemeVars.accent : ThemeVars.gray };
+  color: ${({ active }) => active ? ThemeVars.accent : ThemeVars.gray};
 `;
 
 const Row = styled.div<{ side: 'A' | 'B' }>`
   display: flex;
   gap: 8px;
-  flex-direction: ${ ( { side } ) => side === 'A' ? 'row' : 'row-reverse' };
+  flex-direction: ${({ side }) => side === 'A' ? 'row' : 'row-reverse'};
   justify-content: center;
   align-items: center;
 `;
@@ -74,105 +74,105 @@ const Root = styled.div`
 `;
 
 // == functions ====================================================================================
-function valueToDisplayDB( value: number ): string {
-  if ( value === 0.0 ) {
+function valueToDisplayDB(value: number): string {
+  if (value === 0.0) {
     return '-INF dB';
   } else {
-    const db = 20.0 * Math.log10( 4.0 * value * value );
-    return db.toFixed( 2 ) + ' dB';
+    const db = 20.0 * Math.log10(4.0 * value * value);
+    return db.toFixed(2) + ' dB';
   }
 }
 
-function valueToDisplayEQ( value: number ): string {
-  if ( value >= 0.5 ) {
-    return `+${ ( ( value - 0.5 ) * 200.0 ).toFixed() }%`;
+function valueToDisplayEQ(value: number): string {
+  if (value >= 0.5) {
+    return `+${((value - 0.5) * 200.0).toFixed()}%`;
   } else {
-    return `-${ ( ( 0.5 - value ) * 200.0 ).toFixed() }%`;
+    return `-${((0.5 - value) * 200.0).toFixed()}%`;
   }
 }
 
 // == microcomponents ==============================================================================
-function MixerGainKnob( { label, stalkerText, paramName }: {
+function MixerGainKnob({ label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-} ): JSX.Element {
-  const value = useMidiValue( paramName );
+}): JSX.Element {
+  const value = useMidiValue(paramName);
 
-  const stalkerTextWithValue = useMemo( () => {
-    return `${ stalkerText }: ${ valueToDisplayDB( value ) }`;
-  }, [ value ] );
+  const stalkerTextWithValue = useMemo(() => {
+    return `${stalkerText}: ${valueToDisplayDB(value)}`;
+  }, [value]);
 
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={ 32 }
-        midiParamName={ paramName }
-        resetValue={ 0.5 }
-        deltaValuePerPixel={ 1.0 / 256.0 }
-        stalkerText={ stalkerTextWithValue }
+        size={32}
+        midiParamName={paramName}
+        resetValue={0.5}
+        deltaValuePerPixel={1.0 / 256.0}
+        stalkerText={stalkerTextWithValue}
       />
       <KnobLabel>{ label }</KnobLabel>
     </KnobAndStuff>
   );
 }
 
-function MixerEQKnob( { label, stalkerText, paramName }: {
+function MixerEQKnob({ label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-} ): JSX.Element {
-  const value = useMidiValue( paramName );
+}): JSX.Element {
+  const value = useMidiValue(paramName);
 
-  const stalkerTextWithValue = useMemo( () => {
-    return `${ stalkerText }: ${ valueToDisplayEQ( value ) }`;
-  }, [ value ] );
+  const stalkerTextWithValue = useMemo(() => {
+    return `${stalkerText}: ${valueToDisplayEQ(value)}`;
+  }, [value]);
 
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={ 20 }
-        midiParamName={ paramName }
-        resetValue={ 0.5 }
-        deltaValuePerPixel={ 1.0 / 256.0 }
-        stalkerText={ stalkerTextWithValue }
+        size={20}
+        midiParamName={paramName}
+        resetValue={0.5}
+        deltaValuePerPixel={1.0 / 256.0}
+        stalkerText={stalkerTextWithValue}
       />
       <KnobLabel>{ label }</KnobLabel>
     </KnobAndStuff>
   );
 }
 
-function MixerFaderI( { paramName, stalkerText }: {
+function MixerFaderI({ paramName, stalkerText }: {
   paramName: string;
   stalkerText: string;
-} ): JSX.Element {
+}): JSX.Element {
   return (
     <StyledMixerFader
-      midiParamName={ paramName }
-      stalkerText={ stalkerText }
+      midiParamName={paramName}
+      stalkerText={stalkerText}
     />
   );
 }
 
-function CueButton( { paramName, stalkerText }: {
+function CueButton({ paramName, stalkerText }: {
   paramName: string;
   stalkerText: string;
-} ): JSX.Element {
-  const value = useMidiValue( paramName );
+}): JSX.Element {
+  const value = useMidiValue(paramName);
 
-  const handleClick = useCallback( () => {
-    const currentValue = MIDIMAN.values[ paramName ];
-    MIDIMAN.setValue( paramName, currentValue > 0.0 ? 0.0 : 1.0 );
-  }, [] );
+  const handleClick = useCallback(() => {
+    const currentValue = MIDIMAN.values[paramName];
+    MIDIMAN.setValue(paramName, currentValue > 0.0 ? 0.0 : 1.0);
+  }, []);
 
   return (
     <CueButtonRoot
-      active={ value > 0.0 }
-      onClick={ handleClick }
-      data-stalker={ stalkerText }
+      active={value > 0.0}
+      onClick={handleClick}
+      data-stalker={stalkerText}
     >
       <StyledIconCue />
-      <MIDILearnable paramName={ paramName } />
+      <MIDILearnable paramName={paramName} />
     </CueButtonRoot>
   );
 }
@@ -183,44 +183,46 @@ export const MixerChannelView: React.FC<{
   cueParamName: string;
   side: 'A' | 'B';
   className?: string;
-}> = ( { paramPrefix, cueParamName, side, className } ) => {
-  const eqMode = useSettings( 'eqMode' );
+}> = ({ paramPrefix, cueParamName, side, className }) => {
+  const eqMode = useSettings('eqMode');
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
-      <Row side={ side }>
+      <Row side={side}>
         <MixerGainKnob
           label="GAIN"
           stalkerText="Deck Gain"
-          paramName={ paramPrefix + '/gain' }
+          paramName={paramPrefix + '/gain'}
         />
         <CueButton
-          paramName={ cueParamName }
+          paramName={cueParamName}
           stalkerText="Deck Cue"
         />
       </Row>
-      <Row side={ side }>
-        { eqMode !== 'none' && <EQs>
-          <MixerEQKnob
-            label="HI"
-            stalkerText="Deck EQ High"
-            paramName={ paramPrefix + '/eq/high' }
-          />
-          <MixerEQKnob
-            label="MID"
-            stalkerText="Deck EQ Mid"
-            paramName={ paramPrefix + '/eq/mid' }
-          />
-          <MixerEQKnob
-            label="LO"
-            stalkerText="Deck EQ Low"
-            paramName={ paramPrefix + '/eq/low' }
-          />
-        </EQs> }
+      <Row side={side}>
+        { eqMode !== 'none' && (
+          <EQs>
+            <MixerEQKnob
+              label="HI"
+              stalkerText="Deck EQ High"
+              paramName={paramPrefix + '/eq/high'}
+            />
+            <MixerEQKnob
+              label="MID"
+              stalkerText="Deck EQ Mid"
+              paramName={paramPrefix + '/eq/mid'}
+            />
+            <MixerEQKnob
+              label="LO"
+              stalkerText="Deck EQ Low"
+              paramName={paramPrefix + '/eq/low'}
+            />
+          </EQs>
+        ) }
         <MixerFaderI
-          paramName={ paramPrefix + '/volume' }
+          paramName={paramPrefix + '/volume'}
           stalkerText="Deck Volume"
         />
       </Row>

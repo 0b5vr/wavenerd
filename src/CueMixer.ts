@@ -7,7 +7,8 @@ export class CueMixer {
   public get gainA(): number {
     return this.__gainA;
   }
-  public set gainA( value: number ) {
+
+  public set gainA(value: number) {
     this.__gainA = value;
     this.__updateGains();
   }
@@ -16,7 +17,8 @@ export class CueMixer {
   public get gainB(): number {
     return this.__gainB;
   }
-  public set gainB( value: number ) {
+
+  public set gainB(value: number) {
     this.__gainB = value;
     this.__updateGains();
   }
@@ -25,7 +27,8 @@ export class CueMixer {
   public get masterMix(): number {
     return this.__masterMix;
   }
-  public set masterMix( value: number ) {
+
+  public set masterMix(value: number) {
     this.__masterMix = value;
     this.__updateGains();
   }
@@ -50,7 +53,7 @@ export class CueMixer {
     return this.__gainOut;
   }
 
-  public constructor( audio: AudioContext ) {
+  public constructor(audio: AudioContext) {
     this.__audio = audio;
 
     this.__gainA = 0.0;
@@ -62,20 +65,20 @@ export class CueMixer {
     this.__inputMaster = audio.createGain();
     this.__gainOut = audio.createGain();
 
-    this.__inputA.connect( this.__gainOut );
-    this.__inputB.connect( this.__gainOut );
-    this.__inputMaster.connect( this.__gainOut );
+    this.__inputA.connect(this.__gainOut);
+    this.__inputB.connect(this.__gainOut);
+    this.__inputMaster.connect(this.__gainOut);
 
     this.__updateGains();
   }
 
   private __updateGains(): void {
     const time = this.__audio.currentTime + 0.005;
-    const masterMix = Math.sin( HALF_PI * this.__masterMix );
-    const cueMix = Math.cos( HALF_PI * this.__masterMix );
+    const masterMix = Math.sin(HALF_PI * this.__masterMix);
+    const cueMix = Math.cos(HALF_PI * this.__masterMix);
 
-    this.__inputA.gain.linearRampToValueAtTime( this.__gainA * cueMix, time );
-    this.__inputB.gain.linearRampToValueAtTime( this.__gainB * cueMix, time );
-    this.__inputMaster.gain.linearRampToValueAtTime( masterMix, time );
+    this.__inputA.gain.linearRampToValueAtTime(this.__gainA * cueMix, time);
+    this.__inputB.gain.linearRampToValueAtTime(this.__gainB * cueMix, time);
+    this.__inputMaster.gain.linearRampToValueAtTime(masterMix, time);
   }
 }

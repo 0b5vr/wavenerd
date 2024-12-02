@@ -8,14 +8,14 @@ function findNearestChar(
 ): number {
   let result = -1;
 
-  if ( dir < 0 ) {
-    const i = text.lastIndexOf( char, position - 1 );
-    if ( i !== -1 ) {
+  if (dir < 0) {
+    const i = text.lastIndexOf(char, position - 1);
+    if (i !== -1) {
       result = i;
     }
   } else {
-    const i = text.indexOf( char, position );
-    if ( i !== -1 ) {
+    const i = text.indexOf(char, position);
+    if (i !== -1) {
       result = i;
     }
   }
@@ -31,21 +31,26 @@ function findMatchingCloseBracket(
   let result = -1;
   let nest = 1;
 
-  while ( current < text.length ) {
-    const posOpen = text.slice( current ).indexOf( '{' );
-    const posClose = text.slice( current ).indexOf( '}' );
+  while (current < text.length) {
+    const posOpen = text.slice(current).indexOf('{');
+    const posClose = text.slice(current).indexOf('}');
 
-    if ( posOpen === -1 && posClose === -1 ) {
+    if (posOpen === -1 && posClose === -1) {
       break;
     }
 
-    const pos = posOpen === -1 ? posClose :
-      posClose === -1 ? posOpen :
-      Math.min( posOpen, posClose );
+    let pos: number;
+    if (posOpen === -1) {
+      pos = posClose;
+    } else if (posClose === -1) {
+      pos = posOpen;
+    } else {
+      pos = Math.min(posOpen, posClose);
+    }
 
     nest += pos === posOpen ? 1 : -1;
 
-    if ( nest === 0 ) {
+    if (nest === 0) {
       result = current + pos;
       break;
     } else {
@@ -64,18 +69,18 @@ function findMatchingOpenBracket(
   let result = -1;
   let nest = 1;
 
-  while ( current >= 0 ) {
-    const posOpen = text.slice( 0, current ).lastIndexOf( '{' );
-    const posClose = text.slice( 0, current ).lastIndexOf( '}' );
+  while (current >= 0) {
+    const posOpen = text.slice(0, current).lastIndexOf('{');
+    const posClose = text.slice(0, current).lastIndexOf('}');
 
-    if ( posOpen === -1 && posClose === -1 ) {
+    if (posOpen === -1 && posClose === -1) {
       break;
     }
 
-    const pos = Math.max( posOpen, posClose );
+    const pos = Math.max(posOpen, posClose);
     nest += pos === posClose ? 1 : -1;
 
-    if ( nest === 0 ) {
+    if (nest === 0) {
       result = pos;
       break;
     } else {
@@ -86,26 +91,26 @@ function findMatchingOpenBracket(
   return result;
 }
 
-const braceJump = ( view: EditorView, dir: -1 | 1 ) => {
+const braceJump = (view: EditorView, dir: -1 | 1) => {
   const value = view.state.doc.toString();
   const selection = view.state.selection.main;
 
   const pos = selection.from;
   const bracketStart = dir === -1
-    ? findNearestChar( value, pos, -1, '{' )
-    : findNearestChar( value, pos + 1, 1, '{' );
-  if ( bracketStart === -1 ) {
+    ? findNearestChar(value, pos, -1, '{')
+    : findNearestChar(value, pos + 1, 1, '{');
+  if (bracketStart === -1) {
     return true;
   }
 
-  const bracketEnd = findMatchingCloseBracket( value, bracketStart );
-  if ( bracketEnd === -1 ) {
+  const bracketEnd = findMatchingCloseBracket(value, bracketStart);
+  if (bracketEnd === -1) {
     return true;
   }
 
   const anchor = bracketStart;
   const head = bracketEnd + 1;
-  const scrollEffect = EditorView.scrollIntoView( bracketStart, { y: 'center' } );
+  const scrollEffect = EditorView.scrollIntoView(bracketStart, { y: 'center' });
   view.dispatch(
     { selection: { anchor, head } },
     { effects: scrollEffect },
@@ -114,18 +119,18 @@ const braceJump = ( view: EditorView, dir: -1 | 1 ) => {
   return true;
 };
 
-const braceJumpPrev: Command = ( view ) => braceJump( view, -1 );
-const braceJumpNext: Command = ( view ) => braceJump( view, 1 );
+const braceJumpPrev: Command = (view) => braceJump(view, -1);
+const braceJumpNext: Command = (view) => braceJump(view, 1);
 
-const braceExtend = ( view: EditorView, dir: -1 | 1 ): boolean => {
+const braceExtend = (view: EditorView, dir: -1 | 1): boolean => {
   const value = view.state.doc.toString();
   let head = view.state.selection.main.head;
   let anchor = view.state.selection.main.anchor;
 
-  const openPos = findNearestChar( value, head, dir, '{' );
-  const closePos = findNearestChar( value, head, dir, '}' );
+  const openPos = findNearestChar(value, head, dir, '{');
+  const closePos = findNearestChar(value, head, dir, '}');
 
-  if ( openPos === -1 && closePos === -1 ) {
+  if (openPos === -1 && closePos === -1) {
     return true;
   }
 
@@ -140,51 +145,51 @@ const braceExtend = ( view: EditorView, dir: -1 | 1 ): boolean => {
   //   return true;
   // }
 
-  if ( dir === -1 ) {
-    if ( closePos === -1 || closePos < openPos ) {
+  if (dir === -1) {
+    if (closePos === -1 || closePos < openPos) {
       return true;
     }
 
-    const matching = findMatchingOpenBracket( value, closePos );
-    if ( matching === -1 ) {
+    const matching = findMatchingOpenBracket(value, closePos);
+    if (matching === -1) {
       return true;
     }
 
-    if ( matching === anchor ) {
+    if (matching === anchor) {
       anchor = head;
     }
     head = matching;
 
-    if ( anchor < head ) {
-      const headCand = findNearestChar( value, head, -1, '}' );
-      if ( headCand !== -1 ) {
+    if (anchor < head) {
+      const headCand = findNearestChar(value, head, -1, '}');
+      if (headCand !== -1) {
         head = headCand + 1;
       }
     }
   } else {
-    if ( openPos === -1 || ( closePos !== -1 && closePos < openPos ) ) {
+    if (openPos === -1 || (closePos !== -1 && closePos < openPos)) {
       return true;
     }
 
-    const matching = findMatchingCloseBracket( value, openPos ) + 1;
-    if ( matching === 0 ) {
+    const matching = findMatchingCloseBracket(value, openPos) + 1;
+    if (matching === 0) {
       return true;
     }
 
-    if ( matching === anchor ) {
+    if (matching === anchor) {
       anchor = head;
     }
     head = matching;
 
-    if ( anchor > head ) {
-      const headCand = findNearestChar( value, head, 1, '{' );
-      if ( headCand !== -1 ) {
+    if (anchor > head) {
+      const headCand = findNearestChar(value, head, 1, '{');
+      if (headCand !== -1) {
         head = headCand;
       }
     }
   }
 
-  const scrollEffect = EditorView.scrollIntoView( head, { y: 'center' } );
+  const scrollEffect = EditorView.scrollIntoView(head, { y: 'center' });
   view.dispatch(
     { selection: { anchor, head } },
     { effects: scrollEffect },
@@ -193,8 +198,8 @@ const braceExtend = ( view: EditorView, dir: -1 | 1 ): boolean => {
   return true;
 };
 
-const braceExtendPrev: Command = ( view ) => braceExtend( view, -1 );
-const braceExtendNext: Command = ( view ) => braceExtend( view, 1 );
+const braceExtendPrev: Command = (view) => braceExtend(view, -1);
+const braceExtendNext: Command = (view) => braceExtend(view, 1);
 
 /**
  * Provides 0mix style bracket jumping.

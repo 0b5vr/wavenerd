@@ -31,8 +31,8 @@ const IconButton = styled.svg`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ ThemeVars.barBg };
-  color: ${ ThemeVars.barFg };
+  background: ${ThemeVars.barBg};
+  color: ${ThemeVars.barFg};
   font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 
@@ -44,41 +44,41 @@ const Root = styled.div`
 // == components ===================================================================================
 export const AssetListBar: React.FC<{
   title: string;
-  onFile: ( files: FileList ) => void;
+  onFile: (files: FileList) => void;
   expand: boolean;
   onChangeExpand: () => void;
   className?: string;
-}> = ( { title, onFile, expand, onChangeExpand, className } ) => {
+}> = ({ title, onFile, expand, onChangeExpand, className }) => {
   const handleClickOpen = useCallback(
-    ( event: React.MouseEvent ) => {
+    (event: React.MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
 
-      const input = document.createElement( 'input' );
+      const input = document.createElement('input');
       input.type = 'file';
       input.multiple = true;
       input.onchange = () => {
-        if ( input.files ) {
-          onFile && onFile( input.files );
+        if (input.files) {
+          onFile?.(input.files);
         }
       };
       input.click();
     },
-    []
+    [],
   );
 
   return (
     <Root
-      className={ className }
+      className={className}
     >
       <IconButton
-        as={ expand ? IconChevronDown : IconChevronRight }
-        onClick={ onChangeExpand }
+        as={expand ? IconChevronDown : IconChevronRight}
+        onClick={onChangeExpand}
       />
       <Title>{ title }</Title>
       <IconButton
-        as={ IconFolder }
-        onClick={ handleClickOpen }
+        as={IconFolder}
+        onClick={handleClickOpen}
         data-stalker="Open local file... (you can also drag and drop)"
       />
     </Root>

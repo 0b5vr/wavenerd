@@ -5,10 +5,10 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
-const StyledIconPlay = styled( IconPlay )`
+const StyledIconPlay = styled(IconPlay)`
   width: 128px;
   height: 128px;
-  fill: ${ ThemeVars.fore };
+  fill: ${ThemeVars.fore};
 `;
 
 const Description = styled.div`
@@ -22,7 +22,7 @@ const Underlay = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background: ${ ThemeVars.black };
+  background: ${ThemeVars.black};
   opacity: 0.8;
 `;
 
@@ -51,23 +51,23 @@ const Root = styled.div`
 export const PlayOverlay: React.FC<{
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ( { hostDeck, className } ) => {
-  const [ isOpening, setIsOpening ] = useState( true );
+}> = ({ hostDeck, className }) => {
+  const [isOpening, setIsOpening] = useState(true);
 
-  const handleClick = useCallback( () => {
+  const handleClick = useCallback(() => {
     hostDeck.audio.resume();
     hostDeck.play();
-    setIsOpening( false );
-  }, [ hostDeck ] );
+    setIsOpening(false);
+  }, [hostDeck]);
 
-  if ( !isOpening ) {
+  if (!isOpening) {
     return null;
   }
 
   return (
     <Root
-      onClick={ handleClick }
-      className={ className }
+      onClick={handleClick}
+      className={className}
     >
       <Underlay />
       <Content>

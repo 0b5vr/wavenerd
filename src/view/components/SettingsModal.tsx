@@ -33,10 +33,10 @@ const Line = styled.div`
   }
 `;
 
-const StyledNumberParam = styled( NumberParam )`
+const StyledNumberParam = styled(NumberParam)`
   display: inline-block;
-  color: ${ ThemeVars.inputFore };
-  background: ${ ThemeVars.inputBack };
+  color: ${ThemeVars.inputFore};
+  background: ${ThemeVars.inputBack};
   padding: 2px;
   border-radius: 4px;
   width: 4em;
@@ -44,8 +44,8 @@ const StyledNumberParam = styled( NumberParam )`
 
 const StyledSelect = styled.select`
   display: inline-block;
-  color: ${ ThemeVars.inputFore };
-  background: ${ ThemeVars.inputBack };
+  color: ${ThemeVars.inputFore};
+  background: ${ThemeVars.inputBack};
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -53,8 +53,8 @@ const StyledSelect = styled.select`
 
 const StyledColorInput = styled.input`
   display: inline-block;
-  color: ${ ThemeVars.inputFore };
-  background: ${ ThemeVars.inputBack };
+  color: ${ThemeVars.inputFore};
+  background: ${ThemeVars.inputBack};
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -63,8 +63,8 @@ const StyledColorInput = styled.input`
 
 const StyledTextInput = styled.input`
   display: inline-block;
-  color: ${ ThemeVars.inputFore };
-  background: ${ ThemeVars.inputBack };
+  color: ${ThemeVars.inputFore};
+  background: ${ThemeVars.inputBack};
   padding: 2px;
   border: none;
   border-radius: 4px;
@@ -73,97 +73,97 @@ const StyledTextInput = styled.input`
 
 // == components ===================================================================================
 export const SettingsModal: React.FC<{
-  mixer: Mixer,
-}> = ( { mixer } ) => {
-  const [ isOpening, setOpening ] = useAtom( settingsIsOpeningAtom );
-  const settings = useAtomValue( settingsAtom );
+  mixer: Mixer;
+}> = ({ mixer }) => {
+  const [isOpening, setOpening] = useAtom(settingsIsOpeningAtom);
+  const settings = useAtomValue(settingsAtom);
 
   const latencyBlocks = settings.latencyBlocks;
-  const latencyTime = useMemo( () => (
+  const latencyTime = useMemo(() => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
-  ), [ latencyBlocks ] );
+  ), [latencyBlocks]);
 
-  const handleClose = useCallback( () => {
-    setOpening( false );
-  }, [] );
+  const handleClose = useCallback(() => {
+    setOpening(false);
+  }, []);
 
-  const handleChangeLatencyBlocks = useCallback( ( value: number ) => {
-    const valueValid = Math.max( 1, value );
+  const handleChangeLatencyBlocks = useCallback((value: number) => {
+    const valueValid = Math.max(1, value);
 
-    SETTINGSMAN.set( 'latencyBlocks', valueValid );
-  }, [] );
+    SETTINGSMAN.set('latencyBlocks', valueValid);
+  }, []);
 
-  const handleChangeChannelRouting = useCallback( ( event: React.ChangeEvent ) => {
-    const routing = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'channelRouting', routing );
-  }, [] );
+  const handleChangeChannelRouting = useCallback((event: React.ChangeEvent) => {
+    const routing = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('channelRouting', routing);
+  }, []);
 
-  const handleChangeMasterReverbGain = useCallback( ( event: React.ChangeEvent ) => {
-    const gain = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'masterReverbGain', parseFloat( gain ) );
-  }, [] );
+  const handleChangeMasterReverbGain = useCallback((event: React.ChangeEvent) => {
+    const gain = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('masterReverbGain', parseFloat(gain));
+  }, []);
 
-  const handleChangeMasterDCRemoval = useCallback( ( event: React.ChangeEvent ) => {
-    const checked = ( event.target as HTMLInputElement ).checked;
-    SETTINGSMAN.set( 'masterDCRemoval', checked );
-  }, [] );
+  const handleChangeMasterDCRemoval = useCallback((event: React.ChangeEvent) => {
+    const checked = (event.target as HTMLInputElement).checked;
+    SETTINGSMAN.set('masterDCRemoval', checked);
+  }, []);
 
-  const handleChangeXFaderCurveMode = useCallback( ( event: React.ChangeEvent ) => {
-    const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'xfaderMode', mode as XFaderModeType );
-  }, [] );
+  const handleChangeXFaderCurveMode = useCallback((event: React.ChangeEvent) => {
+    const mode = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('xfaderMode', mode as XFaderModeType);
+  }, []);
 
-  const handleChangeEQMode = useCallback( ( event: React.ChangeEvent ) => {
-    const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'eqMode', mode );
-  }, [] );
+  const handleChangeEQMode = useCallback((event: React.ChangeEvent) => {
+    const mode = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('eqMode', mode);
+  }, []);
 
-  const handleChangeVectorscopeMode = useCallback( ( event: React.ChangeEvent ) => {
-    const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'vectorscopeMode', mode as VectorscopeModeType );
-  }, [] );
+  const handleChangeVectorscopeMode = useCallback((event: React.ChangeEvent) => {
+    const mode = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('vectorscopeMode', mode as VectorscopeModeType);
+  }, []);
 
-  const handleChangeVectorscopeOpacity = useCallback( ( event: React.ChangeEvent ) => {
-    const opacity = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'vectorscopeOpacity', parseFloat( opacity ) );
-  }, [] );
+  const handleChangeVectorscopeOpacity = useCallback((event: React.ChangeEvent) => {
+    const opacity = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('vectorscopeOpacity', parseFloat(opacity));
+  }, []);
 
-  const handleChangeVectorscopeColor = useCallback( ( event: React.ChangeEvent ) => {
-    const color = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'vectorscopeColor', color );
-  }, [] );
+  const handleChangeVectorscopeColor = useCallback((event: React.ChangeEvent) => {
+    const color = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('vectorscopeColor', color);
+  }, []);
 
-  const handleChangeSpectrumMode = useCallback( ( event: React.ChangeEvent ) => {
-    const mode = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'spectrumMode', mode as SpectrumModeType );
-  }, [] );
+  const handleChangeSpectrumMode = useCallback((event: React.ChangeEvent) => {
+    const mode = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('spectrumMode', mode as SpectrumModeType);
+  }, []);
 
-  const handleChangeSpectrumOpacity = useCallback( ( event: React.ChangeEvent ) => {
-    const opacity = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'spectrumOpacity', parseFloat( opacity ) );
-  }, [] );
+  const handleChangeSpectrumOpacity = useCallback((event: React.ChangeEvent) => {
+    const opacity = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('spectrumOpacity', parseFloat(opacity));
+  }, []);
 
-  const handleChangeSpectrumColor = useCallback( ( event: React.ChangeEvent ) => {
-    const color = ( event.target as HTMLInputElement ).value;
-    SETTINGSMAN.set( 'spectrumColor', color );
-  }, [] );
+  const handleChangeSpectrumColor = useCallback((event: React.ChangeEvent) => {
+    const color = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set('spectrumColor', color);
+  }, []);
 
-  const handleChangeTheme = useCallback( ( event: React.ChangeEvent ) => {
-    const theme = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'theme', theme );
-  }, [] );
+  const handleChangeTheme = useCallback((event: React.ChangeEvent) => {
+    const theme = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('theme', theme);
+  }, []);
 
-  const handleChangeEditorFont = useCallback( ( event: React.ChangeEvent ) => {
-    const font = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'editorFont', font );
-  }, [] );
+  const handleChangeEditorFont = useCallback((event: React.ChangeEvent) => {
+    const font = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('editorFont', font);
+  }, []);
 
-  const handleChangeEditorFontVariantLigatures = useCallback( ( event: React.ChangeEvent ) => {
-    const ligatures = ( event.target as HTMLSelectElement ).value;
-    SETTINGSMAN.set( 'editorFontVariantLigatures', ligatures );
-  }, [] );
+  const handleChangeEditorFontVariantLigatures = useCallback((event: React.ChangeEvent) => {
+    const ligatures = (event.target as HTMLSelectElement).value;
+    SETTINGSMAN.set('editorFontVariantLigatures', ligatures);
+  }, []);
 
-  if ( !isOpening ) {
+  if (!isOpening) {
     return null;
   }
 
@@ -175,14 +175,12 @@ export const SettingsModal: React.FC<{
         data-stalker="Faster = more noises, slower = less interactive.&#10;I usually use 32 or 64."
       >
         <Name>Latency Blocks</Name>
-        { (
-          <StyledNumberParam
-            type="int"
-            value={ latencyBlocks }
-            onChange={ handleChangeLatencyBlocks }
-          />
-        ) }
-        ({ latencyTime.toFixed( 0 ) } ms)
+        <StyledNumberParam
+          type="int"
+          value={latencyBlocks}
+          onChange={handleChangeLatencyBlocks}
+        />
+        {`(${latencyTime.toFixed(0)} ms)`}
       </Line>
 
       <Line
@@ -190,8 +188,8 @@ export const SettingsModal: React.FC<{
       >
         <Name>Channel routing</Name>
         <StyledTextInput
-          value={ settings.channelRouting }
-          onChange={ handleChangeChannelRouting }
+          value={settings.channelRouting}
+          onChange={handleChangeChannelRouting}
         />
       </Line>
 
@@ -201,8 +199,8 @@ export const SettingsModal: React.FC<{
         <Name>Master DC Removal</Name>
         <input
           type="checkbox"
-          checked={ settings.masterDCRemoval }
-          onChange={ handleChangeMasterDCRemoval }
+          checked={settings.masterDCRemoval}
+          onChange={handleChangeMasterDCRemoval}
         />
       </Line>
 
@@ -215,57 +213,51 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ settings.masterReverbGain }
-          onChange={ handleChangeMasterReverbGain }
-        /><br />
+          value={settings.masterReverbGain}
+          onChange={handleChangeMasterReverbGain}
+        />
       </Line>
 
       <Line
         data-stalker="Change the curve of the cross fader."
       >
         <Name>X Fader Curve Mode</Name>
-        { (
-          <StyledSelect
-            value={ settings.xfaderMode }
-            onChange={ handleChangeXFaderCurveMode }
-          >
-            <option value="constantPower">Constant Power</option>
-            <option value="cut">Cut</option>
-            <option value="linear">Linear</option>
-            <option value="transition">Transition</option>
-          </StyledSelect>
-        ) }<br />
+        <StyledSelect
+          value={settings.xfaderMode}
+          onChange={handleChangeXFaderCurveMode}
+        >
+          <option value="constantPower">Constant Power</option>
+          <option value="cut">Cut</option>
+          <option value="linear">Linear</option>
+          <option value="transition">Transition</option>
+        </StyledSelect>
       </Line>
 
       <Line
         data-stalker="Change the equalizer mode.&#10;None: Disables the equalizer. This will also hide the EQ knobs from the UI.&#10;Isolator: The &quot;isolator&quot; style equalizer. Turning all knobs to the left will kill the sound."
       >
         <Name>Equalizer Mode</Name>
-        { (
-          <StyledSelect
-            value={ settings.eqMode }
-            onChange={ handleChangeEQMode }
-          >
-            <option value="none">None</option>
-            <option value="isolator">Isolator</option>
-          </StyledSelect>
-        ) }<br />
+        <StyledSelect
+          value={settings.eqMode}
+          onChange={handleChangeEQMode}
+        >
+          <option value="none">None</option>
+          <option value="isolator">Isolator</option>
+        </StyledSelect>
       </Line>
 
       <Line
         data-stalker="Change the type of the vectorscope.&#10;Consumes the performance, yes. Select &quot;None&quot; if you need no funky"
       >
         <Name>Vectorscope Mode</Name>
-        { (
-          <StyledSelect
-            value={ settings.vectorscopeMode }
-            onChange={ handleChangeVectorscopeMode }
-          >
-            <option value="none">None</option>
-            <option value="line">Line</option>
-            <option value="points">Points</option>
-          </StyledSelect>
-        ) }<br />
+        <StyledSelect
+          value={settings.vectorscopeMode}
+          onChange={handleChangeVectorscopeMode}
+        >
+          <option value="none">None</option>
+          <option value="line">Line</option>
+          <option value="points">Points</option>
+        </StyledSelect>
       </Line>
       <Line
         data-stalker="Change the opacity of the vectorscope."
@@ -276,9 +268,9 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ settings.vectorscopeOpacity }
-          onChange={ handleChangeVectorscopeOpacity }
-        /><br />
+          value={settings.vectorscopeOpacity}
+          onChange={handleChangeVectorscopeOpacity}
+        />
       </Line>
       <Line
         data-stalker="Change the color of the vectorscope."
@@ -286,8 +278,8 @@ export const SettingsModal: React.FC<{
         <Name>Vectorscope Color</Name>
         <StyledColorInput
           type="color"
-          value={ settings.vectorscopeColor }
-          onChange={ handleChangeVectorscopeColor }
+          value={settings.vectorscopeColor}
+          onChange={handleChangeVectorscopeColor}
         />
       </Line>
 
@@ -295,15 +287,13 @@ export const SettingsModal: React.FC<{
         data-stalker="Change the type of the spectrum.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
       >
         <Name>Spectrum Mode</Name>
-        { (
-          <StyledSelect
-            value={ settings.spectrumMode }
-            onChange={ handleChangeSpectrumMode }
-          >
-            <option value="none">None</option>
-            <option value="line">Line</option>
-          </StyledSelect>
-        ) }<br />
+        <StyledSelect
+          value={settings.spectrumMode}
+          onChange={handleChangeSpectrumMode}
+        >
+          <option value="none">None</option>
+          <option value="line">Line</option>
+        </StyledSelect>
       </Line>
 
       <Line
@@ -315,9 +305,9 @@ export const SettingsModal: React.FC<{
           min="0"
           max="1"
           step="0.01"
-          value={ settings.spectrumOpacity }
-          onChange={ handleChangeSpectrumOpacity }
-        /><br />
+          value={settings.spectrumOpacity}
+          onChange={handleChangeSpectrumOpacity}
+        />
       </Line>
 
       <Line
@@ -326,8 +316,8 @@ export const SettingsModal: React.FC<{
         <Name>spectrum Color</Name>
         <StyledColorInput
           type="color"
-          value={ settings.spectrumColor }
-          onChange={ handleChangeSpectrumColor }
+          value={settings.spectrumColor}
+          onChange={handleChangeSpectrumColor}
         />
       </Line>
 
@@ -336,12 +326,12 @@ export const SettingsModal: React.FC<{
       >
         <Name>Theme</Name>
         <StyledSelect
-          value={ settings.theme }
-          onChange={ handleChangeTheme }
+          value={settings.theme}
+          onChange={handleChangeTheme}
         >
-          { Object.entries( themes ).map( ( [ key, { displayName } ] ) => (
-            <option key={ key } value={ key }>{ displayName }</option>
-          ) ) }
+          { Object.entries(themes).map(([key, { displayName }]) => (
+            <option key={key} value={key}>{ displayName }</option>
+          )) }
         </StyledSelect>
       </Line>
 
@@ -350,8 +340,8 @@ export const SettingsModal: React.FC<{
       >
         <Name>Editor Font</Name>
         <StyledTextInput
-          value={ settings.editorFont }
-          onChange={ handleChangeEditorFont }
+          value={settings.editorFont}
+          onChange={handleChangeEditorFont}
         />
       </Line>
 
@@ -360,8 +350,8 @@ export const SettingsModal: React.FC<{
       >
         <Name>Editor Font Variant Ligatures</Name>
         <StyledSelect
-          value={ settings.editorFontVariantLigatures }
-          onChange={ handleChangeEditorFontVariantLigatures }
+          value={settings.editorFontVariantLigatures}
+          onChange={handleChangeEditorFontVariantLigatures}
         >
           <option value="none">None</option>
           <option value="normal">Normal</option>

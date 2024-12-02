@@ -3,7 +3,8 @@ export class DCRemoval {
   public get active(): boolean {
     return this.__active;
   }
-  public set active( value: boolean ) {
+
+  public set active(value: boolean) {
     this.__active = value;
     this.__reconnect();
   }
@@ -20,7 +21,7 @@ export class DCRemoval {
 
   private __filter: BiquadFilterNode;
 
-  public constructor( audio: AudioContext ) {
+  public constructor(audio: AudioContext) {
     this.__gainInput = audio.createGain();
     this.__gainOutput = audio.createGain();
 
@@ -35,11 +36,11 @@ export class DCRemoval {
     this.__gainInput.disconnect();
     this.__filter.disconnect();
 
-    if ( this.__active ) {
-      this.__gainInput.connect( this.__filter );
-      this.__filter.connect( this.__gainOutput );
+    if (this.__active) {
+      this.__gainInput.connect(this.__filter);
+      this.__filter.connect(this.__gainOutput);
     } else {
-      this.__gainInput.connect( this.__gainOutput );
+      this.__gainInput.connect(this.__gainOutput);
     }
   }
 }
