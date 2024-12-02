@@ -39,8 +39,8 @@ mixer.output.connect( reverb.input );
 reverb.connect( master );
 
 const cueMixer = new CueMixer( audio );
-mixer.channelA.output.connect( cueMixer.inputA );
-mixer.channelB.output.connect( cueMixer.inputB );
+mixer.channelA.outputForAnal.connect( cueMixer.inputA );
+mixer.channelB.outputForAnal.connect( cueMixer.inputB );
 master.connect( cueMixer.inputMaster );
 
 const router = new AudioDestinationRouter( audio );
