@@ -1,6 +1,6 @@
-import { Mixer, XFaderModeType } from '../../Mixer';
+import { Mixer } from '../../Mixer';
 import React, { useCallback, useMemo } from 'react';
-import { SETTINGSMAN, SpectrumModeType, VectorscopeModeType } from '../../SettingsManager';
+import { Settings, SETTINGSMAN } from '../../SettingsManager';
 import { settingsAtom, settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useAtom, useAtomValue } from 'jotai';
 import { Modal } from './Modal';
@@ -8,6 +8,7 @@ import { NumberParam } from './NumberParam';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { themes } from '../themes/themes';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == constants ====================================================================================
 const BLOCK_SIZE = 128;
@@ -71,11 +72,27 @@ const StyledTextInput = styled.input`
   width: 12em;
 `;
 
-// == components ===================================================================================
-export const SettingsModal: React.FC<{
+// == items ========================================================================================
+function ItemBase(props: {
+  name: string;
+  stalkerText?: string;
+  children: React.ReactNode;
+}): JSX.Element {
+  const { name, children, stalkerText } = props;
+
+  return (
+    <Line data-stalker={stalkerText}>
+      <Name>{name}</Name>
+      {children}
+    </Line>
+  );
+}
+
+function LatencyBlocksItem(props: {
   mixer: Mixer;
-}> = ({ mixer }) => {
-  const [isOpening, setOpening] = useAtom(settingsIsOpeningAtom);
+}): JSX.Element {
+  const { mixer } = props;
+
   const settings = useAtomValue(settingsAtom);
 
   const latencyBlocks = settings.latencyBlocks;
@@ -83,89 +100,177 @@ export const SettingsModal: React.FC<{
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
   ), [latencyBlocks]);
 
-  const handleClose = useCallback(() => {
-    setOpening(false);
-  }, []);
-
   const handleChangeLatencyBlocks = useCallback((value: number) => {
     const valueValid = Math.max(1, value);
 
     SETTINGSMAN.set('latencyBlocks', valueValid);
   }, []);
 
-  const handleChangeChannelRouting = useCallback((event: React.ChangeEvent) => {
-    const routing = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('channelRouting', routing);
-  }, []);
+  return (
+    <ItemBase
+      name="Latency Blocks"
+      stalkerText="Faster = more noises, slower = less interactive.&#10;I usually use 32 or 64."
+    >
+      <StyledNumberParam
+        type="int"
+        value={latencyBlocks}
+        onChange={handleChangeLatencyBlocks}
+      />
+      {`(${latencyTime.toFixed(0)} ms)`}
+    </ItemBase>
+  );
+}
 
-  const handleChangeMasterReverbGain = useCallback((event: React.ChangeEvent) => {
-    const gain = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('masterReverbGain', parseFloat(gain));
-  }, []);
+function BoolItem(props: {
+  settingsKey: keyof Settings;
+  name: string;
+  stalkerText?: string;
+}): JSX.Element {
+  const { settingsKey, name, stalkerText } = props;
+  const value = useSettings(settingsKey) as boolean;
 
-  const handleChangeMasterDCRemoval = useCallback((event: React.ChangeEvent) => {
+  const handleChange = useCallback((event: React.ChangeEvent) => {
     const checked = (event.target as HTMLInputElement).checked;
-    SETTINGSMAN.set('masterDCRemoval', checked);
+    SETTINGSMAN.set(settingsKey, checked);
   }, []);
 
-  const handleChangeXFaderCurveMode = useCallback((event: React.ChangeEvent) => {
-    const mode = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('xfaderMode', mode as XFaderModeType);
+  return (
+    <ItemBase
+      name={name}
+      stalkerText={stalkerText}
+    >
+      <input
+        type="checkbox"
+        checked={value}
+        onChange={handleChange}
+      />
+    </ItemBase>
+  );
+}
+
+function RangeItem(props: {
+  settingsKey: keyof Settings;
+  name: string;
+  stalkerText?: string;
+  min: number;
+  max: number;
+  step: number;
+}): JSX.Element {
+  const { settingsKey, name, min, max, step, stalkerText } = props;
+  const value = useSettings(settingsKey) as number;
+
+  const handleChange = useCallback((event: React.ChangeEvent) => {
+    const value = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set(settingsKey, parseFloat(value));
   }, []);
 
-  const handleChangeEQMode = useCallback((event: React.ChangeEvent) => {
-    const mode = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('eqMode', mode);
+  return (
+    <ItemBase
+      name={name}
+      stalkerText={stalkerText}
+    >
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={handleChange}
+      />
+    </ItemBase>
+  );
+}
+
+function TextItem(props: {
+  settingsKey: keyof Settings;
+  name: string;
+  stalkerText?: string;
+}): JSX.Element {
+  const { settingsKey, name, stalkerText } = props;
+  const value = useSettings(settingsKey) as string;
+
+  const handleChange = useCallback((event: React.ChangeEvent) => {
+    const value = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set(settingsKey, value);
   }, []);
 
-  const handleChangeVectorscopeMode = useCallback((event: React.ChangeEvent) => {
-    const mode = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('vectorscopeMode', mode as VectorscopeModeType);
+  return (
+    <ItemBase
+      name={name}
+      stalkerText={stalkerText}
+    >
+      <StyledTextInput
+        value={value}
+        onChange={handleChange}
+      />
+    </ItemBase>
+  );
+}
+
+function ColorItem(props: {
+  settingsKey: keyof Settings;
+  name: string;
+  stalkerText?: string;
+}): JSX.Element {
+  const { settingsKey, name, stalkerText } = props;
+  const value = useSettings(settingsKey) as string;
+
+  const handleChange = useCallback((event: React.ChangeEvent) => {
+    const value = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set(settingsKey, value);
   }, []);
 
-  const handleChangeVectorscopeOpacity = useCallback((event: React.ChangeEvent) => {
-    const opacity = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('vectorscopeOpacity', parseFloat(opacity));
+  return (
+    <ItemBase
+      name={name}
+      stalkerText={stalkerText}
+    >
+      <StyledColorInput
+        type="color"
+        value={value}
+        onChange={handleChange}
+      />
+    </ItemBase>
+  );
+}
+
+function SelectItem(props: {
+  settingsKey: keyof Settings;
+  name: string;
+  stalkerText?: string;
+  children?: React.ReactNode;
+}): JSX.Element {
+  const { settingsKey, name, stalkerText, children } = props;
+  const value = useSettings(settingsKey) as string;
+
+  const handleChange = useCallback((event: React.ChangeEvent) => {
+    const value = (event.target as HTMLInputElement).value;
+    SETTINGSMAN.set(settingsKey, value);
   }, []);
 
-  const handleChangeVectorscopeColor = useCallback((event: React.ChangeEvent) => {
-    const color = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('vectorscopeColor', color);
-  }, []);
+  return (
+    <ItemBase
+      name={name}
+      stalkerText={stalkerText}
+    >
+      <StyledSelect
+        value={value}
+        onChange={handleChange}
+      >
+        {children}
+      </StyledSelect>
+    </ItemBase>
+  );
+}
 
-  const handleChangeSpectrumMode = useCallback((event: React.ChangeEvent) => {
-    const mode = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('spectrumMode', mode as SpectrumModeType);
-  }, []);
+// == components ===================================================================================
+export const SettingsModal: React.FC<{
+  mixer: Mixer;
+}> = ({ mixer }) => {
+  const [isOpening, setOpening] = useAtom(settingsIsOpeningAtom);
 
-  const handleChangeSpectrumOpacity = useCallback((event: React.ChangeEvent) => {
-    const opacity = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('spectrumOpacity', parseFloat(opacity));
-  }, []);
-
-  const handleChangeSpectrumColor = useCallback((event: React.ChangeEvent) => {
-    const color = (event.target as HTMLInputElement).value;
-    SETTINGSMAN.set('spectrumColor', color);
-  }, []);
-
-  const handleChangeTheme = useCallback((event: React.ChangeEvent) => {
-    const theme = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('theme', theme);
-  }, []);
-
-  const handleChangeEditorFont = useCallback((event: React.ChangeEvent) => {
-    const font = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('editorFont', font);
-  }, []);
-
-  const handleChangeEditorFontVariantLigatures = useCallback((event: React.ChangeEvent) => {
-    const ligatures = (event.target as HTMLSelectElement).value;
-    SETTINGSMAN.set('editorFontVariantLigatures', ligatures);
-  }, []);
-
-  const handleChangeEditorLogEnabled = useCallback((event: React.ChangeEvent) => {
-    const enabled = (event.target as HTMLInputElement).checked;
-    SETTINGSMAN.set('editorLogEnabled', enabled);
+  const handleClose = useCallback(() => {
+    setOpening(false);
   }, []);
 
   if (!isOpening) {
@@ -176,203 +281,128 @@ export const SettingsModal: React.FC<{
     <Modal onClose={handleClose}>
       <Sans>decent settings modal window</Sans>
 
-      <Line
-        data-stalker="Faster = more noises, slower = less interactive.&#10;I usually use 32 or 64."
-      >
-        <Name>Latency Blocks</Name>
-        <StyledNumberParam
-          type="int"
-          value={latencyBlocks}
-          onChange={handleChangeLatencyBlocks}
-        />
-        {`(${latencyTime.toFixed(0)} ms)`}
-      </Line>
+      <LatencyBlocksItem mixer={mixer} />
 
-      <Line
-        data-stalker="Channel routing.&#10;Available source: master, cue, deckA, deckB.&#10;I recommend VB-Audio Matrix to bind two or more channels at once.&#10;I will implement a proper UI for this later 😅"
-      >
-        <Name>Channel routing</Name>
-        <StyledTextInput
-          value={settings.channelRouting}
-          onChange={handleChangeChannelRouting}
-        />
-      </Line>
+      <TextItem
+        settingsKey="channelRouting"
+        name="Channel Routing"
+        stalkerText="Channel routing.&#10;Available source: master, cue, deckA, deckB.&#10;I recommend VB-Audio Matrix to bind two or more channels at once.&#10;I will implement a proper UI for this later 😅"
+      />
 
-      <Line
-        data-stalker="Remove the DC offset from the master output.&#10;You usually want to keep this switch on to prevent damaging your speakers unless you are going to draw your masterpiece onto your oscilloscope."
-      >
-        <Name>Master DC Removal</Name>
-        <input
-          type="checkbox"
-          checked={settings.masterDCRemoval}
-          onChange={handleChangeMasterDCRemoval}
-        />
-      </Line>
+      <BoolItem
+        settingsKey="masterDCRemoval"
+        name="Master DC Removal"
+        stalkerText="Remove the DC offset from the master output.&#10;You usually want to keep this switch on to prevent damaging your speakers unless you are going to draw your masterpiece onto your oscilloscope."
+      />
 
-      <Line
-        data-stalker="Add a reverb to the master (cheating)"
-      >
-        <Name>Master Reverb Gain</Name>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.masterReverbGain}
-          onChange={handleChangeMasterReverbGain}
-        />
-      </Line>
+      <RangeItem
+        settingsKey="masterReverbGain"
+        name="Master Reverb Gain"
+        stalkerText="Add a reverb to the master (cheating)"
+        min={0}
+        max={1}
+        step={0.01}
+      />
 
-      <Line
-        data-stalker="Change the curve of the cross fader."
+      <SelectItem
+        settingsKey="xfaderMode"
+        name="X Fader Curve Mode"
+        stalkerText="Change the curve of the cross fader."
       >
-        <Name>X Fader Curve Mode</Name>
-        <StyledSelect
-          value={settings.xfaderMode}
-          onChange={handleChangeXFaderCurveMode}
-        >
-          <option value="constantPower">Constant Power</option>
-          <option value="cut">Cut</option>
-          <option value="linear">Linear</option>
-          <option value="transition">Transition</option>
-        </StyledSelect>
-      </Line>
+        <option value="constantPower">Constant Power</option>
+        <option value="cut">Cut</option>
+        <option value="linear">Linear</option>
+        <option value="transition">Transition</option>
+      </SelectItem>
 
-      <Line
-        data-stalker="Change the equalizer mode.&#10;None: Disables the equalizer. This will also hide the EQ knobs from the UI.&#10;Isolator: The &quot;isolator&quot; style equalizer. Turning all knobs to the left will kill the sound."
+      <SelectItem
+        settingsKey="eqMode"
+        name="Equalizer Mode"
+        stalkerText="Change the equalizer mode.&#10;None: Disables the equalizer. This will also hide the EQ knobs from the UI.&#10;Isolator: The &quot;isolator&quot; style equalizer. Turning all knobs to the left will kill the sound."
       >
-        <Name>Equalizer Mode</Name>
-        <StyledSelect
-          value={settings.eqMode}
-          onChange={handleChangeEQMode}
-        >
-          <option value="none">None</option>
-          <option value="isolator">Isolator</option>
-        </StyledSelect>
-      </Line>
+        <option value="none">None</option>
+        <option value="isolator">Isolator</option>
+      </SelectItem>
 
-      <Line
-        data-stalker="Change the type of the vectorscope.&#10;Consumes the performance, yes. Select &quot;None&quot; if you need no funky"
+      <SelectItem
+        settingsKey="vectorscopeMode"
+        name="Vectorscope Mode"
+        stalkerText="Change the type of the vectorscope.&#10;Consumes the performance, yes. Select &quot;None&quot; if you need no funky"
       >
-        <Name>Vectorscope Mode</Name>
-        <StyledSelect
-          value={settings.vectorscopeMode}
-          onChange={handleChangeVectorscopeMode}
-        >
-          <option value="none">None</option>
-          <option value="line">Line</option>
-          <option value="points">Points</option>
-        </StyledSelect>
-      </Line>
-      <Line
-        data-stalker="Change the opacity of the vectorscope."
-      >
-        <Name>Vectorscope Opacity</Name>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.vectorscopeOpacity}
-          onChange={handleChangeVectorscopeOpacity}
-        />
-      </Line>
-      <Line
-        data-stalker="Change the color of the vectorscope."
-      >
-        <Name>Vectorscope Color</Name>
-        <StyledColorInput
-          type="color"
-          value={settings.vectorscopeColor}
-          onChange={handleChangeVectorscopeColor}
-        />
-      </Line>
+        <option value="none">None</option>
+        <option value="line">Line</option>
+        <option value="points">Points</option>
+      </SelectItem>
 
-      <Line
-        data-stalker="Change the type of the spectrum.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
-      >
-        <Name>Spectrum Mode</Name>
-        <StyledSelect
-          value={settings.spectrumMode}
-          onChange={handleChangeSpectrumMode}
-        >
-          <option value="none">None</option>
-          <option value="line">Line</option>
-        </StyledSelect>
-      </Line>
+      <RangeItem
+        settingsKey="vectorscopeOpacity"
+        name="Vectorscope Opacity"
+        stalkerText="Change the opacity of the vectorscope."
+        min={0}
+        max={1}
+        step={0.01}
+      />
 
-      <Line
-        data-stalker="Change the opacity of the spectrum."
-      >
-        <Name>spectrum Opacity</Name>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.spectrumOpacity}
-          onChange={handleChangeSpectrumOpacity}
-        />
-      </Line>
+      <ColorItem
+        settingsKey="vectorscopeColor"
+        name="Vectorscope Color"
+        stalkerText="Change the color of the vectorscope."
+      />
 
-      <Line
-        data-stalker="Change the color of the spectrum."
+      <SelectItem
+        settingsKey="spectrumMode"
+        name="Spectrum Mode"
+        stalkerText="Change the type of the spectrum.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
       >
-        <Name>spectrum Color</Name>
-        <StyledColorInput
-          type="color"
-          value={settings.spectrumColor}
-          onChange={handleChangeSpectrumColor}
-        />
-      </Line>
+        <option value="none">None</option>
+        <option value="line">Line</option>
+      </SelectItem>
 
-      <Line
-        data-stalker="Change the appearance theme."
-      >
-        <Name>Theme</Name>
-        <StyledSelect
-          value={settings.theme}
-          onChange={handleChangeTheme}
-        >
-          { Object.entries(themes).map(([key, { displayName }]) => (
-            <option key={key} value={key}>{ displayName }</option>
-          )) }
-        </StyledSelect>
-      </Line>
+      <RangeItem
+        settingsKey="spectrumOpacity"
+        name="Spectrum Opacity"
+        stalkerText="Change the opacity of the spectrum."
+        min={0}
+        max={1}
+        step={0.01}
+      />
 
-      <Line
-        data-stalker="Change the font of the editor.&#10;The syntax is same as the CSS font property."
-      >
-        <Name>Editor Font</Name>
-        <StyledTextInput
-          value={settings.editorFont}
-          onChange={handleChangeEditorFont}
-        />
-      </Line>
+      <ColorItem
+        settingsKey="spectrumColor"
+        name="Spectrum Color"
+        stalkerText="Change the color of the spectrum."
+      />
 
-      <Line
-        data-stalker="Whether to enable font variant ligatures in the editor."
+      <SelectItem
+        settingsKey="theme"
+        name="Theme"
+        stalkerText="Change the appearance theme."
       >
-        <Name>Editor Font Variant Ligatures</Name>
-        <StyledSelect
-          value={settings.editorFontVariantLigatures}
-          onChange={handleChangeEditorFontVariantLigatures}
-        >
-          <option value="none">None</option>
-          <option value="normal">Normal</option>
-        </StyledSelect>
-      </Line>
+        { Object.entries(themes).map(([key, { displayName }]) => (
+          <option key={key} value={key}>{ displayName }</option>
+        )) }
+      </SelectItem>
 
-      <Line
-        data-stalker="Whether to show the editor log in the bottom right corner."
+      <TextItem
+        settingsKey="editorFont"
+        name="Editor Font"
+        stalkerText="Change the font of the editor.&#10;The syntax is same as the CSS font property."
+      />
+
+      <SelectItem
+        settingsKey="editorFontVariantLigatures"
+        name="Editor Font Variant Ligatures"
+        stalkerText="Whether to enable font variant ligatures in the editor."
       >
-        <Name>Show Editor Log</Name>
-        <input
-          type="checkbox"
-          checked={settings.editorLogEnabled}
-          onChange={handleChangeEditorLogEnabled}
-        />
-      </Line>
+        <option value="none">None</option>
+        <option value="normal">Normal</option>
+      </SelectItem>
+
+      <BoolItem
+        settingsKey="editorLogEnabled"
+        name="Show Editor Log"
+        stalkerText="Whether to show the editor log in the bottom right corner."
+      />
     </Modal>
   );
 };
