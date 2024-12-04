@@ -24,6 +24,7 @@ export interface Settings {
   theme: string;
   editorFont: string;
   editorFontVariantLigatures: string;
+  editorLogEnabled: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -42,6 +43,7 @@ export const defaultSettings: Settings = {
   theme: 'monokaiSharp',
   editorFont: '12px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
+  editorLogEnabled: false,
 };
 
 interface SettingsManagerEvents {

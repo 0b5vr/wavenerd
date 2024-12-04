@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Analyser } from '../../Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
 import { DeckVectorscope } from './DeckVectorscope';
-import { PrimitiveAtom } from 'jotai';
+import { atom, PrimitiveAtom } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckCodeStorage } from '../../deckCodeStorage';
 import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
+import { DeckLog } from './DeckLog';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const StyledEditor = styled(DeckEditor)`
@@ -73,6 +75,10 @@ export const Deck: React.FC<{
   gainParamName,
   storageKeyName,
 }) => {
+  const logEnabled = useSettings('editorLogEnabled');
+
+  const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
+
   // prevent terrible consequence
   const handleBeforeUnload = useAtomCallback(useCallback((get) => {
     const hasEdit = get(hasEditAtom);
@@ -126,6 +132,7 @@ export const Deck: React.FC<{
       <StyledSpectrogram analyser={analyser} />
       <StyledEditor
         codeAtom={codeAtom}
+        logsAtom={logsAtom}
         hasEditAtom={hasEditAtom}
         onCompile={handleCompile}
         onApply={handleApply}
@@ -140,6 +147,7 @@ export const Deck: React.FC<{
         onApplyImmediately={handleApplyImmediately}
         gainParamName={gainParamName}
       />
+      {logEnabled && <DeckLog logsAtom={logsAtom} />}
     </Root>
   );
 };

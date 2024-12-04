@@ -163,6 +163,11 @@ export const SettingsModal: React.FC<{
     SETTINGSMAN.set('editorFontVariantLigatures', ligatures);
   }, []);
 
+  const handleChangeEditorLogEnabled = useCallback((event: React.ChangeEvent) => {
+    const enabled = (event.target as HTMLInputElement).checked;
+    SETTINGSMAN.set('editorLogEnabled', enabled);
+  }, []);
+
   if (!isOpening) {
     return null;
   }
@@ -356,6 +361,17 @@ export const SettingsModal: React.FC<{
           <option value="none">None</option>
           <option value="normal">Normal</option>
         </StyledSelect>
+      </Line>
+
+      <Line
+        data-stalker="Whether to show the editor log in the bottom right corner."
+      >
+        <Name>Show Editor Log</Name>
+        <input
+          type="checkbox"
+          checked={settings.editorLogEnabled}
+          onChange={handleChangeEditorLogEnabled}
+        />
       </Line>
     </Modal>
   );

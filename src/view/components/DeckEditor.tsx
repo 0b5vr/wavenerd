@@ -11,6 +11,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)`
@@ -46,9 +47,54 @@ const Root = styled.div`
   transform: translateZ(0);
 `;
 
+// == utils ========================================================================================
+const keyToLogSpecialMap = new Map([
+  [' ', 'Space'],
+  ['ArrowUp', '↑'],
+  ['ArrowDown', '↓'],
+  ['ArrowLeft', '←'],
+  ['ArrowRight', '→'],
+]);
+
+const keysPutShiftSet = new Set([
+  'Enter',
+  'Tab',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'Backspace',
+  'Delete',
+  'PageUp',
+  'PageDown',
+]);
+
+const keysIgnoreSet = new Set([
+  'Control',
+  'Shift',
+  'Alt',
+  'Meta',
+]);
+
+function keyToLog(event: KeyboardEvent): string | null {
+  if (keysIgnoreSet.has(event.key)) {
+    return null;
+  }
+
+  let key = keyToLogSpecialMap.get(event.key) ?? event.key;
+
+  if (event.shiftKey && keysPutShiftSet.has(event.key)) { key = 'Shift-' + key; }
+  if (event.ctrlKey) { key = 'Ctrl-' + key; }
+  if (event.metaKey) { key = 'Cmd-' + key; }
+  if (event.altKey) { key = 'Alt-' + key; }
+
+  return key;
+}
+
 // == component ====================================================================================
 export const DeckEditor: React.FC<{
   codeAtom: PrimitiveAtom<string>;
+  logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
   hasEditAtom: PrimitiveAtom<boolean>;
   onCompile: () => void;
   onApply: () => void;
@@ -56,6 +102,7 @@ export const DeckEditor: React.FC<{
   className?: string;
 }> = ({
   codeAtom,
+  logsAtom,
   hasEditAtom,
   onCompile,
   onApply,
@@ -81,8 +128,15 @@ export const DeckEditor: React.FC<{
     return [theme];
   }, [font, fontVariantLigatures]);
 
+  const addLog = useAtomCallback(useCallback((get, set, text: string) => {
+    const logs = get(logsAtom);
+    const id = (logs[0]?.[0] ?? 0) + 1;
+    const log: [number, string] = [id, text];
+    set(logsAtom, [log, ...logs].slice(0, 5));
+  }, [logsAtom]));
+
   // -- keymap -------------------------------------------------------------------------------------
-  const customKeymap: KeyBinding[] = [
+  const customKeymap: KeyBinding[] = useMemo(() => [
     ...defaultKeymap,
     ...braceJumpKeymap,
     {
@@ -109,9 +163,19 @@ export const DeckEditor: React.FC<{
         return false;
       },
     },
-  ];
+  ], [onCompile, onApply, onApplyImmediately, addLog]);
 
   // -- event handlers -----------------------------------------------------------------------------
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const log = keyToLog(event.nativeEvent);
+      if (log) {
+        addLog(log);
+      }
+    },
+    [addLog],
+  );
+
   const handleChange = useCallback(
     (value: string) => {
       setCode(value);
@@ -188,6 +252,7 @@ export const DeckEditor: React.FC<{
             theme.extensions,
             fontExtension,
           ]}
+          onKeyDown={handleKeyDown}
           onChange={handleChange}
         />
       </StyledSimpleBar>
