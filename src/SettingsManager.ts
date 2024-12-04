@@ -41,7 +41,7 @@ export const defaultSettings: Settings = {
   spectrumOpacity: 0.2,
   spectrumColor: '#ffffff',
   theme: 'monokaiSharp',
-  editorFont: '12px "Roboto Mono", monospace',
+  editorFont: '12px/16px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
   editorLogEnabled: false,
 };

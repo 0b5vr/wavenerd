@@ -16,19 +16,15 @@ import { useAtomCallback } from 'jotai/utils';
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)`
   height: 100%;
-
-  .cm-editor {
-    min-height: 100%;
-  }
-
-  .cm-scroller {
-    line-height: 1.2;
-  }
 `;
 
 const StyledSimpleBar = styled(SimpleBar)`
   width: 100%;
   height: 100%;
+
+  .simplebar-content {
+    min-height: 100%;
+  }
 `;
 
 const Overlay = styled.div<{ isDragging: boolean }>`

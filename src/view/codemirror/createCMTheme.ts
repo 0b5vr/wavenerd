@@ -37,6 +37,9 @@ export function createCMTheme(theme: Theme): {
       minWidth: '100%',
       color: text,
     },
+    '&.cm-focused': {
+      outline: 'none',
+    },
     '.cm-content': {
       caretColor: text,
     },
