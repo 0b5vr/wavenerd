@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
@@ -25,7 +25,6 @@ export const Stalker: React.FC<StalkerProps> = ({ className }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [target, setTarget] = useState<EventTarget | null>(null);
   const [text, setText] = useState<string | null>(null);
-  const refIsMouseDown = useRef(false);
 
   useEffect( // mouse listener
     () => {
