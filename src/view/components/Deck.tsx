@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
 import { useSettings } from '../stores/hooks/useSettings';
+import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 
 // == styles =======================================================================================
 const StyledEditor = styled(DeckEditor)`
@@ -79,11 +80,17 @@ export const Deck: React.FC<{
 
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
 
+  const memoryUpdateAtom = useMemo(() => atom<{
+    key: string;
+    status: 'loaded' | 'loadfailed' | 'saved';
+  } | null>(null), []);
+
   // prevent terrible consequence
-  const handleBeforeUnload = useAtomCallback(useCallback((get) => {
+  const handleBeforeUnload = useAtomCallback(useCallback((get, _, event: BeforeUnloadEvent) => {
     const hasEdit = get(hasEditAtom);
     if (hasEdit) {
-      return 'You will lose all of your changes on the editor!';
+      event.preventDefault();
+      event.returnValue = true;
     }
   }, [hasEditAtom]));
 
@@ -137,6 +144,7 @@ export const Deck: React.FC<{
         onCompile={handleCompile}
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
+        memoryUpdateAtom={memoryUpdateAtom}
       />
       <StyledStatusBar
         errorAtom={errorAtom}
@@ -148,6 +156,7 @@ export const Deck: React.FC<{
         gainParamName={gainParamName}
       />
       {logEnabled && <DeckLog logsAtom={logsAtom} />}
+      <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
     </Root>
   );
 };

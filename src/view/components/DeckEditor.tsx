@@ -1,7 +1,7 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
-import ReactCodeMirror from '@uiw/react-codemirror';
+import ReactCodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
@@ -12,6 +12,7 @@ import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
+import { deckMemoryStorage } from '../../deckMemoryStorage';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)`
@@ -95,6 +96,7 @@ export const DeckEditor: React.FC<{
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
+  memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
   className?: string;
 }> = ({
   codeAtom,
@@ -103,10 +105,13 @@ export const DeckEditor: React.FC<{
   onCompile,
   onApply,
   onApplyImmediately,
+  memoryUpdateAtom,
   className,
 }) => {
+  const refCodeMirror = React.useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
+  const setMemoryUpdate = useSetAtom(memoryUpdateAtom);
   const setHasEdit = useSetAtom(hasEditAtom);
   const themeString = useSettings('theme');
   const font = useSettings('editorFont');
@@ -130,6 +135,33 @@ export const DeckEditor: React.FC<{
     const log: [number, string] = [id, text];
     set(logsAtom, [log, ...logs].slice(0, 5));
   }, [logsAtom]));
+
+  const handleLoadMemory = useCallback((key: string) => {
+    const obj = deckMemoryStorage.get(key);
+    if (obj == null) {
+      setMemoryUpdate({ key, status: 'loadfailed' });
+      return;
+    }
+
+    const code = obj.code ?? '';
+    const head = obj.head ?? 0;
+
+    const scrollEffect = EditorView.scrollIntoView(head, { y: 'center' });
+    refCodeMirror.current?.view?.dispatch(
+      { changes: { from: 0, to: refCodeMirror.current?.state?.doc.length, insert: code } },
+      { selection: { anchor: head, head } },
+      { effects: scrollEffect },
+    );
+
+    setMemoryUpdate({ key, status: 'loaded' });
+  }, [setCode, setHasEdit, setMemoryUpdate]);
+
+  const handleSaveMemory = useCallback((key: string) => {
+    const head = refCodeMirror.current?.view?.state.selection.main.head ?? 0;
+    deckMemoryStorage.set(key, { code, head });
+
+    setMemoryUpdate({ key, status: 'saved' });
+  }, [code, setMemoryUpdate]);
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = useMemo(() => [
@@ -159,7 +191,25 @@ export const DeckEditor: React.FC<{
         return false;
       },
     },
-  ], [onCompile, onApply, onApplyImmediately, addLog]);
+    ...[...Array(10)].flatMap((_, i) => [
+      {
+        key: `Mod-${i}`,
+        preventDefault: true,
+        run: () => {
+          handleLoadMemory(i.toString());
+          return false;
+        },
+      },
+      {
+        key: `Shift-Mod-${i}`,
+        preventDefault: true,
+        run: () => {
+          handleSaveMemory(i.toString());
+          return false;
+        },
+      },
+    ]),
+  ], [onCompile, onApply, onApplyImmediately, handleLoadMemory, handleSaveMemory]);
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(
@@ -238,6 +288,7 @@ export const DeckEditor: React.FC<{
     >
       <StyledSimpleBar>
         <StyledReactCodeMirror
+          ref={refCodeMirror}
           value={code}
           extensions={[
             cpp(),

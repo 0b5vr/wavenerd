@@ -6,8 +6,8 @@ import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const fadeOut = keyframes`
-  from { opacity: 1; }
-  to { opacity: 0; }
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 `;
 
 const Log = styled.div`
@@ -16,7 +16,7 @@ const Log = styled.div`
   border-radius: 4px;
   background: ${ThemeVars.back3};
   color: ${ThemeVars.fore};
-  animation: ease-in ${fadeOut} 2s forwards;
+  animation: cubic-bezier(0.9, 0.0, 1.0, 0.75) ${fadeOut} 2s forwards;
 `;
 
 const Root = styled.div`
