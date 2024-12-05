@@ -5,7 +5,7 @@ const back1 = 'var(--back1)';
 const back2 = 'var(--back2)';
 const back3 = 'var(--back3)';
 
-const overlayBack = 'var(--overlay-back, ${back3})';
+const overlayBack = `var(--overlay-back, ${back3})`;
 
 const uiShadow = 'var(--ui-shadow, #0008)';
 
