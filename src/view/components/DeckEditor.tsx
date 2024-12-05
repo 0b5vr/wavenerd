@@ -45,25 +45,33 @@ const Root = styled.div`
 `;
 
 // == utils ========================================================================================
-const keyToLogSpecialMap = new Map([
-  [' ', 'Space'],
+/** Ref: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values */
+const codeToKeyNameMap = new Map([
+  ['Escape', 'Esc'],
+  ['Minus', '-'],
+  ['Equal', '='],
+  ['BracketLeft', '['],
+  ['BracketRight', ']'],
+  ['Semicolon', ';'],
+  ['Quote', '\''],
+  ['Backquote', '`'],
+  ['Backslash', '\\'],
+  ['Comma', ','],
+  ['Period', '.'],
+  ['Slash', '/'],
+  ['NumpadMultiply', '*'],
+  ['NumpadSubtract', '-'],
+  ['NumpadAdd', '+'],
+  ['NumpadDecimal', '.'],
+  ['IntlBackslash', '\\'],
+  ['NumpadEqual', '='],
+  ['NumpadComma', ','],
+  ['NumpadEnter', 'Enter'],
+  ['NumpadDivide', '/'],
   ['ArrowUp', '↑'],
-  ['ArrowDown', '↓'],
   ['ArrowLeft', '←'],
   ['ArrowRight', '→'],
-]);
-
-const keysPutShiftSet = new Set([
-  'Enter',
-  'Tab',
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'Backspace',
-  'Delete',
-  'PageUp',
-  'PageDown',
+  ['ArrowDown', '↓'],
 ]);
 
 const keysIgnoreSet = new Set([
@@ -73,19 +81,31 @@ const keysIgnoreSet = new Set([
   'Meta',
 ]);
 
+function getKeyName(event: KeyboardEvent): string {
+  if (codeToKeyNameMap.has(event.code)) {
+    return codeToKeyNameMap.get(event.code)!;
+  }
+
+  if (event.code.startsWith('Key') || event.code.startsWith('Digit') || event.code.startsWith('Numpad')) {
+    return event.code.slice(-1);
+  }
+
+  return event.code;
+}
+
 function keyToLog(event: KeyboardEvent): string | null {
   if (keysIgnoreSet.has(event.key)) {
     return null;
   }
 
-  let key = keyToLogSpecialMap.get(event.key) ?? event.key;
+  let log = getKeyName(event);
 
-  if (event.shiftKey && keysPutShiftSet.has(event.key)) { key = 'Shift-' + key; }
-  if (event.ctrlKey) { key = 'Ctrl-' + key; }
-  if (event.metaKey) { key = 'Cmd-' + key; }
-  if (event.altKey) { key = 'Alt-' + key; }
+  if (event.shiftKey) { log = 'Shift-' + log; }
+  if (event.ctrlKey) { log = 'Ctrl-' + log; }
+  if (event.metaKey) { log = 'Cmd-' + log; }
+  if (event.altKey) { log = 'Alt-' + log; }
 
-  return key;
+  return log;
 }
 
 // == component ====================================================================================
