@@ -8,6 +8,12 @@ import IconX from '~icons/mdi/close';
 import IconSave from '~icons/mdi/content-save';
 
 // == styles =======================================================================================
+const Message = styled.div`
+  display: block;
+  width: 10em;
+  text-align: center;
+`;
+
 const KeyLabel = styled.div`
   display: flex;
   justify-content: center;
@@ -41,6 +47,7 @@ const Balloon = styled.div`
   border-radius: 8px;
   background: ${ThemeVars.back3};
   color: ${ThemeVars.fore};
+  box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
   animation: step-end ${fadeOut} 0.5s forwards;
 `;
 
@@ -111,7 +118,7 @@ export function DeckMemoryUpdateBalloon(props: Props): JSX.Element | null {
           </KeyLabel>
           {icon}
         </Row>
-        <span>{message}</span>
+        <Message>{message}</Message>
       </Balloon>
     </Root>
   );

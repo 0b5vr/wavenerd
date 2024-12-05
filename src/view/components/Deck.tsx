@@ -146,6 +146,7 @@ export const Deck: React.FC<{
         onApplyImmediately={handleApplyImmediately}
         memoryUpdateAtom={memoryUpdateAtom}
       />
+      {logEnabled && <DeckLog logsAtom={logsAtom} />}
       <StyledStatusBar
         errorAtom={errorAtom}
         cueStatusAtom={cueStatusAtom}
@@ -155,7 +156,6 @@ export const Deck: React.FC<{
         onApplyImmediately={handleApplyImmediately}
         gainParamName={gainParamName}
       />
-      {logEnabled && <DeckLog logsAtom={logsAtom} />}
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
     </Root>
   );

@@ -5,6 +5,8 @@ const back1 = 'var(--back1)';
 const back2 = 'var(--back2)';
 const back3 = 'var(--back3)';
 
+const uiShadow = 'var(--ui-shadow, #0008)';
+
 const codeBackground = 'var(--code-background)';
 
 const fore = 'var(--fore)';
@@ -49,6 +51,8 @@ export const ThemeVars = {
   back1,
   back2,
   back3,
+
+  uiShadow,
 
   codeBackground,
 
