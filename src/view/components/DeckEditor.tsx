@@ -164,17 +164,22 @@ export const DeckEditor: React.FC<{
     }
 
     const code = obj.code ?? '';
-    const head = obj.head ?? 0;
+    const to = refCodeMirror.current?.view?.state?.doc.length;
+    refCodeMirror.current?.view?.dispatch(
+      { changes: [
+        { from: 0, to, insert: code },
+      ] },
+    );
 
+    const head = obj.head ?? 0;
     const scrollEffect = EditorView.scrollIntoView(head, { y: 'center' });
     refCodeMirror.current?.view?.dispatch(
-      { changes: { from: 0, to: refCodeMirror.current?.state?.doc.length, insert: code } },
       { selection: { anchor: head, head } },
       { effects: scrollEffect },
     );
 
     setMemoryUpdate({ key, status: 'loaded' });
-  }, [setCode, setHasEdit, setMemoryUpdate]);
+  }, [refCodeMirror, setCode, setHasEdit, setMemoryUpdate]);
 
   const handleSaveMemory = useCallback((key: string) => {
     const head = refCodeMirror.current?.view?.state.selection.main.head ?? 0;
