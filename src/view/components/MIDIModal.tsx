@@ -8,12 +8,12 @@ import { useAtom } from 'jotai';
 
 // == styles =======================================================================================
 const Description = styled.p`
-  font: 400 12px 'Roboto', sans-serif;
+  font-size: 12px;
   margin: 8px 0;
 `;
 
 const Header = styled.h2`
-  font: 600 14px 'Roboto', sans-serif;
+  font-size: 16px;
   margin: 16px 0 8px;
 `;
 

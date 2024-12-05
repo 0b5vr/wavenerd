@@ -12,7 +12,7 @@ const StyledKnob = styled(Knob)`
 `;
 
 const KnobLabel = styled.div`
-font: 500 7px 'Roboto', sans-serif;
+font-size: 8px;
 line-height: 1;
 opacity: 0.7;
 `;

@@ -33,7 +33,6 @@ const Root = styled.div`
   align-items: center;
   background: ${ThemeVars.barBg};
   color: ${ThemeVars.barFg};
-  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 
   * {

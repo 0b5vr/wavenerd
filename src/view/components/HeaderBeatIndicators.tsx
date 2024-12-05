@@ -6,13 +6,13 @@ import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Label = styled.div`
-  font: 500 8px 'Roboto', sans-serif;
+  font-size: 8px;
   line-height: 1;
   opacity: 0.7;
 `;
 
 const ValueRow = styled.div`
-  font-size: 14px;
+  font: 14px 'Roboto Mono', monospace;
   line-height: 1.0;
   min-width: 64px;
 `;

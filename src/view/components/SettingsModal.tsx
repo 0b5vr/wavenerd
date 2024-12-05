@@ -27,7 +27,7 @@ const Name = styled.div`
 const Line = styled.div`
   display: flex;
   align-items: center;
-  font: 400 12px 'Roboto', sans-serif;
+  font-size: 12px;
 
   & + & {
     margin-top: 4px;

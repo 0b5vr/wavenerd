@@ -22,7 +22,6 @@ const Content = styled.div`
   padding: 0 16px;
   height: 80vh;
   overflow-y: scroll;
-  font: 400 14px 'Roboto', sans-serif;
 
   h2 {
     margin: 32px 0 8px;

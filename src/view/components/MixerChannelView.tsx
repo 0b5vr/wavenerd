@@ -21,7 +21,7 @@ const StyledMixerFader = styled(MixerFader)`
 `;
 
 const KnobLabel = styled.div`
-  font: 500 8px 'Roboto', sans-serif;
+  font-size: 8px;
   line-height: 1;
   opacity: 0.7;
 `;

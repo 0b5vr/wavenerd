@@ -9,7 +9,11 @@ import IconSave from '~icons/mdi/content-save';
 
 // == styles =======================================================================================
 const KeyLabel = styled.div`
-  padding-left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1em;
+  height: 1em;
 `;
 
 const fadeOut = keyframes`
@@ -19,6 +23,7 @@ const fadeOut = keyframes`
 
 const Row = styled.div`
   font-size: 32px;
+  font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +36,7 @@ const Balloon = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  font: 500 12px 'Roboto', sans-serif;
+  font: 400 12px 'Inter', sans-serif;
   padding: 8px 16px;
   border-radius: 8px;
   background: ${ThemeVars.back3};

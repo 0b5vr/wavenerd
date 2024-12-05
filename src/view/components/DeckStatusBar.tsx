@@ -125,7 +125,6 @@ const TextErrorBlink = styled(Text)`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
   background: ${ThemeVars.barBg};
   color: ${ThemeVars.barFg};

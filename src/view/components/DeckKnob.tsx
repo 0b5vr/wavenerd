@@ -11,7 +11,7 @@ const StyledKnob = styled(Knob)`
 `;
 
 const Label = styled.div`
-  font: 500 8px 'Roboto', sans-serif;
+  font-size: 8px;
   color: ${ThemeVars.foresub};
   line-height: 1;
 `;

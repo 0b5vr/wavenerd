@@ -12,7 +12,6 @@ const StyledIconPlay = styled(IconPlay)`
 `;
 
 const Description = styled.div`
-  font: 400 16px 'Roboto', sans-serif;
   line-height: 1;
 `;
 

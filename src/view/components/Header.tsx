@@ -21,7 +21,7 @@ import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================
 const Logo = styled.div`
-  font: 400 24px 'Poppins', sans-serif;
+  font: 600 24px 'Inter', sans-serif;
   line-height: 1;
   margin-left: 8px;
 `;

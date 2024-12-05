@@ -102,7 +102,7 @@ const Root = styled.div<{ themeString: string }>`
   flex-direction: column;
   color: ${ThemeVars.fore};
   background: ${ThemeVars.back2};
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Inter', monospace;
 
   * {
     box-sizing: border-box;

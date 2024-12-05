@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // == styles =======================================================================================
 const Root = styled.div`
   position: fixed;
-  font: 400 12px 'Roboto', sans-serif;
+  font-size: 12px;
   padding: 4px 8px;
   margin: 8px 16px;
   white-space: pre-line;
