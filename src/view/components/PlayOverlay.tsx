@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const StyledIconPlay = styled(IconPlay)`
   width: 128px;
   height: 128px;
-  fill: ${ThemeVars.fore};
+  fill: ${ThemeVars.white};
 `;
 
 const Description = styled.div`
@@ -31,6 +31,7 @@ const Content = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
+  color: ${ThemeVars.white};
   display: flex;
   flex-direction: column;
   justify-content: center;

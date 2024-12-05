@@ -34,6 +34,7 @@ const gray = 'var(--gray)';
 const knobColor = `var(--knob-color, ${fore})`;
 const knobNotch = `var(--knob-notch, ${back1})`;
 const knobGuide = `var(--knob-guide, ${gray})`;
+const knobBorder = `var(--knob-border, ${back1})`;
 const knobGutter = `var(--knob-gutter, ${back1})`;
 const knobShadow = 'var(--knob-shadow, #0008)';
 
@@ -81,6 +82,7 @@ export const ThemeVars = {
   knobColor,
   knobNotch,
   knobGuide,
+  knobBorder,
   knobGutter,
   knobShadow,
 

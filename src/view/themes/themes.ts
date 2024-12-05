@@ -6,6 +6,8 @@ import { themeShadertoyDark } from './themeShadertoyDark';
 import { themeShadertoyLight } from './themeShadertoyLight';
 import { themeSolarizedDark } from './themeSolarizedDark';
 import { themeSolarizedLight } from './themeSolarizedLight';
+import { themeSwedishBox } from './themeSwedishBox';
+import { themeSwedishMachine } from './themeSwedishMachine';
 
 export const themes: Record<string, {
   displayName: string;
@@ -41,5 +43,15 @@ export const themes: Record<string, {
     displayName: 'Solarized Light',
     theme: themeSolarizedLight,
     cmTheme: createCMTheme(themeSolarizedLight),
+  },
+  'swedishBox': {
+    displayName: 'Swedish Box',
+    theme: themeSwedishBox,
+    cmTheme: createCMTheme(themeSwedishBox),
+  },
+  'swedishMachine': {
+    displayName: 'Swedish Machine',
+    theme: themeSwedishMachine,
+    cmTheme: createCMTheme(themeSwedishMachine),
   },
 };

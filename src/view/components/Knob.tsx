@@ -37,7 +37,7 @@ const Body = styled.div`
   height: 100%;
   border-radius: 10000px;
   background: ${ThemeVars.knobColor};
-  box-shadow: 0 0 0 2px ${ThemeVars.back1}, 0 4px 8px 2px ${ThemeVars.knobShadow};
+  box-shadow: 0 0 0 2px ${ThemeVars.knobBorder}, 0 4px 8px 2px ${ThemeVars.knobShadow};
 `;
 
 const Root = styled.div`
