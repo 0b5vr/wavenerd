@@ -17,17 +17,26 @@ const fadeOut = keyframes`
   100% { opacity: 0; }
 `;
 
-const Balloon = styled.div`
+const Row = styled.div`
+  font-size: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  font: 500 32px 'Roboto', sans-serif;
+`;
+
+const Balloon = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font: 500 12px 'Roboto', sans-serif;
   padding: 8px 16px;
   border-radius: 8px;
   background: ${ThemeVars.back3};
   color: ${ThemeVars.fore};
-  animation: cubic-bezier(0.9, 0.0, 1.0, 0.75) ${fadeOut} 2s forwards;
+  animation: step-end ${fadeOut} 0.5s forwards;
 `;
 
 const Root = styled.div`
@@ -66,6 +75,24 @@ export function DeckMemoryUpdateBalloon(props: Props): JSX.Element | null {
     }
   }, [memoryUpdate]);
 
+  const message = useMemo(() => {
+    if (memoryUpdate == null) {
+      return null;
+    }
+
+    let message = `Memory ${memoryUpdate.key}`;
+
+    if (memoryUpdate.status === 'loaded') {
+      message += ' loaded';
+    } else if (memoryUpdate.status === 'loadfailed') {
+      message += ' empty';
+    } else if (memoryUpdate.status === 'saved') {
+      message += ' saved';
+    }
+
+    return message;
+  }, [memoryUpdate]);
+
   if (memoryUpdate == null) {
     return null;
   }
@@ -73,10 +100,13 @@ export function DeckMemoryUpdateBalloon(props: Props): JSX.Element | null {
   return (
     <Root>
       <Balloon key={key}>
-        <KeyLabel>
-          {memoryUpdate.key}
-        </KeyLabel>
-        {icon}
+        <Row>
+          <KeyLabel>
+            {memoryUpdate.key}
+          </KeyLabel>
+          {icon}
+        </Row>
+        <span>{message}</span>
       </Balloon>
     </Root>
   );
