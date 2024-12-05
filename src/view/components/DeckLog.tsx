@@ -16,7 +16,6 @@ const Log = styled.div`
   border-radius: 4px;
   background: ${ThemeVars.back3};
   color: ${ThemeVars.fore};
-  box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
   animation: cubic-bezier(0.9, 0.0, 1.0, 0.75) ${fadeOut} 2s forwards;
 `;
 
