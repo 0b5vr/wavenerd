@@ -1,15 +1,12 @@
 import { Theme } from './Theme';
 
-const back1 = '#000000';
-const back2 = '#090909';
-const back3 = '#181818';
-const back4 = '#282828';
+const black = '#000000';
 
 const gray = '#999999';
 
 const fore = '#ffffff';
-const foresub = '#bbbbbb';
-const foredark = '#999999';
+const foresub = '#dddddd';
+const foredark = '#aaaaaa';
 
 const background = '#00ff00';
 
@@ -28,13 +25,15 @@ export const themeChromaCoder: Theme = {
     black: '#000000',
     white: '#ffffff',
 
-    back1,
-    back2,
-    back3,
+    back1: background,
+    back2: background,
+    back3: background,
+
+    overlayBack: '#111111',
 
     codeBackground: background,
 
-    inputBack: back4,
+    inputBack: '#282828',
     inputFore: fore,
     inputBackInvalid: redDark,
 
@@ -45,6 +44,10 @@ export const themeChromaCoder: Theme = {
     gray,
 
     knobColor: `linear-gradient(to bottom, ${fore}, ${foresub})`,
+    knobGuide: gray,
+    knobNotch: black,
+    knobBorder: black,
+    knobGutter: black,
     knobShadow: '#0008',
 
     accent: blue,
@@ -72,10 +75,10 @@ export const themeChromaCoder: Theme = {
     strings: yellow,
     comments: gray,
     invalid: invalidred,
-    panels: back3,
-    tooltips: back3,
+    panels: background,
+    tooltips: background,
     gutterText: gray,
-    gutterBackground: back1,
+    gutterBackground: background,
     foldPlaceholders: gray,
     searchMatch: yellow + '22',
     searchSelected: orange + '88',

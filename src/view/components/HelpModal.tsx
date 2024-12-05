@@ -39,7 +39,7 @@ const Content = styled.div`
   code {
     padding: 0px 4px;
     font: 400 14px 'Roboto Mono', sans-serif;
-    background-color: ${ThemeVars.back1};
+    background-color: ${ThemeVars.inputBack};
     color: ${ThemeVars.foresub};
     border-radius: 4px;
   }

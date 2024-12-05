@@ -14,7 +14,7 @@ const Log = styled.div`
   font-size: 12px;
   padding: 0 4px;
   border-radius: 4px;
-  background: ${ThemeVars.back3};
+  background: ${ThemeVars.overlayBack};
   color: ${ThemeVars.fore};
   animation: cubic-bezier(0.9, 0.0, 1.0, 0.75) ${fadeOut} 2s forwards;
 `;

@@ -5,6 +5,8 @@ const back1 = 'var(--back1)';
 const back2 = 'var(--back2)';
 const back3 = 'var(--back3)';
 
+const overlayBack = 'var(--overlay-back, ${back3})';
+
 const uiShadow = 'var(--ui-shadow, #0008)';
 
 const codeBackground = 'var(--code-background)';
@@ -22,7 +24,7 @@ const headerFg = `var(--header-fg, ${barFg})`;
 const contextMenuBg = `var(--context-menu-bg, ${back2})`;
 const contextMenuFg = `var(--context-menu-fg, ${fore})`;
 
-const modalBg = `var(--modal-bg, ${back2})`;
+const modalBg = `var(--modal-bg, ${overlayBack})`;
 const modalFg = `var(--modal-fg, ${fore})`;
 
 const inputBack = 'var(--input-back)';
@@ -52,6 +54,8 @@ export const ThemeVars = {
   back1,
   back2,
   back3,
+
+  overlayBack,
 
   uiShadow,
 

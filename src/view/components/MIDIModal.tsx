@@ -24,7 +24,7 @@ const MonitorBox = styled.div`
   width: 100%;
   padding: 4px 8px;
   border-radius: 4px;
-  background: ${ThemeVars.back1};
+  background: ${ThemeVars.inputBack};
   font: 400 10px 'Roboto Mono', sans-serif;
 `;
 

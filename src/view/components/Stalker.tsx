@@ -10,7 +10,7 @@ const Root = styled.div`
   margin: 8px 16px;
   white-space: pre-line;
   color: ${ThemeVars.foresub};
-  background: ${ThemeVars.back1};
+  background: ${ThemeVars.overlayBack};
   box-shadow: 0 2px 4px 2px #0008;
   border-radius: 4px;
   z-index: 10000;
