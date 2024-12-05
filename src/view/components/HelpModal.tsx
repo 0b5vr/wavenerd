@@ -111,14 +111,19 @@ export const HelpModal: React.FC = () => {
           You can change the latency from the setting screen <IconsInContent as={IconSettings} />.
         </p>
         <h2>Keyboard shortcuts</h2>
+        <p>
+          All shortcuts in CodeMirror's <a href="https://codemirror.net/docs/ref/#commands.defaultKeymap" target="_blank" rel="noreferrer">defaultKeymap</a> are available. In addition, the following Wavenerd-specific shortcuts are available:
+        </p>
         <ul>
-          <li><code>Ctrl + S</code>: Compile the code</li>
-          <li><code>Ctrl + R</code>: Apply the code</li>
-          <li><code>Shift + Ctrl + R</code>: Apply the code immediately</li>
-          <li><code>Ctrl + ,</code>: Jump to the previous bracket</li>
-          <li><code>Ctrl + .</code>: Jump to the next bracket</li>
-          <li><code>Shift + Ctrl + ,</code>: Extend / shrink selection to the previous sibling bracket</li>
-          <li><code>Shift + Ctrl + .</code>: Extend / shrink selection to the next sibling bracket</li>
+          <li><code>Ctrl-S</code>: Compile the code</li>
+          <li><code>Ctrl-R</code>: Apply the code</li>
+          <li><code>Shift-Ctrl-R</code>: Apply the code immediately</li>
+          <li><code>Ctrl-,</code>: Jump to the previous bracket</li>
+          <li><code>Ctrl-.</code>: Jump to the next bracket</li>
+          <li><code>Shift-Ctrl-,</code>: Extend / shrink selection to the previous sibling bracket</li>
+          <li><code>Shift-Ctrl-.</code>: Extend / shrink selection to the next sibling bracket</li>
+          <li><code>Ctrl-[0-9]</code>: Load from memory patterns</li>
+          <li><code>Shift-Ctrl-[0-9]</code>: Save to memory patterns</li>
         </ul>
         <h2>How to use params</h2>
         <p>
