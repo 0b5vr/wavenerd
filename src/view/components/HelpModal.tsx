@@ -112,7 +112,7 @@ export const HelpModal: React.FC = () => {
         </p>
         <h2>Keyboard shortcuts</h2>
         <p>
-          All shortcuts in CodeMirror's <a href="https://codemirror.net/docs/ref/#commands.defaultKeymap" target="_blank" rel="noreferrer">defaultKeymap</a> are available. In addition, the following Wavenerd-specific shortcuts are available:
+          All shortcuts in CodeMirror&#39;s <a href="https://codemirror.net/docs/ref/#commands.defaultKeymap" target="_blank" rel="noreferrer">defaultKeymap</a> are available. In addition, the following Wavenerd-specific shortcuts are available:
         </p>
         <ul>
           <li><code>Ctrl-S</code>: Compile the code</li>
