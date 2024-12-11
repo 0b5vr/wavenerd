@@ -1,6 +1,6 @@
 import { MixerChannel, MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
-import { DCRemoval } from './DCRemoval';
+import { DCRemovalUnit } from './DCRemovalUnit';
 import { EventEmittable } from '../utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
 import { SETTINGSMAN } from '../SettingsManager';
@@ -58,7 +58,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__dcRemovalUnit.active = value;
   }
 
-  private __dcRemovalUnit: DCRemoval;
+  private __dcRemovalUnit: DCRemovalUnit;
 
   private __gainXFaderA: GainNode;
   private __gainXFaderB: GainNode;
@@ -95,7 +95,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__gainXFaderB = audio.createGain();
     this.__gainNodeOut = audio.createGain();
 
-    this.__dcRemovalUnit = new DCRemoval(audio);
+    this.__dcRemovalUnit = new DCRemovalUnit(audio);
 
     this.__channelA.output.connect(this.__gainXFaderA);
     this.__channelB.output.connect(this.__gainXFaderB);

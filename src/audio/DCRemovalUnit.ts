@@ -1,4 +1,6 @@
-export class DCRemoval {
+import { DCRemovalNode } from './DCRemovalNode';
+
+export class DCRemovalUnit {
   private __active = true;
   public get active(): boolean {
     return this.__active;
@@ -19,26 +21,27 @@ export class DCRemoval {
     return this.__gainOutput;
   }
 
-  private __filter: BiquadFilterNode;
+  private __dcRemovalNode?: DCRemovalNode;
 
   public constructor(audio: AudioContext) {
     this.__gainInput = audio.createGain();
     this.__gainOutput = audio.createGain();
 
-    this.__filter = audio.createBiquadFilter();
-    this.__filter.type = 'highpass';
-    this.__filter.frequency.value = 5.0;
+    DCRemovalNode.addModule(audio).then(() => {
+      this.__dcRemovalNode = new DCRemovalNode(audio);
+      this.__reconnect();
+    });
 
     this.__reconnect();
   }
 
   private __reconnect(): void {
     this.__gainInput.disconnect();
-    this.__filter.disconnect();
+    this.__dcRemovalNode?.disconnect();
 
-    if (this.__active) {
-      this.__gainInput.connect(this.__filter);
-      this.__filter.connect(this.__gainOutput);
+    if (this.__active && this.__dcRemovalNode != null) {
+      this.__gainInput.connect(this.__dcRemovalNode);
+      this.__dcRemovalNode.connect(this.__gainOutput);
     } else {
       this.__gainInput.connect(this.__gainOutput);
     }
