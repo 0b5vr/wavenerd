@@ -1,4 +1,4 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { EventEmittable } from '../utils/EventEmittable';
 
 export interface MixerEQChangeEvent {
   low?: number;

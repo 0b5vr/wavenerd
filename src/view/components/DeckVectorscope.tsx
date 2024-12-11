@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Analyser } from '../../Analyser';
+import { Analyser } from '../../audio/Analyser';
 import { VectorscopeRenderer } from '../renderers/VectorscopeRenderer';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';

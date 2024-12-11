@@ -1,5 +1,5 @@
 import { EventEmittable } from './utils/EventEmittable';
-import { MixerEQMode } from './MixerChannel';
+import { MixerEQMode } from './audio/MixerChannel';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 
 export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';

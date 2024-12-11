@@ -1,4 +1,4 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { EventEmittable } from '../utils/EventEmittable';
 
 export const ANALYSER_TIME_DOMAIN_SIZE = 1024;
 export const ANALYSER_FREQUENCY_SIZE = 1024;

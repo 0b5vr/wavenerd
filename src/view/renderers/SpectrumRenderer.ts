@@ -1,4 +1,4 @@
-import { ANALYSER_FREQUENCY_SIZE } from '../../Analyser';
+import { ANALYSER_FREQUENCY_SIZE } from '../../audio/Analyser';
 import colorFrag from './color.frag?raw';
 import spectrumVert from './spectrum.vert?raw';
 

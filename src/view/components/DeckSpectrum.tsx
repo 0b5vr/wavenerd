@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Analyser } from '../../Analyser';
+import { Analyser } from '../../audio/Analyser';
 import { SpectrumRenderer } from '../renderers/SpectrumRenderer';
 import styled from 'styled-components';
 import { useElement } from '../utils/useElement';

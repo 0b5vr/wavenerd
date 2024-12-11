@@ -1,5 +1,5 @@
 import { MixerEQ, MixerEQChangeEvent } from './MixerEQ';
-import { EventEmittable } from './utils/EventEmittable';
+import { EventEmittable } from '../utils/EventEmittable';
 import { MixerEQIsolator } from './MixerEQIsolator';
 import { MixerEQNone } from './MixerEQNone';
 

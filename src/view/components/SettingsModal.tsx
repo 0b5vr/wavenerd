@@ -1,4 +1,4 @@
-import { Mixer } from '../../Mixer';
+import { Mixer } from '../../audio/Mixer';
 import React, { useCallback, useMemo } from 'react';
 import { Settings, SETTINGSMAN } from '../../SettingsManager';
 import { settingsAtom, settingsIsOpeningAtom } from '../stores/atoms/settings';

@@ -1,4 +1,4 @@
-import { ANALYSER_TIME_DOMAIN_SIZE } from '../../Analyser';
+import { ANALYSER_TIME_DOMAIN_SIZE } from '../../audio/Analyser';
 import colorFrag from './color.frag?raw';
 import vectorscopeVert from './vectorscope.vert?raw';
 

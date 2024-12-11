@@ -1,9 +1,9 @@
 import { MixerChannel, MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
 import { DCRemoval } from './DCRemoval';
-import { EventEmittable } from './utils/EventEmittable';
+import { EventEmittable } from '../utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
-import { SETTINGSMAN } from './SettingsManager';
+import { SETTINGSMAN } from '../SettingsManager';
 import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
 import { xfaderCurveLinear } from './xfaderCurveLinear';

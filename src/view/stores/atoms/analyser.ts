@@ -1,4 +1,4 @@
-import { LevelMeterResult } from '../../../LevelMeter';
+import { LevelMeterResult } from '../../../audio/LevelMeter';
 import { atom } from 'jotai';
 
 export const levelMeterInAAtom = atom<LevelMeterResult>({

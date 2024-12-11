@@ -3,12 +3,12 @@ import 'symbol-observable';
 import React from 'react';
 import { SETTINGSMAN, Settings } from './SettingsManager';
 import { App } from './view/components/App';
-import { AudioDestinationRouter } from './AudioDestinationRouter';
+import { AudioDestinationRouter } from './audio/AudioDestinationRouter';
 import { ClockRealtime } from '@0b5vr/experimental';
-import { CueMixer } from './CueMixer';
+import { CueMixer } from './audio/CueMixer';
 import { MIDIMAN } from './MIDIManager';
-import { Mixer } from './Mixer';
-import { Reverb } from './Reverb';
+import { Mixer } from './audio/Mixer';
+import { Reverb } from './audio/Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 

@@ -1,5 +1,5 @@
 import { Analyser, AnalyserResult } from './Analyser';
-import { EventEmittable } from './utils/EventEmittable';
+import { EventEmittable } from '../utils/EventEmittable';
 
 export interface LevelMeterResult {
   level: number;

@@ -11,7 +11,7 @@ import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
 import { MIDIModal } from './MIDIModal';
 import { Metrics } from '../constants/Metrics';
-import { Mixer } from '../../Mixer';
+import { Mixer } from '../../audio/Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import React from 'react';
