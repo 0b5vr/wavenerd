@@ -20,6 +20,14 @@ const Gutter = styled.div`
   pointer-events: none;
 `;
 
+const GutterGlow = styled.div`
+  position: absolute;
+  top: calc( 50% - 1px );
+  height: 2px;
+  background: ${ThemeVars.accent};
+  pointer-events: none;
+`;
+
 const Ruler = styled.div`
   position: absolute;
   top: 0px;
@@ -62,6 +70,7 @@ const Knob = styled.div`
   top: 4px;
   width: 16px;
   height: calc( 100% - 8px );
+  border-radius: 1px;
   background: ${ThemeVars.knobColor};
   pointer-events: none;
   box-shadow: 0 0 0 2px ${ThemeVars.knobBorder}, 0 4px 8px 2px ${ThemeVars.knobShadow};
@@ -125,6 +134,12 @@ export const Fader: React.FC<{
         <Ruler style={{ left: 'calc( 100% - 2px )' }} />
       </RulerContainer>
       <Gutter />
+      <GutterGlow
+        style={{
+          left: `${100.0 * Math.min(value, 0.5)}%`,
+          right: `${100.0 * (1.0 - Math.max(value, 0.5))}%`,
+        }}
+      />
       <Knob
         style={{
           left: `calc( ${100.0 * value}% - 8px )`,

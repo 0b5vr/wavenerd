@@ -45,7 +45,7 @@ const Balloon = styled.div`
   font: 400 12px 'Inter', sans-serif;
   padding: 8px 16px;
   border-radius: 8px;
-  background: ${ThemeVars.back3};
+  background: ${ThemeVars.overlayBack};
   color: ${ThemeVars.fore};
   box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
   animation: step-end ${fadeOut} 0.5s forwards;

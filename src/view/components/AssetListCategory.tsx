@@ -23,11 +23,21 @@ const StyledAssetListBar = styled(AssetListBar)`
   height: 24px;
 `;
 
-const Root = styled.div<{ isDragging: boolean }>`
+const DraggingOverlay = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: ${ThemeVars.fore};
+  opacity: 0.125;
+`;
+
+const Root = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  background: ${({ isDragging }) => isDragging ? ThemeVars.back3 : ThemeVars.back1};
+  background: ${ThemeVars.back1};
 `;
 
 // == components ===================================================================================
@@ -101,7 +111,6 @@ export const AssetListCategory: React.FC<{
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      isDragging={isDragging}
       style={{ flexGrow: expand ? 1 : undefined }}
     >
       <StyledAssetListBar
@@ -123,6 +132,7 @@ export const AssetListCategory: React.FC<{
           }
         </Body>
       ) }
+      {isDragging && <DraggingOverlay />}
     </Root>
   );
 };

@@ -13,6 +13,7 @@ import { useSettings } from '../stores/hooks/useSettings';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
 import { deckMemoryStorage } from '../../deckMemoryStorage';
+import { createCMTheme } from '../codemirror/createCMTheme';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)`
@@ -28,8 +29,8 @@ const StyledSimpleBar = styled(SimpleBar)`
   }
 `;
 
-const Overlay = styled.div<{ isDragging: boolean }>`
-  display: ${({ isDragging }) => isDragging ? 'block' : 'none'};
+const DraggingOverlay = styled.div`
+  display: 'block';
   position: absolute;
   left: 0;
   top: 0;
@@ -37,7 +38,7 @@ const Overlay = styled.div<{ isDragging: boolean }>`
   height: 100%;
   background: ${ThemeVars.fore};
   opacity: 0.125;
-  pointer-events: ${({ isDragging }) => isDragging ? 'auto' : 'none'};
+  pointer-events: 'auto';
 `;
 
 const Root = styled.div`
@@ -137,7 +138,10 @@ export const DeckEditor: React.FC<{
   const font = useSettings('editorFont');
   const fontVariantLigatures = useSettings('editorFontVariantLigatures');
 
-  const theme = (themes[themeString] ?? themes['monokaiSharp']).cmTheme;
+  const theme = useMemo(() => {
+    const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
+    return createCMTheme(theme);
+  }, [themeString]);
 
   const fontExtension = useMemo(() => {
     const theme = EditorView.theme({
@@ -328,9 +332,7 @@ export const DeckEditor: React.FC<{
           onChange={handleChange}
         />
       </StyledSimpleBar>
-      <Overlay
-        isDragging={isDragging}
-      />
+      {isDragging && <DraggingOverlay />}
     </Root>
   );
 };

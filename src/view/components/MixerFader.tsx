@@ -59,6 +59,7 @@ const Knob = styled.div`
   top: 4px;
   width: 100%;
   height: 8px;
+  border-radius: 1px;
   background: ${ThemeVars.knobColor};
   pointer-events: none;
   box-shadow: 0 0 0 2px ${ThemeVars.knobBorder}, 0 4px 8px 2px ${ThemeVars.knobShadow};
