@@ -4,6 +4,7 @@ export function createThemeFlush(accent: string): Theme {
   const black = '#000000';
   const white = '#ffffff';
 
+  const gray1 = '#121212';
   const gray2 = '#232323';
   const gray8 = '#555555';
 
@@ -26,7 +27,7 @@ export function createThemeFlush(accent: string): Theme {
       back2: back,
       back3: back,
 
-      overlayBack: gray2,
+      overlayBack: gray1,
 
       codeBackground: codeBg,
 

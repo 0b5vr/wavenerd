@@ -5,8 +5,29 @@ import SimpleBar from 'simplebar-react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { sanitizeAssetName } from './utils/sanitizeAssetName';
 import styled from 'styled-components';
+import IconNull from '~icons/mdi/circle-off-outline';
 
 // == styles =======================================================================================
+const NoAssetsIcon = styled(IconNull)`
+  font-size: 24px;
+  transform: rotate(-90deg);
+`;
+
+const NoAssetsContainer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 24px;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: ${ThemeVars.gray};
+`;
+
 const StyledEntry = styled(AssetListEntry)`
   width: calc( 100% - 4px );
   height: 16px;
@@ -39,6 +60,16 @@ const Root = styled.div`
   position: relative;
   background: ${ThemeVars.back1};
 `;
+
+// == microcomponent ===============================================================================
+function NoAssets({ text }: { text: string }): JSX.Element {
+  return (
+    <NoAssetsContainer>
+      <NoAssetsIcon />
+      {text}
+    </NoAssetsContainer>
+  );
+}
 
 // == components ===================================================================================
 export const AssetListCategory: React.FC<{
@@ -119,19 +150,26 @@ export const AssetListCategory: React.FC<{
         expand={expand}
         onChangeExpand={handleChangeExpand}
       />
-      { expand && (
-        <Body>
+      {expand && (
+        <>
+          <Body>
+            {
+              assets.map((name) => (
+                <StyledEntry
+                  key={name}
+                  name={name}
+                  onDeleteAsset={onDeleteAsset}
+                />
+              ))
+            }
+          </Body>
           {
-            assets.map((name) => (
-              <StyledEntry
-                key={name}
-                name={name}
-                onDeleteAsset={onDeleteAsset}
-              />
-            ))
+            (assets.length === 0) && (
+              <NoAssets text={`No ${title}`} />
+            )
           }
-        </Body>
-      ) }
+        </>
+      )}
       {isDragging && <DraggingOverlay />}
     </Root>
   );
