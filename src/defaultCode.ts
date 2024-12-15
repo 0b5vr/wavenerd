@@ -1,25 +1,31 @@
-export const defaultCode = `#define BPM bpm
+export const defaultCodeA = `#define BPM bpm
+#define B2T (60.0 / BPM)
 
-#define PI 3.14159265359
-#define TAU 6.28318530718
+const float PI = acos(-1.0);
+const float TAU = 2.0 * PI;
 
-float kick( float t ) {
-  if ( t < 0.0 ) { return 0.0; }
+vec2 mainAudio(vec4 time) {
+  vec2 dest = vec2(0.0);
 
-  float attack = 4.0;
+  { // kick
+    float t = time.x; // time.x = a beat
+    float q = B2T - time.x;
 
-  return exp( -4.0 * t ) * sin( TAU * (
-    50.0 * t - attack * ( exp( -40.0 * t ) + exp( -200.0 * t ) )
-  ) );
+    float env = smoothstep(0.3, 0.1, t) * smoothstep(0.0, 0.01, q);
+
+    float wave = sin(TAU * (
+      50.0 * t
+      - 8.0 * exp2(-50.0 * t)
+    ));
+
+    dest += 0.5 * env * wave;
+  }
+
+  return dest;
 }
+`;
 
-vec2 mainAudio( vec4 time ) {
-  vec2 dest = vec2( 0.0 );
-
-  float tKick = time.x; // time.x = a beat
-  float aKick = kick( tKick );
-  dest += 0.3 * aKick;
-
+export const defaultCodeB = `vec2 mainAudio(vec4 time) {
   return dest;
 }
 `;
