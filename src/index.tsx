@@ -11,6 +11,7 @@ import { Mixer } from './audio/Mixer';
 import { Reverb } from './audio/Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
+import { Recorder } from './audio/Recorder';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl2')!;
@@ -43,6 +44,9 @@ const cueMixer = new CueMixer(audio);
 mixer.channelA.outputForAnal.connect(cueMixer.inputA);
 mixer.channelB.outputForAnal.connect(cueMixer.inputB);
 master.connect(cueMixer.inputMaster);
+
+const recorder = new Recorder(audio);
+master.connect(recorder.input);
 
 const router = new AudioDestinationRouter(audio);
 
@@ -153,5 +157,6 @@ root.render(
     deckA={deckA}
     deckB={deckB}
     mixer={mixer}
+    recorder={recorder}
   />,
 );

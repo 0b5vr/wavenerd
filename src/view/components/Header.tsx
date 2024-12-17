@@ -9,6 +9,7 @@ import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconMIDI from '~icons/mdi/midi-port';
+import IconRecord from '~icons/mdi/record';
 import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -18,6 +19,8 @@ import { midiIndicatorAtom, midiModalIsOpeningAtom } from '../stores/atoms/midi'
 import { settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useAtomCallback } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
+import { Recorder } from '../../audio/Recorder';
+import { recorderIsRecordingAtom } from '../stores/atoms/recorder';
 
 // == styles =======================================================================================
 const Logo = styled.div`
@@ -65,6 +68,10 @@ const StyledIconBBox = styled(IconBBox)`
   ${StyleIcon};
 `;
 
+const StyledIconRecord = styled(IconRecord)`
+  ${StyleIcon};
+`;
+
 const StyledIconSettings = styled(IconSettings)`
   ${StyleIcon};
 `;
@@ -108,10 +115,20 @@ const Root = styled.div`
 // == components ===================================================================================
 export const Header: React.FC<{
   hostDeck: WavenerdDeck;
+  recorder: Recorder;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}> = ({ hostDeck, recorder, className }) => {
   const showB = useAtomValue(deckShowBAtom);
   const midiIndicator = useAtomValue(midiIndicatorAtom);
+  const recorderIsRecording = useAtomValue(recorderIsRecordingAtom);
+
+  const handleClickRecord = useCallback(() => {
+    if (recorder.isRecording) {
+      recorder.stop();
+    } else {
+      recorder.start();
+    }
+  }, [recorder]);
 
   const handleClickToggleB = useAtomCallback(useCallback((get, set) => {
     set(deckShowBAtom, !get(deckShowBAtom));
@@ -150,6 +167,11 @@ export const Header: React.FC<{
         onClick={handleClickToggleB}
         style={{ opacity: showB ? 1.0 : 0.5 }}
         data-stalker="Toggle Deck B"
+      />
+      <StyledIconRecord
+        onClick={handleClickRecord}
+        style={{ color: recorderIsRecording ? ThemeVars.error : 'inherit' }}
+        data-stalker={recorderIsRecording ? 'Recording... Click to stop' : 'Record'}
       />
       <StyledIconMIDI
         onClick={handleClickMIDI}

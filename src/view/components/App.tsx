@@ -28,6 +28,8 @@ import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
+import { Recorder } from '../../audio/Recorder';
+import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -116,9 +118,10 @@ interface Props {
   deckA: WavenerdDeck;
   deckB: WavenerdDeck;
   mixer: Mixer;
+  recorder: Recorder;
 }
 
-const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer }) => {
+const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => {
   const showB = useAtomValue(deckShowBAtom);
   const themeString = useSettings('theme');
 
@@ -126,12 +129,14 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer }) => {
   useMidiSubscribers(MIDIMAN);
   useSettingsSubscribers(SETTINGSMAN);
   useDeckSubscribers(deckA, deckA, deckB);
+  useRecorderSubscribers(recorder);
 
   return (
     <>
       <Root themeString={themeString}>
         <StyledHeader
           hostDeck={deckA}
+          recorder={recorder}
         />
         <DeckRow>
           <StyledDeck
@@ -179,11 +184,12 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer }) => {
   );
 };
 
-const App: React.FC<Props> = ({ deckA, deckB, mixer }) => (
+const App: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => (
   <OutOfContextApp
     deckA={deckA}
     deckB={deckB}
     mixer={mixer}
+    recorder={recorder}
   />
 );
 
