@@ -9,6 +9,10 @@ class DCRemovalProcessor extends AudioWorkletProcessor {
   }
 
   process(inputs, outputs) {
+    if (inputs?.[0].length === 0 || outputs?.[0].length === 0) {
+      return true;
+    }
+
     const k = Math.min(1.0 / sampleRate, 1.0);
 
     for (let iChannel = 0; iChannel < CHANNELS; iChannel++) {
