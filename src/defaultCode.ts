@@ -9,7 +9,7 @@ vec2 mainAudio(vec4 time) {
 
   { // kick
     float t = time.x; // time.x = a beat
-    float q = B2T - time.x;
+    float q = B2T - t;
 
     float env = smoothstep(0.3, 0.1, t) * smoothstep(0.0, 0.01, q);
 
@@ -19,6 +19,20 @@ vec2 mainAudio(vec4 time) {
     ));
 
     dest += 0.5 * env * wave;
+  }
+
+  { // sawtooth
+    float t = time.y; // time.y = a bar
+    float q = B2T - t;
+
+    float env = smoothstep(0.0, 0.01, t) * smoothstep(0.0, 0.01, q);
+    env *= exp2(-t);
+
+    float freq = 220.0;
+    float phase = freq * t;
+    float wave = 2.0 * fract(phase) - 1.0;
+
+    dest += 0.2 * env * wave;
   }
 
   return dest;
