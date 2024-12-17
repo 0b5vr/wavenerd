@@ -70,6 +70,7 @@ const StyledIconBBox = styled(IconBBox)`
 
 const StyledIconRecord = styled(IconRecord)`
   ${StyleIcon};
+  transform: scale(0.9); // to remove an ugly interpolation on 1x scale
 `;
 
 const StyledIconSettings = styled(IconSettings)`
