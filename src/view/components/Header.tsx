@@ -5,11 +5,11 @@ import { HeaderBeatIndicators } from './HeaderBeatIndicators';
 import { HeaderNudge } from './HeaderNudge';
 import { HeaderTime } from './HeaderTime';
 import { HeaderTransport } from './HeaderTransport';
+import IconCasette from '~icons/mdi/cassette';
 import IconBBox from '~icons/mdi/alpha-b-box';
 import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconMIDI from '~icons/mdi/midi-port';
-import IconRecord from '~icons/mdi/record';
 import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -68,9 +68,8 @@ const StyledIconBBox = styled(IconBBox)`
   ${StyleIcon};
 `;
 
-const StyledIconRecord = styled(IconRecord)`
+const StyledIconCasette = styled(IconCasette)`
   ${StyleIcon};
-  transform: scale(0.9); // to remove an ugly interpolation on 1x scale
 `;
 
 const StyledIconSettings = styled(IconSettings)`
@@ -169,7 +168,7 @@ export const Header: React.FC<{
         style={{ opacity: showB ? 1.0 : 0.5 }}
         data-stalker="Toggle Deck B"
       />
-      <StyledIconRecord
+      <StyledIconCasette
         onClick={handleClickRecord}
         style={{ color: recorderIsRecording ? ThemeVars.error : 'inherit' }}
         data-stalker={recorderIsRecording ? 'Recording... Click to stop' : 'Record'}
