@@ -65,7 +65,7 @@ export const DeckSpectrum: React.FC<Param> = ({ analyser, className }) => {
       renderer?.setData(frequencyL);
       renderer?.render();
     }
-  }, [renderer]);
+  }, [spectrumMode, renderer]);
 
   // handle resize
   useEffect(() => {

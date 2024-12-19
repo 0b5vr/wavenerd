@@ -62,7 +62,7 @@ export const DeckVectorscope: React.FC<{
       renderer?.setData(timeDomainL, timeDomainR);
       renderer?.render();
     }
-  }, [renderer]);
+  }, [vectorscopeMode, renderer]);
 
   // handle resize
   useEffect(() => {
