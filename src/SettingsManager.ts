@@ -2,7 +2,7 @@ import { EventEmittable } from './utils/EventEmittable';
 import { MixerEQMode } from './audio/MixerChannel';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 
-export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
+export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
 export type VectorscopeModeType = 'none' | 'line' | 'points';
 

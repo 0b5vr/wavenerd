@@ -144,7 +144,9 @@ export class Mixer extends EventEmittable<MixerEvents> {
     const x = this.__xFaderPos;
     const mode = SETTINGSMAN.values.xfaderMode;
 
-    if (mode === 'constantPower') {
+    if (mode === 'none') {
+      return [1.0, 1.0];
+    } else if (mode === 'constantPower') {
       return xfaderCurveConstantPower(x);
     } else if (mode === 'cut') {
       return xfaderCurveCut(x);
