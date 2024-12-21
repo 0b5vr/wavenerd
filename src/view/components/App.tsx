@@ -48,6 +48,12 @@ const StyledDeck = styled(Deck)`
   flex-grow: 1;
 `;
 
+const DeckColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 const SamplesColumn = styled.div`
   display: flex;
   justify-content: space-between;
@@ -63,19 +69,13 @@ const StyledMixerView = styled(MixerView)`
   height: 180px;
 `;
 
-const FaderRow = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  height: 64px;
-`;
-
 const StyledDeckKnobs = styled(DeckKnobs)`
-  flex-grow: 1;
+  height: ${Metrics.deckKnobsHeight}px;
 `;
 
 const StyledXFader = styled(XFader)`
   width: ${Metrics.xFaderWidth}px;
+  height: ${Metrics.xFaderHeight}px;
   margin: 8px 16px;
 `;
 
@@ -139,40 +139,42 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
           recorder={recorder}
         />
         <DeckRow>
-          <StyledDeck
-            codeAtom={deckACodeAtom}
-            hasEditAtom={deckAHasEditAtom}
-            errorAtom={deckAErrorAtom}
-            cueStatusAtom={deckACueStatusAtom}
-            analyser={mixer.analyserInA}
-            deck={deckA}
-            storageKeyName="a"
-            gainParamName="/mixer/channel_a/gain"
-          />
+          <DeckColumn>
+            <StyledDeck
+              codeAtom={deckACodeAtom}
+              hasEditAtom={deckAHasEditAtom}
+              errorAtom={deckAErrorAtom}
+              cueStatusAtom={deckACueStatusAtom}
+              analyser={mixer.analyserInA}
+              deck={deckA}
+              storageKeyName="a"
+              gainParamName="/mixer/channel_a/gain"
+            />
+            <StyledDeckKnobs paramPrefix="/deck_a" />
+          </DeckColumn>
           <SamplesColumn>
             <StyledAssetList
               hostDeck={deckA}
             />
             <StyledMixerView />
+            <StyledXFader />
           </SamplesColumn>
           { showB && (
-            <StyledDeck
-              codeAtom={deckBCodeAtom}
-              hasEditAtom={deckBHasEditAtom}
-              errorAtom={deckBErrorAtom}
-              analyser={mixer.analyserInB}
-              cueStatusAtom={deckBCueStatusAtom}
-              deck={deckB}
-              storageKeyName="b"
-              gainParamName="/mixer/channel_b/gain"
-            />
+            <DeckColumn>
+              <StyledDeck
+                codeAtom={deckBCodeAtom}
+                hasEditAtom={deckBHasEditAtom}
+                errorAtom={deckBErrorAtom}
+                analyser={mixer.analyserInB}
+                cueStatusAtom={deckBCueStatusAtom}
+                deck={deckB}
+                storageKeyName="b"
+                gainParamName="/mixer/channel_b/gain"
+              />
+              <StyledDeckKnobs paramPrefix="/deck_b" />
+            </DeckColumn>
           ) }
         </DeckRow>
-        <FaderRow>
-          <StyledDeckKnobs paramPrefix="/deck_a" />
-          <StyledXFader />
-          { showB && <StyledDeckKnobs paramPrefix="/deck_b" /> }
-        </FaderRow>
         <SettingsModal mixer={mixer} />
         <MIDIModal />
         <HelpModal />

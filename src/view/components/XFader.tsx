@@ -9,7 +9,7 @@ export const XFader: React.FC<{
   const xfaderMode = useSettings('xfaderMode');
 
   if (xfaderMode === 'none') {
-    return <div className={className} />;
+    return null;
   }
 
   return (
