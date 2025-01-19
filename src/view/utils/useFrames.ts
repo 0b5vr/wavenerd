@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export function useFrames(callback: () => void) {
   const fn = useCallback(() => {
