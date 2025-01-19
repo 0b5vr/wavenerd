@@ -7,6 +7,7 @@ import { useElement } from '../../utils/useElement';
 import { useRect } from '../../utils/useRect';
 import { useSpectrum } from './useSpectrum';
 import { useFrames } from '../../utils/useFrames';
+import { useOscilloscope } from './useOscilloscope';
 
 // == styles =======================================================================================
 const Canvas = styled.canvas`
@@ -47,6 +48,7 @@ export const DeckWaveRenderer: React.FC<{
   // components
   const updateVectorscope = useVectorscope(renderer, analyser);
   const updateSpectrum = useSpectrum(renderer, analyser);
+  const updateOscilloscope = useOscilloscope(renderer, analyser);
 
   // update
   useFrames(useCallback(() => {
@@ -54,7 +56,8 @@ export const DeckWaveRenderer: React.FC<{
 
     updateVectorscope();
     updateSpectrum();
-  }, [renderer, updateVectorscope, updateSpectrum]));
+    updateOscilloscope();
+  }, [renderer, updateVectorscope, updateSpectrum, updateOscilloscope]));
 
   // render
   return (

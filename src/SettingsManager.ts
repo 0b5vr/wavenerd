@@ -5,8 +5,8 @@ import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
 export type VectorscopeModeType = 'none' | 'line' | 'points';
-
 export type SpectrumModeType = 'none' | 'line';
+export type OscilloscopeModeType = 'none' | 'line';
 
 export interface Settings {
   latencyBlocks: number;
@@ -21,6 +21,9 @@ export interface Settings {
   spectrumMode: SpectrumModeType;
   spectrumOpacity: number;
   spectrumColor: string;
+  oscilloscopeMode: OscilloscopeModeType;
+  oscilloscopeOpacity: number;
+  oscilloscopeColor: string;
   theme: string;
   editorFont: string;
   editorFontVariantLigatures: string;
@@ -40,6 +43,9 @@ export const defaultSettings: Settings = {
   spectrumMode: 'none',
   spectrumOpacity: 0.2,
   spectrumColor: '#ffffff',
+  oscilloscopeMode: 'none',
+  oscilloscopeOpacity: 0.2,
+  oscilloscopeColor: '#ffffff',
   theme: 'monokaiSharp',
   editorFont: '12px/16px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',

@@ -375,6 +375,30 @@ export const SettingsModal: React.FC<{
       />
 
       <SelectItem
+        settingsKey="oscilloscopeMode"
+        name="Oscilloscope Mode"
+        stalkerText="Change the type of the oscilloscope.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
+      >
+        <option value="none">None</option>
+        <option value="line">Line</option>
+      </SelectItem>
+
+      <RangeItem
+        settingsKey="oscilloscopeOpacity"
+        name="Oscilloscope Opacity"
+        stalkerText="Change the opacity of the oscilloscope."
+        min={0}
+        max={1}
+        step={0.01}
+      />
+
+      <ColorItem
+        settingsKey="oscilloscopeColor"
+        name="Oscilloscope Color"
+        stalkerText="Change the color of the oscilloscope."
+      />
+
+      <SelectItem
         settingsKey="theme"
         name="Theme"
         stalkerText="Change the appearance theme."

@@ -1,3 +1,4 @@
+import { WaveRendererOscilloscope } from './WaveRendererOscilloscope';
 import { WaveRendererSpectrum } from './WaveRendererSpectrum';
 import { WaveRendererVectorscope } from './WaveRendererVectorscope';
 
@@ -7,6 +8,7 @@ export class WaveRenderer {
 
   public readonly vectorscope: WaveRendererVectorscope;
   public readonly spectrum: WaveRendererSpectrum;
+  public readonly oscilloscope: WaveRendererOscilloscope;
 
   public constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -18,6 +20,7 @@ export class WaveRenderer {
 
     this.vectorscope = new WaveRendererVectorscope(this);
     this.spectrum = new WaveRendererSpectrum(this);
+    this.oscilloscope = new WaveRendererOscilloscope(this);
   }
 
   public clear(): void {
