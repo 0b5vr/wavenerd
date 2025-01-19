@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
-import { DeckSpectrum } from './DeckSpectrum';
 import { DeckStatusBar } from './DeckStatusBar';
-import { DeckVectorscope } from './DeckVectorscope';
 import { atom, PrimitiveAtom } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -13,6 +11,7 @@ import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
 import { useSettings } from '../stores/hooks/useSettings';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
+import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
 
 // == styles =======================================================================================
 const StyledEditor = styled(DeckEditor)`
@@ -31,16 +30,7 @@ const StyledStatusBar = styled(DeckStatusBar)`
   height: 24px;
 `;
 
-const StyledVectorscope = styled(DeckVectorscope)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: calc( 100% - 24px );
-  pointer-events: none;
-`;
-
-const StyledSpectrogram = styled(DeckSpectrum)`
+const StyledWaveRenderer = styled(DeckWaveRenderer)`
   position: absolute;
   left: 0;
   top: 0;
@@ -135,8 +125,7 @@ export const Deck: React.FC<{
     <Root
       className={className}
     >
-      <StyledVectorscope analyser={analyser} />
-      <StyledSpectrogram analyser={analyser} />
+      <StyledWaveRenderer analyser={analyser} />
       <StyledEditor
         codeAtom={codeAtom}
         logsAtom={logsAtom}

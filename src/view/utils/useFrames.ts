@@ -1,19 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-export function useFrames(fn: () => void, deps?: React.DependencyList) {
-  useEffect(() => {
+export function useFrames(callback: () => void) {
+  const fn = useCallback(() => {
     let dead = false;
 
     const update = () => {
       if (dead) { return; }
 
       requestAnimationFrame(update);
-      fn();
+      callback();
     };
     requestAnimationFrame(update);
 
     return () => {
       dead = true;
     };
-  }, deps);
+  }, [callback]);
+
+  useEffect(fn, [fn]);
 }
