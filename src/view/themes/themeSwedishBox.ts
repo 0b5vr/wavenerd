@@ -70,7 +70,7 @@ export const themeSwedishBox: Theme = {
     panels: black,
     tooltips: black,
     gutterText: white,
-    gutterBackground: black,
+    gutterBackground: 'transparent',
     foldPlaceholders: white,
     searchMatch: white + '22',
     searchSelected: white + '44',

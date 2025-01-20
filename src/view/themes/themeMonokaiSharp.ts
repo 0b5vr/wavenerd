@@ -74,7 +74,7 @@ export const themeMonokaiSharp: Theme = {
     panels: gray2,
     tooltips: gray2,
     gutterText: gray8,
-    gutterBackground: back1,
+    gutterBackground: 'transparent',
     foldPlaceholders: gray8,
     searchMatch: yellow + '22',
     searchSelected: orange + '88',

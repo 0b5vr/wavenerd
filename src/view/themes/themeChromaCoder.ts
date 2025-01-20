@@ -78,7 +78,7 @@ export const themeChromaCoder: Theme = {
     panels: background,
     tooltips: background,
     gutterText: gray,
-    gutterBackground: background,
+    gutterBackground: 'transparent',
     foldPlaceholders: gray,
     searchMatch: yellow + '22',
     searchSelected: orange + '88',

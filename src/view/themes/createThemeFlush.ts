@@ -72,7 +72,7 @@ export function createThemeFlush(accent: string): Theme {
       panels: gray2,
       tooltips: gray2,
       gutterText: gray8,
-      gutterBackground: codeBg,
+      gutterBackground: 'transparent',
       foldPlaceholders: gray8,
       searchMatch: accent + '22',
       searchSelected: accent + '88',
