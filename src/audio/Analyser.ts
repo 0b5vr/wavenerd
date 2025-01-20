@@ -1,4 +1,5 @@
 import { EventEmittable } from '../utils/EventEmittable';
+import { createCrossoverIR } from './createCrossoverIR';
 
 export const ANALYSER_TIME_DOMAIN_SIZE = 4096;
 export const ANALYSER_FREQUENCY_SIZE = 1024;
@@ -27,7 +28,7 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
   private __splitterNode: ChannelSplitterNode;
   private __analyserNodeL: AnalyserNode;
   private __analyserNodeR: AnalyserNode;
-  private __lpfL: BiquadFilterNode;
+  private __convolverLoL: ConvolverNode;
   private __analyserNodeLoL: AnalyserNode;
 
   public get input(): AudioNode {
@@ -49,20 +50,23 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
     this.__splitterNode = audio.createChannelSplitter(2);
     this.__analyserNodeL = audio.createAnalyser();
     this.__analyserNodeR = audio.createAnalyser();
-    this.__lpfL = audio.createBiquadFilter();
+    this.__convolverLoL = audio.createConvolver();
     this.__analyserNodeLoL = audio.createAnalyser();
 
     this.__analyserNodeL.fftSize = 4096;
     this.__analyserNodeR.fftSize = 4096;
     this.__analyserNodeLoL.fftSize = 4096;
 
-    this.__lpfL.type = 'lowpass';
-    this.__lpfL.frequency.value = 200;
+    this.__convolverLoL.normalize = false;
+    this.__convolverLoL.buffer = createCrossoverIR({
+      sampleRate: audio.sampleRate,
+      lpfFreq: 200.0,
+    });
 
     this.__splitterNode.connect(this.__analyserNodeL, 0);
     this.__splitterNode.connect(this.__analyserNodeR, 1);
-    this.__splitterNode.connect(this.__lpfL, 0);
-    this.__lpfL.connect(this.__analyserNodeLoL);
+    this.__splitterNode.connect(this.__convolverLoL, 0);
+    this.__convolverLoL.connect(this.__analyserNodeLoL);
 
     this.timeDomainL = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
     this.timeDomainR = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
@@ -100,6 +104,8 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
         }
         v = this.timeDomainLoL[i];
       }
+
+      this.zeroCrossingLoL -= this.__convolverLoL.buffer!.length / 2;
     }
 
     const ret = {
