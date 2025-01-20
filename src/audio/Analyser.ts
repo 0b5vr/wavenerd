@@ -3,6 +3,7 @@ import { createCrossoverIR } from './createCrossoverIR';
 
 export const ANALYSER_TIME_DOMAIN_SIZE = 4096;
 export const ANALYSER_FREQUENCY_SIZE = 1024;
+export const ANALYSER_LO_FREQUENCY = 200;
 export const ANALYSER_ZERO_CROSSING_TARGET = 1024;
 
 export interface AnalyserResult {
@@ -60,7 +61,7 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
     this.__convolverLoL.normalize = false;
     this.__convolverLoL.buffer = createCrossoverIR({
       sampleRate: audio.sampleRate,
-      lpfFreq: 200.0,
+      lpfFreq: ANALYSER_LO_FREQUENCY,
     });
 
     this.__splitterNode.connect(this.__analyserNodeL, 0);

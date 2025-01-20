@@ -8,7 +8,7 @@ import { glCreateTexture } from './gl/glCreateTexture';
 import oscilloscopeVert from './oscilloscope.vert?raw';
 
 const DRAW_LENGTH = ANALYSER_TIME_DOMAIN_SIZE;
-const DRAW_INDEX_RANGE = 256;
+const DRAW_INDEX_RANGE = 512;
 
 export class WaveRendererOscilloscope {
   public readonly renderer: WaveRenderer;
