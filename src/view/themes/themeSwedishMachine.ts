@@ -75,7 +75,7 @@ export const themeSwedishMachine: Theme = {
     panels: lcdbg,
     tooltips: lcdbg,
     gutterText: lcdfg,
-    gutterBackground: 'transparent',
+    gutterBackground: lcdbg,
     foldPlaceholders: lcdfg,
     searchMatch: white + '22',
     searchSelected: white + '44',
