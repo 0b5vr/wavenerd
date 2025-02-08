@@ -138,8 +138,9 @@ export const DeckLibrary = (props: {
   library: Library;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   onLoad: (code: string) => void;
+  focusDeck: () => void;
 }): JSX.Element | null => {
-  const { library, libraryOpeningAtom, onLoad } = props;
+  const { library, libraryOpeningAtom, onLoad, focusDeck } = props;
 
   const [isLibraryOpening, setLibraryOpening] = useAtom(libraryOpeningAtom);
 
@@ -178,7 +179,8 @@ export const DeckLibrary = (props: {
 
     onLoad(code);
     setLibraryOpening(false);
-  }, [onLoad, library, selectedName]);
+    focusDeck();
+  }, [onLoad, library, selectedName, focusDeck]);
 
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -194,7 +196,8 @@ export const DeckLibrary = (props: {
 
     onLoad(code);
     setLibraryOpening(false);
-  }, [onLoad, library]);
+    focusDeck();
+  }, [onLoad, library, focusDeck]);
 
   if (!isLibraryOpening) {
     return null;

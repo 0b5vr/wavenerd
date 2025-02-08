@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
@@ -9,7 +9,6 @@ import { deckCodeStorage } from '../../deckCodeStorage';
 import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
-import { useSettings } from '../stores/hooks/useSettings';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
 import { DeckLibrary } from './DeckLibrary';
@@ -70,18 +69,15 @@ export const Deck: React.FC<{
   gainParamName,
   storageKeyName,
 }) => {
-  const logEnabled = useSettings('editorLogEnabled');
-
+  // -- atoms --------------------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
-
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
-
   const memoryUpdateAtom = useMemo(() => atom<{
     key: string;
     status: 'loaded' | 'loadfailed' | 'saved';
   } | null>(null), []);
 
-  // prevent terrible consequence
+  // -- beforeunload -------------------------------------------------------------------------------
   const handleBeforeUnload = useAtomCallback(useCallback((get, _, event: BeforeUnloadEvent) => {
     const hasEdit = get(hasEditAtom);
     if (hasEdit) {
@@ -95,6 +91,7 @@ export const Deck: React.FC<{
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [handleBeforeUnload]);
 
+  // -- handlers -----------------------------------------------------------------------------------
   const handleLoad = useAtomCallback(useCallback(async (get, set, code: string) => {
     set(codeAtom, code);
     set(hasEditAtom, true);
@@ -132,12 +129,19 @@ export const Deck: React.FC<{
     handleApplyImmediately();
   }, [handleApplyImmediately]);
 
+  const refEditor = useRef<{ focus: () => void }>(null);
+  const focusDeck = useCallback(() => {
+    refEditor.current?.focus?.();
+  }, []);
+
+  // -- render -------------------------------------------------------------------------------------
   return (
     <Root
       className={className}
     >
       <StyledWaveRenderer analyser={analyser} />
       <StyledEditor
+        ref={refEditor}
         codeAtom={codeAtom}
         logsAtom={logsAtom}
         hasEditAtom={hasEditAtom}
@@ -147,7 +151,7 @@ export const Deck: React.FC<{
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
       />
-      {logEnabled && <DeckLog logsAtom={logsAtom} />}
+      <DeckLog logsAtom={logsAtom} />
       <StyledStatusBar
         errorAtom={errorAtom}
         cueStatusAtom={cueStatusAtom}
@@ -161,6 +165,7 @@ export const Deck: React.FC<{
         library={library}
         libraryOpeningAtom={libraryOpeningAtom}
         onLoad={handleLoad}
+        focusDeck={focusDeck}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
     </Root>

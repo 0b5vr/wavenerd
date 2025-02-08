@@ -2,7 +2,7 @@ import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
@@ -110,17 +110,7 @@ function keyToLog(event: KeyboardEvent): string | null {
 }
 
 // == component ====================================================================================
-export const DeckEditor: React.FC<{
-  codeAtom: PrimitiveAtom<string>;
-  logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
-  hasEditAtom: PrimitiveAtom<boolean>;
-  onCompile: () => void;
-  onApply: () => void;
-  onApplyImmediately: () => void;
-  memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
-  libraryOpeningAtom: PrimitiveAtom<boolean>;
-  className?: string;
-}> = ({
+export const DeckEditor = forwardRef(({
   codeAtom,
   logsAtom,
   hasEditAtom,
@@ -130,7 +120,17 @@ export const DeckEditor: React.FC<{
   memoryUpdateAtom,
   libraryOpeningAtom,
   className,
-}) => {
+}: {
+  codeAtom: PrimitiveAtom<string>;
+  logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
+  hasEditAtom: PrimitiveAtom<boolean>;
+  onCompile: () => void;
+  onApply: () => void;
+  onApplyImmediately: () => void;
+  memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
+  libraryOpeningAtom: PrimitiveAtom<boolean>;
+  className?: string;
+}, ref): JSX.Element => {
   const refCodeMirror = React.useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
@@ -318,6 +318,15 @@ export const DeckEditor: React.FC<{
     [handleFile],
   );
 
+  // -- imperative handle --------------------------------------------------------------------------
+  const focus = useCallback(() => {
+    refCodeMirror.current?.view?.focus();
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    focus,
+  }), [focus]);
+
   // -- component ----------------------------------------------------------------------------------
   return (
     <Root
@@ -346,4 +355,5 @@ export const DeckEditor: React.FC<{
       {isDragging && <DraggingOverlay />}
     </Root>
   );
-};
+});
+DeckEditor.displayName = 'DeckEditor';
