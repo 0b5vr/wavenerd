@@ -5,6 +5,8 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { loadFileAsImage } from './utils/loadFileAsImage';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
+import { libraryListSortedAtom } from '../stores/atoms/library';
+import { Library } from '../../Library';
 
 // == styles =======================================================================================
 const StyledAssetListCategory = styled(AssetListCategory)`
@@ -18,11 +20,28 @@ const Root = styled.div`
 // == components ===================================================================================
 export const AssetList: React.FC<{
   hostDeck: WavenerdDeck;
+  library: Library;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}> = ({ hostDeck, library, className }) => {
+  const libraryListSorted = useAtomValue(libraryListSortedAtom);
   const sortedSampleList = useAtomValue(deckSortedSampleListAtom);
   const sortedWavetableList = useAtomValue(deckSortedWavetableListAtom);
   const sortedImageList = useAtomValue(deckSortedImageListAtom);
+
+  const handleLoadLibrary = useCallback(
+    async (name: string, file: File) => {
+      const code = await file.text();
+      library.add(name, code);
+    },
+    [hostDeck],
+  );
+
+  const handleDeleteLibrary = useCallback(
+    (name: string) => {
+      library.delete(name);
+    },
+    [hostDeck],
+  );
 
   const handleLoadSample = useCallback(
     async (name: string, file: File) => {
@@ -43,7 +62,7 @@ export const AssetList: React.FC<{
     async (name: string, file: File) => {
       const buffer = await file.arrayBuffer();
       const array = new Float32Array(buffer);
-      await hostDeck.loadWavetable(name, array);
+      hostDeck.loadWavetable(name, array);
     },
     [hostDeck],
   );
@@ -58,7 +77,7 @@ export const AssetList: React.FC<{
   const handleLoadImage = useCallback(
     async (name: string, file: File) => {
       const image = await loadFileAsImage(file);
-      await hostDeck.loadImage(name, image);
+      hostDeck.loadImage(name, image);
     },
     [hostDeck],
   );
@@ -74,6 +93,12 @@ export const AssetList: React.FC<{
     <Root
       className={className}
     >
+      <StyledAssetListCategory
+        title="Library"
+        assets={libraryListSorted}
+        onLoadAsset={handleLoadLibrary}
+        onDeleteAsset={handleDeleteLibrary}
+      />
       <StyledAssetListCategory
         title="Samples"
         assets={sortedSampleList}

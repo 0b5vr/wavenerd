@@ -30,6 +30,8 @@ import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 import { Recorder } from '../../audio/Recorder';
 import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
+import { Library } from '../../Library';
+import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -119,9 +121,10 @@ interface Props {
   deckB: WavenerdDeck;
   mixer: Mixer;
   recorder: Recorder;
+  library: Library;
 }
 
-const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => {
+const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, library }) => {
   const showB = useAtomValue(deckShowBAtom);
   const themeString = useSettings('theme');
 
@@ -130,6 +133,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
   useSettingsSubscribers(SETTINGSMAN);
   useDeckSubscribers(deckA, deckA, deckB);
   useRecorderSubscribers(recorder);
+  useLibrarySubscribers(library);
 
   return (
     <>
@@ -146,6 +150,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
               errorAtom={deckAErrorAtom}
               cueStatusAtom={deckACueStatusAtom}
               analyser={mixer.analyserInA}
+              library={library}
               deck={deckA}
               storageKeyName="a"
               gainParamName="/mixer/channel_a/gain"
@@ -155,6 +160,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
           <SamplesColumn>
             <StyledAssetList
               hostDeck={deckA}
+              library={library}
             />
             <StyledMixerView />
             <StyledXFader />
@@ -166,6 +172,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
                 hasEditAtom={deckBHasEditAtom}
                 errorAtom={deckBErrorAtom}
                 analyser={mixer.analyserInB}
+                library={library}
                 cueStatusAtom={deckBCueStatusAtom}
                 deck={deckB}
                 storageKeyName="b"
@@ -186,12 +193,13 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => 
   );
 };
 
-const App: React.FC<Props> = ({ deckA, deckB, mixer, recorder }) => (
+const App: React.FC<Props> = ({ deckA, deckB, mixer, recorder, library }) => (
   <OutOfContextApp
     deckA={deckA}
     deckB={deckB}
     mixer={mixer}
     recorder={recorder}
+    library={library}
   />
 );
 

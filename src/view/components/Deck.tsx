@@ -12,6 +12,8 @@ import { DeckLog } from './DeckLog';
 import { useSettings } from '../stores/hooks/useSettings';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
+import { DeckLibrary } from './DeckLibrary';
+import { Library } from '../../Library';
 
 // == styles =======================================================================================
 const StyledEditor = styled(DeckEditor)`
@@ -54,6 +56,7 @@ export const Deck: React.FC<{
   codeAtom: PrimitiveAtom<string>;
   hasEditAtom: PrimitiveAtom<boolean>;
   analyser: Analyser;
+  library: Library;
   className?: string;
 }> = ({
   className,
@@ -62,11 +65,14 @@ export const Deck: React.FC<{
   codeAtom,
   hasEditAtom,
   analyser,
+  library,
   deck,
   gainParamName,
   storageKeyName,
 }) => {
   const logEnabled = useSettings('editorLogEnabled');
+
+  const libraryOpeningAtom = useMemo(() => atom(false), []);
 
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
 
@@ -88,6 +94,11 @@ export const Deck: React.FC<{
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [handleBeforeUnload]);
+
+  const handleLoad = useAtomCallback(useCallback(async (get, set, code: string) => {
+    set(codeAtom, code);
+    set(hasEditAtom, true);
+  }, [codeAtom, hasEditAtom]));
 
   const handleCompile = useAtomCallback(useCallback(async (get, set) => {
     const code = get(codeAtom);
@@ -134,6 +145,7 @@ export const Deck: React.FC<{
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
         memoryUpdateAtom={memoryUpdateAtom}
+        libraryOpeningAtom={libraryOpeningAtom}
       />
       {logEnabled && <DeckLog logsAtom={logsAtom} />}
       <StyledStatusBar
@@ -144,6 +156,11 @@ export const Deck: React.FC<{
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
         gainParamName={gainParamName}
+      />
+      <DeckLibrary
+        library={library}
+        libraryOpeningAtom={libraryOpeningAtom}
+        onLoad={handleLoad}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
     </Root>

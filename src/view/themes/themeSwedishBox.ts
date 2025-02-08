@@ -28,6 +28,10 @@ export const themeSwedishBox: Theme = {
     back2,
     back3,
 
+    listBg: back2,
+    listHoverBg: back3,
+    listFocusedBg: back4,
+
     codeBackground: black,
 
     inputBack: back4,

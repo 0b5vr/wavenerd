@@ -6,6 +6,7 @@ export function createThemeFlush(accent: string): Theme {
 
   const gray1 = '#121212';
   const gray2 = '#232323';
+  const gray3 = '#2d2d2d';
   const gray8 = '#555555';
 
   const back = '#070707';
@@ -27,11 +28,15 @@ export function createThemeFlush(accent: string): Theme {
       back2: back,
       back3: back,
 
+      listBg: gray1,
+      listHoverBg: gray2,
+      listFocusedBg: gray3,
+
       overlayBack: gray1,
 
       codeBackground: codeBg,
 
-      inputBack: gray2,
+      inputBack: gray3,
       inputFore: fore,
       inputBackInvalid: redDark,
 

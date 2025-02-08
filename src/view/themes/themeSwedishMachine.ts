@@ -6,7 +6,6 @@ const white = '#ffffff';
 const back1 = '#c9c5c1';
 const back2 = '#e4ded9';
 const back3 = '#e4ded9';
-const back4 = '#ffffff';
 
 const gray = '#6f6f6f';
 
@@ -31,10 +30,17 @@ export const themeSwedishMachine: Theme = {
     back2,
     back3,
 
+    listBg: lcdfg,
+    listHoverBg: lcdbg,
+    listFocusedBg: lcdbg,
+    listFg: lcdbg,
+    listHoverFg: lcdfg,
+    listFocusedFg: lcdfg,
+
     codeBackground: lcdbg,
 
-    inputBack: back4,
-    inputFore: fore,
+    inputBack: lcdbg,
+    inputFore: lcdfg,
     inputBackInvalid: redDark,
 
     fore,

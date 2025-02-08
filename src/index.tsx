@@ -12,6 +12,7 @@ import { Reverb } from './audio/Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
+import { Library } from './Library';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl2')!;
@@ -114,6 +115,9 @@ for (const [key, value] of Object.entries(MIDIMAN.values)) {
 
 MIDIMAN.on('paramChange', ({ key, value }) => applyMidiParam({ key, value }));
 
+// == library ======================================================================================
+const library = new Library();
+
 // == settings =====================================================================================
 function applySettings(settings: Partial<Settings>) {
   if (settings.channelRouting != null) {
@@ -145,7 +149,7 @@ SETTINGSMAN.on('change', (settings) => applySettings(settings));
 
 // == prevent browser shortcuts ====================================================================
 document.addEventListener('keydown', (event) => {
-  if (event.ctrlKey && event.key.match(/[0-9derst]/)) {
+  if (event.ctrlKey && event.key.match(/[0-9deprst]/)) {
     event.preventDefault();
   }
 });
@@ -158,5 +162,6 @@ root.render(
     deckB={deckB}
     mixer={mixer}
     recorder={recorder}
+    library={library}
   />,
 );

@@ -118,6 +118,7 @@ export const DeckEditor: React.FC<{
   onApply: () => void;
   onApplyImmediately: () => void;
   memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
+  libraryOpeningAtom: PrimitiveAtom<boolean>;
   className?: string;
 }> = ({
   codeAtom,
@@ -127,12 +128,14 @@ export const DeckEditor: React.FC<{
   onApply,
   onApplyImmediately,
   memoryUpdateAtom,
+  libraryOpeningAtom,
   className,
 }) => {
   const refCodeMirror = React.useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
   const setMemoryUpdate = useSetAtom(memoryUpdateAtom);
+  const setLibraryOpening = useSetAtom(libraryOpeningAtom);
   const setHasEdit = useSetAtom(hasEditAtom);
   const themeString = useSettings('theme');
   const font = useSettings('editorFont');
@@ -183,7 +186,7 @@ export const DeckEditor: React.FC<{
     );
 
     setMemoryUpdate({ key, status: 'loaded' });
-  }, [refCodeMirror, setCode, setHasEdit, setMemoryUpdate]);
+  }, [setMemoryUpdate]);
 
   const handleSaveMemory = useCallback((key: string) => {
     const head = refCodeMirror.current?.view?.state.selection.main.head ?? 0;
@@ -196,6 +199,14 @@ export const DeckEditor: React.FC<{
   const customKeymap: KeyBinding[] = useMemo(() => [
     ...defaultKeymap,
     ...braceJumpKeymap,
+    {
+      key: 'Mod-p',
+      preventDefault: true,
+      run: () => {
+        setLibraryOpening(true);
+        return false;
+      },
+    },
     {
       key: 'Mod-s',
       preventDefault: true,
@@ -238,7 +249,7 @@ export const DeckEditor: React.FC<{
         },
       },
     ]),
-  ], [onCompile, onApply, onApplyImmediately, handleLoadMemory, handleSaveMemory]);
+  ], [onCompile, onApply, onApplyImmediately, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(

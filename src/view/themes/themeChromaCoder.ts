@@ -2,6 +2,10 @@ import { Theme } from './Theme';
 
 const black = '#000000';
 
+const back1 = '#111111';
+const back2 = '#222222';
+const back3 = '#333333';
+
 const gray = '#999999';
 
 const fore = '#ffffff';
@@ -29,11 +33,15 @@ export const themeChromaCoder: Theme = {
     back2: background,
     back3: background,
 
+    listBg: back1,
+    listHoverBg: back2,
+    listFocusedBg: back3,
+
     overlayBack: '#111111',
 
     codeBackground: background,
 
-    inputBack: '#282828',
+    inputBack: back3,
     inputFore: fore,
     inputBackInvalid: redDark,
 

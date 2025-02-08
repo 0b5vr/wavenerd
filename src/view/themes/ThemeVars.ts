@@ -18,6 +18,13 @@ const foredark = 'var(--foredark)';
 const barBg = `var(--bar-bg, ${back3})`;
 const barFg = `var(--bar-fg, ${fore})`;
 
+const listBg = `var(--list-bg, ${back2})`;
+const listHoverBg = `var(--list-hover-bg, ${back3})`;
+const listFocusedBg = `var(--list-focused-bg, ${back3})`;
+const listFg = `var(--list-fg, ${fore})`;
+const listHoverFg = `var(--list-hover-fg, ${listFg})`;
+const listFocusedFg = `var(--list-focused-fg, ${listFg})`;
+
 const headerBg = `var(--header-bg, ${barBg})`;
 const headerFg = `var(--header-fg, ${barFg})`;
 
@@ -67,6 +74,13 @@ export const ThemeVars = {
 
   barBg,
   barFg,
+
+  listBg,
+  listHoverBg,
+  listFocusedBg,
+  listFg,
+  listHoverFg,
+  listFocusedFg,
 
   headerBg,
   headerFg,

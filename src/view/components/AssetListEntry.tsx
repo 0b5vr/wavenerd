@@ -31,7 +31,6 @@ const ButtonDelete = styled(IconBin)`
 const Root = styled.div`
   display: flex;
   align-items: center;
-  background: ${ThemeVars.back3};
   font-size: 12px;
 
   * {

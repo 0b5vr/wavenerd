@@ -30,6 +30,11 @@ export const themeSolarizedDark: Theme = {
     back2: base02,
     back3: base02,
 
+    listBg: base03,
+    listHoverBg: base02,
+    listFocusedBg: base01,
+    listFocusedFg: base3,
+
     codeBackground: base03,
 
     inputBack: base01,

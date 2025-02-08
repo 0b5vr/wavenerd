@@ -114,6 +114,7 @@ export const HelpModal: React.FC = () => {
           All shortcuts in CodeMirror&#39;s <a href="https://codemirror.net/docs/ref/#commands.defaultKeymap" target="_blank" rel="noreferrer">defaultKeymap</a> are available. In addition, the following Wavenerd-specific shortcuts are available:
         </p>
         <ul>
+          <li><code>Ctrl-P</code>: Open the library</li>
           <li><code>Ctrl-S</code>: Compile the code</li>
           <li><code>Ctrl-R</code>: Apply the code</li>
           <li><code>Shift-Ctrl-R</code>: Apply the code immediately</li>

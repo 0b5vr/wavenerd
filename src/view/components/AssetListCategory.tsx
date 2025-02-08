@@ -31,7 +31,6 @@ const NoAssetsContainer = styled.div`
 const StyledEntry = styled(AssetListEntry)`
   width: calc( 100% - 4px );
   height: 16px;
-  margin: 2px;
 `;
 
 const Body = styled(SimpleBar)`
