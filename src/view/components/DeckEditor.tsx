@@ -1,7 +1,7 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
-import ReactCodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import ReactCodeMirror, { Prec, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
@@ -119,6 +119,8 @@ export const DeckEditor = forwardRef(({
   onApplyImmediately,
   memoryUpdateAtom,
   libraryOpeningAtom,
+  focusPrevEditor,
+  focusNextEditor,
   className,
 }: {
   codeAtom: PrimitiveAtom<string>;
@@ -129,8 +131,10 @@ export const DeckEditor = forwardRef(({
   onApplyImmediately: () => void;
   memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
+  focusPrevEditor?: () => void;
+  focusNextEditor?: () => void;
   className?: string;
-}, ref): JSX.Element => {
+}, ref: React.Ref<{ focusEditor: () => void }>) => {
   const refCodeMirror = React.useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
@@ -197,8 +201,22 @@ export const DeckEditor = forwardRef(({
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = useMemo(() => [
-    ...defaultKeymap,
-    ...braceJumpKeymap,
+    {
+      key: 'Mod-j',
+      preventDefault: true,
+      run: () => {
+        focusPrevEditor?.();
+        return true;
+      },
+    },
+    {
+      key: 'Mod-k',
+      preventDefault: true,
+      run: () => {
+        focusNextEditor?.();
+        return true;
+      },
+    },
     {
       key: 'Mod-p',
       preventDefault: true,
@@ -222,11 +240,7 @@ export const DeckEditor = forwardRef(({
         onApply();
         return false;
       },
-    },
-    {
-      key: 'Shift-Mod-r',
-      preventDefault: true,
-      run: () => {
+      shift: () => {
         onApplyImmediately();
         return false;
       },
@@ -237,19 +251,18 @@ export const DeckEditor = forwardRef(({
         preventDefault: true,
         run: () => {
           handleLoadMemory(i.toString());
-          return false;
+          return true;
         },
-      },
-      {
-        key: `Shift-Mod-${i}`,
-        preventDefault: true,
-        run: () => {
+        shift: () => {
           handleSaveMemory(i.toString());
           return false;
         },
       },
     ]),
-  ], [onCompile, onApply, onApplyImmediately, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+    ...braceJumpKeymap,
+    ...defaultKeymap,
+  ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+  console.log(customKeymap);
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(
@@ -319,13 +332,10 @@ export const DeckEditor = forwardRef(({
   );
 
   // -- imperative handle --------------------------------------------------------------------------
-  const focus = useCallback(() => {
+  const focusEditor = useCallback(() => {
     refCodeMirror.current?.view?.focus();
   }, []);
-
-  useImperativeHandle(ref, () => ({
-    focus,
-  }), [focus]);
+  useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- component ----------------------------------------------------------------------------------
   return (
@@ -341,7 +351,7 @@ export const DeckEditor = forwardRef(({
           value={code}
           extensions={[
             cpp(),
-            keymap.of(customKeymap),
+            Prec.highest(keymap.of(customKeymap)),
             backlayer,
           ]}
           theme={[

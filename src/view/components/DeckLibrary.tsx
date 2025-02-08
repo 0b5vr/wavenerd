@@ -92,8 +92,9 @@ const TextInput = (props: {
   onCursor: (type: 'inc' | 'dec') => void;
   onEnter: () => void;
   onChange: (event: React.ChangeEvent) => void;
+  focusEditor: (highlight: boolean) => void;
 }): JSX.Element => {
-  const { value, onCursor, onEnter, onChange } = props;
+  const { value, onCursor, onEnter, onChange, focusEditor } = props;
 
   const refTextInputFocusOnOpen = useCallback((input: HTMLInputElement | null) => {
     input?.focus();
@@ -105,6 +106,7 @@ const TextInput = (props: {
     if (event.key === 'Escape') {
       event.preventDefault();
       setLibraryOpening(false);
+      focusEditor(false);
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       onCursor('inc');
@@ -115,11 +117,12 @@ const TextInput = (props: {
       event.preventDefault();
       onEnter();
     }
-  }, [onCursor, onEnter, setLibraryOpening]);
+  }, [onCursor, onEnter, setLibraryOpening, focusEditor]);
 
   const handleBlur = useCallback(() => {
     setLibraryOpening(false);
-  }, [setLibraryOpening]);
+    focusEditor(false);
+  }, [setLibraryOpening, focusEditor]);
 
   return (
     <StyledInput
@@ -138,9 +141,9 @@ export const DeckLibrary = (props: {
   library: Library;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   onLoad: (code: string) => void;
-  focusDeck: () => void;
+  focusEditor: (highlight: boolean) => void;
 }): JSX.Element | null => {
-  const { library, libraryOpeningAtom, onLoad, focusDeck } = props;
+  const { library, libraryOpeningAtom, onLoad, focusEditor } = props;
 
   const [isLibraryOpening, setLibraryOpening] = useAtom(libraryOpeningAtom);
 
@@ -179,8 +182,8 @@ export const DeckLibrary = (props: {
 
     onLoad(code);
     setLibraryOpening(false);
-    focusDeck();
-  }, [onLoad, library, selectedName, focusDeck]);
+    focusEditor(false);
+  }, [onLoad, library, selectedName, focusEditor]);
 
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -196,8 +199,8 @@ export const DeckLibrary = (props: {
 
     onLoad(code);
     setLibraryOpening(false);
-    focusDeck();
-  }, [onLoad, library, focusDeck]);
+    focusEditor(false);
+  }, [onLoad, library, focusEditor]);
 
   if (!isLibraryOpening) {
     return null;
@@ -212,6 +215,7 @@ export const DeckLibrary = (props: {
           onCursor={handleCursor}
           onEnter={handleEnter}
           onChange={handleChange}
+          focusEditor={focusEditor}
         />
         {libraryListFiltered.map((name, i) => (
           <DeckLibraryItem

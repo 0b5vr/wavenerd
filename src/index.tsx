@@ -149,7 +149,11 @@ SETTINGSMAN.on('change', (settings) => applySettings(settings));
 
 // == prevent browser shortcuts ====================================================================
 document.addEventListener('keydown', (event) => {
-  if (event.ctrlKey && event.key.match(/[0-9deprst]/)) {
+  if (event.ctrlKey && event.key.match(/[0-9dejkprst]/)) {
+    event.preventDefault();
+  }
+
+  if (event.ctrlKey && event.key === 'Tab') {
     event.preventDefault();
   }
 });

@@ -14,7 +14,7 @@ import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../audio/Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
@@ -135,6 +135,16 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
   useRecorderSubscribers(recorder);
   useLibrarySubscribers(library);
 
+  const refDeckA = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
+  const focusDeckAEditor = useCallback(() => {
+    refDeckA.current?.focusEditor?.(true);
+  }, []);
+
+  const refDeckB = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
+  const focusDeckBEditor = useCallback(() => {
+    refDeckB.current?.focusEditor?.(true);
+  }, []);
+
   return (
     <>
       <Root themeString={themeString}>
@@ -145,6 +155,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
         <DeckRow>
           <DeckColumn>
             <StyledDeck
+              ref={refDeckA}
               codeAtom={deckACodeAtom}
               hasEditAtom={deckAHasEditAtom}
               errorAtom={deckAErrorAtom}
@@ -154,6 +165,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
               deck={deckA}
               storageKeyName="a"
               gainParamName="/mixer/channel_a/gain"
+              focusNextEditor={showB ? focusDeckBEditor : undefined}
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
@@ -168,6 +180,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
           { showB && (
             <DeckColumn>
               <StyledDeck
+                ref={refDeckB}
                 codeAtom={deckBCodeAtom}
                 hasEditAtom={deckBHasEditAtom}
                 errorAtom={deckBErrorAtom}
@@ -177,6 +190,7 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
                 deck={deckB}
                 storageKeyName="b"
                 gainParamName="/mixer/channel_b/gain"
+                focusPrevEditor={focusDeckAEditor}
               />
               <StyledDeckKnobs paramPrefix="/deck_b" />
             </DeckColumn>

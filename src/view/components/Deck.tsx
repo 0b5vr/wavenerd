@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
@@ -6,7 +6,7 @@ import { atom, PrimitiveAtom } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckCodeStorage } from '../../deckCodeStorage';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
@@ -15,6 +15,22 @@ import { DeckLibrary } from './DeckLibrary';
 import { Library } from '../../Library';
 
 // == styles =======================================================================================
+const fadeOut = keyframes`
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+`;
+
+const DeckFocusHighlight = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  border: 4px solid ${ThemeVars.fore};
+  animation: step-end ${fadeOut} 0.2s forwards;
+  pointer-events: none;
+`;
+
 const StyledEditor = styled(DeckEditor)`
   position: absolute;
   left: 0;
@@ -46,7 +62,20 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const Deck: React.FC<{
+export const Deck = forwardRef(({
+  className,
+  cueStatusAtom,
+  errorAtom,
+  codeAtom,
+  hasEditAtom,
+  analyser,
+  library,
+  deck,
+  focusPrevEditor,
+  focusNextEditor,
+  gainParamName,
+  storageKeyName,
+}: {
   deck: WavenerdDeck;
   gainParamName: string;
   storageKeyName: 'a' | 'b';
@@ -56,19 +85,10 @@ export const Deck: React.FC<{
   hasEditAtom: PrimitiveAtom<boolean>;
   analyser: Analyser;
   library: Library;
+  focusPrevEditor?: () => void;
+  focusNextEditor?: () => void;
   className?: string;
-}> = ({
-  className,
-  cueStatusAtom,
-  errorAtom,
-  codeAtom,
-  hasEditAtom,
-  analyser,
-  library,
-  deck,
-  gainParamName,
-  storageKeyName,
-}) => {
+}, ref: React.Ref<{ focusEditor: (highlight: boolean) => void }>) => {
   // -- atoms --------------------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
@@ -76,6 +96,7 @@ export const Deck: React.FC<{
     key: string;
     status: 'loaded' | 'loadfailed' | 'saved';
   } | null>(null), []);
+  const [focusHighlightKey, setFocusHighlightKey] = useState(0);
 
   // -- beforeunload -------------------------------------------------------------------------------
   const handleBeforeUnload = useAtomCallback(useCallback((get, _, event: BeforeUnloadEvent) => {
@@ -129,10 +150,15 @@ export const Deck: React.FC<{
     handleApplyImmediately();
   }, [handleApplyImmediately]);
 
-  const refEditor = useRef<{ focus: () => void }>(null);
-  const focusDeck = useCallback(() => {
-    refEditor.current?.focus?.();
+  // -- imperative handle --------------------------------------------------------------------------
+  const refEditor = useRef<{ focusEditor: () => void }>(null);
+  const focusEditor = useCallback((highlight: boolean) => {
+    refEditor.current?.focusEditor?.();
+    if (highlight) {
+      setFocusHighlightKey((key) => key + 1);
+    }
   }, []);
+  useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- render -------------------------------------------------------------------------------------
   return (
@@ -150,6 +176,8 @@ export const Deck: React.FC<{
         onApplyImmediately={handleApplyImmediately}
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
+        focusPrevEditor={focusPrevEditor}
+        focusNextEditor={focusNextEditor}
       />
       <DeckLog logsAtom={logsAtom} />
       <StyledStatusBar
@@ -165,9 +193,13 @@ export const Deck: React.FC<{
         library={library}
         libraryOpeningAtom={libraryOpeningAtom}
         onLoad={handleLoad}
-        focusDeck={focusDeck}
+        focusEditor={focusEditor}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
+      {focusHighlightKey > 0 && (
+        <DeckFocusHighlight key={focusHighlightKey} />
+      )}
     </Root>
   );
-};
+});
+Deck.displayName = 'Deck';
