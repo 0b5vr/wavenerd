@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useReducer, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { libraryListSortedAtom } from '../stores/atoms/library';
 import styled from 'styled-components';
@@ -55,17 +55,6 @@ const Root = styled.div`
   pointer-events: none;
 `;
 
-// == reducers =====================================================================================
-function indexReducer(state: number, action: 'inc' | 'dec' | 'reset'): number {
-  if (action === 'inc') {
-    return state + 1;
-  } else if (action === 'dec') {
-    return state - 1;
-  } else {
-    return 0;
-  }
-}
-
 // == children =====================================================================================
 const DeckLibraryItem = ({ name, isSelected, onSelect }: {
   name: string;
@@ -89,7 +78,7 @@ const DeckLibraryItem = ({ name, isSelected, onSelect }: {
 const TextInput = (props: {
   value: string;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
-  onCursor: (type: 'inc' | 'dec') => void;
+  onCursor: (inc: number) => void;
   onEnter: () => void;
   onChange: (event: React.ChangeEvent) => void;
   focusEditor: (highlight: boolean) => void;
@@ -109,10 +98,10 @@ const TextInput = (props: {
       focusEditor(false);
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
-      onCursor('inc');
+      onCursor(1);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      onCursor('dec');
+      onCursor(-1);
     } else if (event.key === 'Enter') {
       event.preventDefault();
       onEnter();
@@ -155,7 +144,7 @@ export const DeckLibrary = (props: {
     [libraryListSorted, textInputValue],
   );
 
-  const [selectedIndexRaw, dispatchSelectedIndex] = useReducer(indexReducer, 0);
+  const [selectedIndexRaw, setSelectedIndexRaw] = useState(0);
   const selectedIndex = useMemo(
     () => mod(selectedIndexRaw, libraryListFiltered.length),
     [selectedIndexRaw, libraryListFiltered.length],
@@ -166,8 +155,8 @@ export const DeckLibrary = (props: {
     [libraryListFiltered, selectedIndex],
   );
 
-  const handleCursor = useCallback((type: 'inc' | 'dec') => {
-    dispatchSelectedIndex(type);
+  const handleCursor = useCallback((inc: number) => {
+    setSelectedIndexRaw((prev) => prev + inc);
   }, []);
 
   const handleEnter = useCallback(() => {
@@ -188,7 +177,7 @@ export const DeckLibrary = (props: {
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
     setTextInputValue(value);
-    dispatchSelectedIndex('reset');
+    setSelectedIndexRaw(0);
   }, []);
 
   const handleSelect = useCallback((name: string) => {
