@@ -51,6 +51,7 @@ const DraggingOverlay = styled.div`
   bottom: 0;
   background: ${ThemeVars.fore};
   opacity: 0.125;
+  pointer-events: none;
 `;
 
 const Root = styled.div`
