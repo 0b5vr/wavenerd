@@ -262,7 +262,6 @@ export const DeckEditor = forwardRef(({
     ...braceJumpKeymap,
     ...defaultKeymap,
   ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
-  console.log(customKeymap);
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(
