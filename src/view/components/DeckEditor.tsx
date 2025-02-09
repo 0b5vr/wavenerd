@@ -333,7 +333,7 @@ export const DeckEditor = forwardRef(({
   // -- imperative handle --------------------------------------------------------------------------
   const focusEditor = useCallback(() => {
     refCodeMirror.current?.view?.focus();
-  }, []);
+  }, [refCodeMirror]);
   useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- component ----------------------------------------------------------------------------------

@@ -157,7 +157,7 @@ export const Deck = forwardRef(({
     if (highlight) {
       setFocusHighlightKey((key) => key + 1);
     }
-  }, []);
+  }, [refEditor, setFocusHighlightKey]);
   useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- render -------------------------------------------------------------------------------------

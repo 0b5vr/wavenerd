@@ -138,12 +138,12 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
   const refDeckA = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
   const focusDeckAEditor = useCallback(() => {
     refDeckA.current?.focusEditor?.(true);
-  }, []);
+  }, [refDeckA]);
 
   const refDeckB = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
   const focusDeckBEditor = useCallback(() => {
     refDeckB.current?.focusEditor?.(true);
-  }, []);
+  }, [refDeckB]);
 
   return (
     <>
