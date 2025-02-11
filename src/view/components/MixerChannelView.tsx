@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import IconCue from '~icons/mdi/headphones';
 import { Knob } from './Knob';
 import { MIDILearnable } from './MIDILearnable';
@@ -96,7 +96,7 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-}): JSX.Element {
+}) {
   const value = useMidiValue(paramName);
 
   const stalkerTextWithValue = useMemo(() => {
@@ -121,7 +121,7 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
   paramName: string;
-}): JSX.Element {
+}) {
   const value = useMidiValue(paramName);
 
   const stalkerTextWithValue = useMemo(() => {
@@ -145,7 +145,7 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
 function MixerFaderI({ paramName, stalkerText }: {
   paramName: string;
   stalkerText: string;
-}): JSX.Element {
+}) {
   return (
     <StyledMixerFader
       midiParamName={paramName}
@@ -157,7 +157,7 @@ function MixerFaderI({ paramName, stalkerText }: {
 function CueButton({ paramName, stalkerText }: {
   paramName: string;
   stalkerText: string;
-}): JSX.Element {
+}) {
   const value = useMidiValue(paramName);
 
   const handleClick = useCallback(() => {
@@ -178,12 +178,17 @@ function CueButton({ paramName, stalkerText }: {
 }
 
 // == components ===================================================================================
-export const MixerChannelView: React.FC<{
+export function MixerChannelView({
+  paramPrefix,
+  cueParamName,
+  side,
+  className,
+}: {
   paramPrefix: string;
   cueParamName: string;
   side: 'A' | 'B';
   className?: string;
-}> = ({ paramPrefix, cueParamName, side, className }) => {
+}) {
   const eqMode = useSettings('eqMode');
 
   return (
@@ -228,4 +233,4 @@ export const MixerChannelView: React.FC<{
       </Row>
     </Root>
   );
-};
+}

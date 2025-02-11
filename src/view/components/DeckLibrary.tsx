@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { libraryListSortedAtom } from '../stores/atoms/library';
 import styled from 'styled-components';
@@ -75,21 +75,26 @@ const DeckLibraryItem = ({ name, isSelected, onSelect }: {
   );
 };
 
-const TextInput = (props: {
+export function TextInput({
+  value,
+  libraryOpeningAtom,
+  onCursor,
+  onEnter,
+  onChange,
+  focusEditor,
+}: {
   value: string;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   onCursor: (inc: number) => void;
   onEnter: () => void;
   onChange: (event: React.ChangeEvent) => void;
   focusEditor: (highlight: boolean) => void;
-}): JSX.Element => {
-  const { value, onCursor, onEnter, onChange, focusEditor } = props;
-
+}) {
   const refTextInputFocusOnOpen = useCallback((input: HTMLInputElement | null) => {
     input?.focus();
   }, []);
 
-  const setLibraryOpening = useSetAtom(props.libraryOpeningAtom);
+  const setLibraryOpening = useSetAtom(libraryOpeningAtom);
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
@@ -123,17 +128,20 @@ const TextInput = (props: {
       onBlur={handleBlur}
     />
   );
-};
+}
 
 // == main =========================================================================================
-export const DeckLibrary = (props: {
+export function DeckLibrary({
+  library,
+  libraryOpeningAtom,
+  onLoad,
+  focusEditor,
+}: {
   library: Library;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   onLoad: (code: string) => void;
   focusEditor: (highlight: boolean) => void;
-}): JSX.Element | null => {
-  const { library, libraryOpeningAtom, onLoad, focusEditor } = props;
-
+}) {
   const [isLibraryOpening, setLibraryOpening] = useAtom(libraryOpeningAtom);
 
   const [textInputValue, setTextInputValue] = useState('');
@@ -223,4 +231,4 @@ export const DeckLibrary = (props: {
       </Box>
     </Root>
   );
-};
+}

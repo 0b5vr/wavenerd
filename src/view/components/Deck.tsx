@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';

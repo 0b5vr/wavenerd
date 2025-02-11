@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import IconClose from '~icons/mdi/close';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
@@ -48,10 +48,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const Modal: React.FC<{
+export function Modal({
+  onClose,
+  children,
+}: {
   onClose?: () => void;
   children?: React.ReactNode;
-}> = ({ onClose, children }) => {
+}) {
   const noopStopPropagation = useCallback(
     (event: React.MouseEvent) => event.stopPropagation(),
     [],
@@ -72,4 +75,4 @@ export const Modal: React.FC<{
       </Plane>
     </Root>
   );
-};
+}

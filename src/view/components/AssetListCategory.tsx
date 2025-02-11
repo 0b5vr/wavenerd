@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
@@ -72,13 +72,19 @@ function NoAssets({ text }: { text: string }): JSX.Element {
 }
 
 // == components ===================================================================================
-export const AssetListCategory: React.FC<{
+export function AssetListCategory({
+  title,
+  assets,
+  onLoadAsset,
+  onDeleteAsset,
+  className,
+}: {
   title: string;
   assets: string[];
   onLoadAsset: (name: string, file: File) => Promise<void>;
   onDeleteAsset: (name: string) => void;
   className?: string;
-}> = ({ title, assets, onLoadAsset, onDeleteAsset, className }) => {
+}) {
   const [expand, setExpand] = useState(true);
   const handleChangeExpand = useCallback(
     () => {
@@ -173,4 +179,4 @@ export const AssetListCategory: React.FC<{
       {isDragging && <DraggingOverlay />}
     </Root>
   );
-};
+}

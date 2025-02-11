@@ -1,6 +1,5 @@
 import { deckBPMAtom, deckBeatsAtom } from '../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
-import React from 'react';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 
@@ -24,9 +23,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const HeaderBeatIndicators: React.FC<{
-  className?: string;
-}> = ({ className }) => {
+export function HeaderBeatIndicators({ className }: { className?: string }) {
   const bpm = useAtomValue(deckBPMAtom);
   const { beat, bar, sixteenBar } = useAtomValue(deckBeatsAtom);
 
@@ -49,4 +46,4 @@ export const HeaderBeatIndicators: React.FC<{
       </ValueRow>
     </Root>
   );
-};
+}

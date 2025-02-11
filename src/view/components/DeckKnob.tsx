@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Knob } from './Knob';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
@@ -32,12 +32,12 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-export const DeckKnob: React.FC<{
+export function DeckKnob({ paramName, paramPrefix, stalker, className }: {
   paramName: string;
   paramPrefix: string;
   stalker?: string;
   className?: string;
-}> = ({ paramName, paramPrefix, stalker, className }) => {
+}): JSX.Element {
   const paramFullname = useMemo(
     () => `${paramPrefix}/${paramName}`,
     [paramPrefix, paramName],
@@ -63,4 +63,4 @@ export const DeckKnob: React.FC<{
       <Label>{ paramName }</Label>
     </Root>
   );
-};
+}

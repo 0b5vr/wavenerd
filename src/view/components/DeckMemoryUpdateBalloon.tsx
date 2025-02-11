@@ -1,4 +1,3 @@
-import React from 'react';
 import { PrimitiveAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
@@ -68,7 +67,7 @@ interface Props {
   memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
 }
 
-export function DeckMemoryUpdateBalloon(props: Props): JSX.Element | null {
+export function DeckMemoryUpdateBalloon(props: Props) {
   const { memoryUpdateAtom } = props;
 
   const memoryUpdate = useAtomValue(memoryUpdateAtom);

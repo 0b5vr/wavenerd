@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
@@ -43,10 +43,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const HeaderNudge: React.FC<{
+export function HeaderNudge({
+  hostDeck,
+  className,
+}: {
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}) {
   const [nudgeAmount, setNudgeAmount] = useState(0.0);
   const refRoot = useRef<HTMLDivElement>(null);
 
@@ -89,4 +92,4 @@ export const HeaderNudge: React.FC<{
       />
     </Root>
   );
-};
+}

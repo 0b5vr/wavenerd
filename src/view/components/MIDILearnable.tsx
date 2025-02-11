@@ -1,4 +1,3 @@
-import React from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { openContextMenuAtom } from '../stores/atoms/contextMenu';
@@ -31,7 +30,7 @@ interface Props {
   className?: string;
 }
 
-export function MIDILearnable(props: Props): JSX.Element {
+export function MIDILearnable(props: Props) {
   const { paramName, className } = props;
 
   const isLearning = useMidiLearning(paramName);

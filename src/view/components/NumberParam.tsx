@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import styled from 'styled-components';
@@ -52,7 +52,7 @@ const Root = styled.div`
 `;
 
 // == element ======================================================================================
-export const NumberParam: React.FC<{
+export function NumberParam(params: {
   type: ValueType;
   value: number;
 
@@ -76,7 +76,7 @@ export const NumberParam: React.FC<{
   changeValueWhenInput?: boolean;
 
   className?: string;
-}> = (params) => {
+}) {
   const {
     className,
     type,
@@ -238,4 +238,4 @@ export const NumberParam: React.FC<{
       }
     </Root>
   );
-};
+}

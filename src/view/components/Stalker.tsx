@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
@@ -21,7 +21,7 @@ export interface StalkerProps {
   className?: string;
 }
 
-export const Stalker: React.FC<StalkerProps> = ({ className }) => {
+export function Stalker({ className }: StalkerProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [target, setTarget] = useState<EventTarget | null>(null);
   const [text, setText] = useState<string | null>(null);
@@ -103,4 +103,4 @@ export const Stalker: React.FC<StalkerProps> = ({ className }) => {
       ) }
     </>
   );
-};
+}

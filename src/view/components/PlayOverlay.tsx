@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import IconPlay from '~icons/mdi/play';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -48,10 +48,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const PlayOverlay: React.FC<{
+export function PlayOverlay({
+  hostDeck,
+  className,
+}: {
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}) {
   const [isOpening, setIsOpening] = useState(true);
 
   const handleClick = useCallback(() => {
@@ -78,4 +81,4 @@ export const PlayOverlay: React.FC<{
       </Content>
     </Root>
   );
-};
+}

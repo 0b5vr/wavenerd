@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
@@ -41,10 +41,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const HeaderTransport: React.FC<{
+export function HeaderTransport({
+  hostDeck,
+  className,
+}: {
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}) {
   const isPlaying = useAtomValue(deckIsPlayingAtom);
 
   const handleClickRewind = useCallback(() => {
@@ -81,4 +84,4 @@ export const HeaderTransport: React.FC<{
       ) }
     </Root>
   );
-};
+}

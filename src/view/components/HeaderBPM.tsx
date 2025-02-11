@@ -1,5 +1,4 @@
 import { NumberParam } from './NumberParam';
-import React from 'react';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckBPMAtom } from '../stores/atoms/deck';
 import styled from 'styled-components';
@@ -25,10 +24,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const HeaderBPM: React.FC<{
+export function HeaderBPM({
+  hostDeck,
+  className,
+}: {
   hostDeck: WavenerdDeck;
   className?: string;
-}> = ({ hostDeck, className }) => {
+}) {
   const bpm = useAtomValue(deckBPMAtom);
 
   return (
@@ -49,4 +51,4 @@ export const HeaderBPM: React.FC<{
       />
     </Root>
   );
-};
+}

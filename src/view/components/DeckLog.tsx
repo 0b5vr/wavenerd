@@ -1,4 +1,3 @@
-import React from 'react';
 import { PrimitiveAtom, useAtomValue } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled, { keyframes } from 'styled-components';
@@ -56,7 +55,7 @@ function DeckLogInside({ logsAtom }: Props): JSX.Element {
   );
 }
 
-export function DeckLog({ logsAtom }: Props): JSX.Element | null {
+export function DeckLog({ logsAtom }: Props) {
   const logEnabled = useSettings('editorLogEnabled');
 
   if (!logEnabled) {

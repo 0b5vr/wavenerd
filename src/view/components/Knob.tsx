@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
@@ -58,7 +58,7 @@ interface Props {
   stalkerText?: string;
 }
 
-export const Knob: React.FC<Props> = (props) => {
+export function Knob(props: Props) {
   const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
 
   const value = useMidiValue(midiParamName);
@@ -107,4 +107,4 @@ export const Knob: React.FC<Props> = (props) => {
       <MIDILearnable paramName={midiParamName} />
     </Root>
   );
-};
+}

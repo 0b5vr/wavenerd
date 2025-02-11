@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
 import { Analyser } from '../../../audio/Analyser';
@@ -18,10 +18,13 @@ const Canvas = styled.canvas`
 const Root = styled.div``;
 
 // == components ===================================================================================
-export const DeckWaveRenderer: React.FC<{
+export function DeckWaveRenderer({
+  analyser,
+  className,
+}: {
   analyser: Analyser;
   className?: string;
-}> = ({ analyser, className }) => {
+}) {
   const [renderer, setRenderer] = useState<WaveRenderer>();
   const refCanvas = useRef<HTMLCanvasElement>(null);
   const canvas = useElement(refCanvas);
@@ -67,4 +70,4 @@ export const DeckWaveRenderer: React.FC<{
       />
     </Root>
   );
-};
+}

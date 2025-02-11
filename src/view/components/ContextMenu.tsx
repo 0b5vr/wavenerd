@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { contextMenuCommandsAtom, contextMenuIsOpeningAtom, contextMenuPositionAtom, resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import { ContextMenuEntry } from './ContextMenuEntry';
 import { ContextMenuHr } from './ContextMenuHr';
@@ -38,7 +38,7 @@ const Root = styled.div`
 `;
 
 // == component ====================================================================================
-export const ContextMenu: React.FC = () => {
+export function ContextMenu() {
   const isOpening = useAtomValue(contextMenuIsOpeningAtom);
   const [x, y] = useAtomValue(contextMenuPositionAtom);
   const commands = useAtomValue(contextMenuCommandsAtom);
@@ -108,4 +108,4 @@ export const ContextMenu: React.FC = () => {
       </Container>
     </Root>
   );
-};
+}

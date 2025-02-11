@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MIDIMAN } from '../../MIDIManager';
 import { Modal } from './Modal';
 import { ThemeVars } from '../themes/ThemeVars';
@@ -29,7 +29,7 @@ const MonitorBox = styled.div`
 `;
 
 // == children =====================================================================================
-function MIDIMonitor(): JSX.Element {
+function MIDIMonitor() {
   const [log, setLog] = useState<string[]>([...Array(10)].fill('...'));
 
   const appendLog = useCallback(

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import IconApply from '~icons/mdi/reload';
 import IconBuild from '~icons/mdi/hammer';
 import IconSettings from '~icons/mdi/cog';
@@ -46,7 +46,7 @@ const Content = styled.div`
 `;
 
 // == components ===================================================================================
-export const HelpModal: React.FC = () => {
+export function HelpModal() {
   const [isOpening, setOpening] = useAtom(helpIsOpeningAtom);
 
   const handleClose = useCallback(() => {
@@ -167,4 +167,4 @@ export const HelpModal: React.FC = () => {
   );
 
   /* eslint-enable @stylistic/jsx-one-expression-per-line */
-};
+}

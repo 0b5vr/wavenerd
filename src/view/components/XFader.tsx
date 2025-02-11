@@ -1,11 +1,8 @@
 import { useSettings } from '../stores/hooks/useSettings';
 import { Fader } from './Fader';
-import React from 'react';
 
 // == components ===================================================================================
-export const XFader: React.FC<{
-  className?: string;
-}> = ({ className }) => {
+export function XFader({ className }: { className?: string }) {
   const xfaderMode = useSettings('xfaderMode');
 
   if (xfaderMode === 'none') {
@@ -18,4 +15,4 @@ export const XFader: React.FC<{
       className={className}
     />
   );
-};
+}

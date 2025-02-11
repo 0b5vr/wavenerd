@@ -2,7 +2,7 @@ import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror, { Prec, ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
@@ -135,7 +135,7 @@ export const DeckEditor = forwardRef(({
   focusNextEditor?: () => void;
   className?: string;
 }, ref: React.Ref<{ focusEditor: () => void }>) => {
-  const refCodeMirror = React.useRef<ReactCodeMirrorRef>(null);
+  const refCodeMirror = useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
   const setMemoryUpdate = useSetAtom(memoryUpdateAtom);

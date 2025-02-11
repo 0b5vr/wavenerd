@@ -1,6 +1,5 @@
 import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../stores/atoms/analyser';
 import { LevelMeter } from './LevelMeter';
-import React from 'react';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 
@@ -30,9 +29,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const LevelMeters: React.FC<{
-  className?: string;
-}> = ({ className }) => {
+export function LevelMeters({ className }: { className?: string }) {
   const levelMeterInA = useAtomValue(levelMeterInAAtom);
   const levelMeterInB = useAtomValue(levelMeterInBAtom);
   const levelMeterOut = useAtomValue(levelMeterOutAtom);
@@ -59,4 +56,4 @@ export const LevelMeters: React.FC<{
       />
     </Root>
   );
-};
+}

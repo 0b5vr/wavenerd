@@ -1,6 +1,6 @@
 // Ref: https://codesandbox.io/s/userect-hook-1y5t7
 
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 export interface RectResult {
   bottom: number;

@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
@@ -82,10 +82,13 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const Fader: React.FC<{
+export function Fader({
+  midiParamName,
+  className,
+}: {
   midiParamName: string;
   className?: string;
-}> = ({ midiParamName, className }) => {
+}) {
   const refRoot = useRef<HTMLDivElement>(null);
   const rectRoot = useRect(refRoot);
 
@@ -150,4 +153,4 @@ export const Fader: React.FC<{
       <MIDILearnable paramName={midiParamName} />
     </Root>
   );
-};
+}

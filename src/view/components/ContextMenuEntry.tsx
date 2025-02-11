@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { ContextMenuCommand } from '../types/ContextMenuCommand';
 import { ThemeVars } from '../themes/ThemeVars';
 import { resetContextMenuAtom } from '../stores/atoms/contextMenu';
@@ -42,9 +42,7 @@ interface ContextMenuEntryProps {
   command: ContextMenuCommand;
 }
 
-export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = (props) => {
-  const { className, command } = props;
-
+export function ContextMenuEntry({ className, command }: ContextMenuEntryProps) {
   const name = command.name;
 
   const handleClick = useAtomCallback(useCallback(
@@ -63,4 +61,4 @@ export const ContextMenuEntry: React.FC<ContextMenuEntryProps> = (props) => {
       <Name>{ name }</Name>
     </Root>
   );
-};
+}

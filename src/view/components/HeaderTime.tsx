@@ -1,4 +1,3 @@
-import React from 'react';
 import { deckTimeAtom } from '../stores/atoms/deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
@@ -23,9 +22,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const HeaderTime: React.FC<{
-  className?: string;
-}> = ({ className }) => {
+export function HeaderTime({ className }: { className?: string }) {
   const time = useAtomValue(deckTimeAtom);
 
   return (
@@ -37,4 +34,4 @@ export const HeaderTime: React.FC<{
       <Value>{ time.toFixed(2) }</Value>
     </Root>
   );
-};
+}

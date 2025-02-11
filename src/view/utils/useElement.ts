@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 export function useElement<T extends HTMLElement | SVGElement>(
   ref: React.RefObject<T>,

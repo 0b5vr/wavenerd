@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import IconBin from '~icons/mdi/delete';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
@@ -43,11 +43,15 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const AssetListEntry: React.FC<{
+export function AssetListEntry({
+  name,
+  onDeleteAsset,
+  className,
+}: {
   name: string;
   onDeleteAsset: (name: string) => void;
   className?: string;
-}> = ({ name, onDeleteAsset, className }) => {
+}) {
   const handleClickDelete = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
@@ -68,4 +72,4 @@ export const AssetListEntry: React.FC<{
       />
     </Root>
   );
-};
+}

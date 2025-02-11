@@ -1,5 +1,4 @@
 import { DeckKnob } from './DeckKnob';
-import React from 'react';
 import styled from 'styled-components';
 
 // == styles =======================================================================================
@@ -15,10 +14,10 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const DeckKnobs: React.FC<{
+export function DeckKnobs({ paramPrefix, className }: {
   paramPrefix: string;
   className?: string;
-}> = ({ paramPrefix, className }) => {
+}): JSX.Element {
   const paramNames = [
     'knob0',
     'knob1',

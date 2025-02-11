@@ -15,6 +15,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
   stylistic.configs.customize({
     semi: true,
     braceStyle: '1tbs',

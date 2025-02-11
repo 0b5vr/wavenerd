@@ -14,7 +14,7 @@ import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../audio/Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
-import React, { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './SettingsModal';
 import { Stalker } from './Stalker';
@@ -124,7 +124,7 @@ interface Props {
   library: Library;
 }
 
-const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, library }) => {
+export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Props) {
   const showB = useAtomValue(deckShowBAtom);
   const themeString = useSettings('theme');
 
@@ -135,12 +135,12 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
   useRecorderSubscribers(recorder);
   useLibrarySubscribers(library);
 
-  const refDeckA = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
+  const refDeckA = useRef<{ focusEditor: (highlight: boolean) => void }>(null);
   const focusDeckAEditor = useCallback(() => {
     refDeckA.current?.focusEditor?.(true);
   }, [refDeckA]);
 
-  const refDeckB = React.createRef<{ focusEditor: (highlight: boolean) => void }>();
+  const refDeckB = useRef<{ focusEditor: (highlight: boolean) => void }>(null);
   const focusDeckBEditor = useCallback(() => {
     refDeckB.current?.focusEditor?.(true);
   }, [refDeckB]);
@@ -205,16 +205,16 @@ const OutOfContextApp: React.FC<Props> = ({ deckA, deckB, mixer, recorder, libra
       </Root>
     </>
   );
-};
+}
 
-const App: React.FC<Props> = ({ deckA, deckB, mixer, recorder, library }) => (
-  <OutOfContextApp
-    deckA={deckA}
-    deckB={deckB}
-    mixer={mixer}
-    recorder={recorder}
-    library={library}
-  />
-);
-
-export { App };
+export function App({ deckA, deckB, mixer, recorder, library }: Props) {
+  return (
+    <OutOfContextApp
+      deckA={deckA}
+      deckB={deckB}
+      mixer={mixer}
+      recorder={recorder}
+      library={library}
+    />
+  );
+}

@@ -1,6 +1,5 @@
 import 'symbol-observable';
 
-import React from 'react';
 import { SETTINGSMAN, Settings } from './SettingsManager';
 import { App } from './view/components/App';
 import { AudioDestinationRouter } from './audio/AudioDestinationRouter';

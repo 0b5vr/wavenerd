@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
@@ -33,11 +33,15 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const LevelMeter: React.FC<{
+export function LevelMeter({
+  level,
+  peak,
+  className,
+}: {
   level: number;
   peak: number;
   className?: string;
-}> = ({ level, peak, className }) => {
+}) {
   const p = useMemo(
     () => saturate(peak * 0.8),
     [peak],
@@ -67,4 +71,4 @@ export const LevelMeter: React.FC<{
       </Fg>
     </Root>
   );
-};
+}

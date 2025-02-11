@@ -1,5 +1,5 @@
 import { PrimitiveAtom, useAtomValue } from 'jotai';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
@@ -136,7 +136,16 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const DeckStatusBar: React.FC<{
+export function DeckStatusBar({
+  onCompile,
+  onApply,
+  onApplyImmediately,
+  cueStatusAtom,
+  hasEditAtom,
+  errorAtom,
+  gainParamName,
+  className,
+}: {
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
@@ -145,16 +154,7 @@ export const DeckStatusBar: React.FC<{
   errorAtom: PrimitiveAtom<string | null>;
   gainParamName: string;
   className?: string;
-}> = ({
-  className,
-  onCompile,
-  onApply,
-  onApplyImmediately,
-  cueStatusAtom,
-  hasEditAtom,
-  errorAtom,
-  gainParamName,
-}) => {
+}) {
   const cueStatus = useAtomValue(cueStatusAtom);
   const error = useAtomValue(errorAtom);
   const hasEdit = useAtomValue(hasEditAtom);
@@ -168,7 +168,7 @@ export const DeckStatusBar: React.FC<{
     }
   }, [onApplyImmediately, onApply]);
 
-  let content: React.ReactNode;
+  let content: JSX.Element;
 
   if (error != null) {
     content = (
@@ -248,4 +248,4 @@ export const DeckStatusBar: React.FC<{
       />
     </Root>
   );
-};
+}

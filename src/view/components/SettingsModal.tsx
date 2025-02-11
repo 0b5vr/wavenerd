@@ -1,5 +1,5 @@
 import { Mixer } from '../../audio/Mixer';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Settings, SETTINGSMAN } from '../../SettingsManager';
 import { settingsAtom, settingsIsOpeningAtom } from '../stores/atoms/settings';
 import { useAtom, useAtomValue } from 'jotai';
@@ -77,7 +77,7 @@ function ItemBase(props: {
   name: string;
   stalkerText?: string;
   children: React.ReactNode;
-}): JSX.Element {
+}) {
   const { name, children, stalkerText } = props;
 
   return (
@@ -90,7 +90,7 @@ function ItemBase(props: {
 
 function LatencyBlocksItem(props: {
   mixer: Mixer;
-}): JSX.Element {
+}) {
   const { mixer } = props;
 
   const settings = useAtomValue(settingsAtom);
@@ -125,7 +125,7 @@ function BoolItem(props: {
   settingsKey: keyof Settings;
   name: string;
   stalkerText?: string;
-}): JSX.Element {
+}) {
   const { settingsKey, name, stalkerText } = props;
   const value = useSettings(settingsKey) as boolean;
 
@@ -155,7 +155,7 @@ function RangeItem(props: {
   min: number;
   max: number;
   step: number;
-}): JSX.Element {
+}) {
   const { settingsKey, name, min, max, step, stalkerText } = props;
   const value = useSettings(settingsKey) as number;
 
@@ -185,7 +185,7 @@ function TextItem(props: {
   settingsKey: keyof Settings;
   name: string;
   stalkerText?: string;
-}): JSX.Element {
+}) {
   const { settingsKey, name, stalkerText } = props;
   const value = useSettings(settingsKey) as string;
 
@@ -211,7 +211,7 @@ function ColorItem(props: {
   settingsKey: keyof Settings;
   name: string;
   stalkerText?: string;
-}): JSX.Element {
+}) {
   const { settingsKey, name, stalkerText } = props;
   const value = useSettings(settingsKey) as string;
 
@@ -239,7 +239,7 @@ function SelectItem(props: {
   name: string;
   stalkerText?: string;
   children?: React.ReactNode;
-}): JSX.Element {
+}) {
   const { settingsKey, name, stalkerText, children } = props;
   const value = useSettings(settingsKey) as string;
 
@@ -264,9 +264,11 @@ function SelectItem(props: {
 }
 
 // == components ===================================================================================
-export const SettingsModal: React.FC<{
+export function SettingsModal({
+  mixer,
+}: {
   mixer: Mixer;
-}> = ({ mixer }) => {
+}) {
   const [isOpening, setOpening] = useAtom(settingsIsOpeningAtom);
 
   const handleClose = useCallback(() => {
@@ -430,4 +432,4 @@ export const SettingsModal: React.FC<{
       />
     </Modal>
   );
-};
+}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatIndicators } from './HeaderBeatIndicators';
@@ -113,11 +113,15 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const Header: React.FC<{
+export function Header({
+  hostDeck,
+  recorder,
+  className,
+}: {
   hostDeck: WavenerdDeck;
   recorder: Recorder;
   className?: string;
-}> = ({ hostDeck, recorder, className }) => {
+}) {
   const showB = useAtomValue(deckShowBAtom);
   const midiIndicator = useAtomValue(midiIndicatorAtom);
   const recorderIsRecording = useAtomValue(recorderIsRecordingAtom);
@@ -196,4 +200,4 @@ export const Header: React.FC<{
       </AnchorGit>
     </Root>
   );
-};
+}

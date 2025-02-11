@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { deckSortedImageListAtom, deckSortedSampleListAtom, deckSortedWavetableListAtom } from '../stores/atoms/deck';
 import { AssetListCategory } from './AssetListCategory';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
@@ -18,11 +18,11 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const AssetList: React.FC<{
+export function AssetList({ hostDeck, library, className }: {
   hostDeck: WavenerdDeck;
   library: Library;
   className?: string;
-}> = ({ hostDeck, library, className }) => {
+}) {
   const libraryListSorted = useAtomValue(libraryListSortedAtom);
   const sortedSampleList = useAtomValue(deckSortedSampleListAtom);
   const sortedWavetableList = useAtomValue(deckSortedWavetableListAtom);
@@ -119,4 +119,4 @@ export const AssetList: React.FC<{
       />
     </Root>
   );
-};
+}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
@@ -41,13 +41,19 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export const AssetListBar: React.FC<{
+export function AssetListBar({
+  title,
+  onFile,
+  expand,
+  onChangeExpand,
+  className,
+}: {
   title: string;
   onFile: (files: FileList) => void;
   expand: boolean;
   onChangeExpand: () => void;
   className?: string;
-}> = ({ title, onFile, expand, onChangeExpand, className }) => {
+}) {
   const handleClickOpen = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
@@ -82,4 +88,4 @@ export const AssetListBar: React.FC<{
       />
     </Root>
   );
-};
+}

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Knob } from './Knob';
 import { LevelMeters } from './LevelMeters';
 import { MixerChannelView } from './MixerChannelView';
@@ -50,7 +50,7 @@ const Root = styled.div`
 `;
 
 // == children =====================================================================================
-function CueMixKnob(): JSX.Element {
+function CueMixKnob() {
   const paramName = '/cue/master_mix';
   const value = useMidiValue(paramName);
 
@@ -72,9 +72,7 @@ function CueMixKnob(): JSX.Element {
 }
 
 // == components ===================================================================================
-export const MixerView: React.FC<{
-  className?: string;
-}> = ({ className }) => {
+export function MixerView({ className }: { className?: string }) {
   return (
     <Root
       className={className}
@@ -95,4 +93,4 @@ export const MixerView: React.FC<{
       />
     </Root>
   );
-};
+}
