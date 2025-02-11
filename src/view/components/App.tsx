@@ -1,12 +1,12 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
-import { deckACodeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom, deckShowBAtom } from '../stores/atoms/deck';
+import { deckACodeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
 import { MIDIModal } from './MIDIModal';
@@ -16,14 +16,13 @@ import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import { useCallback, useRef } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
-import { SettingsModal } from './SettingsModal';
+import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { XFader } from './XFader';
 import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
-import { useAtomValue } from 'jotai';
 import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
@@ -125,8 +124,8 @@ interface Props {
 }
 
 export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Props) {
-  const showB = useAtomValue(deckShowBAtom);
   const themeString = useSettings('theme');
+  const deckBShow = useSettings('deckBShow');
 
   useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
@@ -165,7 +164,7 @@ export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Prop
               deck={deckA}
               storageKeyName="a"
               gainParamName="/mixer/channel_a/gain"
-              focusNextEditor={showB ? focusDeckBEditor : undefined}
+              focusNextEditor={deckBShow ? focusDeckBEditor : undefined}
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
@@ -177,7 +176,7 @@ export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Prop
             <StyledMixerView />
             <StyledXFader />
           </SamplesColumn>
-          { showB && (
+          { deckBShow && (
             <DeckColumn>
               <StyledDeck
                 ref={refDeckB}

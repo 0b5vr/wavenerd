@@ -4,7 +4,7 @@ import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
 import IconRewind from '~icons/mdi/skip-previous';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckIsPlayingAtom } from '../stores/atoms/deck';
+import { deckIsPlayingAtom } from '../../stores/atoms/deck';
 import { useAtomValue } from 'jotai';
 
 // == styles =======================================================================================

@@ -1,6 +1,6 @@
-import { NumberParam } from './NumberParam';
+import { NumberParam } from '../NumberParam';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckBPMAtom } from '../stores/atoms/deck';
+import { deckBPMAtom } from '../../stores/atoms/deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 

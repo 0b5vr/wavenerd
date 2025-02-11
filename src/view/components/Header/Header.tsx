@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { HeaderBPM } from './HeaderBPM';
-import { HeaderBeatIndicators } from './HeaderBeatIndicators';
+import { HeaderBeatNumber } from './HeaderBeatNumber';
 import { HeaderNudge } from './HeaderNudge';
 import { HeaderTime } from './HeaderTime';
 import { HeaderTransport } from './HeaderTransport';
@@ -11,44 +11,21 @@ import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconMIDI from '~icons/mdi/midi-port';
 import IconSettings from '~icons/mdi/cog';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckShowBAtom } from '../stores/atoms/deck';
-import { helpIsOpeningAtom } from '../stores/atoms/help';
-import { midiIndicatorAtom, midiModalIsOpeningAtom } from '../stores/atoms/midi';
-import { settingsIsOpeningAtom } from '../stores/atoms/settings';
+import { helpIsOpeningAtom } from '../../stores/atoms/help';
+import { midiIndicatorAtom, midiModalIsOpeningAtom } from '../../stores/atoms/midi';
 import { useAtomCallback } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
-import { Recorder } from '../../audio/Recorder';
-import { recorderIsRecordingAtom } from '../stores/atoms/recorder';
+import { Recorder } from '../../../audio/Recorder';
+import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
+import { settingsIsOpeningAtom } from '../../stores/atoms/settings';
+import { useSettings } from '../../stores/hooks/useSettings';
+import { SETTINGSMAN } from '../../../SettingsManager';
+import { HeaderLogo } from './HeaderLogo';
+import { HeaderUnknown } from './HeaderUnknown';
 
 // == styles =======================================================================================
-const Logo = styled.div`
-  font: 600 24px 'Inter', sans-serif;
-  line-height: 1;
-  margin-left: 8px;
-`;
-
-const StyledHeaderTransport = styled(HeaderTransport)`
-  margin-left: 8px;
-`;
-
-const StyledHeaderTime = styled(HeaderTime)`
-  margin-left: 8px;
-`;
-
-const StyledHeaderBeatIndicators = styled(HeaderBeatIndicators)`
-  margin-left: 8px;
-`;
-
-const StyledHeaderBPM = styled(HeaderBPM)`
-  margin-left: 8px;
-`;
-
-const StyledHeaderNudge = styled(HeaderNudge)`
-  margin-left: 8px;
-`;
-
 const StyleIcon = css`
   width: 24px;
   height: 24px;
@@ -98,6 +75,14 @@ const Margin = styled.div`
   flex-grow: 1 !important;
 `;
 
+const Left = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  gap: 8px;
+`;
+
 const Root = styled.div`
   display: flex;
   align-items: center;
@@ -122,9 +107,13 @@ export function Header({
   recorder: Recorder;
   className?: string;
 }) {
-  const showB = useAtomValue(deckShowBAtom);
+  const headerItems = useSettings('headerItems');
+  const headerItemsArray = useMemo(() => headerItems.split(','), [headerItems]);
+
   const midiIndicator = useAtomValue(midiIndicatorAtom);
   const recorderIsRecording = useAtomValue(recorderIsRecordingAtom);
+
+  const deckBShow = useSettings('deckBShow');
 
   const handleClickRecord = useCallback(() => {
     if (recorder.isRecording) {
@@ -134,9 +123,9 @@ export function Header({
     }
   }, [recorder]);
 
-  const handleClickToggleB = useAtomCallback(useCallback((get, set) => {
-    set(deckShowBAtom, !get(deckShowBAtom));
-  }, []));
+  const handleClickToggleB = useCallback(() => {
+    SETTINGSMAN.set('deckBShow', !SETTINGSMAN.values.deckBShow);
+  }, []);
 
   const handleClickMIDI = useAtomCallback(useCallback((_, set) => {
     set(midiModalIsOpeningAtom, true);
@@ -154,22 +143,31 @@ export function Header({
     <Root
       className={className}
     >
-      <Logo>Wavenerd</Logo>
-      <StyledHeaderTransport
-        hostDeck={hostDeck}
-      />
-      <StyledHeaderTime />
-      <StyledHeaderBeatIndicators />
-      <StyledHeaderBPM
-        hostDeck={hostDeck}
-      />
-      <StyledHeaderNudge
-        hostDeck={hostDeck}
-      />
+      <Left>
+        {headerItemsArray.map((item, i) => {
+          if (item === 'logo') {
+            return <HeaderLogo key={i} />;
+          } else if (item === 'transport') {
+            return <HeaderTransport key={i} hostDeck={hostDeck} />;
+          } else if (item === 'time') {
+            return <HeaderTime key={i} />;
+          } else if (item === 'beat-number') {
+            return <HeaderBeatNumber key={i} />;
+          } else if (item === 'bpm') {
+            return <HeaderBPM key={i} hostDeck={hostDeck} />;
+          } else if (item === 'nudge') {
+            return <HeaderNudge key={i} hostDeck={hostDeck} />;
+          } else {
+            return <HeaderUnknown key={i} name={item} />;
+          }
+        })}
+      </Left>
+
       <Margin />
+
       <StyledIconBBox
         onClick={handleClickToggleB}
-        style={{ opacity: showB ? 1.0 : 0.5 }}
+        style={{ opacity: deckBShow ? 1.0 : 0.5 }}
         data-stalker="Toggle Deck B"
       />
       <StyledIconCasette

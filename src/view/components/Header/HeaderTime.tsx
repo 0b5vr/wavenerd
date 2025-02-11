@@ -1,4 +1,4 @@
-import { deckTimeAtom } from '../stores/atoms/deck';
+import { deckTimeAtom } from '../../stores/atoms/deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 

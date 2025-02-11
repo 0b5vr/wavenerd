@@ -1,4 +1,4 @@
-import { deckBPMAtom, deckBeatsAtom } from '../stores/atoms/deck';
+import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
@@ -23,7 +23,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function HeaderBeatIndicators({ className }: { className?: string }) {
+export function HeaderBeatNumber({ className }: { className?: string }) {
   const bpm = useAtomValue(deckBPMAtom);
   const { beat, bar, sixteenBar } = useAtomValue(deckBeatsAtom);
 
@@ -40,7 +40,7 @@ export function HeaderBeatIndicators({ className }: { className?: string }) {
       className={className}
       data-stalker="Bars, Beats, Steps"
     >
-      <Label>BARS</Label>
+      <Label>BEAT</Label>
       <ValueRow>
         { `${('0' + barCount).slice(-2)}.${beatCount}.${stepCount}` }
       </ValueRow>

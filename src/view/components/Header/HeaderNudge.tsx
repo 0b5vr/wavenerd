@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
+import { ThemeVars } from '../../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { registerMouseEvent } from '../utils/registerMouseEvent';
+import { registerMouseEvent } from '../../utils/registerMouseEvent';
 import styled from 'styled-components';
 
 // == styles =======================================================================================

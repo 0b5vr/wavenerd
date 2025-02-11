@@ -25,6 +25,8 @@ export interface Settings {
   oscilloscopeOpacity: number;
   oscilloscopeColor: string;
   theme: string;
+  headerItems: string;
+  deckBShow: boolean;
   editorFont: string;
   editorFontVariantLigatures: string;
   editorLogEnabled: boolean;
@@ -47,7 +49,9 @@ export const defaultSettings: Settings = {
   oscilloscopeOpacity: 0.2,
   oscilloscopeColor: '#ffffff',
   theme: 'monokaiSharp',
-  editorFont: '12px/16px "Roboto Mono", monospace',
+  headerItems: 'logo,transport,time,beat-number,bpm,nudge',
+  deckBShow: true,
+  editorFont: '14px/18px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
   editorLogEnabled: false,
 };
