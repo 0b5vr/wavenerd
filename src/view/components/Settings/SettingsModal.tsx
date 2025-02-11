@@ -52,9 +52,9 @@ export function SettingsModal({
         <Content>
           {category === 'audio' && <SettingsContentAudio mixer={mixer} />}
           {category === 'midi' && <SettingsContentMIDI />}
-          {category === 'visualization' && <SettingsContentVisualization />}
-          {category === 'appearance' && <SettingsContentAppearance />}
           {category === 'editor' && <SettingsContentEditor />}
+          {category === 'appearance' && <SettingsContentAppearance />}
+          {category === 'visualization' && <SettingsContentVisualization />}
           {category === 'about' && <SettingsContentAbout />}
         </Content>
       </Root>

@@ -3,7 +3,7 @@ import { ThemeVars } from '../../themes/ThemeVars';
 import styled, { css } from 'styled-components';
 import { SettingsCategory, settingsCategoryAtom } from '../../stores/atoms/settings';
 import IconVolumeHigh from '~icons/mdi/volume-high';
-import IconPulse from '~icons/mdi/pulse';
+import IconPalette from '~icons/mdi/palette';
 import IconEye from '~icons/mdi/eye';
 import IconCodeBraces from '~icons/mdi/code-braces';
 import IconInformation from '~icons/mdi/information';
@@ -25,11 +25,11 @@ const StyledIconMIDI = styled(IconMidiPort)`
   ${StyledIcon}
 `;
 
-const StyledIconVisualization = styled(IconPulse)`
+const StyledIconVisualization = styled(IconEye)`
   ${StyledIcon}
 `;
 
-const StyledIconAppearance = styled(IconEye)`
+const StyledIconAppearance = styled(IconPalette)`
   ${StyledIcon}
 `;
 
@@ -72,27 +72,27 @@ const Root = styled.div`
 const settingsCategories: SettingsCategory[] = [
   'audio',
   'midi',
-  'visualization',
-  'appearance',
   'editor',
+  'appearance',
+  'visualization',
   'about',
 ];
 
 const settingsCategoryNameMap: Record<SettingsCategory, string> = {
   audio: 'Audio',
   midi: 'MIDI',
-  visualization: 'Visualization',
-  appearance: 'Appearance',
   editor: 'Editor',
+  appearance: 'Appearance',
+  visualization: 'Visualization',
   about: 'About',
 };
 
 const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
   audio: <StyledIconAudio />,
   midi: <StyledIconMIDI />,
-  visualization: <StyledIconVisualization />,
-  appearance: <StyledIconAppearance />,
   editor: <StyledIconEditor />,
+  appearance: <StyledIconAppearance />,
+  visualization: <StyledIconVisualization />,
   about: <StyledIconAbout />,
 };
 
