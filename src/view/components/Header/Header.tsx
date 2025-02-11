@@ -6,8 +6,6 @@ import { HeaderNudge } from './HeaderNudge';
 import { HeaderTime } from './HeaderTime';
 import { HeaderTransport } from './HeaderTransport';
 import IconCasette from '~icons/mdi/cassette';
-import IconBBox from '~icons/mdi/alpha-b-box';
-import IconGitHub from '~icons/mdi/github';
 import IconHelp from '~icons/mdi/help-circle';
 import IconMIDI from '~icons/mdi/midi-port';
 import IconSettings from '~icons/mdi/cog';
@@ -21,9 +19,10 @@ import { Recorder } from '../../../audio/Recorder';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
 import { settingsIsOpeningAtom } from '../../stores/atoms/settings';
 import { useSettings } from '../../stores/hooks/useSettings';
-import { SETTINGSMAN } from '../../../SettingsManager';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderUnknown } from './HeaderUnknown';
+import { HeaderBeatHex } from './HeaderBeatHex';
+import { HeaderBeatDots } from './HeaderBeatDots';
 
 // == styles =======================================================================================
 const StyleIcon = css`
@@ -39,10 +38,6 @@ const StyleIcon = css`
   &:active {
     opacity: 0.6;
   }
-`;
-
-const StyledIconBBox = styled(IconBBox)`
-  ${StyleIcon};
 `;
 
 const StyledIconCasette = styled(IconCasette)`
@@ -61,16 +56,6 @@ const StyledIconHelp = styled(IconHelp)`
   ${StyleIcon};
 `;
 
-const StyledIconGitHub = styled(IconGitHub)`
-  ${StyleIcon};
-`;
-
-const AnchorGit = styled.a`
-  display: block;
-  height: 32px;
-  color: ${ThemeVars.headerFg};
-`;
-
 const Margin = styled.div`
   flex-grow: 1 !important;
 `;
@@ -80,7 +65,7 @@ const Left = styled.div`
   display: flex;
   align-items: center;
   margin-left: 8px;
-  gap: 8px;
+  gap: 16px;
 `;
 
 const Root = styled.div`
@@ -113,8 +98,6 @@ export function Header({
   const midiIndicator = useAtomValue(midiIndicatorAtom);
   const recorderIsRecording = useAtomValue(recorderIsRecordingAtom);
 
-  const deckBShow = useSettings('deckBShow');
-
   const handleClickRecord = useCallback(() => {
     if (recorder.isRecording) {
       recorder.stop();
@@ -122,10 +105,6 @@ export function Header({
       recorder.start();
     }
   }, [recorder]);
-
-  const handleClickToggleB = useCallback(() => {
-    SETTINGSMAN.set('deckBShow', !SETTINGSMAN.values.deckBShow);
-  }, []);
 
   const handleClickMIDI = useAtomCallback(useCallback((_, set) => {
     set(midiModalIsOpeningAtom, true);
@@ -153,6 +132,10 @@ export function Header({
             return <HeaderTime key={i} />;
           } else if (item === 'beat-number') {
             return <HeaderBeatNumber key={i} />;
+          } else if (item === 'beat-hex') {
+            return <HeaderBeatHex key={i} />;
+          } else if (item === 'beat-dots') {
+            return <HeaderBeatDots key={i} />;
           } else if (item === 'bpm') {
             return <HeaderBPM key={i} hostDeck={hostDeck} />;
           } else if (item === 'nudge') {
@@ -165,11 +148,6 @@ export function Header({
 
       <Margin />
 
-      <StyledIconBBox
-        onClick={handleClickToggleB}
-        style={{ opacity: deckBShow ? 1.0 : 0.5 }}
-        data-stalker="Toggle Deck B"
-      />
       <StyledIconCasette
         onClick={handleClickRecord}
         style={{ color: recorderIsRecording ? ThemeVars.error : 'inherit' }}
@@ -188,14 +166,6 @@ export function Header({
         onClick={handleClickHelp}
         data-stalker="Show help"
       />
-      <AnchorGit
-        href="https://github.com/0b5vr/wavenerd/"
-        target="_blank"
-        rel="noreferrer"
-        data-stalker="See the source @ GitHub"
-      >
-        <StyledIconGitHub />
-      </AnchorGit>
     </Root>
   );
 }

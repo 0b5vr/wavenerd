@@ -11,7 +11,6 @@ import { useAtomValue } from 'jotai';
 const StyleIconButton = css`
   width: 28px;
   height: 28px;
-  margin: 2px;
 
   cursor: pointer;
 

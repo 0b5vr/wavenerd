@@ -14,7 +14,7 @@ const Label = styled.div`
 const Value = styled(NumberParam)`
   font: 14px 'Roboto Mono', monospace;
   line-height: 1.0;
-  min-width: 64px;
+  min-width: 52px;
 `;
 
 const Root = styled.div`

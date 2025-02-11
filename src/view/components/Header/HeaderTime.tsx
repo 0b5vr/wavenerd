@@ -12,7 +12,7 @@ const Label = styled.div`
 const Value = styled.div`
   font: 14px 'Roboto Mono', monospace;
   line-height: 1.0;
-  min-width: 64px;
+  min-width: 60px;
 `;
 
 const Root = styled.div`
