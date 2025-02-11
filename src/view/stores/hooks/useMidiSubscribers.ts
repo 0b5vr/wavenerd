@@ -1,4 +1,4 @@
-import { midiIndicatorAtom, midiLearningAtom, midiParamsAtom } from '../atoms/midi';
+import { midiDevicesAtom, midiIndicatorAtom, midiLearningAtom, midiMappingsAtom, midiParamsAtom } from '../atoms/midi';
 import { MidiManager } from '../../../MIDIManager';
 import { useCallback, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
@@ -10,10 +10,10 @@ function useMidiParamsSubscriber(midiManager: MidiManager) {
   useEffect(() => {
     setMidiParams(midiManager.values);
 
-    const handleParamChange = midiManager.on('paramChange', ({ key, value }) => {
+    const handleParamChange = midiManager.on('paramChange', ({ paramKey, value }) => {
       setMidiParams((prev) => ({
         ...prev,
-        [key]: value,
+        [paramKey]: value,
       }));
     });
 
@@ -25,8 +25,8 @@ function useMidiLearningSubscriber(midiManager: MidiManager) {
   const setMidiLearning = useSetAtom(midiLearningAtom);
 
   useEffect(() => {
-    const handleLearn = midiManager.on('learn', ({ key }) => {
-      setMidiLearning(key);
+    const handleLearn = midiManager.on('learn', ({ paramKey }) => {
+      setMidiLearning(paramKey);
     });
 
     return () => midiManager.off('learn', handleLearn);
@@ -58,8 +58,40 @@ function useMidiIndicatorSubscriber(midiManager: MidiManager) {
   }, [midiManager]);
 }
 
+function useMidiDevicesSubscriber(midiManager: MidiManager) {
+  const setMidiDevices = useSetAtom(midiDevicesAtom);
+
+  useEffect(() => {
+    const update = () => setMidiDevices(Array.from(midiManager.deviceSet));
+    update();
+
+    const handleDeviceDetect = midiManager.on('deviceDetect', update);
+
+    return () => midiManager.off('deviceDetect', handleDeviceDetect);
+  }, [midiManager]);
+}
+
+function useMidiMappingsSubscriber(midiManager: MidiManager) {
+  const setMidiMappings = useSetAtom(midiMappingsAtom);
+
+  useEffect(() => {
+    const update = () => setMidiMappings(structuredClone(midiManager.mappings));
+    update();
+
+    const handleMappingAssign = midiManager.on('mappingAssign', update);
+    const handleMappingUnassign = midiManager.on('mappingUnassign', update);
+
+    return () => {
+      midiManager.off('mappingAssign', handleMappingAssign);
+      midiManager.off('mappingUnassign', handleMappingUnassign);
+    };
+  }, [midiManager]);
+}
+
 export function useMidiSubscribers(midiManager: MidiManager) {
   useMidiParamsSubscriber(midiManager);
   useMidiLearningSubscriber(midiManager);
   useMidiIndicatorSubscriber(midiManager);
+  useMidiDevicesSubscriber(midiManager);
+  useMidiMappingsSubscriber(midiManager);
 }

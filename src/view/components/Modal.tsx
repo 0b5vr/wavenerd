@@ -28,8 +28,8 @@ const Plane = styled.div`
   position: relative;
   margin: 16px;
   padding: 16px;
-  max-width: 640px;
-  max-height: calc( 100% - 32px );
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
   overflow: visible;
   border-radius: 4px;
   background: ${ThemeVars.modalBg};

@@ -9,7 +9,6 @@ import { DeckKnobs } from './DeckKnobs';
 import { Header } from './Header/Header';
 import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
-import { MIDIModal } from './MIDIModal';
 import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../audio/Mixer';
 import { MixerView } from './MixerView';
@@ -197,7 +196,6 @@ export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Prop
         </DeckRow>
 
         <SettingsModal mixer={mixer} />
-        <MIDIModal />
         <HelpModal />
 
         <PlayOverlay hostDeck={deckA} />

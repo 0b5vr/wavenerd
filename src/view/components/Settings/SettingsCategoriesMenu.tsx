@@ -7,6 +7,7 @@ import IconPulse from '~icons/mdi/pulse';
 import IconEye from '~icons/mdi/eye';
 import IconCodeBraces from '~icons/mdi/code-braces';
 import IconInformation from '~icons/mdi/information';
+import IconMidiPort from '~icons/mdi/midi-port';
 import { useAtom } from 'jotai';
 
 // == styles =======================================================================================
@@ -17,6 +18,10 @@ const StyledIcon = css`
 `;
 
 const StyledIconAudio = styled(IconVolumeHigh)`
+  ${StyledIcon}
+`;
+
+const StyledIconMIDI = styled(IconMidiPort)`
   ${StyledIcon}
 `;
 
@@ -66,6 +71,7 @@ const Root = styled.div`
 // == components ===================================================================================
 const settingsCategories: SettingsCategory[] = [
   'audio',
+  'midi',
   'visualization',
   'appearance',
   'editor',
@@ -74,6 +80,7 @@ const settingsCategories: SettingsCategory[] = [
 
 const settingsCategoryNameMap: Record<SettingsCategory, string> = {
   audio: 'Audio',
+  midi: 'MIDI',
   visualization: 'Visualization',
   appearance: 'Appearance',
   editor: 'Editor',
@@ -82,6 +89,7 @@ const settingsCategoryNameMap: Record<SettingsCategory, string> = {
 
 const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
   audio: <StyledIconAudio />,
+  midi: <StyledIconMIDI />,
   visualization: <StyledIconVisualization />,
   appearance: <StyledIconAppearance />,
   editor: <StyledIconEditor />,

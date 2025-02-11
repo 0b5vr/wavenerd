@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import { SETTINGSMAN } from '../../../SettingsManager';
+import { Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
 
 export function SettingsItemRange(props: {
+  settingsKey: keyof Settings;
   min: number;
   max: number;
   step: number;

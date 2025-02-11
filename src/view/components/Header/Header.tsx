@@ -7,17 +7,17 @@ import { HeaderTime } from './HeaderTime';
 import { HeaderTransport } from './HeaderTransport';
 import IconCasette from '~icons/mdi/cassette';
 import IconHelp from '~icons/mdi/help-circle';
-import IconMIDI from '~icons/mdi/midi-port';
+import IconMidiPort from '~icons/mdi/midi-port';
 import IconSettings from '~icons/mdi/cog';
 import { ThemeVars } from '../../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { helpIsOpeningAtom } from '../../stores/atoms/help';
-import { midiIndicatorAtom, midiModalIsOpeningAtom } from '../../stores/atoms/midi';
+import { midiIndicatorAtom } from '../../stores/atoms/midi';
 import { useAtomCallback } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
 import { Recorder } from '../../../audio/Recorder';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
-import { settingsIsOpeningAtom } from '../../stores/atoms/settings';
+import { settingsCategoryAtom, settingsIsOpeningAtom } from '../../stores/atoms/settings';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderUnknown } from './HeaderUnknown';
@@ -48,7 +48,7 @@ const StyledIconSettings = styled(IconSettings)`
   ${StyleIcon};
 `;
 
-const StyledIconMIDI = styled(IconMIDI)`
+const StyledIconMIDI = styled(IconMidiPort)`
   ${StyleIcon};
 `;
 
@@ -107,7 +107,8 @@ export function Header({
   }, [recorder]);
 
   const handleClickMIDI = useAtomCallback(useCallback((_, set) => {
-    set(midiModalIsOpeningAtom, true);
+    set(settingsIsOpeningAtom, true);
+    set(settingsCategoryAtom, 'midi');
   }, []));
 
   const handleClickHelp = useAtomCallback(useCallback((_, set) => {

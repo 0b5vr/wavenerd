@@ -1,36 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
-import { MIDIMAN } from '../../MIDIManager';
-import { Modal } from './Modal';
-import { ThemeVars } from '../themes/ThemeVars';
-import { midiModalIsOpeningAtom } from '../stores/atoms/midi';
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { useAtom } from 'jotai';
+import { MIDIMAN } from '../../../MIDIManager';
+import { ThemeVars } from '../../themes/ThemeVars';
+import { SettingsItemBase } from './SettingsItemBase';
 
 // == styles =======================================================================================
-const Description = styled.p`
-  font-size: 12px;
-  margin: 8px 0;
-`;
-
-const Header = styled.h2`
-  font-size: 16px;
-  margin: 16px 0 8px;
-`;
-
 const MonitorBox = styled.div`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  margin-right: 8px;
   white-space: pre;
-  width: 100%;
   padding: 4px 8px;
   border-radius: 4px;
   background: ${ThemeVars.inputBack};
   font: 400 10px 'Roboto Mono', sans-serif;
 `;
 
-// == children =====================================================================================
-function MIDIMonitor() {
-  const [log, setLog] = useState<string[]>([...Array(10)].fill('...'));
+// == components ===================================================================================
+const MONITOR_LOG_SIZE = 5;
+
+export function SettingsItemMIDIMonitor() {
+  const [log, setLog] = useState<string[]>([...Array(MONITOR_LOG_SIZE)].fill('...'));
 
   const appendLog = useCallback(
     (channel: number, event: string, value1: number, value2: number, paramKey: string | null) => {
@@ -42,7 +33,7 @@ function MIDIMonitor() {
 
       const message = `Ch.${chStr} ${eventStr} ${value1Str} ${value2Str} ${paramKeyStr}`;
 
-      setLog((prev) => [...prev, message].slice(-10));
+      setLog((prev) => [...prev, message].slice(-MONITOR_LOG_SIZE));
     },
     [],
   );
@@ -68,34 +59,12 @@ function MIDIMonitor() {
   }, [appendLog]);
 
   return (
-    <MonitorBox>
-      {log.map((message, i) => (
-        <span key={i}>{message}</span>
-      ))}
-    </MonitorBox>
-  );
-}
-
-// == component ====================================================================================
-export function MIDIModal() {
-  const [isOpening, setOpening] = useAtom(midiModalIsOpeningAtom);
-
-  const handleClose = useCallback(() => {
-    setOpening(false);
-  }, [setOpening]);
-
-  if (!isOpening) {
-    return null;
-  }
-
-  return (
-    <Modal onClose={handleClose}>
-      <Description>
-        MIDI devices can be assigned to control parameters.
-        Right click on a knob or a fader and select &quot;MIDI Learn&quot; to assign a MIDI device.
-      </Description>
-      <Header>Monitor</Header>
-      <MIDIMonitor />
-    </Modal>
+    <SettingsItemBase name="MIDI Monitor">
+      <MonitorBox>
+        {log.map((message, i) => (
+          <span key={i}>{message}</span>
+        ))}
+      </MonitorBox>
+    </SettingsItemBase>
   );
 }

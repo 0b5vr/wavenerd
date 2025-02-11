@@ -5,31 +5,42 @@ import { migrateMIDIManagerStorage } from './migrateMIDIManagerStorage';
 interface MidiManagerStorageType {
   version?: number;
   values?: { [ key: string ]: number };
-  noteMap?: { [ note: string ]: string }[];
-  ccMap?: { [ cc: string ]: string }[];
+  mappings?: { [ key: string ]: string };
 }
 
 interface MidiManagerEvents {
-  noteOn: { channel: number; note: number; velocity: number; paramKey: string | null };
-  noteOff: { channel: number; note: number; velocity: number; paramKey: string | null };
-  cc: { channel: number; cc: number; value: number; paramKey: string | null };
-  paramChange: { key: string; value: number };
-  learn: { key: string | null };
+  deviceDetect: { deviceId: string; deviceName: string };
+  message: { deviceId: string; deviceName: string };
+  noteOn: { deviceId: string; deviceName: string; channel: number; note: number; velocity: number; paramKey: string | null };
+  noteOff: { deviceId: string; deviceName: string; channel: number; note: number; velocity: number; paramKey: string | null };
+  cc: { deviceId: string; deviceName: string; channel: number; cc: number; value: number; paramKey: string | null };
+  paramChange: { paramKey: string; value: number; midiKey: string | null };
+  mappingAssign: { midiKey: string; paramKey: string };
+  mappingUnassign: { midiKey: string };
+  learn: { paramKey: string | null };
 }
 
 export class MidiManager extends EventEmittable<MidiManagerEvents> {
-  private __values: { [ key: string ]: number };
-  public get values(): { [ key: string ]: number } {
+  private __deviceSet: Set<{ deviceId: string; deviceName: string }>;
+  public get deviceSet(): Set<{ deviceId: string; deviceName: string }> {
+    return this.__deviceSet;
+  }
+
+  private __values: { [ paramKey: string ]: number };
+  public get values(): { [ paramKey: string ]: number } {
     return {
       ...this.defaultValues,
       ...this.__values,
     };
   }
 
-  public defaultValues: { [ key: string ]: number };
+  public defaultValues: { [ paramKey: string ]: number };
 
-  private __noteMap: { [ note: number ]: string }[];
-  private __ccMap: { [ cc: number ]: string }[];
+  private __mappings: { [ midiKey: string ]: string };
+  public get mappings(): { [ midiKey: string ]: string } {
+    return this.__mappings;
+  }
+
   private __storage: ThrottledJSONStorage<MidiManagerStorageType>;
   private __learningParam: string | null = null;
 
@@ -41,9 +52,10 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
     this.defaultValues = {};
 
+    this.__deviceSet = new Set();
+
     this.__values = this.__storage.get('values') ?? {};
-    this.__noteMap = this.__storage.get('noteMap') ?? [...Array(16)].map(() => ({}));
-    this.__ccMap = this.__storage.get('ccMap') ?? [...Array(16)].map(() => ({}));
+    this.__mappings = this.__storage.get('mappings') ?? {};
   }
 
   public midi(key: string): number {
@@ -52,40 +64,68 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   public async initMidi(): Promise<void> {
     const access = await navigator.requestMIDIAccess();
+
     const inputs = access.inputs;
     Array.from(inputs.values()).forEach((input) => {
+      const deviceId = input.id;
+      const deviceName = input.name ?? `Unknown (${deviceId})`;
+
       input.addEventListener(
         'midimessage',
-        (event) => this.__handleMidiMessage(event),
+        (event) => this.__handleMidiMessage(event, deviceId, deviceName),
       );
 
-      console.info(`Detected MIDI Device: ${input.name}`);
+      this.__deviceSet.add({ deviceId, deviceName });
+      this.__emit('deviceDetect', { deviceId, deviceName });
     });
   }
 
-  public learn(key: string): void {
-    this.__learningParam = key;
-    this.__emit('learn', { key });
+  public learn(paramKey: string): void {
+    this.__learningParam = paramKey;
+    this.__emit('learn', { paramKey });
   }
 
   public clearLearn(): void {
     this.__learningParam = null;
-    this.__emit('learn', { key: null });
+    this.__emit('learn', { paramKey: null });
   }
 
-  public setValue(key: string, value: number): void {
-    this.__values[key] = value;
+  public assignMapping(midiKey: string, paramKey: string): void {
+    this.__mappings[midiKey] = paramKey;
+    this.__storage.set('mappings', this.__mappings);
+    this.__emit('mappingAssign', { midiKey, paramKey });
+  }
+
+  public unassignMapping(midiKey: string): void {
+    delete this.__mappings[midiKey];
+    this.__storage.set('mappings', this.__mappings);
+    this.__emit('mappingUnassign', { midiKey });
+  }
+
+  public setValue(paramKey: string, value: number, midiKey?: string | null): void {
+    this.__values[paramKey] = value;
 
     this.__storage.set('values', this.__values);
 
-    this.__emit('paramChange', { key, value });
+    this.__emit('paramChange', {
+      paramKey,
+      value,
+      midiKey: midiKey ?? null,
+    });
   }
 
-  private __handleMidiMessage(event: WebMidi.MIDIMessageEvent): void {
-    let paramKey = '';
+  private __handleMidiMessage(
+    event: WebMidi.MIDIMessageEvent,
+    deviceId: string,
+    deviceName: string,
+  ): void {
+    let paramKey: string | null = null;
+    let midiKey: string | null = null;
     let value = 0;
 
     if (event.data) {
+      this.__emit('message', { deviceId, deviceName });
+
       const isNoteOff = event.data[0] >= 128 && event.data[0] <= 143;
       const isNoteOn = event.data[0] >= 144 && event.data[0] <= 159;
       const isCC = event.data[0] >= 176 && event.data[0] <= 191;
@@ -95,43 +135,44 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
       if (isNoteOn) {
         const note = event.data[1];
         const velocity = event.data[2] / 127.0;
+        midiKey = `note-${channel}-${note}`;
 
         if (this.__learningParam) {
-          this.__noteMap[channel][note] = this.__learningParam;
-          this.__storage.set('noteMap', this.__noteMap);
+          this.assignMapping(midiKey, this.__learningParam);
           this.clearLearn();
         }
 
-        paramKey = this.__noteMap[channel][note] ?? null;
+        paramKey = this.__mappings[midiKey] ?? null;
         value = velocity;
 
-        this.__emit('noteOn', { channel, note, velocity, paramKey });
+        this.__emit('noteOn', { deviceId, deviceName, channel, note, velocity, paramKey });
       } else if (isNoteOff) {
         const note = event.data[1];
         const velocity = event.data[2] / 127.0;
+        midiKey = `note-${channel}-${note}`;
 
-        paramKey = this.__noteMap[channel][note] ?? null;
+        paramKey = this.__mappings[midiKey] ?? null;
         value = 0.0;
 
-        this.__emit('noteOff', { channel, note, velocity, paramKey });
+        this.__emit('noteOff', { deviceId, deviceName, channel, note, velocity, paramKey });
       } else if (isCC) {
         const cc = event.data[1];
+        midiKey = `cc-${channel}-${cc}`;
 
         if (this.__learningParam) {
-          this.__ccMap[channel][cc] = this.__learningParam;
-          this.__storage.set('ccMap', this.__ccMap);
+          this.assignMapping(midiKey, this.__learningParam);
           this.clearLearn();
         }
 
-        paramKey = this.__ccMap[channel][cc] ?? null;
+        paramKey = this.__mappings[midiKey] ?? null;
         value = event.data[2] / 127.0;
 
-        this.__emit('cc', { channel, cc, value, paramKey });
+        this.__emit('cc', { deviceId, deviceName, channel, cc, value, paramKey });
       }
     }
 
     if (paramKey) {
-      this.setValue(paramKey, value);
+      this.setValue(paramKey, value, midiKey);
     }
   }
 }

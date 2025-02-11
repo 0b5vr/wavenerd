@@ -68,11 +68,40 @@ function migrate20241123(data: any): any {
   };
 }
 
+function migrate20250211(data: any): any {
+  if (data.version != null && data.version >= 2025_02_11) { return data; }
+
+  // unify noteMap and ccMap
+  const noteMap = data.noteMap;
+  const ccMap = data.ccMap;
+
+  const newMappings: { [ key: string ]: string } = {};
+
+  noteMap?.map((chMap: { [ note: string ]: string }, ch: number) => {
+    for (const [note, key] of Object.entries(chMap)) {
+      newMappings[`note-${ch}-${note}`] = key;
+    }
+  });
+
+  ccMap?.map((chMap: { [ cc: string ]: string }, ch: number) => {
+    for (const [cc, key] of Object.entries(chMap)) {
+      newMappings[`cc-${ch}-${cc}`] = key;
+    }
+  });
+
+  return {
+    version: 2025_02_11,
+    values: data.values,
+    mappings: newMappings,
+  };
+}
+
 export function migrateMIDIManagerStorage(key: string): void {
   const rawData = localStorage.getItem(key);
   let data = rawData ? JSON.parse(rawData) : { version: LATEST_VERSION };
 
   data = migrate20241123(data);
+  data = migrate20250211(data);
 
   localStorage.setItem(key, JSON.stringify(data));
 }

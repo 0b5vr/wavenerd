@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
-import { SETTINGSMAN } from '../../../SettingsManager';
+import { Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
 
-export function SettingsItemBool(props: SettingsItemBaseProps) {
+export function SettingsItemBool(props: {
+  settingsKey: keyof Settings;
+} & SettingsItemBaseProps) {
   const { settingsKey } = props;
   const value = useSettings(settingsKey) as boolean;
 

@@ -10,18 +10,20 @@ import { SettingsContentVisualization } from './SettingsContentVisualization';
 import { SettingsContentAppearance } from './SettingsContentAppearance';
 import { SettingsContentEditor } from './SettingsContentEditor';
 import { SettingsContentAbout } from './SettingsContentAbout';
+import { SettingsContentMIDI } from './SettingsContentMIDI';
 
 // == styles =======================================================================================
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  height: 240px;
+  height: 480px;
   overflow-y: auto;
 `;
 
 const Root = styled.div`
   display: grid;
-  grid-template-columns: 120px 400px;
+  width: 720px;
+  grid-template-columns: 120px 1fr;
   gap: 16px;
 `;
 
@@ -49,6 +51,7 @@ export function SettingsModal({
 
         <Content>
           {category === 'audio' && <SettingsContentAudio mixer={mixer} />}
+          {category === 'midi' && <SettingsContentMIDI />}
           {category === 'visualization' && <SettingsContentVisualization />}
           {category === 'appearance' && <SettingsContentAppearance />}
           {category === 'editor' && <SettingsContentEditor />}

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { SETTINGSMAN } from '../../../SettingsManager';
+import { Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
@@ -15,7 +15,9 @@ const StyledColorInput = styled.input`
   width: 3em;
 `;
 
-export function SettingsItemColor(props: SettingsItemBaseProps) {
+export function SettingsItemColor(props: {
+  settingsKey: keyof Settings;
+} & SettingsItemBaseProps) {
   const { settingsKey } = props;
   const value = useSettings(settingsKey) as string;
 

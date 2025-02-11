@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { SETTINGSMAN } from '../../../SettingsManager';
+import { Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
@@ -15,7 +15,9 @@ const StyledTextInput = styled.input`
   width: 12em;
 `;
 
-export function SettingsItemText(props: SettingsItemBaseProps) {
+export function SettingsItemText(props: {
+  settingsKey: keyof Settings;
+} & SettingsItemBaseProps) {
   const { settingsKey } = props;
   const value = useSettings(settingsKey) as string;
 

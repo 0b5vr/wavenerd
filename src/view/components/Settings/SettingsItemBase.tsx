@@ -18,9 +18,8 @@ const StyledResetButton = styled(IconRefresh)`
 
 const Line = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   font-size: 12px;
-  height: 20px;
 
   & + & {
     margin-top: 4px;
@@ -29,14 +28,15 @@ const Line = styled.div`
 
 const Name = styled.div`
   width: 12em;
+  flex-shrink: 0;
   text-align: right;
   margin-right: 8px;
   color: ${ThemeVars.foresub};
 `;
 
 export interface SettingsItemBaseProps {
-  settingsKey: keyof Settings;
   name: string;
+  settingsKey?: keyof Settings;
   resettable?: boolean;
   stalkerText?: string;
 }
@@ -47,7 +47,9 @@ export function SettingsItemBase(props: {
   const { settingsKey, name, children, resettable, stalkerText } = props;
 
   const handleReset = useCallback(() => {
-    SETTINGSMAN.set(settingsKey, defaultSettings[settingsKey]);
+    if (settingsKey) {
+      SETTINGSMAN.set(settingsKey, defaultSettings[settingsKey]);
+    }
   }, [settingsKey]);
 
   return (
