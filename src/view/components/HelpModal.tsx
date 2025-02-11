@@ -20,6 +20,7 @@ const IconsInContent = styled.svg`
 
 const Content = styled.div`
   padding: 0 16px;
+  font-size: 14px;
   height: 80vh;
   overflow-y: scroll;
 
@@ -34,13 +35,16 @@ const Content = styled.div`
   a {
     color: ${ThemeVars.accent};
     text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   code {
     padding: 0px 4px;
-    font: 400 14px 'Roboto Mono', sans-serif;
+    font: 400 12px 'Roboto Mono', sans-serif;
     background-color: ${ThemeVars.inputBack};
-    color: ${ThemeVars.foresub};
     border-radius: 4px;
   }
 `;
@@ -84,8 +88,8 @@ export function HelpModal() {
         </p>
         <p>
           <code>
-            vec2 mainAudio( vec4 time ) &#123;<br />
-            &nbsp;&nbsp;return vec2( sin( 440.0 * 2.0 * 3.1415 * time.x ) );<br />
+            vec2 mainAudio(vec4 time) &#123;<br />
+            &nbsp;&nbsp;return vec2(sin(440.0 * 2.0 * 3.1415 * time.x));<br />
             &#125;
           </code>
         </p>
@@ -132,7 +136,7 @@ export function HelpModal() {
           Knobs can be used as interactive params.<br />
         </p>
         <p>
-          <code>paramFetch( param_knob0 )</code><br />
+          <code>paramFetch(param_knob0)</code><br />
         </p>
         <h2>How to use samples</h2>
         <p>
@@ -141,9 +145,9 @@ export function HelpModal() {
           can be loaded.<br />
         </p>
         <p>
-          <code>sampleSinc( sample_****, sample_****_meta, sampleTime )</code><br />
+          <code>sampleSinc(sample_****, sample_****_meta, sampleTime)</code><br />
           or<br />
-          <code>sampleNearest( sample_****, sample_****_meta, sampleTime )</code><br />
+          <code>sampleNearest(sample_****, sample_****_meta, sampleTime)</code><br />
         </p>
         <h2>How to use wavetables</h2>
         <p>
@@ -151,16 +155,16 @@ export function HelpModal() {
           The raw buffer files must be encoded in float32, 2048 samples per cycle.<br />
         </p>
         <p>
-          <code>wavetableSinc( wavetable_****, wavetable_****_meta, vec2( phase, frame ) )</code><br />
+          <code>wavetableSinc(wavetable_****, wavetable_****_meta, vec2(phase, frame))</code><br />
           or<br />
-          <code>wavetableNearest( wavetable_****, wavetable_****_meta, vec2( phase, frame ) )</code><br />
+          <code>wavetableNearest(wavetable_****, wavetable_****_meta, vec2(phase, frame))</code><br />
         </p>
         <h2>How to use images</h2>
         <p>
           Images can be loaded from... images.<br />
         </p>
         <p>
-          Simply <code>texture( image_****, uv )</code> to use.<br />
+          Simply <code>texture(image_****, uv)</code> to use.<br />
         </p>
       </Content>
     </Modal>

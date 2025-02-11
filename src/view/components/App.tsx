@@ -195,9 +195,11 @@ export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Prop
             </DeckColumn>
           ) }
         </DeckRow>
+
         <SettingsModal mixer={mixer} />
         <MIDIModal />
         <HelpModal />
+
         <PlayOverlay hostDeck={deckA} />
         <ContextMenu />
         <Stalker />

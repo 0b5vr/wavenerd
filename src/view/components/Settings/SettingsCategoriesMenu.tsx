@@ -6,6 +6,7 @@ import IconVolumeHigh from '~icons/mdi/volume-high';
 import IconPulse from '~icons/mdi/pulse';
 import IconEye from '~icons/mdi/eye';
 import IconCodeBraces from '~icons/mdi/code-braces';
+import IconInformation from '~icons/mdi/information';
 import { useAtom } from 'jotai';
 
 // == styles =======================================================================================
@@ -28,6 +29,10 @@ const StyledIconAppearance = styled(IconEye)`
 `;
 
 const StyledIconEditor = styled(IconCodeBraces)`
+  ${StyledIcon}
+`;
+
+const StyledIconAbout = styled(IconInformation)`
   ${StyledIcon}
 `;
 
@@ -64,6 +69,7 @@ const settingsCategories: SettingsCategory[] = [
   'visualization',
   'appearance',
   'editor',
+  'about',
 ];
 
 const settingsCategoryNameMap: Record<SettingsCategory, string> = {
@@ -71,6 +77,7 @@ const settingsCategoryNameMap: Record<SettingsCategory, string> = {
   visualization: 'Visualization',
   appearance: 'Appearance',
   editor: 'Editor',
+  about: 'About',
 };
 
 const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
@@ -78,6 +85,7 @@ const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
   visualization: <StyledIconVisualization />,
   appearance: <StyledIconAppearance />,
   editor: <StyledIconEditor />,
+  about: <StyledIconAbout />,
 };
 
 function Category({

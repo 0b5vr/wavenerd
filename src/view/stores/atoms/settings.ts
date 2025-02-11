@@ -1,7 +1,7 @@
 import { Settings, defaultSettings } from '../../../SettingsManager';
 import { atom } from 'jotai';
 
-export type SettingsCategory = 'audio' | 'visualization' | 'appearance' | 'editor';
+export type SettingsCategory = 'audio' | 'visualization' | 'appearance' | 'editor' | 'about';
 
 export const settingsIsOpeningAtom = atom(false);
 

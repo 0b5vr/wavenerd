@@ -9,6 +9,7 @@ import { SettingsContentAudio } from './SettingsContentAudio';
 import { SettingsContentVisualization } from './SettingsContentVisualization';
 import { SettingsContentAppearance } from './SettingsContentAppearance';
 import { SettingsContentEditor } from './SettingsContentEditor';
+import { SettingsContentAbout } from './SettingsContentAbout';
 
 // == styles =======================================================================================
 const Content = styled.div`
@@ -51,6 +52,7 @@ export function SettingsModal({
           {category === 'visualization' && <SettingsContentVisualization />}
           {category === 'appearance' && <SettingsContentAppearance />}
           {category === 'editor' && <SettingsContentEditor />}
+          {category === 'about' && <SettingsContentAbout />}
         </Content>
       </Root>
     </Modal>

@@ -77,7 +77,7 @@ function MIDIMonitor() {
 }
 
 // == component ====================================================================================
-export function MIDIModal(): JSX.Element | null {
+export function MIDIModal() {
   const [isOpening, setOpening] = useAtom(midiModalIsOpeningAtom);
 
   const handleClose = useCallback(() => {
