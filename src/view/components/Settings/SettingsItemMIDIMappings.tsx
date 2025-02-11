@@ -6,6 +6,7 @@ import { midiMappingsSortedAtom } from '../../stores/atoms/midi';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { SettingsItemBase } from './SettingsItemBase';
 import IconClose from '~icons/mdi/close';
+import SimpleBar from 'simplebar-react';
 
 // == styles =======================================================================================
 const RemoveButton = styled(IconClose)`
@@ -47,13 +48,12 @@ const Row = styled.div`
   padding-left: 4px;
 `;
 
-const Root = styled.div`
+const Root = styled(SimpleBar)`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   margin-right: 8px;
   height: 240px;
-  overflow-y: auto;
   padding: 4px 8px;
   border-radius: 4px;
   background: ${ThemeVars.inputBack};
