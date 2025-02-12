@@ -1,12 +1,12 @@
 import { useAtomValue } from 'jotai';
-import { useMemo, useCallback } from 'react';
-import { Mixer } from '../../../audio/Mixer';
+import { useMemo, useCallback, useContext } from 'react';
 import { SETTINGSMAN } from '../../../SettingsManager';
 import { settingsAtom } from '../../stores/atoms/settings';
 import { SettingsItemBase } from './SettingsItemBase';
 import styled from 'styled-components';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { NumberParam } from '../NumberParam';
+import { StuffContext } from '../../StuffContext';
 
 const BLOCK_SIZE = 128;
 
@@ -28,10 +28,8 @@ const Suffix = styled.div`
 
 // is not a SettingsItemNumber because it have to show the latency time in ms
 // might refactor this later
-export function SettingsItemLatencyBlocks(props: {
-  mixer: Mixer;
-}) {
-  const { mixer } = props;
+export function SettingsItemLatencyBlocks() {
+  const { mixer } = useContext(StuffContext)!;
 
   const settings = useAtomValue(settingsAtom);
 

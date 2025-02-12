@@ -1,14 +1,13 @@
-import { Mixer } from '../../../audio/Mixer';
 import { SettingsItemBool } from './SettingsItemBool';
 import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
 
-export function SettingsContentAudio({ mixer }: { mixer: Mixer }) {
+export function SettingsContentAudio() {
   return (
     <>
-      <SettingsItemLatencyBlocks mixer={mixer} />
+      <SettingsItemLatencyBlocks />
 
       <SettingsItemChannelRouting />
 

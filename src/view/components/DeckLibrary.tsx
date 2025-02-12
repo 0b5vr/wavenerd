@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { libraryListSortedAtom } from '../stores/atoms/library';
 import styled from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
 import { mod } from '@0b5vr/experimental';
-import { Library } from '../../Library';
+import { StuffContext } from '../StuffContext';
 
 const StyledInput = styled.input`
   width: 100%;
@@ -132,16 +132,15 @@ export function TextInput({
 
 // == main =========================================================================================
 export function DeckLibrary({
-  library,
   libraryOpeningAtom,
   onLoad,
   focusEditor,
 }: {
-  library: Library;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   onLoad: (code: string) => void;
   focusEditor: (highlight: boolean) => void;
 }) {
+  const { library } = useContext(StuffContext)!;
   const [isLibraryOpening, setLibraryOpening] = useAtom(libraryOpeningAtom);
 
   const [textInputValue, setTextInputValue] = useState('');

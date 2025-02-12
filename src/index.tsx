@@ -161,11 +161,14 @@ document.addEventListener('keydown', (event) => {
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <App
-    deckA={deckA}
-    deckB={deckB}
-    mixer={mixer}
-    recorder={recorder}
-    library={library}
-    router={router}
+    stuff={{
+      deckA,
+      deckB,
+      hostDeck: deckA,
+      mixer,
+      recorder,
+      library,
+      router,
+    }}
   />,
 );

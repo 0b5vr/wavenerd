@@ -12,7 +12,6 @@ import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
 import { DeckLibrary } from './DeckLibrary';
-import { Library } from '../../Library';
 
 // == styles =======================================================================================
 const fadeOut = keyframes`
@@ -69,7 +68,6 @@ export const Deck = forwardRef(({
   codeAtom,
   hasEditAtom,
   analyser,
-  library,
   deck,
   focusPrevEditor,
   focusNextEditor,
@@ -84,7 +82,6 @@ export const Deck = forwardRef(({
   codeAtom: PrimitiveAtom<string>;
   hasEditAtom: PrimitiveAtom<boolean>;
   analyser: Analyser;
-  library: Library;
   focusPrevEditor?: () => void;
   focusNextEditor?: () => void;
   className?: string;
@@ -190,7 +187,6 @@ export const Deck = forwardRef(({
         gainParamName={gainParamName}
       />
       <DeckLibrary
-        library={library}
         libraryOpeningAtom={libraryOpeningAtom}
         onLoad={handleLoad}
         focusEditor={focusEditor}

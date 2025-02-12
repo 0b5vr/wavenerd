@@ -1,4 +1,3 @@
-import { Mixer } from '../../../audio/Mixer';
 import { useCallback } from 'react';
 import { settingsCategoryAtom, settingsIsOpeningAtom } from '../../stores/atoms/settings';
 import { useAtom, useAtomValue } from 'jotai';
@@ -33,11 +32,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function SettingsModal({
-  mixer,
-}: {
-  mixer: Mixer;
-}) {
+export function SettingsModal() {
   const [isOpening, setOpening] = useAtom(settingsIsOpeningAtom);
   const category = useAtomValue(settingsCategoryAtom);
 
@@ -57,7 +52,7 @@ export function SettingsModal({
         <VR />
 
         <Content>
-          {category === 'audio' && <SettingsContentAudio mixer={mixer} />}
+          {category === 'audio' && <SettingsContentAudio />}
           {category === 'midi' && <SettingsContentMIDI />}
           {category === 'editor' && <SettingsContentEditor />}
           {category === 'appearance' && <SettingsContentAppearance />}

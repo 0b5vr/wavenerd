@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import IconPlay from '~icons/mdi/play';
 import { ThemeVars } from '../themes/ThemeVars';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
+import { StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const StyledIconPlay = styled(IconPlay)`
@@ -48,13 +48,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function PlayOverlay({
-  hostDeck,
-  className,
-}: {
-  hostDeck: WavenerdDeck;
-  className?: string;
-}) {
+export function PlayOverlay({ className }: { className?: string }) {
+  const { hostDeck } = useContext(StuffContext)!;
+
   const [isOpening, setIsOpening] = useState(true);
 
   const handleClick = useCallback(() => {
