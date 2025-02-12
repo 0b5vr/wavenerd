@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import IconPause from '~icons/mdi/pause';
 import IconPlay from '~icons/mdi/play';
 import IconRewind from '~icons/mdi/skip-previous';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckIsPlayingAtom } from '../../stores/atoms/deck';
 import { useAtomValue } from 'jotai';
+import { StuffContext } from '../../StuffContext';
 
 // == styles =======================================================================================
 const StyleIconButton = css`
@@ -40,13 +40,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function HeaderTransport({
-  hostDeck,
-  className,
-}: {
-  hostDeck: WavenerdDeck;
-  className?: string;
-}) {
+export function HeaderTransport({ className }: { className?: string }) {
+  const { hostDeck } = useContext(StuffContext)!;
+
   const isPlaying = useAtomValue(deckIsPlayingAtom);
 
   const handleClickRewind = useCallback(() => {

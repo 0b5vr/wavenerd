@@ -6,7 +6,7 @@ const Root = styled.div`
   color: ${ThemeVars.error};
 `;
 
-export function HeaderUnknown({ name }: { name: string }) {
+export function HeaderItemUnknown({ name }: { name: string }) {
   return (
     <Root
       data-stalker={`Unknown header item: ${name}. Check the settings to make sure it's a valid item.`}

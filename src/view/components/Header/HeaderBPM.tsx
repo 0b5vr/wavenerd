@@ -1,8 +1,9 @@
 import { NumberParam } from '../NumberParam';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { deckBPMAtom } from '../../stores/atoms/deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
+import { useContext } from 'react';
+import { StuffContext } from '../../StuffContext';
 
 // == styles =======================================================================================
 const Label = styled.div`
@@ -24,13 +25,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function HeaderBPM({
-  hostDeck,
-  className,
-}: {
-  hostDeck: WavenerdDeck;
-  className?: string;
-}) {
+export function HeaderBPM({ className }: { className?: string }) {
+  const { hostDeck } = useContext(StuffContext)!;
+
   const bpm = useAtomValue(deckBPMAtom);
 
   return (

@@ -23,6 +23,13 @@ export function SettingsContentAppearance() {
         stalkerText="Change the items to show in the header.&#10;Available items: logo, transport, time, beat-number, beat-hex, beat-dots, bpm, nudge.&#10;I will implement a proper UI for this later 😅"
       />
 
+      <SettingsItemText
+        settingsKey="headerIcons"
+        name="Header Icons"
+        resettable
+        stalkerText="Change the icons to show in the header.&#10;Available icons: recorder, midi, settings, help, github, deck-b.&#10;If settings is not in the list, it will automatically add a transparent settings icon.&#10;I will implement a proper UI for this later 😅"
+      />
+
       <SettingsItemBool
         settingsKey="deckBShow"
         name="Show Deck B"

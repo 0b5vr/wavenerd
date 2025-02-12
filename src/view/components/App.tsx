@@ -137,10 +137,7 @@ export function OutOfContextApp() {
   return (
     <>
       <Root themeString={themeString}>
-        <StyledHeader
-          hostDeck={deckA}
-          recorder={recorder}
-        />
+        <StyledHeader />
         <DeckRow>
           <DeckColumn>
             <StyledDeck
@@ -165,7 +162,7 @@ export function OutOfContextApp() {
             <StyledMixerView />
             <StyledXFader />
           </SamplesColumn>
-          { deckBShow && (
+          {deckBShow && (
             <DeckColumn>
               <StyledDeck
                 ref={refDeckB}
@@ -181,7 +178,7 @@ export function OutOfContextApp() {
               />
               <StyledDeckKnobs paramPrefix="/deck_b" />
             </DeckColumn>
-          ) }
+          )}
         </DeckRow>
 
         <SettingsModal />

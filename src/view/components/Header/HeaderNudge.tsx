@@ -1,8 +1,8 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { ThemeVars } from '../../themes/ThemeVars';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { registerMouseEvent } from '../../utils/registerMouseEvent';
 import styled from 'styled-components';
+import { StuffContext } from '../../StuffContext';
 
 // == styles =======================================================================================
 const Label = styled.div`
@@ -43,13 +43,9 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function HeaderNudge({
-  hostDeck,
-  className,
-}: {
-  hostDeck: WavenerdDeck;
-  className?: string;
-}) {
+export function HeaderNudge({ className }: { className?: string }) {
+  const { hostDeck } = useContext(StuffContext)!;
+
   const [nudgeAmount, setNudgeAmount] = useState(0.0);
   const refRoot = useRef<HTMLDivElement>(null);
 
