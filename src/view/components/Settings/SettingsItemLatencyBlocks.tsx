@@ -17,6 +17,13 @@ const StyledNumberParam = styled(NumberParam)`
   padding: 2px;
   border-radius: 4px;
   width: 4em;
+  height: 16px;
+`;
+
+const Suffix = styled.div`
+  font-size: 12px;
+  color: ${ThemeVars.foresub};
+  margin-left: 4px;
 `;
 
 // is not a SettingsItemNumber because it have to show the latency time in ms
@@ -51,7 +58,7 @@ export function SettingsItemLatencyBlocks(props: {
         value={latencyBlocks}
         onChange={handleChangeLatencyBlocks}
       />
-      {`(${latencyTime.toFixed(0)} ms)`}
+      <Suffix>{`(${latencyTime.toFixed(0)} ms)`}</Suffix>
     </SettingsItemBase>
   );
 }

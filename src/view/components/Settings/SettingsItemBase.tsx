@@ -22,12 +22,13 @@ const Line = styled.div`
   font-size: 12px;
 
   & + & {
-    margin-top: 4px;
+    margin-top: 8px;
   }
 `;
 
 const Name = styled.div`
   width: 12em;
+  height: 16px;
   flex-shrink: 0;
   text-align: right;
   margin-right: 8px;
@@ -56,7 +57,12 @@ export function SettingsItemBase(props: {
     <Line data-stalker={stalkerText}>
       <Name>{name}</Name>
       {children}
-      {resettable && <StyledResetButton onClick={handleReset} />}
+      {resettable && (
+        <StyledResetButton
+          onClick={handleReset}
+          data-stalker="Reset to default"
+        />
+      )}
     </Line>
   );
 }

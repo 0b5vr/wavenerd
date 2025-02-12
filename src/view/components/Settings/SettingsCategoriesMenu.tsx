@@ -54,11 +54,11 @@ const StyledCategory = styled.div<{ isSelected: boolean }>`
   }
 
   ${({ isSelected }) => isSelected && css`
-    background-color: ${ThemeVars.fore};
-    color: ${ThemeVars.back1};
+    background-color: ${ThemeVars.modalFg};
+    color: ${ThemeVars.modalBg};
 
     &:hover {
-      background-color: ${ThemeVars.fore};
+      background-color: ${ThemeVars.modalFg};
     }
   `}
 `;

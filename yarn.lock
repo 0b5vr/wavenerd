@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@0b5vr/experimental@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@0b5vr/experimental/-/experimental-0.8.0.tgz#3abfdde3714313ea67d19bd2123ab19135361fad"
-  integrity sha512-h1KHFiYYWvB4lvsabK80Slypc6q+ap+cho0nhkDVxoSIk6zOm4YPCRHTDU1LI/gPh1wR60ZzJQasr+pYbLWa5g==
+"@0b5vr/experimental@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@0b5vr/experimental/-/experimental-0.9.6.tgz#36d5f37f36b66de4907eaf5f20531506bf8a1ba3"
+  integrity sha512-ycSpbxT8Ld/LlCipnvN6ZXugRctvk4FQn3KtU7pBIqiMy92CsDQIwPT+MYVeJ8zAm4+BV+uAWe4/+F/1r2a+tA==
 
 "@0b5vr/wavenerd-deck@^0.7.0":
   version "0.7.0"

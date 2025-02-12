@@ -13,7 +13,7 @@ import { Metrics } from '../constants/Metrics';
 import { Mixer } from '../../audio/Mixer';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
@@ -30,6 +30,8 @@ import { Recorder } from '../../audio/Recorder';
 import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { Library } from '../../Library';
 import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
+import { AudioDestinationRouter } from '../../audio/AudioDestinationRouter';
+import { Stuff, StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -120,6 +122,7 @@ interface Props {
   mixer: Mixer;
   recorder: Recorder;
   library: Library;
+  router: AudioDestinationRouter;
 }
 
 export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Props) {
@@ -206,14 +209,21 @@ export function OutOfContextApp({ deckA, deckB, mixer, recorder, library }: Prop
   );
 }
 
-export function App({ deckA, deckB, mixer, recorder, library }: Props) {
+export function App({ deckA, deckB, mixer, recorder, library, router }: Props) {
+  const stuff: Stuff = useMemo(() => ({
+    router,
+  }), [router]);
+
   return (
-    <OutOfContextApp
-      deckA={deckA}
-      deckB={deckB}
-      mixer={mixer}
-      recorder={recorder}
-      library={library}
-    />
+    <StuffContext.Provider value={stuff}>
+      <OutOfContextApp
+        deckA={deckA}
+        deckB={deckB}
+        mixer={mixer}
+        recorder={recorder}
+        library={library}
+        router={router}
+      />
+    </StuffContext.Provider>
   );
 }

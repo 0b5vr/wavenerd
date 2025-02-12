@@ -9,7 +9,8 @@ const StyledSelect = styled.select`
   display: inline-block;
   color: ${ThemeVars.inputFore};
   background: ${ThemeVars.inputBack};
-  padding: 2px;
+  font-size: 12px;
+  height: 16px;
   border: none;
   border-radius: 4px;
 `;

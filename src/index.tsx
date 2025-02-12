@@ -166,5 +166,6 @@ root.render(
     mixer={mixer}
     recorder={recorder}
     library={library}
+    router={router}
   />,
 );

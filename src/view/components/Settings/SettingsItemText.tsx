@@ -13,6 +13,7 @@ const StyledTextInput = styled.input`
   border: none;
   border-radius: 4px;
   width: 12em;
+  height: 16px;
 `;
 
 export function SettingsItemText(props: {

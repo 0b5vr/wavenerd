@@ -3,16 +3,25 @@ import { Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
-import { ThemeVars } from '../../themes/ThemeVars';
 
 const StyledColorInput = styled.input`
   display: inline-block;
-  color: ${ThemeVars.inputFore};
-  background: ${ThemeVars.inputBack};
-  padding: 2px;
+  background: transparent;
   border: none;
-  border-radius: 4px;
-  width: 3em;
+  border-radius: 8px;
+  width: 32px;
+  height: 16px;
+  padding: 0;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 7px;
+  }
 `;
 
 export function SettingsItemColor(props: {

@@ -1,21 +1,16 @@
 import { Mixer } from '../../../audio/Mixer';
 import { SettingsItemBool } from './SettingsItemBool';
+import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
-import { SettingsItemText } from './SettingsItemText';
 
 export function SettingsContentAudio({ mixer }: { mixer: Mixer }) {
   return (
     <>
       <SettingsItemLatencyBlocks mixer={mixer} />
 
-      <SettingsItemText
-        settingsKey="channelRouting"
-        name="Channel Routing"
-        resettable
-        stalkerText="Channel routing.&#10;Available source: master, cue, deckA, deckB.&#10;I recommend VB-Audio Matrix to bind two or more channels at once.&#10;I will implement a proper UI for this later 😅"
-      />
+      <SettingsItemChannelRouting />
 
       <SettingsItemBool
         settingsKey="masterDCRemoval"
