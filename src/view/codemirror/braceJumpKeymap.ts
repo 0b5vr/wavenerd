@@ -1,9 +1,8 @@
-import { Command, EditorView, KeyBinding } from '@codemirror/view';
-import { SelectionRange } from '@uiw/react-codemirror';
+import { EditorView, KeyBinding } from '@codemirror/view';
 import { findAllBracePairs } from '../../utils/findAllBracePairs';
 import { binarySearch, clamp } from '@0b5vr/experimental';
 
-const braceJump = (view: EditorView, dir: -1 | 1) => {
+const braceJump = (view: EditorView, dir: -1 | 1, onBraceJump?: (index: number) => void) => {
   const value = view.state.doc.toString();
   const bracePairs = findAllBracePairs(value);
 
@@ -51,13 +50,12 @@ const braceJump = (view: EditorView, dir: -1 | 1) => {
     { effects: scrollEffect },
   );
 
+  onBraceJump?.(newIndex);
+
   return true;
 };
 
-const braceJumpPrev: Command = (view) => braceJump(view, -1);
-const braceJumpNext: Command = (view) => braceJump(view, 1);
-
-const braceExtend = (view: EditorView, dir: -1 | 1): boolean => {
+const braceExtend = (view: EditorView, dir: -1 | 1, onBraceJump?: (index: number) => void): boolean => {
   const value = view.state.doc.toString();
   const bracePairs = findAllBracePairs(value);
 
@@ -159,11 +157,11 @@ const braceExtend = (view: EditorView, dir: -1 | 1): boolean => {
     { effects: scrollEffect },
   );
 
+  const indexToFocus = isCursorLeft ? sibIndices[sibIndicesIndexFrom] : sibIndices[sibIndicesIndexTo];
+  onBraceJump?.(indexToFocus);
+
   return true;
 };
-
-const braceExtendPrev: Command = (view) => braceExtend(view, -1);
-const braceExtendNext: Command = (view) => braceExtend(view, 1);
 
 /**
  * Provides 0mix style bracket jumping.
@@ -173,30 +171,28 @@ const braceExtendNext: Command = (view) => braceExtend(view, 1);
  * `Mod-Shift-ArrowDown` extends the selection to the next bracket.
  */
 export function braceJumpKeymap({ onBraceJump }: {
-  onBraceJump?: (range: SelectionRange) => void;
+  onBraceJump?: (index: number) => void;
 }): readonly KeyBinding[] {
   return [
     {
       key: 'Mod-,',
       run: (target) => {
-        const result = braceJumpPrev(target);
-        onBraceJump?.(target.state.selection.main);
+        const result = braceJump(target, -1, onBraceJump);
         return result;
       },
       shift: (target) => {
-        const result = braceExtendPrev(target);
+        const result = braceExtend(target, -1, onBraceJump);
         return result;
       },
     },
     {
       key: 'Mod-.',
       run: (target) => {
-        const result = braceJumpNext(target);
-        onBraceJump?.(target.state.selection.main);
+        const result = braceJump(target, 1, onBraceJump);
         return result;
       },
       shift: (target) => {
-        const result = braceExtendNext(target);
+        const result = braceExtend(target, 1, onBraceJump);
         return result;
       },
     },

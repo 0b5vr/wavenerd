@@ -12,6 +12,7 @@ import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
 import { DeckLibrary } from './DeckLibrary';
+import { DeckBraceJumpMap } from './DeckBraceJumpMap';
 
 // == styles =======================================================================================
 const fadeOut = keyframes`
@@ -55,6 +56,14 @@ const StyledWaveRenderer = styled(DeckWaveRenderer)`
   pointer-events: none;
 `;
 
+const StyledDeckBraceJumpMap = styled(DeckBraceJumpMap)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc( 100% - 24px );
+`;
+
 const Root = styled.div`
   position: relative;
   background: ${ThemeVars.codeBackground};
@@ -86,13 +95,14 @@ export const Deck = forwardRef(({
   focusNextEditor?: () => void;
   className?: string;
 }, ref: React.Ref<{ focusEditor: (highlight: boolean) => void }>) => {
-  // -- atoms --------------------------------------------------------------------------------------
+  // -- atoms and state ----------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
   const memoryUpdateAtom = useMemo(() => atom<{
     key: string;
     status: 'loaded' | 'loadfailed' | 'saved';
   } | null>(null), []);
+
   const [focusHighlightKey, setFocusHighlightKey] = useState(0);
 
   // -- beforeunload -------------------------------------------------------------------------------
@@ -142,6 +152,11 @@ export const Deck = forwardRef(({
     [handleCompile],
   );
 
+  const refBraceJumpMap = useRef<{ update: (index: number) => void }>(null);
+  const handleBraceJump = useCallback((index: number) => {
+    refBraceJumpMap.current?.update(index);
+  }, []);
+
   // apply once on init
   useEffect(() => {
     handleApplyImmediately();
@@ -171,6 +186,7 @@ export const Deck = forwardRef(({
         onCompile={handleCompile}
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
+        onBraceJump={handleBraceJump}
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
         focusPrevEditor={focusPrevEditor}
@@ -186,10 +202,15 @@ export const Deck = forwardRef(({
         onApplyImmediately={handleApplyImmediately}
         gainParamName={gainParamName}
       />
+
       <DeckLibrary
         libraryOpeningAtom={libraryOpeningAtom}
         onLoad={handleLoad}
         focusEditor={focusEditor}
+      />
+      <StyledDeckBraceJumpMap
+        ref={refBraceJumpMap}
+        codeAtom={codeAtom}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
       {focusHighlightKey > 0 && (

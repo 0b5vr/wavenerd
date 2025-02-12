@@ -31,6 +31,7 @@ export interface Settings {
   editorFont: string;
   editorFontVariantLigatures: string;
   editorLogEnabled: boolean;
+  editorBraceJumpMapEnabled: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -56,6 +57,7 @@ export const defaultSettings: Settings = {
   editorFont: '14px/18px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
   editorLogEnabled: false,
+  editorBraceJumpMapEnabled: true,
 };
 
 interface SettingsManagerEvents {

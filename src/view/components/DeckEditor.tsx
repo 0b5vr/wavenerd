@@ -117,6 +117,7 @@ export const DeckEditor = forwardRef(({
   onCompile,
   onApply,
   onApplyImmediately,
+  onBraceJump,
   memoryUpdateAtom,
   libraryOpeningAtom,
   focusPrevEditor,
@@ -129,6 +130,7 @@ export const DeckEditor = forwardRef(({
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
+  onBraceJump?: (index: number) => void;
   memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   focusPrevEditor?: () => void;
@@ -259,9 +261,9 @@ export const DeckEditor = forwardRef(({
         },
       },
     ]),
-    ...braceJumpKeymap,
+    ...braceJumpKeymap({ onBraceJump }),
     ...defaultKeymap,
-  ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+  ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(

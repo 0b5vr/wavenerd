@@ -26,6 +26,12 @@ export function SettingsContentEditor() {
         name="Show Editor Log"
         stalkerText="Whether to show the editor log in the bottom right corner."
       />
+
+      <SettingsItemBool
+        settingsKey="editorBraceJumpMapEnabled"
+        name="Show Brace Jump Map"
+        stalkerText="Whether to show the brace jump map when using the brace jump keybindings.&#10;Kinda experimental. Might be removed without notice."
+      />
     </>
   );
 }
