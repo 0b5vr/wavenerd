@@ -9,11 +9,12 @@ const StyledTextInput = styled.input`
   display: inline-block;
   color: ${ThemeVars.inputFore};
   background: ${ThemeVars.inputBack};
-  padding: 2px;
-  border: none;
-  border-radius: 4px;
+  padding: 0 4px;
   width: 12em;
   height: 16px;
+  border: none;
+  border-radius: 4px;
+  font: 12px 'Inter', sans-serif;
 `;
 
 export function SettingsItemText(props: {
