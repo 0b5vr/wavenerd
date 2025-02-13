@@ -65,29 +65,34 @@ export function Knob(props: Props) {
 
   const checkDoubleClick = useDoubleTap();
 
+  const beginDrag = useCallback((event: React.MouseEvent<Element>) => {
+    if (checkDoubleClick()) {
+      MIDIMAN.setValue(midiParamName, resetValue);
+      return;
+    }
+
+    const y0 = event.clientY;
+    const v0 = MIDIMAN.midi(midiParamName);
+
+    registerMouseEvent(
+      (event) => {
+        const y = y0 - event.clientY;
+        const mod = event.ctrlKey ? 0.1 : 1.0;
+        const dv = y * deltaValuePerPixel * mod;
+        const v = saturate(v0 + dv);
+        MIDIMAN.setValue(midiParamName, v);
+      },
+    );
+  }, [checkDoubleClick, midiParamName, resetValue, deltaValuePerPixel]);
+
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       mouseCombo({
-        [MouseComboBit.LMB]: () => {
-          if (checkDoubleClick()) {
-            MIDIMAN.setValue(midiParamName, resetValue);
-            return;
-          }
-
-          const y0 = event.clientY;
-          const v0 = MIDIMAN.midi(midiParamName);
-
-          registerMouseEvent(
-            (event) => {
-              const y = (y0 - event.clientY);
-              const v = saturate(v0 + y * deltaValuePerPixel);
-              MIDIMAN.setValue(midiParamName, v);
-            },
-          );
-        },
+        [MouseComboBit.LMB]: beginDrag,
+        [MouseComboBit.LMB | MouseComboBit.Ctrl]: beginDrag,
       })(event);
     },
-    [resetValue, midiParamName, deltaValuePerPixel],
+    [beginDrag],
   );
 
   return (
