@@ -32,6 +32,7 @@ export interface Settings {
   editorFontVariantLigatures: string;
   editorLogEnabled: boolean;
   editorBraceJumpMapEnabled: boolean;
+  editorBraceJumpMapScale: number;
 }
 
 export const defaultSettings: Settings = {
@@ -58,6 +59,7 @@ export const defaultSettings: Settings = {
   editorFontVariantLigatures: 'normal',
   editorLogEnabled: false,
   editorBraceJumpMapEnabled: true,
+  editorBraceJumpMapScale: 0.8,
 };
 
 interface SettingsManagerEvents {

@@ -1,6 +1,18 @@
 import { SettingsItemBool } from './SettingsItemBool';
+import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
 import { SettingsItemText } from './SettingsItemText';
+import styled from 'styled-components';
+
+const StyledPercent = styled.span`
+  width: 32px;
+  font-size: 12px;
+  text-align: right;
+`;
+
+function suffixFnPercent(value: number) {
+  return <StyledPercent>{`${(value * 100).toFixed(0)}%`}</StyledPercent>;
+}
 
 export function SettingsContentEditor() {
   return (
@@ -31,6 +43,17 @@ export function SettingsContentEditor() {
         settingsKey="editorBraceJumpMapEnabled"
         name="Show Brace Jump Map"
         stalkerText="Whether to show the brace jump map when using the brace jump keybindings.&#10;Kinda experimental. Might be removed without notice."
+      />
+
+      <SettingsItemRange
+        settingsKey="editorBraceJumpMapScale"
+        name="Brace Jump Map Scale"
+        min={0.5}
+        max={1.0}
+        step={0.01}
+        suffixFn={suffixFnPercent}
+        resettable
+        stalkerText="The scale of the brace jump map."
       />
     </>
   );

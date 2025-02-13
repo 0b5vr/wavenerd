@@ -1,6 +1,17 @@
 import { SettingsItemColor } from './SettingsItemColor';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
+import styled from 'styled-components';
+
+const StyledPercent = styled.span`
+  width: 32px;
+  font-size: 12px;
+  text-align: right;
+`;
+
+function suffixFnPercent(value: number) {
+  return <StyledPercent>{`${(value * 100).toFixed(0)}%`}</StyledPercent>;
+}
 
 export function SettingsContentVisualization() {
   return (
@@ -22,6 +33,7 @@ export function SettingsContentVisualization() {
         min={0}
         max={1}
         step={0.01}
+        suffixFn={suffixFnPercent}
       />
 
       <SettingsItemColor
@@ -46,6 +58,7 @@ export function SettingsContentVisualization() {
         min={0}
         max={1}
         step={0.01}
+        suffixFn={suffixFnPercent}
       />
 
       <SettingsItemColor
@@ -70,6 +83,7 @@ export function SettingsContentVisualization() {
         min={0}
         max={1}
         step={0.01}
+        suffixFn={suffixFnPercent}
       />
 
       <SettingsItemColor

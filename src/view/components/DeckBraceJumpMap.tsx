@@ -35,7 +35,6 @@ const Box = styled.div<{ isActive: boolean }>`
   box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
   overflow: hidden;
   transform-origin: center right;
-  transform: scale(0.8);
   opacity: 0;
 
   ${({ isActive }) => isActive && css`
@@ -65,6 +64,8 @@ const DeckBraceJumpMapInside = forwardRef(({
   codeAtom,
   className,
 }: Props, ref: React.Ref<{ update: (index: number) => void }>) => {
+  const scale = useSettings('editorBraceJumpMapScale');
+
   const [centerIndex, setCenterIndex] = useState(0);
   const [key, setKey] = useState(0);
 
@@ -88,6 +89,7 @@ const DeckBraceJumpMapInside = forwardRef(({
       <Box
         key={key}
         isActive={key !== 0}
+        style={{ transform: `scale(${scale})` }}
       >
         {bracePairsStr.map((str, i) => (
           <BracePair

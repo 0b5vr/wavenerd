@@ -14,8 +14,9 @@ export function SettingsItemRange(props: {
   min: number;
   max: number;
   step: number;
+  suffixFn?: (value: number) => React.ReactNode;
 } & SettingsItemBaseProps) {
-  const { settingsKey, min, max, step } = props;
+  const { settingsKey, min, max, step, suffixFn } = props;
   const value = useSettings(settingsKey) as number;
 
   const handleChange = useCallback((event: React.ChangeEvent) => {
@@ -33,6 +34,7 @@ export function SettingsItemRange(props: {
         value={value}
         onChange={handleChange}
       />
+      {suffixFn && suffixFn(value)}
     </SettingsItemBase>
   );
 }

@@ -5,10 +5,10 @@ import IconCog from '~icons/mdi/cog';
 import { useAtomCallback } from 'jotai/utils';
 import { settingsIsOpeningAtom } from '../../stores/atoms/settings';
 
-const StyledIcon = styled(IconCog)<{ isHidden?: boolean }>`
+const StyledIcon = styled(IconCog)<{ hidden?: boolean }>`
   ${headerIconStyle}
 
-  ${({ isHidden }) => isHidden && css`
+  ${({ hidden }) => hidden && css`
     opacity: 0.0;
   `}
 `;
@@ -21,7 +21,7 @@ export function HeaderIconSettings({ hidden }: { hidden?: boolean }) {
   return (
     <StyledIcon
       onClick={handleClick}
-      isHidden={hidden}
+      hidden={hidden}
       data-stalker="Settings"
     />
   );
