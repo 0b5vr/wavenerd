@@ -12,6 +12,7 @@ import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
 import { Library } from './Library';
+import { FullscreenManager } from './FullscreenManager';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl2')!;
@@ -146,18 +147,17 @@ applySettings(SETTINGSMAN.values);
 
 SETTINGSMAN.on('change', (settings) => applySettings(settings));
 
-// == prevent browser shortcuts ====================================================================
-document.addEventListener('keydown', (event) => {
-  if (event.ctrlKey && event.key.match(/[0-9dejkprst]/)) {
-    event.preventDefault();
-  }
+// == fullscreen ===================================================================================
+const fullscreenManager = new FullscreenManager();
 
-  if (event.ctrlKey && event.key === 'Tab') {
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'F11') {
     event.preventDefault();
+    fullscreenManager.requestFullscreen();
   }
 });
 
-// == dom ==========================================================================================
+// == render =======================================================================================
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <App
@@ -169,6 +169,7 @@ root.render(
       recorder,
       library,
       router,
+      fullscreenManager,
     }}
   />,
 );

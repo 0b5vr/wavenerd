@@ -18,6 +18,7 @@ import { HeaderIconMIDI } from './HeaderIconMIDI';
 import { HeaderIconSettings } from './HeaderIconSettings';
 import { HeaderIconDeckB } from './HeaderIconDeckB';
 import { HeaderIconUnknown } from './HeaderIconUnknown';
+import { HeaderIconFullscreen } from './HeaderIconFullscreen';
 
 // == styles =======================================================================================
 const Margin = styled.div`
@@ -113,6 +114,8 @@ export function Header({ className }: { className?: string }) {
             return <HeaderIconGitHub key={i} />;
           } else if (item === 'deck-b') {
             return <HeaderIconDeckB key={i} />;
+          } else if (item === 'fullscreen') {
+            return <HeaderIconFullscreen key={i} />;
           } else {
             return <HeaderIconUnknown key={i} name={item} />;
           }

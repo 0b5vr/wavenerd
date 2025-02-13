@@ -27,6 +27,7 @@ import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
 import { Stuff, StuffContext } from '../StuffContext';
+import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -123,6 +124,7 @@ export function OutOfContextApp() {
   useDeckSubscribers(deckA, deckA, deckB);
   useRecorderSubscribers(recorder);
   useLibrarySubscribers(library);
+  useFullscreenSubscriber();
 
   const refDeckA = useRef<{ focusEditor: (highlight: boolean) => void }>(null);
   const focusDeckAEditor = useCallback(() => {
