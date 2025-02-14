@@ -1,6 +1,6 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
-import { deckACodeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
+import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
 import styled, { css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
@@ -148,6 +148,7 @@ export function OutOfContextApp() {
               hasEditAtom={deckAHasEditAtom}
               errorAtom={deckAErrorAtom}
               cueStatusAtom={deckACueStatusAtom}
+              compileTimeAtom={deckACompileTimeAtom}
               analyser={mixer.analyserInA}
               deck={deckA}
               storageKeyName="a"
@@ -173,6 +174,7 @@ export function OutOfContextApp() {
                 errorAtom={deckBErrorAtom}
                 analyser={mixer.analyserInB}
                 cueStatusAtom={deckBCueStatusAtom}
+                compileTimeAtom={deckBCompileTimeAtom}
                 deck={deckB}
                 storageKeyName="b"
                 gainParamName="/mixer/channel_b/gain"

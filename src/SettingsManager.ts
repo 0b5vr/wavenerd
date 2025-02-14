@@ -33,6 +33,7 @@ export interface Settings {
   editorLogEnabled: boolean;
   editorBraceJumpMapEnabled: boolean;
   editorBraceJumpMapScale: number;
+  editorCompileTimeEnabled: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -60,6 +61,7 @@ export const defaultSettings: Settings = {
   editorLogEnabled: false,
   editorBraceJumpMapEnabled: true,
   editorBraceJumpMapScale: 0.8,
+  editorCompileTimeEnabled: true,
 };
 
 interface SettingsManagerEvents {

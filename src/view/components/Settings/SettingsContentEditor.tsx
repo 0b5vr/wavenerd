@@ -55,6 +55,12 @@ export function SettingsContentEditor() {
         resettable
         stalkerText="The scale of the brace jump map."
       />
+
+      <SettingsItemBool
+        settingsKey="editorCompileTimeEnabled"
+        name="Show Compile Time"
+        stalkerText="Whether to show the compile time in the deck status bar."
+      />
     </>
   );
 }

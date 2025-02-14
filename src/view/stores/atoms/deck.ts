@@ -15,6 +15,9 @@ export const deckBCueStatusAtom = atom<'none' | 'compiling' | 'ready' | 'applyin
 export const deckAErrorAtom = atom<string | null>(null);
 export const deckBErrorAtom = atom<string | null>(null);
 
+export const deckACompileTimeAtom = atom(0.0);
+export const deckBCompileTimeAtom = atom(0.0);
+
 export const deckTimeAtom = atom(0.0);
 export const deckIsPlayingAtom = atom(false);
 export const deckBeatsAtom = atom({

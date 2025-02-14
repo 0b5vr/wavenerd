@@ -76,6 +76,7 @@ export const Deck = forwardRef(({
   errorAtom,
   codeAtom,
   hasEditAtom,
+  compileTimeAtom,
   analyser,
   deck,
   focusPrevEditor,
@@ -90,6 +91,7 @@ export const Deck = forwardRef(({
   errorAtom: PrimitiveAtom<string | null>;
   codeAtom: PrimitiveAtom<string>;
   hasEditAtom: PrimitiveAtom<boolean>;
+  compileTimeAtom: PrimitiveAtom<number>;
   analyser: Analyser;
   focusPrevEditor?: () => void;
   focusNextEditor?: () => void;
@@ -127,9 +129,14 @@ export const Deck = forwardRef(({
 
   const handleCompile = useAtomCallback(useCallback(async (get, set) => {
     const code = get(codeAtom);
+
+    const compileBegin = performance.now();
     await deck.compile(code);
+    const compileTime = performance.now() - compileBegin;
+
     deckCodeStorage.set(storageKeyName, code);
     set(hasEditAtom, false);
+    set(compileTimeAtom, compileTime);
   }, [codeAtom, hasEditAtom, deck, storageKeyName]));
 
   const handleApply = useCallback(
@@ -197,6 +204,7 @@ export const Deck = forwardRef(({
         errorAtom={errorAtom}
         cueStatusAtom={cueStatusAtom}
         hasEditAtom={hasEditAtom}
+        compileTimeAtom={compileTimeAtom}
         onCompile={handleCompile}
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}

@@ -33,6 +33,11 @@ const StyleIconButton = css`
   }
 `;
 
+const DivCompileTime = styled.div`
+  font-size: 12px;
+  margin: 0 4px;
+`;
+
 const StyledIconHasChange = styled(IconCircle)`
   ${StyleIcon}
   color: ${ThemeVars.accentBright};
@@ -135,7 +140,20 @@ const Root = styled.div`
   }
 `;
 
-// == components ===================================================================================
+// == children =====================================================================================
+function CompileTime({ compileTimeAtom }: { compileTimeAtom: PrimitiveAtom<number> }) {
+  const compileTime = useAtomValue(compileTimeAtom);
+
+  return (
+    <DivCompileTime
+      data-stalker="The last compilation time taken"
+    >
+      {`${compileTime.toFixed()}ms`}
+    </DivCompileTime>
+  );
+}
+
+// == component ====================================================================================
 export function DeckStatusBar({
   onCompile,
   onApply,
@@ -143,6 +161,7 @@ export function DeckStatusBar({
   cueStatusAtom,
   hasEditAtom,
   errorAtom,
+  compileTimeAtom,
   gainParamName,
   className,
 }: {
@@ -152,6 +171,7 @@ export function DeckStatusBar({
   cueStatusAtom: PrimitiveAtom<'none' | 'compiling' | 'ready' | 'applying'>;
   hasEditAtom: PrimitiveAtom<boolean>;
   errorAtom: PrimitiveAtom<string | null>;
+  compileTimeAtom: PrimitiveAtom<number>;
   gainParamName: string;
   className?: string;
 }) {
@@ -238,6 +258,7 @@ export function DeckStatusBar({
       className={className}
     >
       { content }
+      <CompileTime compileTimeAtom={compileTimeAtom} />
       <StyledIconBuild
         onClick={onCompile}
         data-stalker="Compile the shader code (Ctrl+S)"
