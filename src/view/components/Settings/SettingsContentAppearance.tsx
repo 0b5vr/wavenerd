@@ -30,7 +30,7 @@ export function SettingsContentAppearance() {
         settingsKey="headerIcons"
         name="Header Icons"
         resettable
-        stalkerText="Change the icons to show in the header.&#10;Available icons: recorder, midi, settings, help, github, deck-b, fullscreen.&#10;If settings is not in the list, it will automatically add a transparent settings icon.&#10;I will implement a proper UI for this later 😅"
+        stalkerText="Change the icons to show in the header.&#10;Available icons: recorder, midi, settings, help, github, deck-b, fullscreen, visualizer.&#10;If settings is not in the list, it will automatically add a transparent settings icon.&#10;I will implement a proper UI for this later 😅"
       />
 
       <SettingsItemBool

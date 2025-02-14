@@ -3,10 +3,12 @@ import { VisualizerWindow } from './VisualizerWindow';
 import { Analyser } from '../../../audio/Analyser';
 
 export function openVisualizerWindow(analyser: Analyser) {
-  const visualizerWindow = window.open('about:blank', '_blank');
+  const visualizerWindow = window.open('about:blank', '_blank', 'height=480,width=480');
   if (visualizerWindow == null) {
     throw new Error('Failed to open visualizer window');
   }
+
+  visualizerWindow.document.title = 'Wavenerd';
 
   visualizerWindow.document.body.style.margin = '0';
   visualizerWindow.document.body.style.background = '#000';

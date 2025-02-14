@@ -19,6 +19,7 @@ import { HeaderIconSettings } from './HeaderIconSettings';
 import { HeaderIconDeckB } from './HeaderIconDeckB';
 import { HeaderIconUnknown } from './HeaderIconUnknown';
 import { HeaderIconFullscreen } from './HeaderIconFullscreen';
+import { HeaderIconVisualizer } from './HeaderIconVisualizer';
 
 // == styles =======================================================================================
 const Margin = styled.div`
@@ -116,6 +117,8 @@ export function Header({ className }: { className?: string }) {
             return <HeaderIconDeckB key={i} />;
           } else if (item === 'fullscreen') {
             return <HeaderIconFullscreen key={i} />;
+          } else if (item === 'visualizer') {
+            return <HeaderIconVisualizer key={i} />;
           } else {
             return <HeaderIconUnknown key={i} name={item} />;
           }
