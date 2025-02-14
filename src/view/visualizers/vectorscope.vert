@@ -4,6 +4,7 @@ layout (location = 0) in float index;
 
 uniform float aspect;
 uniform float bufferSize;
+uniform float pointSize;
 uniform sampler2D samplerL;
 uniform sampler2D samplerR;
 
@@ -40,5 +41,5 @@ void main() {
   vec2 correct = aspect < 1.0 ? vec2(1.0, aspect) : vec2(1.0 / aspect, 1.0);
 
   gl_Position = vec4(correct * (pos * mat2(-0.5, 0.5, 0.5, 0.5)), 0.0, 1.0);
-  gl_PointSize = 4.0;
+  gl_PointSize = pointSize;
 }

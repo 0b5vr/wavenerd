@@ -14,13 +14,16 @@ export class VisualizerVectorscope {
 
   public mode: 'none' | 'line' | 'points';
   public color: [ number, number, number, number ];
-
+  public pointSize: number;
+  public pointShape: number;
   private readonly __buffer: WebGLBuffer;
   private readonly __program: WebGLProgram;
   private readonly __locations: {
     aspect: WebGLUniformLocation;
     bufferSize: WebGLUniformLocation;
     color: WebGLUniformLocation;
+    pointSize: WebGLUniformLocation;
+    pointShape: WebGLUniformLocation;
     samplerL: WebGLUniformLocation;
     samplerR: WebGLUniformLocation;
   };
@@ -43,6 +46,8 @@ export class VisualizerVectorscope {
       aspect: gl.getUniformLocation(this.__program, 'aspect')!,
       bufferSize: gl.getUniformLocation(this.__program, 'bufferSize')!,
       color: gl.getUniformLocation(this.__program, 'color')!,
+      pointSize: gl.getUniformLocation(this.__program, 'pointSize')!,
+      pointShape: gl.getUniformLocation(this.__program, 'pointShape')!,
       samplerL: gl.getUniformLocation(this.__program, 'samplerL')!,
       samplerR: gl.getUniformLocation(this.__program, 'samplerR')!,
     };
@@ -52,6 +57,8 @@ export class VisualizerVectorscope {
 
     this.mode = 'none';
     this.color = [1.0, 1.0, 1.0, 1.0];
+    this.pointSize = 4.0;
+    this.pointShape = 0.0;
   }
 
   public setData(dataL: Float32Array, dataR: Float32Array): void {
@@ -101,6 +108,8 @@ export class VisualizerVectorscope {
     gl.uniform1f(this.__locations.aspect, canvas.width / canvas.height);
     gl.uniform1f(this.__locations.bufferSize, ANALYSER_TIME_DOMAIN_SIZE);
     gl.uniform4f(this.__locations.color, ...this.color);
+    gl.uniform1f(this.__locations.pointSize, this.pointSize);
+    gl.uniform1f(this.__locations.pointShape, this.pointShape);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
