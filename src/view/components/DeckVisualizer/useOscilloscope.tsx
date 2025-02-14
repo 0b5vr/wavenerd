@@ -20,6 +20,8 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
       parseInt(oscilloscopeColor.slice(5, 7), 16) / 255.0,
       oscilloscopeOpacity,
     ];
+
+    visualizer.oscilloscope.scale = 0.5;
   }, [visualizer, oscilloscopeMode, oscilloscopeColor, oscilloscopeOpacity]);
 
   // update the visualizer

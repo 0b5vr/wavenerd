@@ -13,13 +13,14 @@ export class VisualizerSpectrum {
 
   public mode: 'none' | 'line';
   public color: [ number, number, number, number ];
+  public scale: number;
 
   private readonly __buffer: WebGLBuffer;
   private readonly __program: WebGLProgram;
   private readonly __locations: {
-    aspect: WebGLUniformLocation;
     bufferSize: WebGLUniformLocation;
     color: WebGLUniformLocation;
+    scale: WebGLUniformLocation;
     samplerL: WebGLUniformLocation;
   };
 
@@ -37,9 +38,9 @@ export class VisualizerSpectrum {
 
     this.__program = glCreateProgram(gl, spectrumVert, colorFrag);
     this.__locations = {
-      aspect: gl.getUniformLocation(this.__program, 'aspect')!,
       bufferSize: gl.getUniformLocation(this.__program, 'bufferSize')!,
       color: gl.getUniformLocation(this.__program, 'color')!,
+      scale: gl.getUniformLocation(this.__program, 'scale')!,
       samplerL: gl.getUniformLocation(this.__program, 'samplerL')!,
     };
 
@@ -47,6 +48,7 @@ export class VisualizerSpectrum {
 
     this.mode = 'none';
     this.color = [1.0, 1.0, 1.0, 1.0];
+    this.scale = 1.0;
   }
 
   public setData(dataL: Float32Array): void {
@@ -70,7 +72,7 @@ export class VisualizerSpectrum {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { canvas, gl } = this.visualizer;
+    const { gl } = this.visualizer;
 
     gl.useProgram(this.__program);
 
@@ -79,10 +81,9 @@ export class VisualizerSpectrum {
     gl.vertexAttribPointer(0, 1, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    gl.uniform1f(this.__locations.aspect, canvas.width / canvas.height);
     gl.uniform1f(this.__locations.bufferSize, ANALYSER_FREQUENCY_SIZE);
     gl.uniform4f(this.__locations.color, ...this.color);
-
+    gl.uniform1f(this.__locations.scale, this.scale);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
     gl.uniform1i(this.__locations.samplerL, 0);

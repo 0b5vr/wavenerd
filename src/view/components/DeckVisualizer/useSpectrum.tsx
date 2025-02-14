@@ -20,6 +20,8 @@ export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analys
       parseInt(spectrumColor.slice(5, 7), 16) / 255.0,
       spectrumOpacity,
     ];
+
+    visualizer.spectrum.scale = 0.25;
   }, [visualizer, spectrumMode, spectrumColor, spectrumOpacity]);
 
   // update the visualizer

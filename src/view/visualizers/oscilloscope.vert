@@ -2,7 +2,7 @@
 
 layout (location = 0) in float index;
 
-uniform float aspect;
+uniform float scale;
 uniform float bufferSize;
 uniform float drawIndexRange;
 uniform sampler2D samplerL;
@@ -32,12 +32,12 @@ void main() {
     float weight = sinc(x) * hann(x / 20.0 + 0.5);
 
     float u = (texi + 0.5) / bufferSize;
-    float tex = 0.5 * texture(samplerL, vec2(u, 0.5)).x;
+    float tex = texture(samplerL, vec2(u, 0.5)).x;
 
     pos.y += tex * weight;
   }
 
-  vec2 correct = aspect < 1.0 ? vec2(1.0, aspect) : vec2(1.0 / aspect, 1.0);
+  pos.y *= scale;
 
   gl_Position = vec4(pos, 0.0, 1.0);
   gl_PointSize = 4.0;

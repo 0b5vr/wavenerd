@@ -15,11 +15,12 @@ export class VisualizerOscilloscope {
 
   public mode: 'none' | 'line';
   public color: [number, number, number, number];
+  public scale: number;
 
   private readonly __buffer: WebGLBuffer;
   private readonly __program: WebGLProgram;
   private readonly __locations: {
-    aspect: WebGLUniformLocation;
+    scale: WebGLUniformLocation;
     bufferSize: WebGLUniformLocation;
     drawIndexRange: WebGLUniformLocation;
     color: WebGLUniformLocation;
@@ -43,7 +44,7 @@ export class VisualizerOscilloscope {
 
     this.__program = glCreateProgram(gl, oscilloscopeVert, colorFrag);
     this.__locations = {
-      aspect: gl.getUniformLocation(this.__program, 'aspect')!,
+      scale: gl.getUniformLocation(this.__program, 'scale')!,
       bufferSize: gl.getUniformLocation(this.__program, 'bufferSize')!,
       drawIndexRange: gl.getUniformLocation(this.__program, 'drawIndexRange')!,
       color: gl.getUniformLocation(this.__program, 'color')!,
@@ -57,6 +58,7 @@ export class VisualizerOscilloscope {
 
     this.mode = 'none';
     this.color = [1.0, 1.0, 1.0, 1.0];
+    this.scale = 0.8;
   }
 
   public setData(data: Float32Array, zc: number): void {
@@ -82,7 +84,7 @@ export class VisualizerOscilloscope {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { canvas, gl } = this.visualizer;
+    const { gl } = this.visualizer;
 
     gl.useProgram(this.__program);
 
@@ -91,7 +93,7 @@ export class VisualizerOscilloscope {
     gl.vertexAttribPointer(0, 1, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    gl.uniform1f(this.__locations.aspect, canvas.width / canvas.height);
+    gl.uniform1f(this.__locations.scale, this.scale);
     gl.uniform1f(this.__locations.bufferSize, ANALYSER_TIME_DOMAIN_SIZE);
     gl.uniform1f(this.__locations.drawIndexRange, DRAW_INDEX_RANGE);
     gl.uniform4f(this.__locations.color, ...this.color);

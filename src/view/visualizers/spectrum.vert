@@ -2,7 +2,7 @@
 
 layout (location = 0) in float x;
 
-uniform float aspect;
+uniform float scale;
 uniform float bufferSize;
 uniform sampler2D samplerL;
 
@@ -40,10 +40,12 @@ void main() {
     value += tex * weight;
   }
 
-  value = 0.5 * linearstep(-100.0, 0.0, value);
+  value = linearstep(-100.0, 0.0, value);
 
-  vec2 correct = vec2(1.0, aspect);
+  vec2 v = vec2(x, value);
+  v.y *= scale;
+  v = 2.0 * v - 1.0;
 
-  gl_Position = vec4(correct * vec2(2.0 * x - 1.0, value) - vec2(0.0, 1.0), 0.0, 1.0);
+  gl_Position = vec4(v, 0.0, 1.0);
   gl_PointSize = 4.0;
 }
