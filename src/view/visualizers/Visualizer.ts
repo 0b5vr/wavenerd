@@ -1,14 +1,14 @@
-import { WaveRendererOscilloscope } from './WaveRendererOscilloscope';
-import { WaveRendererSpectrum } from './WaveRendererSpectrum';
-import { WaveRendererVectorscope } from './WaveRendererVectorscope';
+import { VisualizerOscilloscope } from './VisualizerOscilloscope';
+import { VisualizerSpectrum } from './VisualizerSpectrum';
+import { VisualizerVectorscope } from './VisualizerVectorscope';
 
-export class WaveRenderer {
+export class Visualizer {
   public readonly canvas: HTMLCanvasElement;
   public readonly gl: WebGL2RenderingContext;
 
-  public readonly vectorscope: WaveRendererVectorscope;
-  public readonly spectrum: WaveRendererSpectrum;
-  public readonly oscilloscope: WaveRendererOscilloscope;
+  public readonly vectorscope: VisualizerVectorscope;
+  public readonly spectrum: VisualizerSpectrum;
+  public readonly oscilloscope: VisualizerOscilloscope;
 
   public constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -18,9 +18,9 @@ export class WaveRenderer {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.getExtension('EXT_color_buffer_float');
 
-    this.vectorscope = new WaveRendererVectorscope(this);
-    this.spectrum = new WaveRendererSpectrum(this);
-    this.oscilloscope = new WaveRendererOscilloscope(this);
+    this.vectorscope = new VisualizerVectorscope(this);
+    this.spectrum = new VisualizerSpectrum(this);
+    this.oscilloscope = new VisualizerOscilloscope(this);
   }
 
   public clear(): void {

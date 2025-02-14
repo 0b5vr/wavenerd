@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
 import { Analyser } from '../../../audio/Analyser';
-import { WaveRenderer } from '../../renderers/WaveRenderer';
+import { Visualizer } from '../../visualizers/Visualizer';
 import { useElement } from '../../utils/useElement';
 import { useRect } from '../../utils/useRect';
 import { useSpectrum } from './useSpectrum';
@@ -18,49 +18,49 @@ const Canvas = styled.canvas`
 const Root = styled.div``;
 
 // == components ===================================================================================
-export function DeckWaveRenderer({
+export function DeckVisualizer({
   analyser,
   className,
 }: {
   analyser: Analyser;
   className?: string;
 }) {
-  const [renderer, setRenderer] = useState<WaveRenderer>();
+  const [visualizer, setVisualizer] = useState<Visualizer>();
   const refCanvas = useRef<HTMLCanvasElement>(null);
   const canvas = useElement(refCanvas);
   const rectCanvas = useRect(refCanvas);
 
-  // setup the renderer
+  // setup the visualizer
   useEffect(() => {
     if (canvas == null) { return; }
 
-    const renderer = new WaveRenderer(canvas);
-    setRenderer(renderer);
+    const visualizer = new Visualizer(canvas);
+    setVisualizer(visualizer);
 
     return () => {
-      renderer.dispose();
+      visualizer.dispose();
     };
   }, [canvas]);
 
   // handle resize
   useEffect(() => {
     const ratio = window.devicePixelRatio;
-    renderer?.resize(rectCanvas.width * ratio, rectCanvas.height * ratio);
-  }, [renderer, rectCanvas]);
+    visualizer?.resize(rectCanvas.width * ratio, rectCanvas.height * ratio);
+  }, [visualizer, rectCanvas]);
 
   // components
-  const updateVectorscope = useVectorscope(renderer, analyser);
-  const updateSpectrum = useSpectrum(renderer, analyser);
-  const updateOscilloscope = useOscilloscope(renderer, analyser);
+  const updateVectorscope = useVectorscope(visualizer, analyser);
+  const updateSpectrum = useSpectrum(visualizer, analyser);
+  const updateOscilloscope = useOscilloscope(visualizer, analyser);
 
   // update
   useFrames(useCallback(() => {
-    renderer?.clear();
+    visualizer?.clear();
 
     updateVectorscope();
     updateSpectrum();
     updateOscilloscope();
-  }, [renderer, updateVectorscope, updateSpectrum, updateOscilloscope]));
+  }, [visualizer, updateVectorscope, updateSpectrum, updateOscilloscope]));
 
   // render
   return (

@@ -1,7 +1,12 @@
+import { SettingsItemButton } from './SettingsItemButton';
+import { openVisualizerWindow } from '../VisualizerWindow/openVisualizerWindow';
 import { SettingsItemColor } from './SettingsItemColor';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
 import styled from 'styled-components';
+import { useCallback } from 'react';
+import { useContext } from 'react';
+import { StuffContext } from '../../StuffContext';
 
 const StyledPercent = styled.span`
   width: 32px;
@@ -14,6 +19,12 @@ function suffixFnPercent(value: number) {
 }
 
 export function SettingsContentVisualization() {
+  const { mixer } = useContext(StuffContext)!;
+
+  const handleClickOpenVisualizerWindow = useCallback(() => {
+    openVisualizerWindow(mixer.analyserOut);
+  }, [mixer.analyserOut]);
+
   return (
     <>
       <SettingsItemSelect
@@ -90,6 +101,13 @@ export function SettingsContentVisualization() {
         settingsKey="oscilloscopeColor"
         name="Oscilloscope Color"
         stalkerText="Change the color of the oscilloscope."
+      />
+
+      <SettingsItemButton
+        name="Open Visualizer Window"
+        label="Open"
+        stalkerText="Open a new window with the visualizer."
+        onClick={handleClickOpenVisualizerWindow}
       />
     </>
   );

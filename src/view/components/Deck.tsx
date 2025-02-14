@@ -10,7 +10,7 @@ import styled, { keyframes } from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
-import { DeckWaveRenderer } from './DeckWaveRenderer/DeckWaveRenderer';
+import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
 import { DeckBraceJumpMap } from './DeckBraceJumpMap';
 
@@ -47,7 +47,7 @@ const StyledStatusBar = styled(DeckStatusBar)`
   height: 24px;
 `;
 
-const StyledWaveRenderer = styled(DeckWaveRenderer)`
+const StyledVisualizer = styled(DeckVisualizer)`
   position: absolute;
   left: 0;
   top: 0;
@@ -184,7 +184,7 @@ export const Deck = forwardRef(({
     <Root
       className={className}
     >
-      <StyledWaveRenderer analyser={analyser} />
+      <StyledVisualizer analyser={analyser} />
       <StyledEditor
         ref={refEditor}
         codeAtom={codeAtom}
