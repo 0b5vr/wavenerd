@@ -126,9 +126,13 @@ export class Mixer extends EventEmittable<MixerEvents> {
   }
 
   public updateAnalyser(deltaTime: number): void {
-    this.analyserInA.update(deltaTime);
-    this.analyserInB.update(deltaTime);
-    this.analyserOut.update(deltaTime);
+    this.analyserInA.update();
+    this.analyserInB.update();
+    this.analyserOut.update();
+
+    this.levelMeterInA.update(deltaTime);
+    this.levelMeterInB.update(deltaTime);
+    this.levelMeterOut.update(deltaTime);
   }
 
   private __updateXFaderGains(): void {

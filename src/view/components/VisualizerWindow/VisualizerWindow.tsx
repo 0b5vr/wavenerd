@@ -21,7 +21,7 @@ function initVisualizer(canvas: HTMLCanvasElement): Visualizer {
 }
 
 function renderVisualizer(visualizer: Visualizer, analyser: Analyser, mode: number): void {
-  const { timeDomainL, timeDomainR, zeroCrossingLoL, frequencyL } = analyser;
+  const { timeDomainL, timeDomainR, frequencyL, timeDomainLoL, convolverBufferLength } = analyser;
 
   visualizer.clear();
 
@@ -29,7 +29,8 @@ function renderVisualizer(visualizer: Visualizer, analyser: Analyser, mode: numb
     visualizer.vectorscope.setData(timeDomainL, timeDomainR);
     visualizer.vectorscope.render();
   } else if (mode === MODE_OSCILLOSCOPE) {
-    visualizer.oscilloscope.setData(timeDomainL, zeroCrossingLoL);
+    visualizer.oscilloscope.setData(timeDomainL);
+    visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL, convolverBufferLength);
     visualizer.oscilloscope.render();
   } else if (mode === MODE_SPECTRUM) {
     visualizer.spectrum.setData(frequencyL);

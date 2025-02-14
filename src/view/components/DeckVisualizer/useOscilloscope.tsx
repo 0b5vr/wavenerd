@@ -27,8 +27,9 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
   // update the visualizer
   return useCallback(() => {
     if (oscilloscopeMode !== 'none') {
-      const { timeDomainL, zeroCrossingLoL } = analyser;
-      visualizer?.oscilloscope.setData(timeDomainL, zeroCrossingLoL);
+      const { timeDomainL, timeDomainLoL } = analyser;
+      visualizer?.oscilloscope.setData(timeDomainL);
+      visualizer?.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
       visualizer?.oscilloscope.render();
     }
   }, [oscilloscopeMode, visualizer]);

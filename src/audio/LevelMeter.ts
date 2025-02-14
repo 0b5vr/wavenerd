@@ -1,4 +1,4 @@
-import { Analyser, AnalyserResult } from './Analyser';
+import { Analyser } from './Analyser';
 import { EventEmittable } from '../utils/EventEmittable';
 
 export interface LevelMeterResult {
@@ -29,15 +29,11 @@ export class LevelMeter extends EventEmittable<LevelMeterEvents> {
 
   public constructor(analyser: Analyser) {
     super();
-
     this.analyser = analyser;
-    this.analyser.on('update', (result) => {
-      this.__update(result);
-    });
   }
 
-  private __update(result: AnalyserResult): LevelMeterResult {
-    const { deltaTime, timeDomainL, timeDomainR } = result;
+  public update(deltaTime: number): LevelMeterResult {
+    const { timeDomainL, timeDomainR } = this.analyser;
 
     const decay = Math.exp(-5.0 * deltaTime);
 

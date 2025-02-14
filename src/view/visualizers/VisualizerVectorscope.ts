@@ -34,7 +34,7 @@ export class VisualizerVectorscope {
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
-      array[i] = i / (DRAW_LENGTH - 1) * (DRAW_INDEX_RANGE - 1);
+      array[i] = ANALYSER_TIME_DOMAIN_SIZE - DRAW_INDEX_RANGE + i / (DRAW_LENGTH - 1) * (DRAW_INDEX_RANGE - 1);
     }
     this.__buffer = glCreateBuffer(gl, array);
 

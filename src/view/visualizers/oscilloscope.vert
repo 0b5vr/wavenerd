@@ -1,10 +1,10 @@
 #version 300 es
 
-layout (location = 0) in float index;
+layout (location = 0) in float x;
 
 uniform float scale;
 uniform float bufferSize;
-uniform float drawIndexRange;
+uniform float windowWidth;
 uniform sampler2D samplerL;
 uniform float zc;
 
@@ -21,9 +21,9 @@ float hann(float x) {
 }
 
 void main() {
-  vec2 pos = vec2(index / drawIndexRange, 0.0);
+  vec2 pos = vec2(x, 0.0);
 
-  float i0 = index + zc;
+  float i0 = (0.5 * windowWidth * x) + zc;
   float i0i = floor(i0 + 0.5);
 
   for (int i = -10; i <= 10; i ++) {

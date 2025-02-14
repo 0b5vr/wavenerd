@@ -13,12 +13,19 @@ import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
 import { Library } from './Library';
 import { FullscreenManager } from './FullscreenManager';
+import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
+import { DCRemovalNode } from './audio/DCRemovalNode';
 
+// == setup ========================================================================================
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl2')!;
 
 const audio = new AudioContext();
 audio.suspend();
+
+// install audio worklet modules
+await TimeDomainDataProbeNode.addModule(audio);
+await DCRemovalNode.addModule(audio);
 
 const master = audio.createGain();
 

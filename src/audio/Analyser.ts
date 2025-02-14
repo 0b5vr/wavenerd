@@ -1,26 +1,11 @@
-import { EventEmittable } from '../utils/EventEmittable';
 import { createCrossoverIR } from './createCrossoverIR';
+import { TimeDomainDataProbeNode } from './TimeDomainDataProbeNode';
 
-export const ANALYSER_TIME_DOMAIN_SIZE = 4096;
+export const ANALYSER_TIME_DOMAIN_SIZE = 8192;
 export const ANALYSER_FREQUENCY_SIZE = 1024;
 export const ANALYSER_LO_FREQUENCY = 200;
-export const ANALYSER_ZERO_CROSSING_TARGET = 1024;
 
-export interface AnalyserResult {
-  deltaTime: number;
-  timeDomainL: Float32Array;
-  timeDomainR: Float32Array;
-  timeDomainLoL: Float32Array;
-  zeroCrossingLoL: number;
-  frequencyL: Float32Array;
-  frequencyR: Float32Array;
-}
-
-interface AnalyserEvents {
-  update: AnalyserResult;
-}
-
-export class Analyser extends EventEmittable<AnalyserEvents> {
+export class Analyser {
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -28,35 +13,44 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
 
   private __splitterNode: ChannelSplitterNode;
   private __analyserNodeL: AnalyserNode;
-  private __analyserNodeR: AnalyserNode;
+  private __probeNodeL: TimeDomainDataProbeNode;
+  private __probeNodeR: TimeDomainDataProbeNode;
   private __convolverLoL: ConvolverNode;
-  private __analyserNodeLoL: AnalyserNode;
+  private __probeNodeLoL: TimeDomainDataProbeNode;
 
   public get input(): AudioNode {
     return this.__splitterNode;
   }
 
-  public timeDomainL: Float32Array;
-  public timeDomainR: Float32Array;
-  public timeDomainLoL: Float32Array;
-  public zeroCrossingLoL: number;
+  public get timeDomainL(): Float32Array {
+    return this.__probeNodeL.data;
+  }
+
+  public get timeDomainR(): Float32Array {
+    return this.__probeNodeR.data;
+  }
+
+  public get timeDomainLoL(): Float32Array {
+    return this.__probeNodeLoL.data;
+  }
+
   public frequencyL: Float32Array;
-  public frequencyR: Float32Array;
+
+  public get convolverBufferLength(): number {
+    return this.__convolverLoL.buffer!.length;
+  }
 
   public constructor(audio: AudioContext) {
-    super();
-
     this.__audio = audio;
 
     this.__splitterNode = audio.createChannelSplitter(2);
     this.__analyserNodeL = audio.createAnalyser();
-    this.__analyserNodeR = audio.createAnalyser();
+    this.__probeNodeL = new TimeDomainDataProbeNode(audio, ANALYSER_TIME_DOMAIN_SIZE);
+    this.__probeNodeR = new TimeDomainDataProbeNode(audio, ANALYSER_TIME_DOMAIN_SIZE);
     this.__convolverLoL = audio.createConvolver();
-    this.__analyserNodeLoL = audio.createAnalyser();
+    this.__probeNodeLoL = new TimeDomainDataProbeNode(audio, ANALYSER_TIME_DOMAIN_SIZE);
 
     this.__analyserNodeL.fftSize = 4096;
-    this.__analyserNodeR.fftSize = 4096;
-    this.__analyserNodeLoL.fftSize = 4096;
 
     this.__convolverLoL.normalize = false;
     this.__convolverLoL.buffer = createCrossoverIR({
@@ -65,62 +59,15 @@ export class Analyser extends EventEmittable<AnalyserEvents> {
     });
 
     this.__splitterNode.connect(this.__analyserNodeL, 0);
-    this.__splitterNode.connect(this.__analyserNodeR, 1);
+    this.__splitterNode.connect(this.__probeNodeL, 0);
+    this.__splitterNode.connect(this.__probeNodeR, 1);
     this.__splitterNode.connect(this.__convolverLoL, 0);
-    this.__convolverLoL.connect(this.__analyserNodeLoL);
+    this.__convolverLoL.connect(this.__probeNodeLoL);
 
-    this.timeDomainL = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
-    this.timeDomainR = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
-    this.timeDomainLoL = new Float32Array(ANALYSER_TIME_DOMAIN_SIZE);
     this.frequencyL = new Float32Array(ANALYSER_FREQUENCY_SIZE);
-    this.frequencyR = new Float32Array(ANALYSER_FREQUENCY_SIZE);
-    this.zeroCrossingLoL = 0;
   }
 
-  public update(deltaTime: number): AnalyserResult {
-    this.__analyserNodeL.getFloatTimeDomainData(this.timeDomainL);
-    this.__analyserNodeR.getFloatTimeDomainData(this.timeDomainR);
-    this.__analyserNodeLoL.getFloatTimeDomainData(this.timeDomainLoL);
+  public update(): void {
     this.__analyserNodeL.getFloatFrequencyData(this.frequencyL);
-    this.__analyserNodeR.getFloatFrequencyData(this.frequencyR);
-
-    // find zero crossing
-    {
-      const target = ANALYSER_ZERO_CROSSING_TARGET;
-      let d = target;
-      let v = 0;
-
-      for (let i = 0; i < this.timeDomainLoL.length; i++) {
-        if (i >= target + d) {
-          break;
-        }
-
-        const v1 = this.timeDomainLoL[i];
-        if (v < 0 && v1 >= 0) {
-          const d1 = Math.abs(i - target);
-          if (d1 < d) {
-            d = d1;
-            this.zeroCrossingLoL = i;
-          }
-        }
-        v = this.timeDomainLoL[i];
-      }
-
-      this.zeroCrossingLoL -= this.__convolverLoL.buffer!.length / 2;
-    }
-
-    const ret = {
-      deltaTime: deltaTime,
-      timeDomainL: this.timeDomainL,
-      timeDomainR: this.timeDomainR,
-      timeDomainLoL: this.timeDomainLoL,
-      zeroCrossingLoL: this.zeroCrossingLoL,
-      frequencyL: this.frequencyL,
-      frequencyR: this.frequencyR,
-    };
-
-    this.__emit('update', ret);
-
-    return ret;
   }
 }

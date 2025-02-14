@@ -7,8 +7,7 @@ import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import oscilloscopeVert from './oscilloscope.vert?raw';
 
-const DRAW_LENGTH = ANALYSER_TIME_DOMAIN_SIZE;
-const DRAW_INDEX_RANGE = 512;
+const DRAW_LENGTH = 4096;
 
 export class VisualizerOscilloscope {
   public readonly visualizer: Visualizer;
@@ -16,13 +15,13 @@ export class VisualizerOscilloscope {
   public mode: 'none' | 'line';
   public color: [number, number, number, number];
   public scale: number;
-
+  public windowWidth: number;
   private readonly __buffer: WebGLBuffer;
   private readonly __program: WebGLProgram;
   private readonly __locations: {
     scale: WebGLUniformLocation;
     bufferSize: WebGLUniformLocation;
-    drawIndexRange: WebGLUniformLocation;
+    windowWidth: WebGLUniformLocation;
     color: WebGLUniformLocation;
     samplerL: WebGLUniformLocation;
     zc: WebGLUniformLocation;
@@ -38,7 +37,7 @@ export class VisualizerOscilloscope {
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
-      array[i] = lerp(-DRAW_INDEX_RANGE, DRAW_INDEX_RANGE, i / (DRAW_LENGTH - 1));
+      array[i] = lerp(-1.0, 1.0, i / (DRAW_LENGTH - 1));
     }
     this.__buffer = glCreateBuffer(gl, array);
 
@@ -46,7 +45,7 @@ export class VisualizerOscilloscope {
     this.__locations = {
       scale: gl.getUniformLocation(this.__program, 'scale')!,
       bufferSize: gl.getUniformLocation(this.__program, 'bufferSize')!,
-      drawIndexRange: gl.getUniformLocation(this.__program, 'drawIndexRange')!,
+      windowWidth: gl.getUniformLocation(this.__program, 'windowWidth')!,
       color: gl.getUniformLocation(this.__program, 'color')!,
       samplerL: gl.getUniformLocation(this.__program, 'samplerL')!,
       zc: gl.getUniformLocation(this.__program, 'zc')!,
@@ -59,9 +58,10 @@ export class VisualizerOscilloscope {
     this.mode = 'none';
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.scale = 0.8;
+    this.windowWidth = 2048;
   }
 
-  public setData(data: Float32Array, zc: number): void {
+  public setData(data: Float32Array): void {
     const { gl } = this.visualizer;
 
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
@@ -77,8 +77,21 @@ export class VisualizerOscilloscope {
       data, // pixels
     );
     gl.bindTexture(gl.TEXTURE_2D, null);
+  }
 
-    this.__zc = zc;
+  public calcZeroCrossing(timeDomain: Float32Array, convolverBufferLength: number): void {
+    let v0 = 0;
+
+    const i0 = Math.floor(timeDomain.length - this.windowWidth / 2 + convolverBufferLength / 2);
+    for (let i = i0; i >= 0; i--) {
+      const v1 = timeDomain[i];
+      if (v0 > 0 && v1 <= 0) {
+        // found a zero crossing point
+        this.__zc = i - Math.floor(convolverBufferLength / 2);
+        break;
+      }
+      v0 = v1;
+    }
   }
 
   public render(): void {
@@ -95,7 +108,7 @@ export class VisualizerOscilloscope {
 
     gl.uniform1f(this.__locations.scale, this.scale);
     gl.uniform1f(this.__locations.bufferSize, ANALYSER_TIME_DOMAIN_SIZE);
-    gl.uniform1f(this.__locations.drawIndexRange, DRAW_INDEX_RANGE);
+    gl.uniform1f(this.__locations.windowWidth, this.windowWidth);
     gl.uniform4f(this.__locations.color, ...this.color);
     gl.uniform1f(this.__locations.zc, this.__zc);
 

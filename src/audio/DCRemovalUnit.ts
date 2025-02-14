@@ -21,25 +21,21 @@ export class DCRemovalUnit {
     return this.__gainOutput;
   }
 
-  private __dcRemovalNode?: DCRemovalNode;
+  private __dcRemovalNode: DCRemovalNode;
 
   public constructor(audio: AudioContext) {
     this.__gainInput = audio.createGain();
     this.__gainOutput = audio.createGain();
-
-    DCRemovalNode.addModule(audio).then(() => {
-      this.__dcRemovalNode = new DCRemovalNode(audio);
-      this.__reconnect();
-    });
+    this.__dcRemovalNode = new DCRemovalNode(audio);
 
     this.__reconnect();
   }
 
   private __reconnect(): void {
     this.__gainInput.disconnect();
-    this.__dcRemovalNode?.disconnect();
+    this.__dcRemovalNode.disconnect();
 
-    if (this.__active && this.__dcRemovalNode != null) {
+    if (this.__active) {
       this.__gainInput.connect(this.__dcRemovalNode);
       this.__dcRemovalNode.connect(this.__gainOutput);
     } else {
