@@ -21,5 +21,8 @@ export default defineConfig({
     COMMIT_HASH: `'${COMMIT_HASH}'`,
     COMMIT_DATE: `'${COMMIT_DATE}'`,
   },
+  build: {
+    target: 'esnext',
+  },
   base: './',
 });
