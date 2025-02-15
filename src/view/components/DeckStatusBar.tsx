@@ -10,6 +10,7 @@ import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
 import { ThemeVars } from '../themes/ThemeVars';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
+import { useSettings } from '../stores/hooks/useSettings';
 
 // == styles =======================================================================================
 const StyleIcon = css`
@@ -180,6 +181,8 @@ export function DeckStatusBar({
   const hasEdit = useAtomValue(hasEditAtom);
   const gainValue = useMidiValue(gainParamName);
 
+  const compileTimeEnabled = useSettings('editorCompileTimeEnabled');
+
   const handleClickApply = useCallback((event: React.MouseEvent) => {
     if (event.shiftKey) {
       onApplyImmediately();
@@ -258,7 +261,7 @@ export function DeckStatusBar({
       className={className}
     >
       { content }
-      <CompileTime compileTimeAtom={compileTimeAtom} />
+      {compileTimeEnabled && <CompileTime compileTimeAtom={compileTimeAtom} />}
       <StyledIconBuild
         onClick={onCompile}
         data-stalker="Compile the shader code (Ctrl+S)"
