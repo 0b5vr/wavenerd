@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatNumber } from './HeaderBeatNumber';
 import { HeaderNudge } from './HeaderNudge';
-import { HeaderTime } from './HeaderTime';
+import { HeaderTimeSeconds } from './HeaderTimeSeconds';
 import { HeaderTransport } from './HeaderTransport';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { useSettings } from '../../stores/hooks/useSettings';
@@ -20,6 +20,8 @@ import { HeaderIconDeckB } from './HeaderIconDeckB';
 import { HeaderIconUnknown } from './HeaderIconUnknown';
 import { HeaderIconFullscreen } from './HeaderIconFullscreen';
 import { HeaderIconVisualizer } from './HeaderIconVisualizer';
+import { HeaderBarsGrid } from './HeaderBarsGrid';
+import { HeaderTimeHMS } from './HeaderTimeHMS';
 
 // == styles =======================================================================================
 const Margin = styled.div`
@@ -75,14 +77,18 @@ export function Header({ className }: { className?: string }) {
             return <HeaderLogo key={i} />;
           } else if (item === 'transport') {
             return <HeaderTransport key={i} />;
-          } else if (item === 'time') {
-            return <HeaderTime key={i} />;
+          } else if (item === 'time-seconds' || item === 'time') {
+            return <HeaderTimeSeconds key={i} />;
+          } else if (item === 'time-hms') {
+            return <HeaderTimeHMS key={i} />;
           } else if (item === 'beat-number') {
             return <HeaderBeatNumber key={i} />;
           } else if (item === 'beat-hex') {
             return <HeaderBeatHex key={i} />;
           } else if (item === 'beat-dots') {
             return <HeaderBeatDots key={i} />;
+          } else if (item === 'bars-grid') {
+            return <HeaderBarsGrid key={i} />;
           } else if (item === 'bpm') {
             return <HeaderBPM key={i} />;
           } else if (item === 'nudge') {

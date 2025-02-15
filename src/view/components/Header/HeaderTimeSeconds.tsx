@@ -22,7 +22,7 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function HeaderTime({ className }: { className?: string }) {
+export function HeaderTimeSeconds({ className }: { className?: string }) {
   const time = useAtomValue(deckTimeAtom);
 
   return (
