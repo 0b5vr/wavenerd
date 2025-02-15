@@ -31,6 +31,10 @@ export function openVisualizerWindow(analyser: Analyser): void {
     renderer.visualizer.dispose();
   });
 
+  window.addEventListener('beforeunload', () => {
+    visualizerWindow.close();
+  });
+
   const update = () => {
     if (visualizerWindow.closed) {
       console.log('visualizerWindow closed');
