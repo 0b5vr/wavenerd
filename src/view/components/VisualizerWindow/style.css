@@ -19,13 +19,10 @@ body {
   right: 0;
   width: 280px;
   margin: 8px;
-
-  --display-enter: block;
-  --display-leave: none;
-  display: var(--display-leave);
+  opacity: 0;
+  transition: opacity 0.1s ease;
 
   @media (display-mode: fullscreen) {
-    --display-enter: none;
-    --display-leave: none;
+    display: none;
   }
 }

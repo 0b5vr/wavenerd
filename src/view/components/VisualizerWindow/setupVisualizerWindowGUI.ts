@@ -21,11 +21,11 @@ function injectStyle(visualizerWindow: Window): void {
  */
 function showOnMouseOver(window: Window, element: HTMLElement): void {
   window.document.body.addEventListener('mouseenter', () => {
-    element.style.display = 'var(--display-enter)';
+    element.style.opacity = '1.0';
   });
 
   window.document.body.addEventListener('mouseleave', () => {
-    element.style.display = 'var(--display-leave)';
+    element.style.opacity = '0.0';
   });
 }
 
