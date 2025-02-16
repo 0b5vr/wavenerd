@@ -16,6 +16,7 @@ export class VisualizerVectorscope {
   public color: [ number, number, number, number ];
   public pointSize: number;
   public pointShape: number;
+  public scale: number;
   private readonly __buffer: WebGLBuffer;
   private readonly __program: WebGLProgram;
   private readonly __locations: {
@@ -24,6 +25,7 @@ export class VisualizerVectorscope {
     color: WebGLUniformLocation;
     pointSize: WebGLUniformLocation;
     pointShape: WebGLUniformLocation;
+    scale: WebGLUniformLocation;
     samplerL: WebGLUniformLocation;
     samplerR: WebGLUniformLocation;
   };
@@ -48,6 +50,7 @@ export class VisualizerVectorscope {
       color: gl.getUniformLocation(this.__program, 'color')!,
       pointSize: gl.getUniformLocation(this.__program, 'pointSize')!,
       pointShape: gl.getUniformLocation(this.__program, 'pointShape')!,
+      scale: gl.getUniformLocation(this.__program, 'scale')!,
       samplerL: gl.getUniformLocation(this.__program, 'samplerL')!,
       samplerR: gl.getUniformLocation(this.__program, 'samplerR')!,
     };
@@ -59,6 +62,7 @@ export class VisualizerVectorscope {
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.pointSize = 4.0;
     this.pointShape = 0.0;
+    this.scale = 1.0;
   }
 
   public setData(dataL: Float32Array, dataR: Float32Array): void {
@@ -110,6 +114,7 @@ export class VisualizerVectorscope {
     gl.uniform4f(this.__locations.color, ...this.color);
     gl.uniform1f(this.__locations.pointSize, this.pointSize);
     gl.uniform1f(this.__locations.pointShape, this.pointShape);
+    gl.uniform1f(this.__locations.scale, this.scale);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);

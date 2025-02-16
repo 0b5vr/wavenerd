@@ -3,6 +3,7 @@
 layout (location = 0) in float index;
 
 uniform float aspect;
+uniform float scale;
 uniform float bufferSize;
 uniform float pointSize;
 uniform sampler2D samplerL;
@@ -37,6 +38,8 @@ void main() {
 
     pos += tex * weight;
   }
+
+  pos *= scale;
 
   vec2 correct = aspect < 1.0 ? vec2(1.0, aspect) : vec2(1.0 / aspect, 1.0);
 

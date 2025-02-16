@@ -35,6 +35,7 @@ interface VisualizerWindowParams {
   opacity: number;
   vectorscope: {
     mode: 'points' | 'line';
+    scale: number;
     pointSize: number;
     pointShape: number;
   };
@@ -65,6 +66,7 @@ export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: Vis
     opacity: 1.0,
     vectorscope: {
       mode: 'points',
+      scale: 1.0,
       pointSize: 4.0,
       pointShape: 0.0,
     },
@@ -120,6 +122,14 @@ export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: Vis
     },
   }).on('change', () => {
     renderer.visualizer.vectorscope.mode = params.vectorscope.mode;
+  });
+
+  vectorscopeFolder.addBinding(params.vectorscope, 'scale', {
+    label: 'Scale',
+    min: 0.0,
+    max: 4.0,
+  }).on('change', () => {
+    renderer.visualizer.vectorscope.scale = params.vectorscope.scale;
   });
 
   vectorscopeFolder.addBinding(params.vectorscope, 'pointSize', {
