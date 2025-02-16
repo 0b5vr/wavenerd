@@ -8,6 +8,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
+import { UILabel } from './UILabel';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)<{ size: number }>`
@@ -20,15 +21,9 @@ const StyledMixerFader = styled(MixerFader)`
   height: 96px;
 `;
 
-const KnobLabel = styled.div`
-  font-size: 8px;
-  line-height: 1;
-  opacity: 0.7;
-`;
-
 const KnobAndStuff = styled.div`
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -58,7 +53,7 @@ const Row = styled.div<{ side: 'A' | 'B' }>`
 
 const EQs = styled.div`
   display: flex;
-  gap: 4px;
+  gap: 8px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -112,7 +107,7 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
         deltaValuePerPixel={1.0 / 256.0}
         stalkerText={stalkerTextWithValue}
       />
-      <KnobLabel>{ label }</KnobLabel>
+      <UILabel text={label} />
     </KnobAndStuff>
   );
 }
@@ -137,7 +132,7 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
         deltaValuePerPixel={1.0 / 256.0}
         stalkerText={stalkerTextWithValue}
       />
-      <KnobLabel>{ label }</KnobLabel>
+      <UILabel text={label} />
     </KnobAndStuff>
   );
 }

@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { settingsCategoryAtom, settingsIsOpeningAtom } from '../../stores/atoms/settings';
 
 const Logo = styled.div`
-  font: 600 24px 'Inter', sans-serif;
+  font: 700 24px 'Inter', sans-serif;
   line-height: 1;
   cursor: pointer;
 

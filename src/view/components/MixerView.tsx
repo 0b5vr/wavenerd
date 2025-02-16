@@ -4,6 +4,7 @@ import { LevelMeters } from './LevelMeters';
 import { MixerChannelView } from './MixerChannelView';
 import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
+import { UILabel } from './UILabel';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)`
@@ -11,15 +12,9 @@ const StyledKnob = styled(Knob)`
   height: 16px;
 `;
 
-const KnobLabel = styled.div`
-font-size: 8px;
-line-height: 1;
-opacity: 0.7;
-`;
-
 const KnobAndStuff = styled.div`
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -66,7 +61,7 @@ function CueMixKnob() {
         deltaValuePerPixel={1.0 / 64.0}
         stalkerText={stalkerTextWithValue}
       />
-      <KnobLabel>MIX</KnobLabel>
+      <UILabel text="MIX" />
     </KnobAndStuff>
   );
 }

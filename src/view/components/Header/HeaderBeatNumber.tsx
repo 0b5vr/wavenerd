@@ -2,17 +2,13 @@ import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
+import { UILabel } from '../UILabel';
+import { UINumber } from '../UINumber';
+import { ThemeVars } from '../../themes/ThemeVars';
 
 // == styles =======================================================================================
-const Label = styled.div`
-  font-size: 8px;
-  line-height: 1;
-  opacity: 0.7;
-`;
-
-const ValueRow = styled.div`
-  font: 14px 'Roboto Mono', monospace;
-  line-height: 1.0;
+const StyledUILabel = styled(UILabel)`
+  color: ${ThemeVars.headerFg};
 `;
 
 const Root = styled.div`
@@ -39,10 +35,12 @@ export function HeaderBeatNumber({ className }: { className?: string }) {
       className={className}
       data-stalker="Bars, Beats, Steps"
     >
-      <Label>BEAT</Label>
-      <ValueRow>
-        { `${('0' + barCount).slice(-2)}.${beatCount}.${stepCount}` }
-      </ValueRow>
+      <StyledUILabel text="BEAT" />
+      <UINumber
+        text={`${('0' + barCount).slice(-2)}.${beatCount}.${stepCount}`}
+        activeColor={ThemeVars.headerFg}
+        inactiveColor={ThemeVars.gray}
+      />
     </Root>
   );
 }

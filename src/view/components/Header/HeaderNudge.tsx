@@ -3,12 +3,10 @@ import { ThemeVars } from '../../themes/ThemeVars';
 import { registerMouseEvent } from '../../utils/registerMouseEvent';
 import styled from 'styled-components';
 import { StuffContext } from '../../StuffContext';
+import { UILabel } from '../UILabel';
 
 // == styles =======================================================================================
-const Label = styled.div`
-  font-size: 10px;
-  line-height: 1;
-  user-select: none;
+const StyledLabel = styled(UILabel)`
   color: ${ThemeVars.headerBg};
 `;
 
@@ -78,7 +76,7 @@ export function HeaderNudge({ className }: { className?: string }) {
       onMouseDown={handleMouseDown}
       data-stalker="Nudge the beat (drag left and right)"
     >
-      <Label>Nudge</Label>
+      <StyledLabel text="Nudge" />
       <CenterLine />
       <Rect
         style={{

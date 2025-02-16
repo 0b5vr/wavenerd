@@ -3,6 +3,7 @@ import { Knob } from './Knob';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
+import { UILabel } from './UILabel';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)`
@@ -10,15 +11,9 @@ const StyledKnob = styled(Knob)`
   height: 28px;
 `;
 
-const Label = styled.div`
-  font-size: 8px;
-  color: ${ThemeVars.foresub};
-  line-height: 1;
-`;
-
 const Root = styled.div<{ isLearning: boolean }>`
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -32,9 +27,10 @@ const Root = styled.div<{ isLearning: boolean }>`
 `;
 
 // == components ===================================================================================
-export function DeckKnob({ paramName, paramPrefix, stalker, className }: {
+export function DeckKnob({ paramName, paramPrefix, label, stalker, className }: {
   paramName: string;
   paramPrefix: string;
+  label: string;
   stalker?: string;
   className?: string;
 }): JSX.Element {
@@ -60,7 +56,7 @@ export function DeckKnob({ paramName, paramPrefix, stalker, className }: {
         resetValue={0.0}
         deltaValuePerPixel={1.0 / 64.0}
       />
-      <Label>{ paramName }</Label>
+      <UILabel text={label} />
     </Root>
   );
 }

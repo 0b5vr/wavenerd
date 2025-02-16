@@ -55,7 +55,9 @@ export function SettingsItemLatencyBlocks() {
         type="int"
         value={latencyBlocks}
         onChange={handleChangeLatencyBlocks}
-      />
+      >
+        {latencyBlocks}
+      </StyledNumberParam>
       <Suffix>{`(${latencyTime.toFixed(0)} ms)`}</Suffix>
     </SettingsItemBase>
   );

@@ -20,14 +20,6 @@ function inputToValue(value: string, type: ValueType): number | null {
   }
 }
 
-function valueToInput(value: number, type: ValueType, digits: number): string {
-  if (type === 'int') {
-    return Math.floor(value).toString();
-  } else {
-    return (value).toFixed(digits);
-  }
-}
-
 // == styles =======================================================================================
 const Input = styled.input< { isInvalid: boolean } >`
   position: absolute;
@@ -71,11 +63,12 @@ export function NumberParam(params: {
 
   deltaCoarse?: number;
   deltaFine?: number;
-  fixedDigits?: number;
 
   changeValueWhenInput?: boolean;
 
   className?: string;
+
+  children?: React.ReactNode;
 }) {
   const {
     className,
@@ -84,8 +77,8 @@ export function NumberParam(params: {
     changeValueWhenInput,
     onChange,
     onSettle,
+    children,
   } = params;
-  const fixedDigits = params.fixedDigits ?? 3;
   const deltaCoarse = params.deltaCoarse ?? (type === 'int' ? 1.0 : 0.01);
   const deltaFine = params.deltaFine ?? (type === 'int' ? 0.1 : 0.001);
 
@@ -215,14 +208,12 @@ export function NumberParam(params: {
     [inputValue, type, inputPrevValue, trySettle],
   );
 
-  const displayValue = valueToInput(value, type, fixedDigits);
-
   return (
     <Root className={className}>
       <Value
         onMouseDown={handleClick}
       >
-        { displayValue }
+        {children}
       </Value>
       {
         isInput && (

@@ -4,12 +4,14 @@ import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 import { useContext } from 'react';
 import { StuffContext } from '../../StuffContext';
+import { UILabel } from '../UILabel';
+import { UINumber } from '../UINumber';
+import { ThemeVars } from '../../themes/ThemeVars';
+import { clamp } from '@0b5vr/experimental';
 
 // == styles =======================================================================================
-const Label = styled.div`
-  font-size: 8px;
-  line-height: 1;
-  opacity: 0.7;
+const StyledUILabel = styled(UILabel)`
+  color: ${ThemeVars.headerFg};
 `;
 
 const Value = styled(NumberParam)`
@@ -35,17 +37,22 @@ export function HeaderBPM({ className }: { className?: string }) {
       className={className}
       data-stalker="Beat Per Minute&#10;Drag up/down to change BPM, Double click to edit"
     >
-      <Label>BPM</Label>
+      <StyledUILabel text="BPM" />
       <Value
         type="float"
         value={bpm}
         onChange={(value) => {
-          hostDeck.bpm = Math.max(40.0, value);
+          hostDeck.bpm = clamp(value, 40.0, 999.0);
         }}
-        fixedDigits={2}
         deltaCoarse={1.0}
         deltaFine={0.1}
-      />
+      >
+        <UINumber
+          text={('0' + bpm.toFixed(2)).slice(-6)}
+          activeColor={ThemeVars.headerFg}
+          inactiveColor={ThemeVars.gray}
+        />
+      </Value>
     </Root>
   );
 }

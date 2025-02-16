@@ -38,6 +38,12 @@ export function SettingsContentAppearance() {
         name="Show Deck B"
         stalkerText="Whether to show the deck B."
       />
+
+      <SettingsItemBool
+        settingsKey="preferPixelFonts"
+        name="Prefer Pixel Fonts"
+        stalkerText="Several text elements turn into pixel fonts when this is enabled."
+      />
     </>
   );
 }
