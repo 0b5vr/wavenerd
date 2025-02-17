@@ -17,7 +17,6 @@ const blue = '#268bd2';
 const cyan = '#2aa198';
 const green = '#859900';
 
-const invalidred = '#ff0000';
 const redDark = '#920000';
 const blueBright = '#67b9ff';
 
@@ -72,7 +71,7 @@ export const themeSolarizedLight: Theme = {
     constants: magenta,
     strings: yellow,
     comments: base1,
-    invalid: invalidred,
+    invalid: red,
     panels: base2,
     tooltips: base2,
     gutterText: base1,

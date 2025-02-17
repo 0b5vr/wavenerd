@@ -170,13 +170,20 @@ export const Deck = forwardRef(({
   }, [handleApplyImmediately]);
 
   // -- imperative handle --------------------------------------------------------------------------
-  const refEditor = useRef<{ focusEditor: () => void }>(null);
+  const refEditor = useRef<{ focusEditor: () => void; jumpToLine: (line: number) => void }>(null);
+
   const focusEditor = useCallback((highlight: boolean) => {
     refEditor.current?.focusEditor?.();
     if (highlight) {
       setFocusHighlightKey((key) => key + 1);
     }
   }, [refEditor, setFocusHighlightKey]);
+
+  const jumpToLine = useCallback((line: number) => {
+    focusEditor(false);
+    refEditor.current?.jumpToLine(line);
+  }, [refEditor]);
+
   useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- render -------------------------------------------------------------------------------------
@@ -189,6 +196,7 @@ export const Deck = forwardRef(({
         ref={refEditor}
         codeAtom={codeAtom}
         logsAtom={logsAtom}
+        errorAtom={errorAtom}
         hasEditAtom={hasEditAtom}
         onCompile={handleCompile}
         onApply={handleApply}
@@ -208,6 +216,7 @@ export const Deck = forwardRef(({
         onCompile={handleCompile}
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
+        onJumpToLine={jumpToLine}
         gainParamName={gainParamName}
       />
 

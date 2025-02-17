@@ -10,10 +10,11 @@ import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
-import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
+import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
 import { deckMemoryStorage } from '../../deckMemoryStorage';
 import { createCMTheme } from '../codemirror/createCMTheme';
+import { createErrorlayer } from '../codemirror/createErrorlayer';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)<{ guttersEnabled: boolean }>`
@@ -117,6 +118,7 @@ function keyToLog(event: KeyboardEvent): string | null {
 export const DeckEditor = forwardRef(({
   codeAtom,
   logsAtom,
+  errorAtom,
   hasEditAtom,
   onCompile,
   onApply,
@@ -130,6 +132,7 @@ export const DeckEditor = forwardRef(({
 }: {
   codeAtom: PrimitiveAtom<string>;
   logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
+  errorAtom: PrimitiveAtom<string | null>;
   hasEditAtom: PrimitiveAtom<boolean>;
   onCompile: () => void;
   onApply: () => void;
@@ -270,6 +273,22 @@ export const DeckEditor = forwardRef(({
     ...defaultKeymap,
   ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
+  // -- error layer --------------------------------------------------------------------------------
+  const error = useAtomValue(errorAtom);
+  const errorLines = useMemo(() => {
+    if (error == null) {
+      return [];
+    }
+
+    const lines: number[] = [];
+    for (const match of error.matchAll(/ERROR: (\d+):(\d+)/g)) {
+      lines.push(parseInt(match[2], 10));
+    }
+
+    return lines;
+  }, [error]);
+  const errorlayer = useMemo(() => createErrorlayer(errorLines), [errorLines]);
+
   // -- event handlers -----------------------------------------------------------------------------
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -341,7 +360,26 @@ export const DeckEditor = forwardRef(({
   const focusEditor = useCallback(() => {
     refCodeMirror.current?.view?.focus();
   }, [refCodeMirror]);
-  useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
+
+  const jumpToLine = useCallback((line: number) => {
+    const pos = refCodeMirror.current?.view?.state.doc.line(line).to;
+    if (pos == null) {
+      throw new Error('Unreachable. line is out of range');
+    }
+
+    const scrollEffect = EditorView.scrollIntoView(pos, { y: 'center' });
+
+    refCodeMirror.current?.view?.dispatch(
+      { selection: { anchor: pos, head: pos } },
+      { effects: scrollEffect },
+    );
+  }, [refCodeMirror]);
+
+  useImperativeHandle(
+    ref,
+    () => ({ focusEditor, jumpToLine }),
+    [focusEditor, jumpToLine],
+  );
 
   // -- component ----------------------------------------------------------------------------------
   return (
@@ -358,6 +396,7 @@ export const DeckEditor = forwardRef(({
           extensions={[
             cpp(),
             Prec.highest(keymap.of(customKeymap)),
+            errorlayer,
             backlayer,
           ]}
           theme={[

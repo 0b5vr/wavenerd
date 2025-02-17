@@ -13,7 +13,7 @@ function useDeckASubscribers(deckA: WavenerdDeck) {
     });
 
     const handleError = deckA.on('error', ({ error }) => {
-      setDeckAError(error?.split('\n')[0] ?? null);
+      setDeckAError(error ?? null);
     });
 
     return () => {
@@ -33,7 +33,7 @@ function useDeckBSubscribers(deckB: WavenerdDeck) {
     });
 
     const handleError = deckB.on('error', ({ error }) => {
-      setDeckBError(error?.split('\n')[0] ?? null);
+      setDeckBError(error ?? null);
     });
 
     return () => {

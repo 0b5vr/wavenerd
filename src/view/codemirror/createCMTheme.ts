@@ -115,6 +115,9 @@ export function createCMTheme(theme: Theme): {
     '.cm-backlayer': {
       backgroundColor: backlayer,
     },
+    '.cm-errorlayer': {
+      borderBottom: '2px solid ' + invalid,
+    },
   }, { dark });
 
   // -- syntax highlighting --------------------------------------------------------------------------

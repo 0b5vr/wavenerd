@@ -24,7 +24,6 @@ const comments = '#a50';
 const gutterText = '#999';
 const gutterBackground = '#f7f7f7';
 
-const invalidred = '#ff0000';
 const redDark = '#920000';
 const blueBright = '#67b9ff';
 
@@ -79,7 +78,7 @@ export const themeShadertoyLight: Theme = {
     constants,
     strings,
     comments,
-    invalid: invalidred,
+    invalid: red,
     panels: highlightYellow,
     tooltips: highlightYellow,
     gutterText,

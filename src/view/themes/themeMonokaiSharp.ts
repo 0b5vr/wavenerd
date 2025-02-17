@@ -12,7 +12,6 @@ const fore = '#d0edff';
 const foresub = '#b9d3e3';
 const foredark = '#97abb9';
 
-const invalidred = '#ff0000';
 const red = '#ff0066';
 const redDark = '#a30a4a';
 const orange = '#ff5a1f';
@@ -74,7 +73,7 @@ export const themeMonokaiSharp: Theme = {
     constants: constblue,
     strings: yellow,
     comments: gray8,
-    invalid: invalidred,
+    invalid: red,
     panels: gray2,
     tooltips: gray2,
     gutterText: gray8,

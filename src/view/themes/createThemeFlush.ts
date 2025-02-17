@@ -16,8 +16,7 @@ export function createThemeFlush(accent: string): Theme {
   const foresub = '#aaaaaa';
   const foredark = '#999999';
 
-  const invalidred = '#ff0000';
-  const redDark = '#811';
+  const redDark = '#500';
 
   return {
     ui: {
@@ -73,7 +72,7 @@ export function createThemeFlush(accent: string): Theme {
       constants: foredark,
       strings: accent,
       comments: gray8,
-      invalid: invalidred,
+      invalid: redDark,
       panels: gray2,
       tooltips: gray2,
       gutterText: gray8,

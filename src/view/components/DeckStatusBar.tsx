@@ -1,5 +1,5 @@
 import { PrimitiveAtom, useAtomValue } from 'jotai';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
@@ -105,11 +105,23 @@ const Content = styled.div`
   flex-shrink: 1;
 `;
 
+const CodeErrorContent = styled(Content)`
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 const Text = styled.div`
 `;
 
 const TextGray = styled(Text)`
   color: ${ThemeVars.gray};
+`;
+
+const TextError = styled(Text)`
+  color: ${ThemeVars.error};
 `;
 
 const TextHasChangeBlink = styled(Text)`
@@ -159,6 +171,7 @@ export function DeckStatusBar({
   onCompile,
   onApply,
   onApplyImmediately,
+  onJumpToLine,
   cueStatusAtom,
   hasEditAtom,
   errorAtom,
@@ -169,6 +182,7 @@ export function DeckStatusBar({
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
+  onJumpToLine: (line: number) => void;
   cueStatusAtom: PrimitiveAtom<'none' | 'compiling' | 'ready' | 'applying'>;
   hasEditAtom: PrimitiveAtom<boolean>;
   errorAtom: PrimitiveAtom<string | null>;
@@ -181,6 +195,10 @@ export function DeckStatusBar({
   const hasEdit = useAtomValue(hasEditAtom);
   const gainValue = useMidiValue(gainParamName);
 
+  const errorFirstLine = useMemo(() => {
+    return error?.split('\n')[0];
+  }, [error]);
+
   const compileTimeEnabled = useSettings('editorCompileTimeEnabled');
 
   const handleClickApply = useCallback((event: React.MouseEvent) => {
@@ -191,14 +209,31 @@ export function DeckStatusBar({
     }
   }, [onApplyImmediately, onApply]);
 
+  const handleClickCodeError = useCallback(() => {
+    if (error == null) {
+      return;
+    }
+
+    const match = error.match(/ERROR: (\d+):(\d+)/);
+    const line = match?.[2];
+    if (line == null) {
+      return;
+    }
+
+    onJumpToLine(parseInt(line, 10));
+  }, [error, onJumpToLine]);
+
   let content: JSX.Element;
 
   if (error != null) {
     content = (
-      <Content>
+      <CodeErrorContent
+        data-stalker="Click to jump to the line of the error"
+        onClick={handleClickCodeError}
+      >
         <StyledIconError />
-        <Text>{ error }</Text>
-      </Content>
+        <TextError>{errorFirstLine}</TextError>
+      </CodeErrorContent>
     );
   } else if (cueStatus === 'compiling') {
     content = (

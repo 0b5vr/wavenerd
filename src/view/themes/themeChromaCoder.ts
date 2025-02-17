@@ -14,7 +14,6 @@ const foredark = '#aaaaaa';
 
 const background = '#00ff00';
 
-const invalidred = '#ff0000';
 const red = '#ff2255';
 const redDark = '#990011';
 const orange = '#ff5a1f';
@@ -82,7 +81,7 @@ export const themeChromaCoder: Theme = {
     constants: constblue,
     strings: yellow,
     comments: gray,
-    invalid: invalidred,
+    invalid: red,
     panels: background,
     tooltips: background,
     gutterText: gray,
