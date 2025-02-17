@@ -34,6 +34,12 @@ export function SettingsContentEditor() {
       </SettingsItemSelect>
 
       <SettingsItemBool
+        settingsKey="editorGuttersEnabled"
+        name="Show Gutters"
+        stalkerText="Whether to show the gutters (line numbers, etc.) in the editor."
+      />
+
+      <SettingsItemBool
         settingsKey="editorLogEnabled"
         name="Show Editor Log"
         stalkerText="Whether to show the editor log in the bottom right corner."

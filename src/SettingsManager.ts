@@ -31,6 +31,7 @@ export interface Settings {
   preferPixelFonts: boolean;
   editorFont: string;
   editorFontVariantLigatures: string;
+  editorGuttersEnabled: boolean;
   editorLogEnabled: boolean;
   editorBraceJumpMapEnabled: boolean;
   editorBraceJumpMapScale: number;
@@ -60,6 +61,7 @@ export const defaultSettings: Settings = {
   preferPixelFonts: false,
   editorFont: '14px/18px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
+  editorGuttersEnabled: true,
   editorLogEnabled: false,
   editorBraceJumpMapEnabled: true,
   editorBraceJumpMapScale: 0.8,

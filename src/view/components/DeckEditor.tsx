@@ -16,8 +16,12 @@ import { deckMemoryStorage } from '../../deckMemoryStorage';
 import { createCMTheme } from '../codemirror/createCMTheme';
 
 // == styles =======================================================================================
-const StyledReactCodeMirror = styled(ReactCodeMirror)`
+const StyledReactCodeMirror = styled(ReactCodeMirror)<{ guttersEnabled: boolean }>`
   height: 100%;
+
+  .cm-gutters {
+    display: ${({ guttersEnabled }) => guttersEnabled ? 'inherit' : 'none'};
+  }
 `;
 
 const StyledSimpleBar = styled(SimpleBar)`
@@ -146,6 +150,7 @@ export const DeckEditor = forwardRef(({
   const themeString = useSettings('theme');
   const font = useSettings('editorFont');
   const fontVariantLigatures = useSettings('editorFontVariantLigatures');
+  const guttersEnabled = useSettings('editorGuttersEnabled');
 
   const theme = useMemo(() => {
     const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
@@ -359,6 +364,7 @@ export const DeckEditor = forwardRef(({
             theme.extensions,
             fontExtension,
           ]}
+          guttersEnabled={guttersEnabled}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
         />

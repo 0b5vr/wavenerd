@@ -56,7 +56,7 @@ export const themeChromaCoder: Theme = {
     knobNotch: black,
     knobBorder: black,
     knobGutter: black,
-    knobShadow: '#0008',
+    knobShadow: '#0000',
 
     accent: blue,
     accentBright: blueBright,
