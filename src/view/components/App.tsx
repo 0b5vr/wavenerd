@@ -108,7 +108,12 @@ const Root = styled.div<{ themeString: string }>`
     box-sizing: border-box;
   }
 
-  ${({ themeString }) => themeVarsCss(themeString)};
+  ${({ themeString }) => themeVarsCss(themeString)}
+
+  // hack: disable subpixel rendering by applying a filter
+  ${({ themeString }) => themeString === 'chromaCoder' && css`
+    filter: brightness(1.0);
+  `}
 `;
 
 // == component ====================================================================================
