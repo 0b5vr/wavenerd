@@ -9,10 +9,11 @@ import { arraySerial } from '@0b5vr/experimental';
 // == styles =======================================================================================
 const fadeOut = keyframes`
   0% { opacity: 1; }
+  80% { opacity: 1; }
   100% { opacity: 0; }
 `;
 
-const BracePair = styled.div<{ fontStyle: string; fontVariantLigatures: string; distanceFromCenter: number }>`
+const StyledBracePair = styled.div<{ fontStyle: string; fontVariantLigatures: string; distanceFromCenter: number }>`
   padding-left: 4px;
   white-space: pre;
   font: ${({ fontStyle }) => fontStyle};
@@ -26,7 +27,7 @@ const BracePair = styled.div<{ fontStyle: string; fontVariantLigatures: string; 
 `;
 
 const Box = styled.div<{ isActive: boolean }>`
-  margin-right: 8px;
+  margin-right: 16px;
   width: 50%;
   max-width: 320px;
   background: ${ThemeVars.overlayBack};
@@ -38,7 +39,7 @@ const Box = styled.div<{ isActive: boolean }>`
   opacity: 0;
 
   ${({ isActive }) => isActive && css`
-    animation: step-end ${fadeOut} 1s forwards;
+    animation: ease-in-out ${fadeOut} 1s forwards;
   `}
 `;
 
@@ -65,6 +66,8 @@ const DeckBraceJumpMapInside = forwardRef(({
   className,
 }: Props, ref: React.Ref<{ update: (index: number) => void }>) => {
   const scale = useSettings('editorBraceJumpMapScale');
+  const font = useSettings('editorFont');
+  const fontVariantLigatures = useSettings('editorFontVariantLigatures');
 
   const [centerIndex, setCenterIndex] = useState(0);
   const [key, setKey] = useState(0);
@@ -72,7 +75,7 @@ const DeckBraceJumpMapInside = forwardRef(({
   const code = useAtomValue(codeAtom);
   const bracePairs = useMemo(() => findAllBracePairs(code), [code]);
   const bracePairsStr = useMemo(() => {
-    return arraySerial(11).map((i) => bracePairs[centerIndex + i - 5]?.firstLine ?? ' ');
+    return arraySerial(21).map((i) => bracePairs[centerIndex + i - 10]?.firstLine ?? ' ');
   }, [bracePairs, centerIndex]);
 
   const update = useCallback((index: number) => {
@@ -80,9 +83,6 @@ const DeckBraceJumpMapInside = forwardRef(({
     setKey((key) => key + 1);
   }, [centerIndex]);
   useImperativeHandle(ref, () => ({ update }), [update]);
-
-  const font = useSettings('editorFont');
-  const fontVariantLigatures = useSettings('editorFontVariantLigatures');
 
   return (
     <Root className={className}>
@@ -92,14 +92,14 @@ const DeckBraceJumpMapInside = forwardRef(({
         style={{ transform: `scale(${scale})` }}
       >
         {bracePairsStr.map((str, i) => (
-          <BracePair
+          <StyledBracePair
             key={i}
-            distanceFromCenter={i - 5}
+            distanceFromCenter={i - 10}
             fontStyle={font}
             fontVariantLigatures={fontVariantLigatures}
           >
             {str}
-          </BracePair>
+          </StyledBracePair>
         ))}
       </Box>
     </Root>
