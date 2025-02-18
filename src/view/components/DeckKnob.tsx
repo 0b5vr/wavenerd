@@ -7,13 +7,12 @@ import { UILabel } from './UILabel';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)`
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 `;
 
 const Root = styled.div<{ isLearning: boolean }>`
   display: flex;
-  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -20,7 +20,7 @@ const nullResult: RectResult = {
   width: 0,
 };
 
-function getRect<T extends HTMLElement>(element?: T): RectResult {
+function getRect<T extends Element>(element?: T): RectResult {
   if (element) {
     return element.getBoundingClientRect();
   } else {
@@ -28,7 +28,7 @@ function getRect<T extends HTMLElement>(element?: T): RectResult {
   }
 }
 
-export function useRect<T extends HTMLElement>(
+export function useRect<T extends Element>(
   ref: React.RefObject<T>,
 ): RectResult {
   const [rect, setRect] = useState<RectResult>(nullResult);

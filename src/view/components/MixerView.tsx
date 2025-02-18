@@ -8,13 +8,12 @@ import { UILabel } from './UILabel';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)`
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 `;
 
 const KnobAndStuff = styled.div`
   display: flex;
-  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

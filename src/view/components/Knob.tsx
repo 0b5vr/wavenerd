@@ -4,31 +4,17 @@ import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
-import { saturate } from '@0b5vr/experimental';
+import { linearstep, saturate, vecAdd, vecScale } from '@0b5vr/experimental';
 import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 
+// == constants ====================================================================================
+const PI = Math.PI;
+
+const SIZE = 64;
+
 // == styles =======================================================================================
-const Head = styled.div`
-  position: absolute;
-  top: 10%;
-  left: 45%;
-  width: 10%;
-  height: 35%;
-  background: ${ThemeVars.knobNotch};
-  border-radius: 10000px;
-  pointer-events: none;
-`;
-
-const HeadContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
-
 const Body = styled.div`
   position: absolute;
   top: 0;
@@ -37,7 +23,37 @@ const Body = styled.div`
   height: 100%;
   border-radius: 10000px;
   background: ${ThemeVars.knobColor};
-  box-shadow: 0 0 0 2px ${ThemeVars.knobBorder}, 0 4px 8px 2px ${ThemeVars.knobShadow};
+  transform: scale(0.72);
+  box-shadow: 0 4px 8px 2px ${ThemeVars.knobShadow};
+`;
+
+const RingPath = styled.path`
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+`;
+
+const RingPathBack = styled(RingPath)`
+  stroke-width: 4;
+  stroke: ${ThemeVars.knobGutter};
+`;
+
+const RingPathFore = styled(RingPath)`
+  stroke: ${ThemeVars.accent};
+`;
+
+const HeadLine = styled.line`
+  stroke: ${ThemeVars.knobNotch};
+  stroke-width: 4;
+  stroke-linecap: round;
+`;
+
+const SVG = styled.svg`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const Root = styled.div`
@@ -48,6 +64,68 @@ const Root = styled.div`
   align-items: center;
   cursor: pointer;
 `;
+
+// == functions ====================================================================================
+function valueToDir(value: number): [number, number] {
+  const x = Math.cos(PI / 6 * (10 * value + 4));
+  const y = Math.sin(PI / 6 * (10 * value + 4));
+  return [x, y];
+}
+
+// == children =====================================================================================
+export function Ring({
+  value,
+  resetValue,
+}: {
+  value: number;
+  resetValue: number;
+}) {
+  const center = SIZE / 2;
+  const radius = 0.45 * SIZE;
+
+  const [xb0, yb0] = vecAdd(vecScale(valueToDir(0.0), radius), [center, center]);
+  const [xb1, yb1] = vecAdd(vecScale(valueToDir(1.0), radius), [center, center]);
+  const [x0, y0] = vecAdd(vecScale(valueToDir(resetValue), radius), [center, center]);
+  const [x1, y1] = vecAdd(vecScale(valueToDir(value), radius), [center, center]);
+
+  const largeArcFlag = Math.abs(resetValue - value) > 6 / 10 ? 1 : 0;
+  const sweepFlag = (resetValue < value) ? 1 : 0;
+
+  const opacity = linearstep(0.0, 1.0, 100.0 * Math.abs(value - resetValue));
+
+  return (
+    <>
+      <RingPathBack
+        d={`M ${xb0} ${yb0} A ${radius} ${radius} 0 1 1 ${xb1} ${yb1}`}
+      />
+      <RingPathFore
+        d={`M ${x0} ${y0} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${x1} ${y1}`}
+        opacity={opacity}
+      />
+    </>
+  );
+}
+
+export function Head({
+  value,
+}: {
+  value: number;
+}) {
+  const center = SIZE / 2;
+  const r1 = 0.1 * SIZE;
+  const r2 = 0.28 * SIZE;
+  const [x1, y1] = vecAdd(vecScale(valueToDir(value), r1), [center, center]);
+  const [x2, y2] = vecAdd(vecScale(valueToDir(value), r2), [center, center]);
+
+  return (
+    <HeadLine
+      x1={x1}
+      y1={y1}
+      x2={x2}
+      y2={y2}
+    />
+  );
+}
 
 // == components ===================================================================================
 interface Props {
@@ -85,15 +163,12 @@ export function Knob(props: Props) {
     );
   }, [checkDoubleClick, midiParamName, resetValue, deltaValuePerPixel]);
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      mouseCombo({
-        [MouseComboBit.LMB]: beginDrag,
-        [MouseComboBit.LMB | MouseComboBit.Ctrl]: beginDrag,
-      })(event);
-    },
-    [beginDrag],
-  );
+  const handleClick = useCallback((event: React.MouseEvent) => {
+    mouseCombo({
+      [MouseComboBit.LMB]: beginDrag,
+      [MouseComboBit.LMB | MouseComboBit.Ctrl]: beginDrag,
+    })(event);
+  }, [beginDrag]);
 
   return (
     <Root
@@ -101,14 +176,14 @@ export function Knob(props: Props) {
       className={className}
       data-stalker={stalkerText}
     >
+      <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill={ThemeVars.knobBorder} />
+        <Ring value={value} resetValue={resetValue} />
+      </SVG>
       <Body />
-      <HeadContainer
-        style={{
-          transform: `rotate( ${210 + 300.0 * value}deg )`,
-        }}
-      >
-        <Head />
-      </HeadContainer>
+      <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
+        <Head value={value} />
+      </SVG>
       <MIDILearnable paramName={midiParamName} />
     </Root>
   );

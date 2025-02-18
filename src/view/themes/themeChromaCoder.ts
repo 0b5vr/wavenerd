@@ -14,13 +14,12 @@ const foredark = '#aaaaaa';
 
 const background = '#00ff00';
 
-const red = '#ff2255';
+const red = '#ff0066';
 const redDark = '#990011';
 const orange = '#ff5a1f';
 const yellow = '#f7f025';
-const blue = '#5599ff';
-const blueBright = '#82beff';
 const cyan = '#00ccff';
+const cyanBright = '#82d8ff';
 const constblue = '#ae78ff';
 
 export const themeChromaCoder: Theme = {
@@ -57,8 +56,8 @@ export const themeChromaCoder: Theme = {
     knobGutter: black,
     knobShadow: '#0000',
 
-    accent: blue,
-    accentBright: blueBright,
+    accent: cyan,
+    accentBright: cyanBright,
     green: cyan,
     error: red,
 

@@ -47,7 +47,8 @@ export const themeSolarizedDark: Theme = {
     gray: base00,
 
     knobColor: `linear-gradient(to bottom, ${base3}, ${base2})`,
-    knobShadow: base03,
+    knobGutter: base03,
+    knobShadow: 'transparent',
 
     accent: blue,
     accentBright: blueBright,

@@ -23,7 +23,6 @@ const StyledMixerFader = styled(MixerFader)`
 
 const KnobAndStuff = styled.div`
   display: flex;
-  gap: 2px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -101,7 +100,7 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={32}
+        size={36}
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -126,7 +125,7 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={20}
+        size={24}
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
