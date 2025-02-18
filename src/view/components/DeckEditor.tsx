@@ -126,8 +126,6 @@ export const DeckEditor = forwardRef(({
   onBraceJump,
   memoryUpdateAtom,
   libraryOpeningAtom,
-  focusPrevEditor,
-  focusNextEditor,
   className,
 }: {
   codeAtom: PrimitiveAtom<string>;
@@ -140,8 +138,6 @@ export const DeckEditor = forwardRef(({
   onBraceJump?: (index: number) => void;
   memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
-  focusPrevEditor?: () => void;
-  focusNextEditor?: () => void;
   className?: string;
 }, ref: React.Ref<{ focusEditor: () => void }>) => {
   const refCodeMirror = useRef<ReactCodeMirrorRef>(null);
@@ -212,22 +208,6 @@ export const DeckEditor = forwardRef(({
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = useMemo(() => [
     {
-      key: 'Mod-j',
-      preventDefault: true,
-      run: () => {
-        focusPrevEditor?.();
-        return true;
-      },
-    },
-    {
-      key: 'Mod-k',
-      preventDefault: true,
-      run: () => {
-        focusNextEditor?.();
-        return true;
-      },
-    },
-    {
       key: 'Mod-p',
       preventDefault: true,
       run: () => {
@@ -271,7 +251,7 @@ export const DeckEditor = forwardRef(({
     ]),
     ...braceJumpKeymap({ onBraceJump }),
     ...defaultKeymap,
-  ], [focusPrevEditor, focusNextEditor, onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+  ], [onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
   // -- error layer --------------------------------------------------------------------------------
   const error = useAtomValue(errorAtom);

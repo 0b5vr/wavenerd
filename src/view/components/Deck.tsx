@@ -79,8 +79,6 @@ export const Deck = forwardRef(({
   compileTimeAtom,
   analyser,
   deck,
-  focusPrevEditor,
-  focusNextEditor,
   gainParamName,
   storageKeyName,
 }: {
@@ -93,8 +91,6 @@ export const Deck = forwardRef(({
   hasEditAtom: PrimitiveAtom<boolean>;
   compileTimeAtom: PrimitiveAtom<number>;
   analyser: Analyser;
-  focusPrevEditor?: () => void;
-  focusNextEditor?: () => void;
   className?: string;
 }, ref: React.Ref<{ focusEditor: (highlight: boolean) => void }>) => {
   // -- atoms and state ----------------------------------------------------------------------------
@@ -204,8 +200,6 @@ export const Deck = forwardRef(({
         onBraceJump={handleBraceJump}
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
-        focusPrevEditor={focusPrevEditor}
-        focusNextEditor={focusNextEditor}
       />
       <DeckLog logsAtom={logsAtom} />
       <StyledStatusBar

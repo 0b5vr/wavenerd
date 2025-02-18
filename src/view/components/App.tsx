@@ -12,7 +12,7 @@ import { MIDIMAN } from '../../MIDIManager';
 import { Metrics } from '../constants/Metrics';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
@@ -116,6 +116,30 @@ const Root = styled.div<{ themeString: string }>`
   `}
 `;
 
+// == hooks ========================================================================================
+function useFocusDeckShortcuts({
+  focusDeckAEditor,
+  focusDeckBEditor,
+}: {
+  focusDeckAEditor: () => void;
+  focusDeckBEditor: () => void;
+}) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'j' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        focusDeckAEditor();
+      } else if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        focusDeckBEditor();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [focusDeckAEditor, focusDeckBEditor]);
+}
+
 // == component ====================================================================================
 export function OutOfContextApp() {
   const { deckA, deckB, mixer, recorder, library } = useContext(StuffContext)!;
@@ -141,6 +165,11 @@ export function OutOfContextApp() {
     refDeckB.current?.focusEditor?.(true);
   }, [refDeckB]);
 
+  useFocusDeckShortcuts({
+    focusDeckAEditor,
+    focusDeckBEditor,
+  });
+
   return (
     <>
       <Root themeString={themeString}>
@@ -158,7 +187,6 @@ export function OutOfContextApp() {
               deck={deckA}
               storageKeyName="a"
               gainParamName="/mixer/channel_a/gain"
-              focusNextEditor={deckBShow ? focusDeckBEditor : undefined}
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
@@ -183,7 +211,6 @@ export function OutOfContextApp() {
                 deck={deckB}
                 storageKeyName="b"
                 gainParamName="/mixer/channel_b/gain"
-                focusPrevEditor={focusDeckAEditor}
               />
               <StyledDeckKnobs paramPrefix="/deck_b" />
             </DeckColumn>
