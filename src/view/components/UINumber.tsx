@@ -3,28 +3,29 @@ import { useMemo } from 'react';
 import { useSettings } from '../stores/hooks/useSettings';
 
 // == paths ========================================================================================
-const paths = [
-  'M 1 0 L 1 1 L 0 1 L 0 11 L 1 11 L 1 12 L 7 12 L 7 11 L 8 11 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 10 L 2 10 Z M 3 5 L 3 7 L 5 7 L 5 5 Z', // 0
-  'M 2 0 L 2 2 L 3 2 L 3 12 L 5 12 L 5 0 Z', // 1
-  'M 0 0 L 0 2 L 6 2 L 6 5 L 1 5 L 1 6 L 0 6 L 0 12 L 8 12 L 8 10 L 2 10 L 2 7 L 7 7 L 7 6 L 8 6 L 8 1 L 7 1 L 7 0 Z', // 2
-  'M 0 0 L 0 2 L 6 2 L 6 5 L 1 5 L 1 7 L 6 7 L 6 10 L 0 10 L 0 12 L 7 12 L 7 11 L 8 11 L 8 6 L 7 6 L 7 5 L 8 5 L 8 1 L 7 1 L 7 0 Z', // 3
-  'M 0 0 L 0 6 L 1 6 L 1 7 L 6 7 L 6 12 L 8 12 L 8 0 L 6 0 L 6 5 L 2 5 L 2 0 Z', // 4
-  'M 0 0 L 0 6 L 1 6 L 1 7 L 6 7 L 6 10 L 0 10 L 0 12 L 7 12 L 7 11 L 8 11 L 8 6 L 7 6 L 7 5 L 2 5 L 2 2 L 8 2 L 8 0 Z', // 5
-  'M 1 0 L 1 1 L 0 1 L 0 11 L 1 11 L 1 12 L 7 12 L 7 11 L 8 11 L 8 6 L 7 6 L 7 5 L 2 5 L 2 2 L 7 2 L 7 0 Z M 2 7 L 6 7 L 6 10 L 2 10 Z', // 6
-  'M 0 0 L 0 2 L 6 2 L 6 12 L 8 12 L 8 0 Z', // 7
-  'M 1 0 L 1 1 L 0 1 L 0 5 L 1 5 L 1 6 L 0 6 L 0 11 L 1 11 L 1 12 L 7 12 L 7 11 L 8 11 L 8 6 L 7 6 L 7 5 L 8 5 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 5 L 2 5 Z M 2 7 L 6 7 L 6 10 L 2 10 Z', // 8
-  'M 1 0 L 1 1 L 0 1 L 0 6 L 1 6 L 1 7 L 6 7 L 6 10 L 1 10 L 1 12 L 7 12 L 7 11 L 8 11 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 5 L 2 5 Z', // 9
-  'M 1 0 L 1 1 L 0 1 L 0 12 L 2 12 L 2 7 L 6 7 L 6 12 L 8 12 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 5 L 2 5 Z', // a
-  'M 0 0 L 0 12 L 7 12 L 7 11 L 8 11 L 8 6 L 7 6 L 7 5 L 8 5 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 5 L 2 5 Z M 2 7 L 6 7 L 6 10 L 2 10 Z', // b
-  'M 1 0 L 1 1 L 0 1 L 0 11 L 1 11 L 1 12 L 8 12 L 8 10 L 2 10 L 2 2 L 8 2 L 8 0 Z', // c
-  'M 0 0 L 0 12 L 7 12 L 7 11 L 8 11 L 8 1 L 7 1 L 7 0 Z M 2 2 L 6 2 L 6 10 L 2 10 Z', // d
-  'M 0 0 L 0 12 L 8 12 L 8 10 L 2 10 L 2 7 L 7 7 L 7 5 L 2 5 L 2 2 L 8 2 L 8 0 Z', // e
-  'M 0 0 L 0 12 L 2 12 L 2 7 L 7 7 L 7 5 L 2 5 L 2 2 L 8 2 L 8 0 Z', // f
-  'M 0 10 L 0 12 L 2 12 L 2 10 Z', // .
-  'M 0 3 L 0 5 L 2 5 L 2 3 Z M 0 8 L 0 10 L 2 10 L 2 8 Z', // :
-];
+const charTable = (
+  'e7ff3c3c3cbdbd3c3c3cffe7' // 0
+  + 'c1c181818181818181818181' // 1
+  + 'f7ff0c0c0ceff7303030ffff' // 2
+  + 'f7ff0c0c0ce7ef0c0c0cfff7' // 3
+  + '3c3c3c3c3cffef0c0c0c0c0c' // 4
+  + 'ffff303030f7ef0c0c0cfff7' // 5
+  + 'e7f7303030f7ff3c3c3cffe7' // 6
+  + 'ffff0c0c0c0c0c0c0c0c0c0c' // 7
+  + 'e7ff3c3c3ce7ff3c3c3cffe7' // 8
+  + 'e7ff3c3c3cffef0c0c0cefe7' // 9
+  + 'e7ff3c3c3cffff3c3c3c3c3c' // a
+  + 'f7ff3c3c3cf7ff3c3c3cfff7' // b
+  + 'efff3030303030303030ffef' // c
+  + 'f7ff3c3c3c3c3c3c3c3cfff7' // d
+  + 'ffff303030f7f7303030ffff' // e
+  + 'ffff303030f7f73030303030' // f
+  + '000000000000000000003030' // .
+  + '000000303000000030300000' // :
+);
 
-const widths = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 2, 2];
+const widths = '888888888888888822';
+//              0123456789abcdef.:
 
 const charIndexMap = new Map<string, number>([
   ['0', 0],
@@ -95,7 +96,30 @@ function PixelChar({
 }) {
   const index = charIndexMap.get(char)!;
   const width = widths[index];
-  const path = paths[index];
+
+  const masks: number[] = useMemo(() => {
+    const masks: number[] = [];
+    for (let i = 0; i < 24; i++) {
+      const c = parseInt(charTable[index * 24 + i], 16);
+      masks.push((c >> 0) & 1);
+      masks.push((c >> 1) & 1);
+      masks.push((c >> 2) & 1);
+      masks.push((c >> 3) & 1);
+    }
+    return masks;
+  }, [index]);
+
+  const path = useMemo(() => {
+    let path = '';
+    for (let i = 0; i < 96; i++) {
+      if (masks[i] === 1) {
+        const x = i % 8;
+        const y = ~~(i / 8);
+        path += `M${x} ${y}l0 1l1 0l0-1z`;
+      }
+    }
+    return path;
+  }, [masks]);
 
   return (
     <svg width={width} height="12">

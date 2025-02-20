@@ -49,11 +49,21 @@ function PixelLabelChar({ char }: { char: string }) {
     return masks;
   }, [index]);
 
+  const path = useMemo(() => {
+    let path = '';
+    for (let i = 0; i < 25; i++) {
+      if (masks[i] === 1) {
+        const x = i % 5;
+        const y = ~~(i / 5);
+        path += `M${x} ${y}l0 1l1 0l0-1z`;
+      }
+    }
+    return path;
+  }, [masks]);
+
   return (
     <svg width={width} height="5">
-      {masks.map((mask, i) => (mask === 1) && (
-        <rect key={i} x={i % 5} y={~~(i / 5)} width={1} height={1} fill="currentColor" />
-      ))}
+      <path d={path} fill="currentColor" />
     </svg>
   );
 }
