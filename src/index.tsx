@@ -73,7 +73,7 @@ function update() {
   deckB.update();
   mixer.updateAnalyser(clock.deltaTime);
 
-  setTimeout(update, 10);
+  setTimeout(update, 1);
 }
 update();
 
