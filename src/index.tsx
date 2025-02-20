@@ -63,19 +63,26 @@ router.addSource('cue', cueMixer.output);
 router.addSource('deckA', deckA.node);
 router.addSource('deckB', deckB.node);
 
-const clock = new ClockRealtime();
-clock.play();
-
-function update() {
-  clock.update();
-
+// == updates ======================================================================================
+function updateAudio() {
   deckA.update();
   deckB.update();
-  mixer.updateAnalyser(clock.deltaTime);
 
-  setTimeout(update, 1);
+  setTimeout(updateAudio, 1);
 }
-update();
+updateAudio();
+
+const clockUI = new ClockRealtime();
+clockUI.play();
+function updateUI() {
+  clockUI.update();
+  const { deltaTime } = clockUI;
+
+  mixer.updateAnalyser(deltaTime);
+
+  requestAnimationFrame(updateUI);
+}
+requestAnimationFrame(updateUI);
 
 // == midi =========================================================================================
 function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }) {
