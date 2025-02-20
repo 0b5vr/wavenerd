@@ -1,3 +1,4 @@
+import { arraySerial } from '@0b5vr/experimental';
 import processorUrl from './TimeDomainDataProbeProcessor.js?url';
 
 const BLOCK_SIZE = 128;
@@ -13,31 +14,35 @@ export class TimeDomainDataProbeNode extends AudioWorkletNode {
     return audio.audioWorklet.addModule(processorUrl);
   }
 
+  public readonly channelCount: number;
   public readonly dataSize: number;
-  public data: Float32Array;
+  public data: Float32Array[];
 
-  constructor(audio: AudioContext, dataSize: number) {
+  constructor(audio: AudioContext, channelCount: number, dataSize: number) {
     super(audio, 'time-domain-data-probe-processor', {
       numberOfInputs: 1,
       numberOfOutputs: 1,
-      outputChannelCount: [1],
+      outputChannelCount: [channelCount],
     });
 
+    this.channelCount = channelCount;
     this.dataSize = dataSize;
-    this.data = new Float32Array(dataSize);
+    this.data = arraySerial(channelCount).map(() => new Float32Array(dataSize));
 
     this.port.onmessage = (event) => this.handleMessage(event);
   }
 
   private handleMessage(event: MessageEvent): void {
-    const { dataSize, data } = this;
+    const { channelCount, dataSize, data } = this;
 
-    const newData = event.data as Float32Array;
+    const newData = event.data as Float32Array[];
 
-    // slide the data
-    data.set(data.slice(BLOCK_SIZE), 0);
+    for (let i = 0; i < channelCount; i++) {
+      // slide the data
+      data[i].set(data[i].slice(BLOCK_SIZE), 0);
 
-    // add the new data
-    data.set(newData, dataSize - BLOCK_SIZE);
+      // add the new data
+      data[i].set(newData[i], dataSize - BLOCK_SIZE);
+    }
   }
 }

@@ -4,7 +4,7 @@ class TimeDomainDataProbeProcessor extends AudioWorkletProcessor {
   }
 
   process(inputs) {
-    const data = inputs?.[0]?.[0];
+    const data = inputs?.[0];
     if (data == null) {
       return true;
     }
