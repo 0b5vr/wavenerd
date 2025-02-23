@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
 import { Analyser } from '../../../audio/Analyser';
@@ -6,8 +6,8 @@ import { Visualizer } from '../../visualizers/Visualizer';
 import { useElement } from '../../utils/useElement';
 import { useRect } from '../../utils/useRect';
 import { useSpectrum } from './useSpectrum';
-import { useFrames } from '../../utils/useFrames';
 import { useOscilloscope } from './useOscilloscope';
+import { StuffContext } from '../../StuffContext';
 
 // == styles =======================================================================================
 const Canvas = styled.canvas`
@@ -25,6 +25,8 @@ export function DeckVisualizer({
   analyser: Analyser;
   className?: string;
 }) {
+  const { frameEmitter } = useContext(StuffContext)!;
+
   const [visualizer, setVisualizer] = useState<Visualizer>();
   const refCanvas = useRef<HTMLCanvasElement>(null);
   const canvas = useElement(refCanvas);
@@ -54,13 +56,17 @@ export function DeckVisualizer({
   const updateOscilloscope = useOscilloscope(visualizer, analyser);
 
   // update
-  useFrames(useCallback(() => {
-    visualizer?.clear();
+  useEffect(() => {
+    const udpate = frameEmitter.on('update', () => {
+      visualizer?.clear();
 
-    updateVectorscope();
-    updateSpectrum();
-    updateOscilloscope();
-  }, [visualizer, updateVectorscope, updateSpectrum, updateOscilloscope]));
+      updateVectorscope();
+      updateSpectrum();
+      updateOscilloscope();
+    });
+
+    return () => frameEmitter.off('update', udpate);
+  }, [frameEmitter, visualizer, updateVectorscope, updateSpectrum, updateOscilloscope]);
 
   // render
   return (

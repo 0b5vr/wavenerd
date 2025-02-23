@@ -10,10 +10,10 @@ const StyledIcon = styled(IconEye)`
 `;
 
 export function HeaderIconVisualizer() {
-  const { mixer } = useContext(StuffContext)!;
+  const { mixer, frameEmitter } = useContext(StuffContext)!;
 
   const handleClick = useCallback(() => {
-    openVisualizerWindow(mixer.analyserOut);
+    openVisualizerWindow(mixer.analyserOut, frameEmitter);
   }, [mixer.analyserOut]);
 
   return (

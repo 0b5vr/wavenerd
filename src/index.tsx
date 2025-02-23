@@ -3,7 +3,6 @@ import 'symbol-observable';
 import { SETTINGSMAN, Settings } from './SettingsManager';
 import { App } from './view/components/App';
 import { AudioDestinationRouter } from './audio/AudioDestinationRouter';
-import { ClockRealtime } from '@0b5vr/experimental';
 import { CueMixer } from './audio/CueMixer';
 import { MIDIMAN } from './MIDIManager';
 import { Mixer } from './audio/Mixer';
@@ -15,6 +14,7 @@ import { Library } from './Library';
 import { FullscreenManager } from './FullscreenManager';
 import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
+import { FrameEmitter } from './FrameEmitter';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');
@@ -72,17 +72,11 @@ function updateAudio() {
 }
 updateAudio();
 
-const clockUI = new ClockRealtime();
-clockUI.play();
-function updateUI() {
-  clockUI.update();
-  const { deltaTime } = clockUI;
+const frameEmitter = new FrameEmitter();
 
+frameEmitter.on('update', ({ deltaTime }) => {
   mixer.updateAnalyser(deltaTime);
-
-  requestAnimationFrame(updateUI);
-}
-requestAnimationFrame(updateUI);
+});
 
 // == midi =========================================================================================
 function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }) {
@@ -184,6 +178,7 @@ root.render(
       library,
       router,
       fullscreenManager,
+      frameEmitter,
     }}
   />,
 );

@@ -19,10 +19,10 @@ function suffixFnPercent(value: number) {
 }
 
 export function SettingsContentVisualization() {
-  const { mixer } = useContext(StuffContext)!;
+  const { mixer, frameEmitter } = useContext(StuffContext)!;
 
   const handleClickOpenVisualizerWindow = useCallback(() => {
-    openVisualizerWindow(mixer.analyserOut);
+    openVisualizerWindow(mixer.analyserOut, frameEmitter);
   }, [mixer.analyserOut]);
 
   return (

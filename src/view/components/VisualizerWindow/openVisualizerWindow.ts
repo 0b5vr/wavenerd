@@ -2,8 +2,9 @@ import style from './style.css';
 import { Analyser } from '../../../audio/Analyser';
 import { VisualizerWindowRenderer } from './VisualizerWindowRenderer';
 import { setupVisualizerWindowGUI } from './setupVisualizerWindowGUI';
+import { FrameEmitter } from '../../../FrameEmitter';
 
-export function openVisualizerWindow(analyser: Analyser): void {
+export function openVisualizerWindow(analyser: Analyser, frameEmitter: FrameEmitter): void {
   const visualizerWindow = window.open('about:blank', '_blank', 'height=480,width=480');
   if (visualizerWindow == null) {
     throw new Error('Failed to open visualizer window');
@@ -35,15 +36,11 @@ export function openVisualizerWindow(analyser: Analyser): void {
     visualizerWindow.close();
   });
 
-  const update = () => {
+  frameEmitter.on('update', () => {
     if (visualizerWindow.closed) {
-      console.log('visualizerWindow closed');
       return;
     }
 
-    requestAnimationFrame(update);
-
     renderer.update();
-  };
-  requestAnimationFrame(update);
+  });
 }
