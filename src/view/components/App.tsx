@@ -1,7 +1,7 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
-import styled, { css } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
@@ -28,6 +28,8 @@ import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
 import { Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
+import { useAtomValue } from 'jotai';
+import { isFullscreenAtom } from '../stores/atoms/fullscreen';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -116,6 +118,18 @@ const Root = styled.div<{ themeString: string }>`
   `}
 `;
 
+const GlobalStyleDisableSwipeNavi = createGlobalStyle`
+  // Disable two finger swipe navigation
+  // Ref: https://stackoverflow.com/questions/17474930/disable-chrome-two-fingers-back-forward-swipe
+  html {
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    overscroll-behavior-x: none;
+  }
+`;
+
 // == hooks ========================================================================================
 function useFocusDeckShortcuts({
   focusDeckAEditor,
@@ -147,6 +161,9 @@ export function OutOfContextApp() {
   const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
 
+  const isFullscreen = useAtomValue(isFullscreenAtom);
+  console.log(isFullscreen);
+
   useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
   useSettingsSubscribers(SETTINGSMAN);
@@ -172,6 +189,8 @@ export function OutOfContextApp() {
 
   return (
     <>
+      <GlobalStyleDisableSwipeNavi />
+
       <Root themeString={themeString}>
         <StyledHeader />
         <DeckRow>
