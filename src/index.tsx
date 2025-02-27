@@ -68,7 +68,7 @@ function updateAudio() {
   deckA.update();
   deckB.update();
 
-  setTimeout(updateAudio, 1);
+  setTimeout(updateAudio, 10);
 }
 updateAudio();
 
