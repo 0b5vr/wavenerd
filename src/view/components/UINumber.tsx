@@ -1,27 +1,28 @@
 import styled from 'styled-components';
 import { useMemo } from 'react';
 import { useSettings } from '../stores/hooks/useSettings';
+import { arraySerial } from '@0b5vr/experimental';
 
 // == paths ========================================================================================
 const charTable = (
-  'e7ff3c3c3cbdbd3c3c3cffe7' // 0
-  + 'c1c181818181818181818181' // 1
-  + 'f7ff0c0c0ceff7303030ffff' // 2
-  + 'f7ff0c0c0ce7ef0c0c0cfff7' // 3
-  + '3c3c3c3c3cffef0c0c0c0c0c' // 4
-  + 'ffff303030f7ef0c0c0cfff7' // 5
-  + 'e7f7303030f7ff3c3c3cffe7' // 6
-  + 'ffff0c0c0c0c0c0c0c0c0c0c' // 7
-  + 'e7ff3c3c3ce7ff3c3c3cffe7' // 8
-  + 'e7ff3c3c3cffef0c0c0cefe7' // 9
-  + 'e7ff3c3c3cffff3c3c3c3c3c' // a
-  + 'f7ff3c3c3cf7ff3c3c3cfff7' // b
-  + 'efff3030303030303030ffef' // c
-  + 'f7ff3c3c3c3c3c3c3c3cfff7' // d
-  + 'ffff303030f7f7303030ffff' // e
-  + 'ffff303030f7f73030303030' // f
-  + '000000000000000000003030' // .
-  + '000000303000000030300000' // :
+  '7effc3c3c3dbdbc3c3c3ff7e' // 0
+  + '1c1c18181818181818181818' // 1
+  + '7fffc0c0c0fe7f030303ffff' // 2
+  + '7fffc0c0c07efec0c0c0ff7f' // 3
+  + 'c3c3c3c3c3fffec0c0c0c0c0' // 4
+  + 'ffff0303037ffec0c0c0ff7f' // 5
+  + '7e7f0303037fffc3c3c3ff7e' // 6
+  + 'ffffc0c0c0c0c0c0c0c0c0c0' // 7
+  + '7effc3c3c37effc3c3c3ff7e' // 8
+  + '7effc3c3c3fffec0c0c0fe7e' // 9
+  + '7effc3c3c3ffffc3c3c3c3c3' // a
+  + '7fffc3c3c37fffc3c3c3ff7f' // b
+  + 'feff0303030303030303fffe' // c
+  + '7fffc3c3c3c3c3c3c3c3ff7f' // d
+  + 'ffff0303037f7f030303ffff' // e
+  + 'ffff0303037f7f0303030303' // f
+  + '000000000000000000000303' // .
+  + '000000030300000003030000' // :
 );
 
 const widths = '888888888888888822';
@@ -47,6 +48,22 @@ const charIndexMap = new Map<string, number>([
   ['.', 16],
   [':', 17],
 ]);
+
+const paths = arraySerial(widths.length).map((i) => {
+  let path = '';
+
+  for (let y = 0; y < 12; y++) {
+    const ic = i * 24 + y * 2;
+    const c = parseInt(charTable.substring(ic, ic + 2), 16);
+    for (let x = 0; x < 8; x++) {
+      if ((c >> x) & 1) {
+        path += `M${x} ${y}l0 1l1 0l0-1z`;
+      }
+    }
+  }
+
+  return path;
+});
 
 // == functions ====================================================================================
 function calcIsActiveArray(text: string, forceActiveFrom?: number): boolean[] {
@@ -96,30 +113,7 @@ function PixelChar({
 }) {
   const index = charIndexMap.get(char)!;
   const width = widths[index];
-
-  const masks: number[] = useMemo(() => {
-    const masks: number[] = [];
-    for (let i = 0; i < 24; i++) {
-      const c = parseInt(charTable[index * 24 + i], 16);
-      masks.push((c >> 0) & 1);
-      masks.push((c >> 1) & 1);
-      masks.push((c >> 2) & 1);
-      masks.push((c >> 3) & 1);
-    }
-    return masks;
-  }, [index]);
-
-  const path = useMemo(() => {
-    let path = '';
-    for (let i = 0; i < 96; i++) {
-      if (masks[i] === 1) {
-        const x = i % 8;
-        const y = ~~(i / 8);
-        path += `M${x} ${y}l0 1l1 0l0-1z`;
-      }
-    }
-    return path;
-  }, [masks]);
+  const path = paths[index];
 
   return (
     <svg width={width} height="12">

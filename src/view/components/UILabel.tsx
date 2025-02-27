@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
 import styled from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
 import { useSettings } from '../stores/hooks/useSettings';
+import { arraySerial } from '@0b5vr/experimental';
 
 // == constants ====================================================================================
 const charTable = '000001110155000avavau5ekfh842h61m9m110006111634443le4el44v440001100v0000001g8421vhlhv32222vgv1vvgvgvhhvggv1vgvv1vhvvggggvhvhvvhvgv0101001011421240v0v012421vhs0400000vhvhhf9vhvv111vfhhhfv1v1vv1f11v1thvhhvhh11111ggghvh979h1111vvllllvhhhhvhhhvvhv11vhhpvvhv9hv1vgvv4444hhhhvhhha4llllvha4ahhhvgvv842v711171248g744474ah000000v12000vhvhhf9vhvv111vfhhhfv1v1vv1f11v1thvhhvhh11111ggghvh979h1111vvllllvhhhhvhhhvvhv11vhhpvvhv9hv1vgvv4444hhhhvhhha4llllvha4ahhhvgvv842v62326111113262302l80';
@@ -9,6 +9,21 @@ const charTable = '000001110155000avavau5ekfh842h61m9m110006111634443le4el44v440
 
 const charWidthTable = '21355551335515155255555555113535555555555155555555555555555353552555555551555555555555555553135';
 //                       !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+
+const paths = arraySerial(charWidthTable.length).map((i) => {
+  let path = '';
+
+  for (let y = 0; y < 5; y++) {
+    const c = parseInt(charTable[i * 5 + y], 32);
+    for (let x = 0; x < 5; x++) {
+      if ((c >> x) & 1) {
+        path += `M${x} ${y}l0 1l1 0l0-1z`;
+      }
+    }
+  }
+
+  return path;
+});
 
 // == styles =======================================================================================
 const RootBase = styled.div`
@@ -33,33 +48,8 @@ const TextRoot = styled(RootBase)`
 // == children =====================================================================================
 function PixelLabelChar({ char }: { char: string }) {
   const index = char.charCodeAt(0) - 32;
-
   const width = parseInt(charWidthTable[index], 10);
-
-  const masks: number[] = useMemo(() => {
-    const masks: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      const c = parseInt(charTable[index * 5 + i], 32);
-      masks.push((c >> 0) & 1);
-      masks.push((c >> 1) & 1);
-      masks.push((c >> 2) & 1);
-      masks.push((c >> 3) & 1);
-      masks.push((c >> 4) & 1);
-    }
-    return masks;
-  }, [index]);
-
-  const path = useMemo(() => {
-    let path = '';
-    for (let i = 0; i < 25; i++) {
-      if (masks[i] === 1) {
-        const x = i % 5;
-        const y = ~~(i / 5);
-        path += `M${x} ${y}l0 1l1 0l0-1z`;
-      }
-    }
-    return path;
-  }, [masks]);
+  const path = paths[index];
 
   return (
     <svg width={width} height="5">
