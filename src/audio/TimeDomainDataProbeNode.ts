@@ -40,6 +40,8 @@ export class TimeDomainDataProbeNode extends AudioWorkletNode {
     const newData = event.data as Float32Array[];
 
     for (let i = 0; i < channelCount; i++) {
+      if (newData[i] == null) { continue; }
+
       const len = newData[i].length;
 
       // slide the data
