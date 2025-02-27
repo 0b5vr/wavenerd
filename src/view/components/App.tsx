@@ -28,8 +28,6 @@ import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
 import { Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
-import { useAtomValue } from 'jotai';
-import { isFullscreenAtom } from '../stores/atoms/fullscreen';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -160,9 +158,6 @@ export function OutOfContextApp() {
 
   const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
-
-  const isFullscreen = useAtomValue(isFullscreenAtom);
-  console.log(isFullscreen);
 
   useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
