@@ -1,4 +1,3 @@
-import { ANALYSER_TIME_DOMAIN_SIZE } from '../../audio/Analyser';
 import { Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
@@ -7,7 +6,7 @@ import { glCreateTexture } from './gl/glCreateTexture';
 import vectorscopeVert from './vectorscope.vert?raw';
 
 const DRAW_LENGTH = 4096;
-const DRAW_INDEX_RANGE = 1024;
+const BUFFER_SIZE = 1024;
 
 export class VisualizerVectorscope {
   public readonly visualizer: Visualizer;
@@ -39,7 +38,7 @@ export class VisualizerVectorscope {
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
-      array[i] = ANALYSER_TIME_DOMAIN_SIZE - DRAW_INDEX_RANGE + i / (DRAW_LENGTH - 1) * (DRAW_INDEX_RANGE - 1);
+      array[i] = i / (DRAW_LENGTH - 1) * (BUFFER_SIZE - 1);
     }
     this.__buffer = glCreateBuffer(gl, array);
 
@@ -73,12 +72,12 @@ export class VisualizerVectorscope {
       gl.TEXTURE_2D, // target
       0, // level
       gl.R32F, // internalformat
-      ANALYSER_TIME_DOMAIN_SIZE, // width
+      BUFFER_SIZE, // width
       1, // height
       0, // border
       gl.RED, // format
       gl.FLOAT, // type
-      dataL, // pixels
+      dataL.subarray(-BUFFER_SIZE), // pixels
     );
     gl.bindTexture(gl.TEXTURE_2D, null);
 
@@ -87,12 +86,12 @@ export class VisualizerVectorscope {
       gl.TEXTURE_2D, // target
       0, // level
       gl.R32F, // internalformat
-      ANALYSER_TIME_DOMAIN_SIZE, // width
+      BUFFER_SIZE, // width
       1, // height
       0, // border
       gl.RED, // format
       gl.FLOAT, // type
-      dataR, // pixels
+      dataR.subarray(-BUFFER_SIZE), // pixels
     );
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
@@ -110,7 +109,7 @@ export class VisualizerVectorscope {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     gl.uniform1f(this.__locations.aspect, canvas.width / canvas.height);
-    gl.uniform1f(this.__locations.bufferSize, ANALYSER_TIME_DOMAIN_SIZE);
+    gl.uniform1f(this.__locations.bufferSize, BUFFER_SIZE);
     gl.uniform4f(this.__locations.color, ...this.color);
     gl.uniform1f(this.__locations.pointSize, this.pointSize);
     gl.uniform1f(this.__locations.pointShape, this.pointShape);

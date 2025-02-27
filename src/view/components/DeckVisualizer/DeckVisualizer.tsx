@@ -8,6 +8,7 @@ import { useRect } from '../../utils/useRect';
 import { useSpectrum } from './useSpectrum';
 import { useOscilloscope } from './useOscilloscope';
 import { StuffContext } from '../../StuffContext';
+import { useWaveform } from './useWaveform';
 
 // == styles =======================================================================================
 const Canvas = styled.canvas`
@@ -54,6 +55,7 @@ export function DeckVisualizer({
   const updateVectorscope = useVectorscope(visualizer, analyser);
   const updateSpectrum = useSpectrum(visualizer, analyser);
   const updateOscilloscope = useOscilloscope(visualizer, analyser);
+  const updateWaveform = useWaveform(visualizer, analyser);
 
   // update
   useEffect(() => {
@@ -63,6 +65,7 @@ export function DeckVisualizer({
       updateVectorscope();
       updateSpectrum();
       updateOscilloscope();
+      updateWaveform();
     });
 
     return () => frameEmitter.off('update', udpate);

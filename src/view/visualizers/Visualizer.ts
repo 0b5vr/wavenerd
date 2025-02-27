@@ -1,6 +1,7 @@
 import { VisualizerOscilloscope } from './VisualizerOscilloscope';
 import { VisualizerSpectrum } from './VisualizerSpectrum';
 import { VisualizerVectorscope } from './VisualizerVectorscope';
+import { VisualizerWaveform } from './VisualizerWaveform';
 
 export class Visualizer {
   public readonly canvas: HTMLCanvasElement;
@@ -9,6 +10,7 @@ export class Visualizer {
   public readonly vectorscope: VisualizerVectorscope;
   public readonly spectrum: VisualizerSpectrum;
   public readonly oscilloscope: VisualizerOscilloscope;
+  public readonly waveform: VisualizerWaveform;
 
   public constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -21,6 +23,7 @@ export class Visualizer {
     this.vectorscope = new VisualizerVectorscope(this);
     this.spectrum = new VisualizerSpectrum(this);
     this.oscilloscope = new VisualizerOscilloscope(this);
+    this.waveform = new VisualizerWaveform(this);
   }
 
   public clear(): void {

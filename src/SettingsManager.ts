@@ -7,6 +7,7 @@ export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'tran
 export type VectorscopeModeType = 'none' | 'line' | 'points';
 export type SpectrumModeType = 'none' | 'line';
 export type OscilloscopeModeType = 'none' | 'line';
+export type WaveformModeType = 'none' | 'line';
 
 export interface Settings {
   latencyBlocks: number;
@@ -24,6 +25,9 @@ export interface Settings {
   oscilloscopeMode: OscilloscopeModeType;
   oscilloscopeOpacity: number;
   oscilloscopeColor: string;
+  waveformMode: WaveformModeType;
+  waveformOpacity: number;
+  waveformColor: string;
   theme: string;
   headerItems: string;
   headerIcons: string;
@@ -54,6 +58,9 @@ export const defaultSettings: Settings = {
   oscilloscopeMode: 'none',
   oscilloscopeOpacity: 0.2,
   oscilloscopeColor: '#ffffff',
+  waveformMode: 'none',
+  waveformOpacity: 0.2,
+  waveformColor: '#ffffff',
   theme: 'monokaiSharp',
   headerItems: 'logo,transport,time,beat-number,bpm,nudge',
   headerIcons: 'recorder,midi,settings,help,github',

@@ -103,10 +103,35 @@ export function SettingsContentVisualization() {
         stalkerText="Change the color of the oscilloscope."
       />
 
+      <SettingsItemSelect
+        settingsKey="waveformMode"
+        name="Waveform Mode"
+        stalkerText="Change the type of the waveform.&#10;&quot;Line&quot; should work fine, but you can use &quot;None&quot; if you need no funky"
+      >
+        <option value="none">None</option>
+        <option value="line">Line</option>
+      </SettingsItemSelect>
+
+      <SettingsItemRange
+        settingsKey="waveformOpacity"
+        name="Waveform Opacity"
+        stalkerText="Change the opacity of the waveform."
+        min={0}
+        max={1}
+        step={0.01}
+        suffixFn={suffixFnPercent}
+      />
+
+      <SettingsItemColor
+        settingsKey="waveformColor"
+        name="Waveform Color"
+        stalkerText="Change the color of the waveform."
+      />
+
       <SettingsItemButton
         name="Open Visualizer Window"
         label="Open"
-        stalkerText="Open a new window with the visualizer."
+        stalkerText="Open a new window for the visualizer."
         onClick={handleClickOpenVisualizerWindow}
       />
     </>

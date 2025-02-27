@@ -1,7 +1,7 @@
 import { createCrossoverIR } from './createCrossoverIR';
 import { TimeDomainDataProbeNode } from './TimeDomainDataProbeNode';
 
-export const ANALYSER_TIME_DOMAIN_SIZE = 8192;
+export const ANALYSER_TIME_DOMAIN_SIZE = 65536;
 export const ANALYSER_FREQUENCY_SIZE = 1024;
 export const ANALYSER_LO_FREQUENCY = 200;
 
