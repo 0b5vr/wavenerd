@@ -75,7 +75,7 @@ updateAudio();
 const frameEmitter = new FrameEmitter();
 
 frameEmitter.on('update', ({ deltaTime }) => {
-  mixer.updateAnalyser(deltaTime);
+  mixer.updateAnalysers(deltaTime);
 });
 
 // == midi =========================================================================================

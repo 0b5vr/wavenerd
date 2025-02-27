@@ -68,6 +68,8 @@ export class Analyser {
   }
 
   public update(): void {
+    this.__probeNode.update();
+    this.__probeNodeLoL.update();
     this.__analyserNodeL.getFloatFrequencyData(this.frequencyL);
   }
 }

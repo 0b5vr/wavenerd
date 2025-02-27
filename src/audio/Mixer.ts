@@ -125,7 +125,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__channelB.on('change', (event) => this.__emit('change', { channelB: event }));
   }
 
-  public updateAnalyser(deltaTime: number): void {
+  public updateAnalysers(deltaTime: number): void {
     this.analyserInA.update();
     this.analyserInB.update();
     this.analyserOut.update();
