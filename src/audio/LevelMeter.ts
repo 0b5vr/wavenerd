@@ -1,6 +1,8 @@
 import { Analyser } from './Analyser';
 import { EventEmittable } from '../utils/EventEmittable';
 
+const ENV_SIZE_MAX = 2048;
+
 export interface LevelMeterResult {
   level: number;
   levelL: number;
@@ -37,18 +39,23 @@ export class LevelMeter extends EventEmittable<LevelMeterEvents> {
 
     const decay = Math.exp(-5.0 * deltaTime);
 
+    // simple envelope follower
+    const envSize = Math.min(~~(this.analyser.audio.sampleRate * deltaTime), ENV_SIZE_MAX);
+
     this.__levelL *= decay;
-    timeDomainL.forEach((v) => {
-      this.__levelL = Math.max(this.__levelL, Math.abs(v));
-    });
+    for (let i = timeDomainL.length - envSize; i < timeDomainL.length; i++) {
+      this.__levelL = Math.max(this.__levelL, Math.abs(timeDomainL[i]));
+    }
 
     this.__levelR *= decay;
-    timeDomainR.forEach((v) => {
-      this.__levelR = Math.max(this.__levelR, Math.abs(v));
-    });
+    for (let i = timeDomainR.length - envSize; i < timeDomainR.length; i++) {
+      this.__levelR = Math.max(this.__levelR, Math.abs(timeDomainR[i]));
+    }
 
+    // take the maximum among left and right channels
     this.__level = Math.max(this.__levelL, this.__levelR);
 
+    // the peak indicator falls down with a velocity
     this.__vpeakL -= 0.01 * deltaTime;
     this.__peakL = Math.max(0.0, this.__peakL + this.__vpeakL);
     if (this.__peakL < this.__levelL) {
