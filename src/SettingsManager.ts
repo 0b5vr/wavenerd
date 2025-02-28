@@ -10,6 +10,7 @@ export type OscilloscopeModeType = 'none' | 'line';
 export type WaveformModeType = 'none' | 'line';
 
 export interface Settings {
+  blocksPerRender: number;
   latencyBlocks: number;
   channelRouting: string;
   masterDCRemoval: boolean;
@@ -43,6 +44,7 @@ export interface Settings {
 }
 
 export const defaultSettings: Settings = {
+  blocksPerRender: 16,
   latencyBlocks: 32,
   channelRouting: 'master:0,master:1,cue:0,cue:1',
   masterDCRemoval: true,

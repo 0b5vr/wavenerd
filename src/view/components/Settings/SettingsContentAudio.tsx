@@ -1,3 +1,4 @@
+import { SettingsItemBlocksPerRender } from './SettingsItemBlocksPerRender';
 import { SettingsItemBool } from './SettingsItemBool';
 import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
@@ -7,6 +8,8 @@ import { SettingsItemSelect } from './SettingsItemSelect';
 export function SettingsContentAudio() {
   return (
     <>
+      <SettingsItemBlocksPerRender />
+
       <SettingsItemLatencyBlocks />
 
       <SettingsItemChannelRouting />

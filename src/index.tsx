@@ -134,6 +134,11 @@ function applySettings(settings: Partial<Settings>) {
     router.setRouting(settings.channelRouting);
   }
 
+  if (settings.blocksPerRender != null) {
+    deckA.blocksPerRender = settings.blocksPerRender;
+    deckB.blocksPerRender = settings.blocksPerRender;
+  }
+
   if (settings.latencyBlocks != null) {
     deckA.latencyBlocks = settings.latencyBlocks;
     deckB.latencyBlocks = settings.latencyBlocks;
