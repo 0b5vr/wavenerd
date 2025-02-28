@@ -5,7 +5,7 @@ class TimeDomainDataProbeProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
 
-    this.index = 0;
+    this.head = 0;
     this.bank = [];
 
     this.port.onmessage = () => this.cashout();
@@ -20,24 +20,28 @@ class TimeDomainDataProbeProcessor extends AudioWorkletProcessor {
       return true;
     }
 
+    if (this.head + BLOCK_SIZE > BANK_SIZE) {
+      this.cashout();
+    }
+
     for (let iCh = 0; iCh < data.length; iCh++) {
       if (this.bank[iCh] == null) {
         this.bank[iCh] = new Float32Array(BANK_SIZE);
       }
 
-      this.bank[iCh].set(data[iCh], this.index);
+      this.bank[iCh].set(data[iCh], this.head);
     }
 
-    this.index += BLOCK_SIZE;
+    this.head += BLOCK_SIZE;
 
     return true;
   }
 
   cashout() {
     this.port.postMessage(
-      this.bank.map((ch) => ch.subarray(0, this.index)),
+      this.bank.map((ch) => ch.subarray(0, this.head)),
     );
-    this.index = 0;
+    this.head = 0;
   }
 }
 
