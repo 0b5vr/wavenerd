@@ -64,11 +64,13 @@ router.addSource('deckA', deckA.node);
 router.addSource('deckB', deckB.node);
 
 // == updates ======================================================================================
-function updateAudio() {
-  deckA.update();
-  deckB.update();
+async function updateAudio() {
+  await Promise.all([
+    deckA.update(),
+    deckB.update(),
+  ]);
 
-  setTimeout(updateAudio, 10);
+  setTimeout(updateAudio);
 }
 updateAudio();
 
