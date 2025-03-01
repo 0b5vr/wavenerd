@@ -1,23 +1,26 @@
-import { useMemo } from 'react';
+import { useRef } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
+import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
 const Bg = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 1px;
   background: #000;
   opacity: 0.8;
+  transform-origin: top left;
 `;
 
 const Bg2 = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 1px;
   background: #000;
   opacity: 0.8;
+  transform-origin: top left;
 `;
 
 const Fg = styled.div`
@@ -42,30 +45,31 @@ export function LevelMeter({
   peak: number;
   className?: string;
 }) {
-  const p = useMemo(
-    () => saturate(peak * 0.8),
-    [peak],
-  );
+  const ref = useRef<HTMLDivElement>(null);
+  const rect = useRect(ref);
+  const height = rect?.height ?? 0;
 
-  const l = useMemo(
-    () => saturate(level * 0.8),
-    [level],
-  );
+  const p = saturate(peak * 0.8);
+  const l = saturate(level * 0.8);
+
+  const peakTop = height * (1.0 - p);
+  const peakBottom = peakTop + 2;
+  const levelTop = height * (1.0 - l);
 
   return (
     <Root
+      ref={ref}
       className={className}
     >
       <Fg>
         <Bg
           style={{
-            height: `${100.0 - 100.0 * p}%`,
+            transform: `scaleY(${peakTop})`,
           }}
         />
         <Bg2
           style={{
-            top: `calc( ${100.0 - 100.0 * p}% + 2px )`,
-            height: `calc( ${100.0 * (p - l)}% - 2px )`,
+            transform: `translateY(${peakBottom}px) scaleY(${levelTop - peakBottom})`,
           }}
         />
       </Fg>
