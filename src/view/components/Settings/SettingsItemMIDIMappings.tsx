@@ -26,11 +26,10 @@ const blink = keyframes`
 `;
 
 const Indicator = styled.div<{ isActive: boolean }>`
-  width: 4px;
-  height: 4px;
-  border-radius: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 2.5px;
   background: ${ThemeVars.modalBg};
-  box-shadow: 0 0 0 1px ${ThemeVars.gray};
 
   ${({ isActive }) => isActive && css`
     animation: step-end ${blink} 0.2s forwards;
