@@ -45,7 +45,7 @@ export class TimeDomainDataProbeNode extends AudioWorkletNode {
       const len = newData[i].length;
 
       // slide the data
-      data[i].set(data[i].slice(len), 0);
+      data[i].set(data[i].subarray(len), 0);
 
       // add the new data
       data[i].set(newData[i], dataSize - len);

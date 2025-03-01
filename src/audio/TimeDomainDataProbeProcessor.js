@@ -38,9 +38,10 @@ class TimeDomainDataProbeProcessor extends AudioWorkletProcessor {
   }
 
   cashout() {
-    this.port.postMessage(
-      this.bank.map((ch) => ch.subarray(0, this.head)),
-    );
+    const arrays = this.bank.map((ch) => ch.slice(0, this.head));
+    const buffers = arrays.map((array) => array.buffer);
+
+    this.port.postMessage(arrays, buffers);
     this.head = 0;
   }
 }
