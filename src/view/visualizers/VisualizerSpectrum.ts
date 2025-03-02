@@ -1,4 +1,4 @@
-import { ANALYSER_FREQUENCY_SIZE } from '../../audio/Analyser';
+import { ANALYSER_FREQUENCY_SIZE } from '../../audio/constants';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';

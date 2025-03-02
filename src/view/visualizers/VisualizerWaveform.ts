@@ -1,11 +1,11 @@
 import { lerp } from '@0b5vr/experimental';
-import { ANALYSER_TIME_DOMAIN_SIZE } from '../../audio/Analyser';
 import { Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import waveformVert from './waveform.vert?raw';
+import { ANALYSER_TIME_DOMAIN_SIZE } from '../../audio/constants';
 
 const DRAW_LENGTH = 4096;
 

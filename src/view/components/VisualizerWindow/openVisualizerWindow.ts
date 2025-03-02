@@ -1,6 +1,6 @@
 import style from './style.css';
 import { Analyser } from '../../../audio/Analyser';
-import { VisualizerWindowRenderer } from './VisualizerWindowRenderer';
+import { VisualizerWindowProxy } from './VisualizerWindowProxy';
 import { setupVisualizerWindowGUI } from './setupVisualizerWindowGUI';
 import { FrameEmitter } from '../../../FrameEmitter';
 
@@ -20,27 +20,29 @@ export function openVisualizerWindow(analyser: Analyser, frameEmitter: FrameEmit
   canvas.id = 'canvas';
   visualizerWindow.document.body.appendChild(canvas);
 
-  const renderer = new VisualizerWindowRenderer(visualizerWindow, canvas, analyser);
+  const proxy = new VisualizerWindowProxy(canvas, analyser);
 
-  setupVisualizerWindowGUI(visualizerWindow, renderer);
+  setupVisualizerWindowGUI(visualizerWindow, (params) => proxy.setParams(params));
 
   visualizerWindow.addEventListener('resize', () => {
-    renderer.visualizer.resize(visualizerWindow.innerWidth, visualizerWindow.innerHeight);
+    proxy.resize(visualizerWindow.innerWidth, visualizerWindow.innerHeight);
   });
 
   visualizerWindow.addEventListener('beforeunload', () => {
-    renderer.visualizer.dispose();
+    proxy.dispose();
   });
 
   window.addEventListener('beforeunload', () => {
     visualizerWindow.close();
   });
 
-  frameEmitter.on('update', () => {
+  const update = () => {
     if (visualizerWindow.closed) {
+      frameEmitter.off('update', update);
       return;
     }
 
-    renderer.update();
-  });
+    proxy.update();
+  };
+  frameEmitter.on('update', update);
 }

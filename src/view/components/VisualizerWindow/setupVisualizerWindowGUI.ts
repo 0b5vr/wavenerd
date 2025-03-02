@@ -1,5 +1,6 @@
 import { Pane } from 'tweakpane';
-import { VisualizerWindowRenderer } from './VisualizerWindowRenderer';
+import { VisualizerWindowParams } from './VisualizerWindowParams';
+import { visualizerWindowDefaultParams } from './visualizerWindowDefaultParams';
 
 /**
  * tweakpane style element is not loaded into the visualizer window
@@ -29,25 +30,10 @@ function showOnMouseOver(window: Window, element: HTMLElement): void {
   });
 }
 
-interface VisualizerWindowParams {
-  mode: 'vectorscope' | 'oscilloscope' | 'spectrum';
-  color: { r: number; g: number; b: number };
-  opacity: number;
-  vectorscope: {
-    mode: 'points' | 'line';
-    scale: number;
-    pointSize: number;
-    pointShape: number;
-  };
-  oscilloscope: {
-    scale: number;
-  };
-  spectrum: {
-    scale: number;
-  };
-}
-
-export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: VisualizerWindowRenderer): void {
+export function setupVisualizerWindowGUI(
+  visualizerWindow: Window,
+  callback: (params: VisualizerWindowParams) => void,
+): void {
   // -- hello tweakpane ----------------------------------------------------------------------------
   const pane = new Pane({
     container: visualizerWindow.document.body,
@@ -60,23 +46,7 @@ export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: Vis
   showOnMouseOver(visualizerWindow, pane.element);
 
   // -- init params with default values ------------------------------------------------------------
-  const params: VisualizerWindowParams = {
-    mode: 'vectorscope',
-    color: { r: 1.0, g: 1.0, b: 1.0 },
-    opacity: 1.0,
-    vectorscope: {
-      mode: 'points',
-      scale: 1.0,
-      pointSize: 4.0,
-      pointShape: 0.0,
-    },
-    oscilloscope: {
-      scale: 0.8,
-    },
-    spectrum: {
-      scale: 1.0,
-    },
-  };
+  const params: VisualizerWindowParams = structuredClone(visualizerWindowDefaultParams);
 
   // -- setup GUI ----------------------------------------------------------------------------------
   pane.addBinding(params, 'mode', {
@@ -86,17 +56,9 @@ export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: Vis
       'Oscilloscope': 'oscilloscope',
       'Spectrum': 'spectrum',
     },
-  }).on('change', ({ value }) => {
-    renderer.mode = value;
-  });
+  }).on('change', () => callback(params));
 
-  const applyColor = () => {
-    const color = [params.color.r, params.color.g, params.color.b, params.opacity] as [number, number, number, number];
-
-    renderer.visualizer.vectorscope.color = color;
-    renderer.visualizer.oscilloscope.color = color;
-    renderer.visualizer.spectrum.color = color;
-  };
+  const applyColor = () => callback(params);
 
   pane.addBinding(params, 'color', {
     label: 'Color',
@@ -120,63 +82,47 @@ export function setupVisualizerWindowGUI(visualizerWindow: Window, renderer: Vis
       'Points': 'points',
       'Line': 'line',
     },
-  }).on('change', () => {
-    renderer.visualizer.vectorscope.mode = params.vectorscope.mode;
-  });
+  }).on('change', () => callback(params));
 
   vectorscopeFolder.addBinding(params.vectorscope, 'scale', {
     label: 'Scale',
     min: 0.0,
     max: 4.0,
-  }).on('change', () => {
-    renderer.visualizer.vectorscope.scale = params.vectorscope.scale;
-  });
+  }).on('change', () => callback(params));
 
   vectorscopeFolder.addBinding(params.vectorscope, 'pointSize', {
     label: 'Point Size',
     min: 1.0,
     max: 16.0,
-  }).on('change', () => {
-    renderer.visualizer.vectorscope.pointSize = params.vectorscope.pointSize;
-  });
+  }).on('change', () => callback(params));
 
   vectorscopeFolder.addBinding(params.vectorscope, 'pointShape', {
     label: 'Point Shape',
     min: 0.0,
     max: 1.0,
-  }).on('change', () => {
-    renderer.visualizer.vectorscope.pointShape = params.vectorscope.pointShape;
-  });
+  }).on('change', () => callback(params));
 
   const oscilloscopeFolder = pane.addFolder({
     title: 'Oscilloscope',
     expanded: false,
-  }).on('change', () => {
-    renderer.visualizer.oscilloscope.scale = params.oscilloscope.scale;
-  });
+  }).on('change', () => callback(params));
 
   oscilloscopeFolder.addBinding(params.oscilloscope, 'scale', {
     label: 'Scale',
     min: 0.0,
     max: 1.0,
-  }).on('change', () => {
-    renderer.visualizer.oscilloscope.scale = params.oscilloscope.scale;
-  });
+  }).on('change', () => callback(params));
 
   const spectrumFolder = pane.addFolder({
     title: 'Spectrum',
     expanded: false,
-  }).on('change', () => {
-    renderer.visualizer.spectrum.scale = params.spectrum.scale;
-  });
+  }).on('change', () => callback(params));
 
   spectrumFolder.addBinding(params.spectrum, 'scale', {
     label: 'Scale',
     min: 0.0,
     max: 1.0,
-  }).on('change', () => {
-    renderer.visualizer.spectrum.scale = params.spectrum.scale;
-  });
+  }).on('change', () => callback(params));
 
   pane.addBlade({ view: 'separator' });
 
