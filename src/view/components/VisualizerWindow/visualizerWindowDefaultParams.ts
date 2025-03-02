@@ -1,3 +1,4 @@
+import { ANALYSER_TIME_DOMAIN_SIZE } from '../../../audio/constants';
 import { VisualizerWindowParams } from './VisualizerWindowParams';
 
 export const visualizerWindowDefaultParams: VisualizerWindowParams = {
@@ -15,5 +16,9 @@ export const visualizerWindowDefaultParams: VisualizerWindowParams = {
   },
   spectrum: {
     scale: 1.0,
+  },
+  waveform: {
+    width: ANALYSER_TIME_DOMAIN_SIZE,
+    scale: 0.8,
   },
 };

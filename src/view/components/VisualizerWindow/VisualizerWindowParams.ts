@@ -1,5 +1,5 @@
 export interface VisualizerWindowParams {
-  mode: 'vectorscope' | 'oscilloscope' | 'spectrum';
+  mode: 'vectorscope' | 'oscilloscope' | 'spectrum' | 'waveform';
   color: { r: number; g: number; b: number };
   opacity: number;
   vectorscope: {
@@ -12,6 +12,10 @@ export interface VisualizerWindowParams {
     scale: number;
   };
   spectrum: {
+    scale: number;
+  };
+  waveform: {
+    width: number;
     scale: number;
   };
 }

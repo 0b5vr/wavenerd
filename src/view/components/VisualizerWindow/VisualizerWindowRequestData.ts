@@ -6,6 +6,7 @@ export type VisualizerWindowRequestData = (
   | { type: 'updateVectorscope'; timeDomainL: Float32Array; timeDomainR: Float32Array }
   | { type: 'updateOscilloscope'; timeDomainL: Float32Array; timeDomainLoL: Float32Array; convolverBufferLength: number }
   | { type: 'updateSpectrum'; frequencyL: Float32Array }
+  | { type: 'updateWaveform'; timeDomainL: Float32Array }
   | { type: 'resize'; width: number; height: number }
   | { type: 'dispose' }
   | { type: '__heck' } // to make type check work

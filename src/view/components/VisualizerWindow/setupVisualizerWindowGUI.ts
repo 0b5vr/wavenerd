@@ -1,6 +1,7 @@
 import { Pane } from 'tweakpane';
 import { VisualizerWindowParams } from './VisualizerWindowParams';
 import { visualizerWindowDefaultParams } from './visualizerWindowDefaultParams';
+import { ANALYSER_TIME_DOMAIN_SIZE } from '../../../audio/constants';
 
 /**
  * tweakpane style element is not loaded into the visualizer window
@@ -55,6 +56,7 @@ export function setupVisualizerWindowGUI(
       'Vectorscope': 'vectorscope',
       'Oscilloscope': 'oscilloscope',
       'Spectrum': 'spectrum',
+      'Waveform': 'waveform',
     },
   }).on('change', () => callback(params));
 
@@ -119,6 +121,24 @@ export function setupVisualizerWindowGUI(
   }).on('change', () => callback(params));
 
   spectrumFolder.addBinding(params.spectrum, 'scale', {
+    label: 'Scale',
+    min: 0.0,
+    max: 1.0,
+  }).on('change', () => callback(params));
+
+  const waveformFolder = pane.addFolder({
+    title: 'Waveform',
+    expanded: false,
+  }).on('change', () => callback(params));
+
+  waveformFolder.addBinding(params.waveform, 'width', {
+    label: 'Width',
+    min: 256,
+    max: ANALYSER_TIME_DOMAIN_SIZE,
+    step: 1,
+  }).on('change', () => callback(params));
+
+  waveformFolder.addBinding(params.waveform, 'scale', {
     label: 'Scale',
     min: 0.0,
     max: 1.0,

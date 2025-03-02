@@ -19,6 +19,8 @@ self.onmessage = (event: MessageEvent<VisualizerWindowRequestData>) => {
     handleUpdateOscilloscope(message);
   } else if (message.type === 'updateSpectrum') {
     handleUpdateSpectrum(message);
+  } else if (message.type === 'updateWaveform') {
+    handleUpdateWaveform(message);
   } else if (message.type === 'resize') {
     handleResize(message);
   } else if (message.type === 'dispose') {
@@ -43,7 +45,7 @@ function handleUpdateVectorscope(message: VisualizerWindowRequestData & { type: 
 
   visualizer.clear();
 
-  visualizer.vectorscope.setData(timeDomainL!, timeDomainR!);
+  visualizer.vectorscope.setData(timeDomainL, timeDomainR);
   visualizer.vectorscope.render();
 }
 
@@ -58,8 +60,8 @@ function handleUpdateOscilloscope(message: VisualizerWindowRequestData & { type:
 
   visualizer.clear();
 
-  visualizer.oscilloscope.setData(timeDomainL!);
-  visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL!, convolverBufferLength!);
+  visualizer.oscilloscope.setData(timeDomainL);
+  visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL, convolverBufferLength);
   visualizer.oscilloscope.render();
 }
 
@@ -72,8 +74,21 @@ function handleUpdateSpectrum(message: VisualizerWindowRequestData & { type: 'up
 
   visualizer.clear();
 
-  visualizer.spectrum.setData(frequencyL!);
+  visualizer.spectrum.setData(frequencyL);
   visualizer.spectrum.render();
+}
+
+function handleUpdateWaveform(message: VisualizerWindowRequestData & { type: 'updateWaveform' }): void {
+  if (!visualizer) return;
+
+  const {
+    timeDomainL,
+  } = message;
+
+  visualizer.clear();
+
+  visualizer.waveform.setData(timeDomainL);
+  visualizer.waveform.render();
 }
 
 function setParams(params: VisualizerWindowParams): void {
@@ -99,6 +114,11 @@ function setParams(params: VisualizerWindowParams): void {
   visualizer.spectrum.mode = 'line';
   visualizer.spectrum.color = color;
   visualizer.spectrum.scale = params.spectrum.scale;
+
+  visualizer.waveform.mode = 'line';
+  visualizer.waveform.color = color;
+  visualizer.waveform.windowWidth = params.waveform.width;
+  visualizer.waveform.scale = params.waveform.scale;
 }
 
 function handleSetParams(message: VisualizerWindowRequestData & { type: 'setParams' }): void {

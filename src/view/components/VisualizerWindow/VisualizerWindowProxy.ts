@@ -67,6 +67,17 @@ export class VisualizerWindowProxy {
       }, [
         frequencyLCopy.buffer,
       ]);
+    } else if (this.params.mode === 'waveform') {
+      const { timeDomainL } = analyser;
+
+      const timeDomainLCopy = new Float32Array(timeDomainL);
+
+      this.__sendMessage({
+        type: 'updateWaveform',
+        timeDomainL: timeDomainLCopy,
+      }, [
+        timeDomainLCopy.buffer,
+      ]);
     }
   }
 
