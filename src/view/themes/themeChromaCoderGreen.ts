@@ -22,7 +22,7 @@ const cyan = '#00ccff';
 const cyanBright = '#82d8ff';
 const constblue = '#ae78ff';
 
-export const themeChromaCoder: Theme = {
+export const themeChromaCoderGreen: Theme = {
   ui: {
     black: '#000000',
     white: '#ffffff',

@@ -1,5 +1,5 @@
 import { Theme } from './Theme';
-import { themeChromaCoder } from './themeChromaCoder';
+import { themeChromaCoderGreen } from './themeChromaCoderGreen';
 import { themeMonokaiSharp } from './themeMonokaiSharp';
 import { themeShadertoyDark } from './themeShadertoyDark';
 import { themeShadertoyLight } from './themeShadertoyLight';
@@ -8,6 +8,7 @@ import { themeSolarizedLight } from './themeSolarizedLight';
 import { themeSwedishBox } from './themeSwedishBox';
 import { themeSwedishMachine } from './themeSwedishMachine';
 import { createThemeFlush } from './createThemeFlush';
+import { themeChromaCoderBlue } from './themeChromaCoderBlue';
 
 export const themes: Record<string, {
   displayName: string;
@@ -17,9 +18,13 @@ export const themes: Record<string, {
     displayName: 'Monokai Sharp',
     theme: themeMonokaiSharp,
   },
-  'chromaCoder': {
-    displayName: 'ChromaCoder',
-    theme: themeChromaCoder,
+  'chromaCoderGreen': {
+    displayName: 'ChromaCoder Green',
+    theme: themeChromaCoderGreen,
+  },
+  'chromaCoderBlue': {
+    displayName: 'ChromaCoder Blue',
+    theme: themeChromaCoderBlue,
   },
   'shadertoyDark': {
     displayName: 'Shadertoy Dark',

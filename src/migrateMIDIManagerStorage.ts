@@ -1,4 +1,6 @@
-const LATEST_VERSION = 2025_02_11;
+const VERSION_2024_11_23 = 2024_11_23;
+const VERSION_2025_02_11 = 2025_02_11;
+const VERSION_LATEST = VERSION_2025_02_11;
 
 const nameMap20241123: Record<string, string> = {
   'XFader': '/mixer/xfader_pos',
@@ -23,7 +25,7 @@ const nameMap20241123: Record<string, string> = {
 };
 
 function migrate20241123(data: any): any {
-  if (data.version != null && data.version >= 2024_11_23) { return data; }
+  if (data.version != null && data.version >= VERSION_2024_11_23) { return data; }
 
   // noteMap, 1 ch -> 16 ch
   const prevNoteMap: { [ note: string ]: string } | undefined = data.noteMap;
@@ -61,7 +63,7 @@ function migrate20241123(data: any): any {
   }
 
   return {
-    version: 2024_11_23,
+    version: VERSION_2024_11_23,
     values: newValues,
     noteMap: newNoteMap,
     ccMap: newCCMap,
@@ -69,7 +71,7 @@ function migrate20241123(data: any): any {
 }
 
 function migrate20250211(data: any): any {
-  if (data.version != null && data.version >= 2025_02_11) { return data; }
+  if (data.version != null && data.version >= VERSION_2025_02_11) { return data; }
 
   // unify noteMap and ccMap
   const noteMap = data.noteMap;
@@ -90,7 +92,7 @@ function migrate20250211(data: any): any {
   });
 
   return {
-    version: 2025_02_11,
+    version: VERSION_2025_02_11,
     values: data.values,
     mappings: newMappings,
   };
@@ -98,7 +100,7 @@ function migrate20250211(data: any): any {
 
 export function migrateMIDIManagerStorage(key: string): void {
   const rawData = localStorage.getItem(key);
-  let data = rawData ? JSON.parse(rawData) : { version: LATEST_VERSION };
+  let data = rawData ? JSON.parse(rawData) : { version: VERSION_LATEST };
 
   data = migrate20241123(data);
   data = migrate20250211(data);

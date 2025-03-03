@@ -1,6 +1,7 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { MixerEQMode } from './audio/MixerChannel';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
+import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
 
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
@@ -99,6 +100,7 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
   public constructor() {
     super();
 
+    migrateSettingsManagerStorage('wavenerd-settings');
     this.__storage = new ThrottledJSONStorage('wavenerd-settings');
   }
 }
