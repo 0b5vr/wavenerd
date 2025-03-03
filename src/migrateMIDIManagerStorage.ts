@@ -1,4 +1,4 @@
-const LATEST_VERSION = 2024_11_23;
+const LATEST_VERSION = 2025_02_11;
 
 const nameMap20241123: Record<string, string> = {
   'XFader': '/mixer/xfader_pos',
