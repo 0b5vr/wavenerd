@@ -103,6 +103,9 @@ export const Deck = forwardRef(({
 
   const [focusHighlightKey, setFocusHighlightKey] = useState(0);
 
+  // -- refs ---------------------------------------------------------------------------------------
+  const refEditor = useRef<{ focusEditor: () => void; jumpToLine: (line: number) => void }>(null);
+
   // -- beforeunload -------------------------------------------------------------------------------
   const handleBeforeUnload = useAtomCallback(useCallback((get, _, event: BeforeUnloadEvent) => {
     const hasEdit = get(hasEditAtom);
@@ -118,10 +121,23 @@ export const Deck = forwardRef(({
   }, [handleBeforeUnload]);
 
   // -- handlers -----------------------------------------------------------------------------------
+  const focusEditor = useCallback((highlight: boolean) => {
+    refEditor.current?.focusEditor?.();
+    if (highlight) {
+      setFocusHighlightKey((key) => key + 1);
+    }
+  }, [refEditor, setFocusHighlightKey]);
+
+  const jumpToLine = useCallback((line: number) => {
+    focusEditor(false);
+    refEditor.current?.jumpToLine(line);
+  }, [refEditor]);
+
   const handleLoad = useAtomCallback(useCallback(async (get, set, code: string) => {
     set(codeAtom, code);
     set(hasEditAtom, true);
-  }, [codeAtom, hasEditAtom]));
+    jumpToLine(1);
+  }, [codeAtom, hasEditAtom, jumpToLine]));
 
   const handleCompile = useAtomCallback(useCallback(async (get, set) => {
     const code = get(codeAtom);
@@ -166,20 +182,6 @@ export const Deck = forwardRef(({
   }, [handleApplyImmediately]);
 
   // -- imperative handle --------------------------------------------------------------------------
-  const refEditor = useRef<{ focusEditor: () => void; jumpToLine: (line: number) => void }>(null);
-
-  const focusEditor = useCallback((highlight: boolean) => {
-    refEditor.current?.focusEditor?.();
-    if (highlight) {
-      setFocusHighlightKey((key) => key + 1);
-    }
-  }, [refEditor, setFocusHighlightKey]);
-
-  const jumpToLine = useCallback((line: number) => {
-    focusEditor(false);
-    refEditor.current?.jumpToLine(line);
-  }, [refEditor]);
-
   useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);
 
   // -- render -------------------------------------------------------------------------------------
