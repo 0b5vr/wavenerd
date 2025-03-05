@@ -53,7 +53,7 @@ export function LevelMeter({
   const l = saturate(level * 0.8);
 
   const peakTop = height * (1.0 - p);
-  const peakBottom = peakTop + 2;
+  const peakBottom = Math.min(peakTop + 2, height);
   const levelTop = height * (1.0 - l);
 
   return (
