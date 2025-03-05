@@ -1,6 +1,5 @@
+import { linearstep } from '@0b5vr/experimental';
 import { LINEAR_RAMP_TIME } from './constants';
-
-const HALF_PI = Math.PI * 0.5;
 
 export class CueMixer {
   private readonly __audio: AudioContext;
@@ -76,8 +75,8 @@ export class CueMixer {
 
   private __updateGains(): void {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
-    const masterMix = Math.sin(HALF_PI * this.__masterMix);
-    const cueMix = Math.cos(HALF_PI * this.__masterMix);
+    const masterMix = linearstep(0.0, 0.5, this.__masterMix);
+    const cueMix = linearstep(1.0, 0.5, this.__masterMix);
 
     this.__inputA.gain.linearRampToValueAtTime(this.__gainA * cueMix, time);
     this.__inputB.gain.linearRampToValueAtTime(this.__gainB * cueMix, time);
