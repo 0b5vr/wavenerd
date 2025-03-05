@@ -8,6 +8,7 @@ import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
 import { xfaderCurveLinear } from './xfaderCurveLinear';
 import { xfaderCurveTransition } from './xfaderCurveTransition';
+import { LINEAR_RAMP_TIME } from './constants';
 
 export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
 
@@ -138,7 +139,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
   private __updateXFaderGains(): void {
     const [a, b] = this.__getXFaderValue();
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
 
     this.__gainXFaderA.gain.linearRampToValueAtTime(a, time);
     this.__gainXFaderB.gain.linearRampToValueAtTime(b, time);

@@ -1,3 +1,5 @@
+import { LINEAR_RAMP_TIME } from './constants';
+
 const HALF_PI = Math.PI * 0.5;
 
 export class CueMixer {
@@ -73,7 +75,7 @@ export class CueMixer {
   }
 
   private __updateGains(): void {
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     const masterMix = Math.sin(HALF_PI * this.__masterMix);
     const cueMix = Math.cos(HALF_PI * this.__masterMix);
 

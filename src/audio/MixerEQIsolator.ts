@@ -1,4 +1,5 @@
 import { MixerEQ } from './MixerEQ';
+import { LINEAR_RAMP_TIME } from './constants';
 import { createCrossoverIR } from './createCrossoverIR';
 
 export class MixerEQIsolator extends MixerEQ {
@@ -15,7 +16,7 @@ export class MixerEQIsolator extends MixerEQ {
   public set low(value: number) {
     this.__low = value;
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeLow.gain.linearRampToValueAtTime(this.__low, time);
 
     this.__emit('change', { low: value });
@@ -29,7 +30,7 @@ export class MixerEQIsolator extends MixerEQ {
   public set mid(value: number) {
     this.__mid = value;
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeMid.gain.linearRampToValueAtTime(this.__mid, time);
 
     this.__emit('change', { mid: value });
@@ -43,7 +44,7 @@ export class MixerEQIsolator extends MixerEQ {
   public set high(value: number) {
     this.__high = value;
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeHigh.gain.linearRampToValueAtTime(this.__high, time);
 
     this.__emit('change', { high: value });

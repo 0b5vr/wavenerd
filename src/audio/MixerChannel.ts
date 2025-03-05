@@ -5,6 +5,7 @@ import { MixerEQNone } from './MixerEQNone';
 import { MixerFilter, MixerFilterChangeEvent } from './MixerFilter';
 import { MixerFilterNone } from './MixerFilterNone';
 import { MixerFilterBiquad } from './MixerFilterBiquad';
+import { LINEAR_RAMP_TIME } from './constants';
 
 export type MixerEQMode = 'none' | 'isolator';
 export type MixerFilterMode = 'none' | 'biquad';
@@ -36,7 +37,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
   public set gain(value: number) {
     this.__gain = value;
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNode.gain.linearRampToValueAtTime(this.__gain, time);
 
     this.__emit('change', { gain: value });
@@ -50,7 +51,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
   public set volume(value: number) {
     this.__volume = value;
 
-    const time = this.__audio.currentTime + 0.005;
+    const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeOut.gain.linearRampToValueAtTime(this.__volume, time);
 
     this.__emit('change', { volume: value });
