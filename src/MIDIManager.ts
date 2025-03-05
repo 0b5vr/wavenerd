@@ -165,7 +165,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
         }
 
         paramKey = this.__mappings[midiKey] ?? null;
-        value = event.data[2] / 127.0;
+        value = Math.max(event.data[2] - 1.0, 0.0) / 126.0;
 
         this.__emit('cc', { deviceId, deviceName, channel, cc, value, paramKey });
       }
