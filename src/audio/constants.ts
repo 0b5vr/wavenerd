@@ -12,3 +12,8 @@ export const ANALYSER_FREQUENCY_SIZE = 1024;
  * LPF cutoff frequency of the oscilloscope zero-crossing detector.
  */
 export const ANALYSER_LO_FREQUENCY = 200;
+
+/**
+ * Time used for linearRampToValueAtTime.
+ */
+export const LINEAR_RAMP_TIME = 0.02;
