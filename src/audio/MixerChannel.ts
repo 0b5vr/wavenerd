@@ -2,13 +2,19 @@ import { MixerEQ, MixerEQChangeEvent } from './MixerEQ';
 import { EventEmittable } from '../utils/EventEmittable';
 import { MixerEQIsolator } from './MixerEQIsolator';
 import { MixerEQNone } from './MixerEQNone';
+import { MixerFilter, MixerFilterChangeEvent } from './MixerFilter';
+import { MixerFilterNone } from './MixerFilterNone';
+import { MixerFilterBiquad } from './MixerFilterBiquad';
 
 export type MixerEQMode = 'none' | 'isolator';
+export type MixerFilterMode = 'none' | 'biquad';
 
 export interface MixerChannelChangeEvent {
   gain?: number;
   eq?: MixerEQChangeEvent;
   eqMode?: MixerEQMode;
+  filter?: MixerFilterChangeEvent;
+  filterMode?: MixerFilterMode;
   volume?: number;
 }
 
@@ -57,6 +63,13 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
 
   private __eqChangeHandler: (event: MixerEQChangeEvent) => void;
 
+  private __filter: MixerFilter;
+  public get filter(): MixerFilter {
+    return this.__filter;
+  }
+
+  private __filterChangeHandler: (event: MixerFilterChangeEvent) => void;
+
   private __gainNode: GainNode;
   private __gainNodeOut: GainNode;
   private __gainNodeOutForAnal: GainNode;
@@ -88,9 +101,16 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
       this.__emit('change', { eq: event })
     ));
 
+    this.__filter = new MixerFilterNone(audio);
+
+    this.__filterChangeHandler = this.__filter.on('change', (event) => (
+      this.__emit('change', { filter: event })
+    ));
+
     this.__gainNode.connect(this.__eq.input);
-    this.__eq.output.connect(this.__gainNodeOut);
-    this.__eq.output.connect(this.__gainNodeOutForAnal);
+    this.__eq.output.connect(this.__filter.input);
+    this.__filter.output.connect(this.__gainNodeOut);
+    this.__filter.output.connect(this.__gainNodeOutForAnal);
   }
 
   public replaceEQ(mode: MixerEQMode): void {
@@ -116,7 +136,31 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     ));
 
     this.__gainNode.connect(this.__eq.input);
-    this.__eq.output.connect(this.__gainNodeOut);
-    this.__eq.output.connect(this.__gainNodeOutForAnal);
+    this.__eq.output.connect(this.__filter.input);
+  }
+
+  public replaceFilter(mode: MixerFilterMode): void {
+    const { filter } = this.__filter;
+
+    this.__filter.off('change', this.__filterChangeHandler);
+
+    this.__eq.output.disconnect();
+    this.__filter.output.disconnect();
+
+    if (mode === 'none') {
+      this.__filter = new MixerFilterNone(this.__audio);
+    } else if (mode === 'biquad') {
+      this.__filter = new MixerFilterBiquad(this.__audio);
+    }
+
+    this.__filter.filter = filter;
+
+    this.__filterChangeHandler = this.__filter.on('change', (event) => (
+      this.__emit('change', { filter: event })
+    ));
+
+    this.__eq.output.connect(this.__filter.input);
+    this.__filter.output.connect(this.__gainNodeOut);
+    this.__filter.output.connect(this.__gainNodeOutForAnal);
   }
 }
