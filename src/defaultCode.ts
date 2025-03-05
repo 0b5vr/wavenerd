@@ -40,6 +40,8 @@ vec2 mainAudio(vec4 time) {
 `;
 
 export const defaultCodeB = `vec2 mainAudio(vec4 time) {
+  vec2 dest = vec2(0.0);
+
   return dest;
 }
 `;
