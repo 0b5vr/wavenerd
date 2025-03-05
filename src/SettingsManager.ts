@@ -1,5 +1,5 @@
 import { EventEmittable } from './utils/EventEmittable';
-import { MixerEQMode } from './audio/MixerChannel';
+import { MixerEQMode, MixerFilterMode } from './audio/MixerChannel';
 import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
 
@@ -18,6 +18,7 @@ export interface Settings {
   masterReverbGain: number;
   xfaderMode: XFaderModeType;
   eqMode: MixerEQMode;
+  filterMode: MixerFilterMode;
   vectorscopeMode: VectorscopeModeType;
   vectorscopeOpacity: number;
   vectorscopeColor: string;
@@ -52,6 +53,7 @@ export const defaultSettings: Settings = {
   masterReverbGain: 0.0,
   xfaderMode: 'transition',
   eqMode: 'none',
+  filterMode: 'none',
   vectorscopeMode: 'none',
   vectorscopeOpacity: 0.2,
   vectorscopeColor: '#ffffff',

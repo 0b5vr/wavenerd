@@ -3,5 +3,5 @@ export const Metrics = {
   deckKnobsHeight: 64,
   sampleListWidth: 192,
   xFaderWidth: 160,
-  xFaderHeight: 48,
+  xFaderHeight: 40,
 };

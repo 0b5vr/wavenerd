@@ -88,12 +88,14 @@ function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }
   if (paramKey === '/mixer/channel_a/eq/high') { mixer.channelA.eq.high = 2.0 * value; }
   if (paramKey === '/mixer/channel_a/eq/mid') { mixer.channelA.eq.mid = 2.0 * value; }
   if (paramKey === '/mixer/channel_a/eq/low') { mixer.channelA.eq.low = 2.0 * value; }
+  if (paramKey === '/mixer/channel_a/filter') { mixer.channelA.filter.filter = value; }
   if (paramKey === '/mixer/channel_a/volume') { mixer.channelA.volume = value * value; }
 
   if (paramKey === '/mixer/channel_b/gain') { mixer.channelB.gain = 4.0 * value * value; }
   if (paramKey === '/mixer/channel_b/eq/high') { mixer.channelB.eq.high = 2.0 * value; }
   if (paramKey === '/mixer/channel_b/eq/mid') { mixer.channelB.eq.mid = 2.0 * value; }
   if (paramKey === '/mixer/channel_b/eq/low') { mixer.channelB.eq.low = 2.0 * value; }
+  if (paramKey === '/mixer/channel_b/filter') { mixer.channelB.filter.filter = value; }
   if (paramKey === '/mixer/channel_b/volume') { mixer.channelB.volume = value * value; }
 
   if (paramKey === '/cue/channel_a') { cueMixer.gainA = value * value; }
@@ -155,6 +157,11 @@ function applySettings(settings: Partial<Settings>) {
   if (settings.eqMode != null) {
     mixer.channelA.replaceEQ(settings.eqMode);
     mixer.channelB.replaceEQ(settings.eqMode);
+  }
+
+  if (settings.filterMode != null) {
+    mixer.channelA.replaceFilter(settings.filterMode);
+    mixer.channelB.replaceFilter(settings.filterMode);
   }
 }
 

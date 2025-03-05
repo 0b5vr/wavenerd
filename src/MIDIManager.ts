@@ -185,12 +185,14 @@ MIDIMAN.defaultValues = {
   '/mixer/channel_a/eq/high': 0.5,
   '/mixer/channel_a/eq/mid': 0.5,
   '/mixer/channel_a/eq/low': 0.5,
+  '/mixer/channel_a/filter': 0.5,
   '/mixer/channel_a/volume': 1.0,
 
   '/mixer/channel_b/gain': 0.5,
   '/mixer/channel_b/eq/high': 0.5,
   '/mixer/channel_b/eq/mid': 0.5,
   '/mixer/channel_b/eq/low': 0.5,
+  '/mixer/channel_b/filter': 0.5,
   '/mixer/channel_b/volume': 1.0,
 };
 MIDIMAN.initMidi();

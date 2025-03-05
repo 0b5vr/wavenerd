@@ -28,7 +28,6 @@ const CenterRow = styled.div`
   gap: 16px;
   width: 24px;
   padding: 4px 0;
-  margin: 8px 0;
 `;
 
 const StyledMixerChannelA = styled(MixerChannelView)`

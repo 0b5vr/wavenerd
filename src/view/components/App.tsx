@@ -64,7 +64,7 @@ const StyledAssetList = styled(AssetList)`
 `;
 
 const StyledMixerView = styled(MixerView)`
-  height: 180px;
+  padding: 8px 0;
 `;
 
 const StyledDeckKnobs = styled(DeckKnobs)`

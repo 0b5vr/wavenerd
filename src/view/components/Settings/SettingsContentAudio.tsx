@@ -49,6 +49,15 @@ export function SettingsContentAudio() {
         <option value="none">None</option>
         <option value="isolator">Isolator</option>
       </SettingsItemSelect>
+
+      <SettingsItemSelect
+        settingsKey="filterMode"
+        name="Filter Mode"
+        stalkerText="Change the filter mode.&#10;None: Disables the filter. This will also hide the filter knob from the UI.&#10;Biquad: The stock LPF and HPF that comes with the Web Audio API."
+      >
+        <option value="none">None</option>
+        <option value="biquad">Biquad</option>
+      </SettingsItemSelect>
     </>
   );
 }

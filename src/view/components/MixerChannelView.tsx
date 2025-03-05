@@ -9,16 +9,17 @@ import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 import { UILabel } from './UILabel';
+import { linearstep } from '@0b5vr/experimental';
 
 // == styles =======================================================================================
-const StyledKnob = styled(Knob)<{ size: number }>`
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
+const StyledKnob = styled(Knob)`
+  width: 28px;
+  height: 28px;
 `;
 
 const StyledMixerFader = styled(MixerFader)`
-  width: 32px;
-  height: 96px;
+  flex-grow: 1;
+  margin: 4px 0;
 `;
 
 const KnobAndStuff = styled.div`
@@ -26,7 +27,6 @@ const KnobAndStuff = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 const StyledIconCue = styled(IconCue)`
@@ -36,18 +36,27 @@ const StyledIconCue = styled(IconCue)`
 
 const CueButtonRoot = styled.div<{ active: boolean }>`
   position: relative;
-  width: 20px;
-  height: 20px;
-  margin: 2px;
+  width: 32px;
+  height: 36px;
+  padding: 6px;
   color: ${({ active }) => active ? ThemeVars.accent : ThemeVars.gray};
+  cursor: pointer;
 `;
 
-const Row = styled.div<{ side: 'A' | 'B' }>`
+const GainAndFader = styled.div`
+  width: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Row = styled.div<{ side: 'A' | 'B'; height: string }>`
   display: flex;
   gap: 8px;
   flex-direction: ${({ side }) => side === 'A' ? 'row' : 'row-reverse'};
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+  height: ${({ height }) => height};
 `;
 
 const EQs = styled.div`
@@ -60,11 +69,10 @@ const EQs = styled.div`
 
 const Root = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 // == functions ====================================================================================
@@ -85,6 +93,16 @@ function valueToDisplayEQ(value: number): string {
   }
 }
 
+function valueToDisplayFilter(value: number): string {
+  if (value === 0.5) {
+    return 'OFF';
+  } else if (value >= 0.5) {
+    return `HPF ${(linearstep(0.5, 1.0, value) * 100.0).toFixed()}%`;
+  } else {
+    return `LPF ${(linearstep(0.5, 0.0, value) * 100.0).toFixed()}%`;
+  }
+}
+
 // == microcomponents ==============================================================================
 function MixerGainKnob({ label, stalkerText, paramName }: {
   label: string;
@@ -100,7 +118,6 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={36}
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -125,7 +142,6 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
   return (
     <KnobAndStuff>
       <StyledKnob
-        size={24}
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -136,15 +152,27 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
   );
 }
 
-function MixerFaderI({ paramName, stalkerText }: {
-  paramName: string;
+function MixerFilterKnob({ label, stalkerText, paramName }: {
+  label: string;
   stalkerText: string;
+  paramName: string;
 }) {
+  const value = useMidiValue(paramName);
+
+  const stalkerTextWithValue = useMemo(() => {
+    return `${stalkerText}: ${valueToDisplayFilter(value)}`;
+  }, [value]);
+
   return (
-    <StyledMixerFader
-      midiParamName={paramName}
-      stalkerText={stalkerText}
-    />
+    <KnobAndStuff>
+      <StyledKnob
+        midiParamName={paramName}
+        resetValue={0.5}
+        deltaValuePerPixel={1.0 / 256.0}
+        stalkerText={stalkerTextWithValue}
+      />
+      <UILabel text={label} />
+    </KnobAndStuff>
   );
 }
 
@@ -184,12 +212,13 @@ export function MixerChannelView({
   className?: string;
 }) {
   const eqMode = useSettings('eqMode');
+  const filterMode = useSettings('filterMode');
 
   return (
     <Root
       className={className}
     >
-      <Row side={side}>
+      <Row side={side} height="36px">
         <MixerGainKnob
           label="GAIN"
           stalkerText="Deck Gain"
@@ -200,8 +229,8 @@ export function MixerChannelView({
           stalkerText="Deck Cue"
         />
       </Row>
-      <Row side={side}>
-        { eqMode !== 'none' && (
+      <Row side={side} height="124px">
+        {eqMode !== 'none' && (
           <EQs>
             <MixerEQKnob
               label="HI"
@@ -219,11 +248,20 @@ export function MixerChannelView({
               paramName={paramPrefix + '/eq/low'}
             />
           </EQs>
-        ) }
-        <MixerFaderI
-          paramName={paramPrefix + '/volume'}
-          stalkerText="Deck Volume"
-        />
+        )}
+        <GainAndFader>
+          {filterMode !== 'none' && (
+            <MixerFilterKnob
+              label="FILT"
+              stalkerText="Deck Filter"
+              paramName={paramPrefix + '/filter'}
+            />
+          )}
+          <StyledMixerFader
+            midiParamName={paramPrefix + '/volume'}
+            stalkerText="Deck Volume"
+          />
+        </GainAndFader>
       </Row>
     </Root>
   );
