@@ -5,22 +5,24 @@ import { SettingsItemBool } from './SettingsItemBool';
 import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
 import { SettingsItemMIDIKnob } from './SettingsItemMIDIKnob';
-import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
 import { ThemeVars } from '../../themes/ThemeVars';
 
-const SuffixDB = styled.div`
-  margin-left: -8px;
-  width: 64px;
+const Suffix = styled.div`
   font-size: 12px;
-  text-align: right;
   color: ${ThemeVars.foresub};
   align-self: flex-end;
+  margin-left: 8px;
 `;
+
+function suffixFnPercent(value: number) {
+  const str = (value * 100).toFixed() + '%';
+  return <Suffix>{str}</Suffix>;
+}
 
 function suffixFnSquaredDB(value: number) {
   const str = voltageToDisplayDB(value * value);
-  return <SuffixDB>{str}</SuffixDB>;
+  return <Suffix>{str}</Suffix>;
 }
 
 export function SettingsContentAudio() {
@@ -38,13 +40,14 @@ export function SettingsContentAudio() {
         stalkerText="Remove the DC offset from the master output.&#10;You usually want to keep this switch on to prevent damaging your speakers unless you are going to draw your masterpiece onto your oscilloscope."
       />
 
-      <SettingsItemRange
-        settingsKey="masterReverbGain"
-        name="Master Reverb Gain"
+      <SettingsItemMIDIKnob
+        midiParamName="/mixer/master/reverb/mix"
+        name="Master Reverb Mix"
         stalkerText="Add a reverb to the master (cheating)"
-        min={0}
-        max={1}
-        step={0.01}
+        suffixFn={suffixFnPercent}
+        deltaValuePerPixel={1.0 / 256.0}
+        resetValue={0.0}
+        ringOrigin={0.0}
       />
 
       <SettingsItemMIDIKnob

@@ -36,15 +36,12 @@ const deckOptions = {
 };
 const deckA = new WavenerdDeck(deckOptions);
 const deckB = new WavenerdDeck({ ...deckOptions, hostDeck: deckA });
-
 const mixer = new Mixer(audio);
 
 deckA.node.connect(mixer.inputA);
 deckB.node.connect(mixer.inputB);
-mixer.output.connect(master);
 
 const reverb = new Reverb(audio);
-reverb.gain.value = SETTINGSMAN.values.masterReverbGain;
 mixer.output.connect(reverb.input);
 reverb.connect(master);
 
@@ -101,6 +98,7 @@ function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }
   if (paramKey === '/mixer/channel_b/filter') { mixer.channelB.filter.filter = value; }
   if (paramKey === '/mixer/channel_b/volume') { mixer.channelB.volume = value * value; }
 
+  if (paramKey === '/mixer/master/reverb/mix') { reverb.mix = value; }
   if (paramKey === '/mixer/master/volume') { masterGain.gain.value = value * value; }
 
   if (paramKey === '/cue/channel_a') { cueMixer.gainA = value * value; }
@@ -153,10 +151,6 @@ function applySettings(settings: Partial<Settings>) {
 
   if (settings.masterDCRemoval != null) {
     mixer.dcRemoval = settings.masterDCRemoval;
-  }
-
-  if (settings.masterReverbGain != null) {
-    reverb.gain.value = settings.masterReverbGain;
   }
 
   if (settings.eqMode != null) {
