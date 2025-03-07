@@ -10,6 +10,7 @@ import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 import { UILabel } from './UILabel';
 import { linearstep } from '@0b5vr/experimental';
+import { voltageToDisplayDB } from '../utils/valueToDisplayDB';
 
 // == styles =======================================================================================
 const StyledKnob = styled(Knob)`
@@ -77,12 +78,7 @@ const Root = styled.div`
 
 // == functions ====================================================================================
 function valueToDisplayDB(value: number): string {
-  if (value === 0.0) {
-    return '-INF dB';
-  } else {
-    const db = 20.0 * Math.log10(4.0 * value * value);
-    return db.toFixed(2) + ' dB';
-  }
+  return voltageToDisplayDB(4.0 * value * value);
 }
 
 function valueToDisplayEQ(value: number): string {

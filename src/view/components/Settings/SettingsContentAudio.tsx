@@ -1,9 +1,27 @@
+import styled from 'styled-components';
+import { voltageToDisplayDB } from '../../utils/valueToDisplayDB';
 import { SettingsItemBlocksPerRender } from './SettingsItemBlocksPerRender';
 import { SettingsItemBool } from './SettingsItemBool';
 import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
+import { SettingsItemMIDIKnob } from './SettingsItemMIDIKnob';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
+import { ThemeVars } from '../../themes/ThemeVars';
+
+const SuffixDB = styled.div`
+  margin-left: -8px;
+  width: 64px;
+  font-size: 12px;
+  text-align: right;
+  color: ${ThemeVars.foresub};
+  align-self: flex-end;
+`;
+
+function suffixFnSquaredDB(value: number) {
+  const str = voltageToDisplayDB(value * value);
+  return <SuffixDB>{str}</SuffixDB>;
+}
 
 export function SettingsContentAudio() {
   return (
@@ -27,6 +45,16 @@ export function SettingsContentAudio() {
         min={0}
         max={1}
         step={0.01}
+      />
+
+      <SettingsItemMIDIKnob
+        midiParamName="/mixer/master/volume"
+        name="Master Volume"
+        stalkerText="Attenuates the master output."
+        suffixFn={suffixFnSquaredDB}
+        deltaValuePerPixel={1.0 / 256.0}
+        resetValue={1.0}
+        ringOrigin={0.0}
       />
 
       <SettingsItemSelect

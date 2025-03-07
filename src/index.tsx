@@ -53,12 +53,15 @@ mixer.channelA.outputForAnal.connect(cueMixer.inputA);
 mixer.channelB.outputForAnal.connect(cueMixer.inputB);
 master.connect(cueMixer.inputMaster);
 
+const masterGain = audio.createGain();
+master.connect(masterGain);
+
 const recorder = new Recorder(audio);
-master.connect(recorder.input);
+masterGain.connect(recorder.input);
 
 const router = new AudioDestinationRouter(audio);
 
-router.addSource('master', master);
+router.addSource('master', masterGain);
 router.addSource('cue', cueMixer.output);
 router.addSource('deckA', deckA.node);
 router.addSource('deckB', deckB.node);
@@ -97,6 +100,8 @@ function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }
   if (paramKey === '/mixer/channel_b/eq/low') { mixer.channelB.eq.low = 2.0 * value; }
   if (paramKey === '/mixer/channel_b/filter') { mixer.channelB.filter.filter = value; }
   if (paramKey === '/mixer/channel_b/volume') { mixer.channelB.volume = value * value; }
+
+  if (paramKey === '/mixer/master/volume') { masterGain.gain.value = value * value; }
 
   if (paramKey === '/cue/channel_a') { cueMixer.gainA = value * value; }
   if (paramKey === '/cue/channel_b') { cueMixer.gainB = value * value; }

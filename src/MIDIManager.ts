@@ -194,5 +194,7 @@ MIDIMAN.defaultValues = {
   '/mixer/channel_b/eq/low': 0.5,
   '/mixer/channel_b/filter': 0.5,
   '/mixer/channel_b/volume': 1.0,
+
+  '/mixer/master/volume': 1.0,
 };
 MIDIMAN.initMidi();

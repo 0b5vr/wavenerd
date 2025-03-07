@@ -34,11 +34,12 @@ const RingPath = styled.path`
 `;
 
 const RingPathBack = styled(RingPath)`
-  stroke-width: 4;
+  stroke-width: 6;
   stroke: ${ThemeVars.knobGutter};
 `;
 
 const RingPathFore = styled(RingPath)`
+  stroke-width: 4;
   stroke: ${ThemeVars.accent};
 `;
 
@@ -75,23 +76,23 @@ function valueToDir(value: number): [number, number] {
 // == children =====================================================================================
 export function Ring({
   value,
-  resetValue,
+  ringOrigin,
 }: {
   value: number;
-  resetValue: number;
+  ringOrigin: number;
 }) {
   const center = SIZE / 2;
-  const radius = 0.45 * SIZE;
+  const radius = (SIZE - 6) / 2;
 
   const [xb0, yb0] = vecAdd(vecScale(valueToDir(0.0), radius), [center, center]);
   const [xb1, yb1] = vecAdd(vecScale(valueToDir(1.0), radius), [center, center]);
-  const [x0, y0] = vecAdd(vecScale(valueToDir(resetValue), radius), [center, center]);
+  const [x0, y0] = vecAdd(vecScale(valueToDir(ringOrigin), radius), [center, center]);
   const [x1, y1] = vecAdd(vecScale(valueToDir(value), radius), [center, center]);
 
-  const largeArcFlag = Math.abs(resetValue - value) > 6 / 10 ? 1 : 0;
-  const sweepFlag = (resetValue < value) ? 1 : 0;
+  const largeArcFlag = Math.abs(ringOrigin - value) > 6 / 10 ? 1 : 0;
+  const sweepFlag = (ringOrigin < value) ? 1 : 0;
 
-  const opacity = linearstep(0.0, 1.0, 100.0 * Math.abs(value - resetValue));
+  const opacity = linearstep(0.0, 0.01, Math.abs(value - ringOrigin));
 
   return (
     <>
@@ -132,12 +133,14 @@ interface Props {
   midiParamName: string;
   resetValue: number;
   deltaValuePerPixel: number;
+  ringOrigin?: number;
   className?: string;
   stalkerText?: string;
 }
 
 export function Knob(props: Props) {
   const { midiParamName, deltaValuePerPixel, resetValue, className, stalkerText } = props;
+  const ringOrigin = props.ringOrigin ?? resetValue;
 
   const value = useMidiValue(midiParamName);
 
@@ -178,7 +181,7 @@ export function Knob(props: Props) {
     >
       <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
         <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill={ThemeVars.knobBorder} />
-        <Ring value={value} resetValue={resetValue} />
+        <Ring value={value} ringOrigin={ringOrigin} />
       </SVG>
       <Body />
       <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
