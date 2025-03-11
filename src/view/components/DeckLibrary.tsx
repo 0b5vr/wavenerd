@@ -75,7 +75,7 @@ const DeckLibraryItem = ({ name, isSelected, onSelect }: {
   );
 };
 
-export function TextInput({
+function TextInput({
   value,
   libraryOpeningAtom,
   onCursor,
@@ -92,6 +92,7 @@ export function TextInput({
 }) {
   const refTextInputFocusOnOpen = useCallback((input: HTMLInputElement | null) => {
     input?.focus();
+    input?.select();
   }, []);
 
   const setLibraryOpening = useSetAtom(libraryOpeningAtom);
