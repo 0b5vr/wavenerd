@@ -44,7 +44,7 @@ export function HeaderCatjam() {
       style={{
         backgroundPosition: `-${frame * 32}px 0`,
       }}
-      data-stalker="vibing"
+      data-stalker="live cat reaction"
     />
   );
 }
