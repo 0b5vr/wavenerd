@@ -1,9 +1,19 @@
 import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import styled, { css } from 'styled-components';
-import { useAtomValue } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { arraySerial } from '@0b5vr/experimental';
+
+// == atoms ========================================================================================
+const barAtom = atom((get) => {
+  const bpm = get(deckBPMAtom);
+  const { sixteenBar } = get(deckBeatsAtom);
+
+  const barSeconds = BeatManager.CalcBarSeconds(bpm);
+
+  return Math.floor(sixteenBar / barSeconds);
+});
 
 // == styles =======================================================================================
 const Square = styled.div<{ isActive: boolean }>`
@@ -25,12 +35,7 @@ const Root = styled.div`
 
 // == components ===================================================================================
 export function HeaderBarsGrid({ className }: { className?: string }) {
-  const bpm = useAtomValue(deckBPMAtom);
-  const { sixteenBar } = useAtomValue(deckBeatsAtom);
-
-  const barSeconds = BeatManager.CalcBarSeconds(bpm);
-
-  const bar = Math.floor(sixteenBar / barSeconds);
+  const bar = useAtomValue(barAtom);
 
   return (
     <Root

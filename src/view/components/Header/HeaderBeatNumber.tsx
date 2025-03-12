@@ -1,10 +1,26 @@
 import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import styled from 'styled-components';
-import { useAtomValue } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
 import { ThemeVars } from '../../themes/ThemeVars';
+
+// == atoms ========================================================================================
+const textAtom = atom((get) => {
+  const bpm = get(deckBPMAtom);
+  const { beat, bar, sixteenBar } = get(deckBeatsAtom);
+
+  const beatSeconds = BeatManager.CalcBeatSeconds(bpm);
+  const barSeconds = BeatManager.CalcBarSeconds(bpm);
+  const sixteenBarSeconds = BeatManager.CalcSixteenBarSeconds(bpm);
+
+  const stepCount = 1 + Math.floor(4.0 * beat / beatSeconds);
+  const beatCount = 1 + Math.floor(4.0 * bar / barSeconds);
+  const barCount = 1 + Math.floor(16.0 * sixteenBar / sixteenBarSeconds);
+
+  return `${('0' + barCount).slice(-2)}.${beatCount}.${stepCount}`;
+});
 
 // == styles =======================================================================================
 const StyledUILabel = styled(UILabel)`
@@ -19,16 +35,7 @@ const Root = styled.div`
 
 // == components ===================================================================================
 export function HeaderBeatNumber({ className }: { className?: string }) {
-  const bpm = useAtomValue(deckBPMAtom);
-  const { beat, bar, sixteenBar } = useAtomValue(deckBeatsAtom);
-
-  const beatSeconds = BeatManager.CalcBeatSeconds(bpm);
-  const barSeconds = BeatManager.CalcBarSeconds(bpm);
-  const sixteenBarSeconds = BeatManager.CalcSixteenBarSeconds(bpm);
-
-  const stepCount = 1 + Math.floor(4.0 * beat / beatSeconds);
-  const beatCount = 1 + Math.floor(4.0 * bar / barSeconds);
-  const barCount = 1 + Math.floor(16.0 * sixteenBar / sixteenBarSeconds);
+  const text = useAtomValue(textAtom);
 
   return (
     <Root
@@ -37,7 +44,7 @@ export function HeaderBeatNumber({ className }: { className?: string }) {
     >
       <StyledUILabel text="BEAT" />
       <UINumber
-        text={`${('0' + barCount).slice(-2)}.${beatCount}.${stepCount}`}
+        text={text}
         activeColor={ThemeVars.headerFg}
         inactiveColor={ThemeVars.gray}
       />

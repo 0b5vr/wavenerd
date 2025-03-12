@@ -1,8 +1,18 @@
 import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
 import styled, { css } from 'styled-components';
-import { useAtomValue } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import { ThemeVars } from '../../themes/ThemeVars';
+
+// == atoms ========================================================================================
+const beatAtom = atom((get) => {
+  const bpm = get(deckBPMAtom);
+  const { bar } = get(deckBeatsAtom);
+
+  const barSeconds = BeatManager.CalcBarSeconds(bpm);
+
+  return Math.floor(4.0 * bar / barSeconds);
+});
 
 // == styles =======================================================================================
 const Dot = styled.div<{ isActive: boolean }>`
@@ -26,12 +36,7 @@ const Root = styled.div`
 
 // == components ===================================================================================
 export function HeaderBeatDots({ className }: { className?: string }) {
-  const bpm = useAtomValue(deckBPMAtom);
-  const { bar } = useAtomValue(deckBeatsAtom);
-
-  const barSeconds = BeatManager.CalcBarSeconds(bpm);
-
-  const beat = Math.floor(4.0 * bar / barSeconds);
+  const beat = useAtomValue(beatAtom);
 
   return (
     <Root
