@@ -10,7 +10,7 @@ import { atom, useAtomValue } from 'jotai';
 // == constants ====================================================================================
 const FRAMES = 158;
 const BEATS = 13;
-const OFFSET = 0.4;
+const OFFSET = 0.5;
 
 // == atoms ========================================================================================
 const frameAtom = atom((get) => {
@@ -44,6 +44,7 @@ export function HeaderCatjam() {
       style={{
         backgroundPosition: `-${frame * 32}px 0`,
       }}
+      data-stalker="vibing"
     />
   );
 }
