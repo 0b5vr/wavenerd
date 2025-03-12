@@ -35,7 +35,7 @@ const Content = styled.div`
 
 export function SettingsContentAbout() {
   const hash = COMMIT_HASH.slice(0, 7);
-  const date = new Date(COMMIT_DATE).toLocaleDateString();
+  const date = new Date(COMMIT_DATE).toISOString().slice(0, 10);
 
   /* eslint-disable @stylistic/jsx-one-expression-per-line */
 
