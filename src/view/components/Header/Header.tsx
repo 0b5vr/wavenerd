@@ -23,6 +23,7 @@ import { HeaderIconVisualizer } from './HeaderIconVisualizer';
 import { HeaderBarsGrid } from './HeaderBarsGrid';
 import { HeaderTimeHMS } from './HeaderTimeHMS';
 import { HeaderCatjam } from './HeaderCatjam';
+import { HeaderOBSVR } from './HeaderOBSVR';
 
 // == styles =======================================================================================
 const Margin = styled.div`
@@ -75,6 +76,8 @@ export function Header({ className }: { className?: string }) {
             return null;
           } else if (item === 'logo') {
             return <HeaderLogo key={i} />;
+          } else if (item === '0b5vr') {
+            return <HeaderOBSVR key={i} />;
           } else if (item === 'transport') {
             return <HeaderTransport key={i} />;
           } else if (item === 'time-seconds' || item === 'time') {
