@@ -22,6 +22,7 @@ import { HeaderIconFullscreen } from './HeaderIconFullscreen';
 import { HeaderIconVisualizer } from './HeaderIconVisualizer';
 import { HeaderBarsGrid } from './HeaderBarsGrid';
 import { HeaderTimeHMS } from './HeaderTimeHMS';
+import { HeaderCatjam } from './HeaderCatjam';
 
 // == styles =======================================================================================
 const Margin = styled.div`
@@ -47,7 +48,6 @@ const Root = styled.div`
   align-items: center;
   background: ${ThemeVars.headerBg};
   color: ${ThemeVars.headerFg};
-  border-bottom: solid 2px ${ThemeVars.back1};
   box-sizing: content-box;
 
   & > * {
@@ -93,6 +93,8 @@ export function Header({ className }: { className?: string }) {
             return <HeaderBPM key={i} />;
           } else if (item === 'nudge') {
             return <HeaderNudge key={i} />;
+          } else if (item === 'catjam') {
+            return <HeaderCatjam key={i} />;
           } else {
             return <HeaderItemUnknown key={i} name={item} />;
           }
