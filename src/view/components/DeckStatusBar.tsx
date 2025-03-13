@@ -228,7 +228,7 @@ export function DeckStatusBar({
   if (error != null) {
     content = (
       <CodeErrorContent
-        data-stalker="Click to jump to the line of the error"
+        data-stalker="Click here to jump to the line of the error"
         onClick={handleClickCodeError}
       >
         <StyledIconError />
@@ -245,15 +245,23 @@ export function DeckStatusBar({
       </Content>
     );
   } else if (cueStatus === 'ready') {
+    const text = hasEdit
+      ? 'Ready to apply (+ has edit)'
+      : 'Ready to apply';
+
     content = (
       <Content
         data-stalker="A shader is successfully compiled and ready to be applied&#10;Ctrl+R to apply the shader at the next bar"
       >
         <StyledIconCheck />
-        <TextReadyBlink>Ready to apply</TextReadyBlink>
+        <TextReadyBlink>{text}</TextReadyBlink>
       </Content>
     );
   } else if (cueStatus === 'applying') {
+    const text = hasEdit
+      ? 'Applying... (+ has edit)'
+      : 'Applying...';
+
     content = (
       <Content
         data-stalker="The shader will be applied at the next bar"
@@ -261,7 +269,7 @@ export function DeckStatusBar({
         <IconStopwatchContainer>
           <StyledIconApplying />
         </IconStopwatchContainer>
-        <TextApplyingBlink>Applying...</TextApplyingBlink>
+        <TextApplyingBlink>{text}</TextApplyingBlink>
       </Content>
     );
   } else if (hasEdit) {
