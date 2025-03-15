@@ -6,9 +6,10 @@ import { MixerFilter, MixerFilterChangeEvent } from './MixerFilter';
 import { MixerFilterNone } from './MixerFilterNone';
 import { MixerFilterBiquad } from './MixerFilterBiquad';
 import { LINEAR_RAMP_TIME } from './constants';
+import { MixerFilterGate } from './MixerFilterGate';
 
 export type MixerEQMode = 'none' | 'isolator';
-export type MixerFilterMode = 'none' | 'biquad';
+export type MixerFilterMode = 'none' | 'biquad' | 'gate';
 
 export interface MixerChannelChangeEvent {
   gain?: number;
@@ -152,6 +153,8 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
       this.__filter = new MixerFilterNone(this.__audio);
     } else if (mode === 'biquad') {
       this.__filter = new MixerFilterBiquad(this.__audio);
+    } else if (mode === 'gate') {
+      this.__filter = new MixerFilterGate(this.__audio);
     }
 
     this.__filter.filter = filter;

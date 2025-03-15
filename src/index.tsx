@@ -15,6 +15,7 @@ import { FullscreenManager } from './FullscreenManager';
 import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
 import { FrameEmitter } from './FrameEmitter';
+import { FirstOrderFilterNode } from './audio/FirstOrderFilterNode';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');
@@ -26,6 +27,7 @@ audio.suspend();
 // install audio worklet modules
 await TimeDomainDataProbeNode.addModule(audio);
 await DCRemovalNode.addModule(audio);
+await FirstOrderFilterNode.addModule(audio);
 
 const master = audio.createGain();
 

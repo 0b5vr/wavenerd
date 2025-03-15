@@ -1,12 +1,13 @@
 import { lerp, linearstep } from '@0b5vr/experimental';
 import { MixerFilter } from './MixerFilter';
+import { FirstOrderFilterNode } from './FirstOrderFilterNode';
 import { BlendNode } from './BlendNode';
 import { LINEAR_RAMP_TIME } from './constants';
 
 const LOG2_MIN_FREQ = Math.log2(20.0);
 const LOG2_MAX_FREQ = Math.log2(20000.0);
 
-export class MixerFilterBiquad extends MixerFilter {
+export class MixerFilterGate extends MixerFilter {
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -18,17 +19,17 @@ export class MixerFilterBiquad extends MixerFilter {
   private readonly __blendLPF: BlendNode;
   private readonly __blendHPF: BlendNode;
 
-  private readonly __filterLPF: BiquadFilterNode;
-  private readonly __filterHPF: BiquadFilterNode;
+  private readonly __filterLPF: FirstOrderFilterNode;
+  private readonly __filterHPF: FirstOrderFilterNode;
 
-  private __filter: number;
+  private __value: number;
 
   public get filter(): number {
-    return this.__filter;
+    return this.__value;
   }
 
   public set filter(value: number) {
-    this.__filter = value;
+    this.__value = value;
 
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
 
@@ -38,11 +39,17 @@ export class MixerFilterBiquad extends MixerFilter {
     const lpfFreq = Math.pow(2.0, lerp(LOG2_MIN_FREQ, LOG2_MAX_FREQ, linearstep(0.0, 0.5, value)));
     this.__filterLPF.frequency.linearRampToValueAtTime(lpfFreq, time);
 
+    const lpfGain = Math.sqrt(linearstep(0.0, 0.5, value));
+    this.__blendLPF.gain.linearRampToValueAtTime(lpfGain, time);
+
     const hpfWet = linearstep(0.5, 0.55, value);
     this.__blendHPF.blend = hpfWet;
 
     const hpfFreq = Math.pow(2.0, lerp(LOG2_MIN_FREQ, LOG2_MAX_FREQ, linearstep(0.5, 1.0, value)));
     this.__filterHPF.frequency.linearRampToValueAtTime(hpfFreq, time);
+
+    const hpfGain = Math.sqrt(linearstep(1.0, 0.5, value));
+    this.__blendHPF.gain.linearRampToValueAtTime(hpfGain, time);
 
     this.__emit('change', { filter: value });
   }
@@ -66,15 +73,12 @@ export class MixerFilterBiquad extends MixerFilter {
     this.__blendLPF = new BlendNode(audio);
     this.__blendHPF = new BlendNode(audio);
 
-    this.__filterLPF = audio.createBiquadFilter();
+    this.__filterLPF = new FirstOrderFilterNode(audio);
     this.__filterLPF.type = 'lowpass';
-    this.__filterLPF.Q.value = 0.0;
-
-    this.__filterHPF = audio.createBiquadFilter();
+    this.__filterHPF = new FirstOrderFilterNode(audio);
     this.__filterHPF.type = 'highpass';
-    this.__filterHPF.Q.value = 0.0;
 
-    this.__filter = 0.5;
+    this.__value = 0.5;
     this.filter = 0.5;
 
     this.__gainInput.connect(this.__filterLPF);

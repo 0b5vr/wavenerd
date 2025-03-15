@@ -84,10 +84,11 @@ export function SettingsContentAudio() {
       <SettingsItemSelect
         settingsKey="filterMode"
         name="Filter Mode"
-        stalkerText="Change the filter mode.&#10;None: Disables the filter. This will also hide the filter knob from the UI.&#10;Biquad: The stock LPF and HPF that comes with the Web Audio API."
+        stalkerText="Change the filter mode.&#10;None: Disables the filter. This will also hide the filter knob from the UI.&#10;Biquad: The stock -12dB/oct LPF and HPF that comes with the Web Audio API.&#10;Gate: The -6dB/oct LPF and HPF that also attenuates the amplitude. Best for gentle mixing."
       >
         <option value="none">None</option>
         <option value="biquad">Biquad</option>
+        <option value="gate">Gate</option>
       </SettingsItemSelect>
     </>
   );
