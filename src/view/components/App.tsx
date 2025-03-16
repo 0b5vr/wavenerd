@@ -110,8 +110,7 @@ const Root = styled.div<{ themeString: string }>`
 
   ${({ themeString }) => themeVarsCss(themeString)}
 
-  // hack: disable subpixel rendering by applying a filter
-  ${({ themeString }) => themeString === 'chromaCoder' && css`
+  ${({ themeString }) => (themeString.startsWith('chromaCoder')) && css`
     filter: brightness(1.0);
   `}
 `;
