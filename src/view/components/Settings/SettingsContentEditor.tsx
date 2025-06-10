@@ -67,6 +67,12 @@ export function SettingsContentEditor() {
         name="Show Compile Time"
         stalkerText="Whether to show the compile time in the deck status bar."
       />
+
+      <SettingsItemBool
+        settingsKey="editorVimMode"
+        name="Vim Mode"
+        stalkerText="Enable Vim-like editing keybindings in the editor."
+      />
     </>
   );
 }

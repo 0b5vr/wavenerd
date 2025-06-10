@@ -42,6 +42,7 @@ export interface Settings {
   editorBraceJumpMapEnabled: boolean;
   editorBraceJumpMapScale: number;
   editorCompileTimeEnabled: boolean;
+  editorVimMode: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -76,6 +77,7 @@ export const defaultSettings: Settings = {
   editorBraceJumpMapEnabled: true,
   editorBraceJumpMapScale: 0.8,
   editorCompileTimeEnabled: true,
+  editorVimMode: false,
 };
 
 interface SettingsManagerEvents {
