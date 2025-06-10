@@ -1,6 +1,6 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
-import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
+import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom, deckMaximizedAtom } from '../stores/atoms/deck';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
@@ -13,6 +13,8 @@ import { Metrics } from '../constants/Metrics';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useAtomValue } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
@@ -151,12 +153,36 @@ function useFocusDeckShortcuts({
   }, [focusDeckAEditor, focusDeckBEditor]);
 }
 
+function useMaximizeDeckShortcuts({
+  maximizeDeckA,
+  maximizeDeckB,
+}: {
+  maximizeDeckA: () => void;
+  maximizeDeckB: () => void;
+}) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === '1' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        maximizeDeckA();
+      } else if (event.key === '2' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        maximizeDeckB();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [maximizeDeckA, maximizeDeckB]);
+}
+
 // == component ====================================================================================
 export function OutOfContextApp() {
   const { deckA, deckB, mixer, recorder, library } = useContext(StuffContext)!;
 
   const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
+  const maximizedDeck = useAtomValue(deckMaximizedAtom);
 
   useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
@@ -176,9 +202,32 @@ export function OutOfContextApp() {
     refDeckB.current?.focusEditor?.(true);
   }, [refDeckB]);
 
+  const maximizeDeckA = useAtomCallback(useCallback((get, set) => {
+    const currentMaximized = get(deckMaximizedAtom);
+    if (currentMaximized === 'a') {
+      set(deckMaximizedAtom, 'none');
+    } else {
+      set(deckMaximizedAtom, 'a');
+    }
+  }, []));
+
+  const maximizeDeckB = useAtomCallback(useCallback((get, set) => {
+    const currentMaximized = get(deckMaximizedAtom);
+    if (currentMaximized === 'b') {
+      set(deckMaximizedAtom, 'none');
+    } else {
+      set(deckMaximizedAtom, 'b');
+    }
+  }, []));
+
   useFocusDeckShortcuts({
     focusDeckAEditor,
     focusDeckBEditor,
+  });
+
+  useMaximizeDeckShortcuts({
+    maximizeDeckA,
+    maximizeDeckB,
   });
 
   return (
@@ -187,8 +236,10 @@ export function OutOfContextApp() {
 
       <Root themeString={themeString}>
         <StyledHeader />
-        <DeckRow>
-          <DeckColumn>
+        
+        {maximizedDeck === 'a' ? (
+          // Deck A maximized
+          <DeckColumn style={{ height: `calc(100% - ${Metrics.headerHeight}px)` }}>
             <StyledDeck
               ref={refDeckA}
               codeAtom={deckACodeAtom}
@@ -203,32 +254,68 @@ export function OutOfContextApp() {
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
-          <SamplesColumn>
-            <StyledAssetList
-              hostDeck={deckA}
-              library={library}
+        ) : maximizedDeck === 'b' ? (
+          // Deck B maximized
+          <DeckColumn style={{ height: `calc(100% - ${Metrics.headerHeight}px)` }}>
+            <StyledDeck
+              ref={refDeckB}
+              codeAtom={deckBCodeAtom}
+              hasEditAtom={deckBHasEditAtom}
+              errorAtom={deckBErrorAtom}
+              analyser={mixer.analyserInB}
+              cueStatusAtom={deckBCueStatusAtom}
+              compileTimeAtom={deckBCompileTimeAtom}
+              deck={deckB}
+              storageKeyName="b"
+              gainParamName="/mixer/channel_b/gain"
             />
-            <StyledMixerView />
-            <StyledXFader />
-          </SamplesColumn>
-          {deckBShow && (
+            <StyledDeckKnobs paramPrefix="/deck_b" />
+          </DeckColumn>
+        ) : (
+          // Normal view with both decks
+          <DeckRow>
             <DeckColumn>
               <StyledDeck
-                ref={refDeckB}
-                codeAtom={deckBCodeAtom}
-                hasEditAtom={deckBHasEditAtom}
-                errorAtom={deckBErrorAtom}
-                analyser={mixer.analyserInB}
-                cueStatusAtom={deckBCueStatusAtom}
-                compileTimeAtom={deckBCompileTimeAtom}
-                deck={deckB}
-                storageKeyName="b"
-                gainParamName="/mixer/channel_b/gain"
+                ref={refDeckA}
+                codeAtom={deckACodeAtom}
+                hasEditAtom={deckAHasEditAtom}
+                errorAtom={deckAErrorAtom}
+                cueStatusAtom={deckACueStatusAtom}
+                compileTimeAtom={deckACompileTimeAtom}
+                analyser={mixer.analyserInA}
+                deck={deckA}
+                storageKeyName="a"
+                gainParamName="/mixer/channel_a/gain"
               />
-              <StyledDeckKnobs paramPrefix="/deck_b" />
+              <StyledDeckKnobs paramPrefix="/deck_a" />
             </DeckColumn>
-          )}
-        </DeckRow>
+            <SamplesColumn>
+              <StyledAssetList
+                hostDeck={deckA}
+                library={library}
+              />
+              <StyledMixerView />
+              <StyledXFader />
+            </SamplesColumn>
+            {deckBShow && (
+              <DeckColumn>
+                <StyledDeck
+                  ref={refDeckB}
+                  codeAtom={deckBCodeAtom}
+                  hasEditAtom={deckBHasEditAtom}
+                  errorAtom={deckBErrorAtom}
+                  analyser={mixer.analyserInB}
+                  cueStatusAtom={deckBCueStatusAtom}
+                  compileTimeAtom={deckBCompileTimeAtom}
+                  deck={deckB}
+                  storageKeyName="b"
+                  gainParamName="/mixer/channel_b/gain"
+                />
+                <StyledDeckKnobs paramPrefix="/deck_b" />
+              </DeckColumn>
+            )}
+          </DeckRow>
+        )}
 
         <SettingsModal />
         <HelpModal />

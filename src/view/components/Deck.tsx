@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
@@ -13,6 +13,8 @@ import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
 import { DeckBraceJumpMap } from './DeckBraceJumpMap';
+import { deckMaximizedAtom } from '../stores/atoms/deck';
+import { StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const fadeOut = keyframes`
@@ -101,6 +103,9 @@ export const Deck = forwardRef(({
     status: 'loaded' | 'loadfailed' | 'saved';
   } | null>(null), []);
 
+  // -- context ------------------------------------------------------------------------------------
+  const { frameEmitter } = useContext(StuffContext)!;
+
   const [focusHighlightKey, setFocusHighlightKey] = useState(0);
 
   // -- refs ---------------------------------------------------------------------------------------
@@ -176,6 +181,17 @@ export const Deck = forwardRef(({
     refBraceJumpMap.current?.update(index);
   }, []);
 
+  const handleMaximize = useAtomCallback(useCallback(async (get, set) => {
+    const currentMaximized = get(deckMaximizedAtom);
+    if (currentMaximized === storageKeyName) {
+      // If this deck is already maximized, restore normal view
+      set(deckMaximizedAtom, 'none');
+    } else {
+      // Maximize this deck
+      set(deckMaximizedAtom, storageKeyName);
+    }
+  }, [storageKeyName]));
+
   // apply once on init
   useEffect(() => {
     handleApplyImmediately();
@@ -212,8 +228,10 @@ export const Deck = forwardRef(({
         onCompile={handleCompile}
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
+        onMaximize={handleMaximize}
         onJumpToLine={jumpToLine}
         gainParamName={gainParamName}
+        storageKeyName={storageKeyName}
       />
 
       <DeckLibrary

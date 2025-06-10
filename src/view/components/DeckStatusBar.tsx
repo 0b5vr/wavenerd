@@ -8,9 +8,12 @@ import IconCircle from '~icons/mdi/circle-medium';
 import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
+import IconMaximize from '~icons/mdi/arrow-expand-all';
+import IconMinimize from '~icons/mdi/arrow-collapse-all';
 import { ThemeVars } from '../themes/ThemeVars';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
+import { deckMaximizedAtom } from '../stores/atoms/deck';
 
 // == styles =======================================================================================
 const StyleIcon = css`
@@ -86,6 +89,14 @@ const StyledIconBuild = styled(IconBuild)`
 `;
 
 const StyledIconApply = styled(IconApply)`
+  ${StyleIconButton}
+`;
+
+const StyledIconMaximize = styled(IconMaximize)`
+  ${StyleIconButton}
+`;
+
+const StyledIconMinimize = styled(IconMinimize)`
   ${StyleIconButton}
 `;
 
@@ -171,29 +182,36 @@ export function DeckStatusBar({
   onCompile,
   onApply,
   onApplyImmediately,
+  onMaximize,
   onJumpToLine,
   cueStatusAtom,
   hasEditAtom,
   errorAtom,
   compileTimeAtom,
   gainParamName,
+  storageKeyName,
   className,
 }: {
   onCompile: () => void;
   onApply: () => void;
   onApplyImmediately: () => void;
+  onMaximize: () => void;
   onJumpToLine: (line: number) => void;
   cueStatusAtom: PrimitiveAtom<'none' | 'compiling' | 'ready' | 'applying'>;
   hasEditAtom: PrimitiveAtom<boolean>;
   errorAtom: PrimitiveAtom<string | null>;
   compileTimeAtom: PrimitiveAtom<number>;
   gainParamName: string;
+  storageKeyName: 'a' | 'b';
   className?: string;
 }) {
   const cueStatus = useAtomValue(cueStatusAtom);
   const error = useAtomValue(errorAtom);
   const hasEdit = useAtomValue(hasEditAtom);
   const gainValue = useMidiValue(gainParamName);
+  const maximizedDeck = useAtomValue(deckMaximizedAtom);
+  
+  const isMaximized = maximizedDeck === storageKeyName;
 
   const errorFirstLine = useMemo(() => {
     return error?.split('\n')[0];
@@ -313,6 +331,17 @@ export function DeckStatusBar({
         onClick={handleClickApply}
         data-stalker="Apply the compiled shader code (Ctrl+R)&#10;Shift+Ctrl+R to apply immediately"
       />
+      {isMaximized ? (
+        <StyledIconMinimize
+          onClick={onMaximize}
+          data-stalker={`Restore deck to normal view (Ctrl+${storageKeyName === 'a' ? '1' : '2'})`}
+        />
+      ) : (
+        <StyledIconMaximize
+          onClick={onMaximize}
+          data-stalker={`Maximize deck (Ctrl+${storageKeyName === 'a' ? '1' : '2'})`}
+        />
+      )}
     </Root>
   );
 }

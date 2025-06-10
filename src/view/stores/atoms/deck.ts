@@ -33,6 +33,8 @@ export const deckImageListAtom = atom(new Set<string>());
 
 export const deckShowBAtom = atom(true);
 
+export const deckMaximizedAtom = atom<'none' | 'a' | 'b'>('none');
+
 // == sorted assets ================================================================================
 export const deckSortedSampleListAtom = atom((get) => {
   const sampleList = get(deckSampleListAtom);
