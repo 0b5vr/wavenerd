@@ -48,5 +48,8 @@
     "typescript-eslint": "^8.16.0",
     "unplugin-icons": "^0.14.3",
     "vite": "^2.9.5"
+  },
+  "dependencies": {
+    "@replit/codemirror-vim": "^6.3.0"
   }
 }

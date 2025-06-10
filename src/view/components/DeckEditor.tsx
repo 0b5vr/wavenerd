@@ -1,6 +1,7 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
+import { vim, Vim } from '@replit/codemirror-vim';
 import ReactCodeMirror, { Prec, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -150,6 +151,14 @@ export const DeckEditor = forwardRef(({
   const font = useSettings('editorFont');
   const fontVariantLigatures = useSettings('editorFontVariantLigatures');
   const guttersEnabled = useSettings('editorGuttersEnabled');
+  const vimMode = useSettings('editorVimMode');
+
+  // Configure vim mappings
+  useMemo(() => {
+    if (vimMode) {
+      Vim.map('jj', '<Esc>', 'insert');
+    }
+  }, [vimMode]);
 
   const theme = useMemo(() => {
     const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
@@ -206,52 +215,55 @@ export const DeckEditor = forwardRef(({
   }, [code, setMemoryUpdate]);
 
   // -- keymap -------------------------------------------------------------------------------------
-  const customKeymap: KeyBinding[] = useMemo(() => [
-    {
-      key: 'Mod-p',
-      preventDefault: true,
-      run: () => {
-        setLibraryOpening(true);
-        return false;
-      },
-    },
-    {
-      key: 'Mod-s',
-      preventDefault: true,
-      run: () => {
-        onCompile();
-        return false;
-      },
-    },
-    {
-      key: 'Mod-r',
-      preventDefault: true,
-      run: () => {
-        onApply();
-        return false;
-      },
-      shift: () => {
-        onApplyImmediately();
-        return false;
-      },
-    },
-    ...[...Array(10)].flatMap((_, i) => [
+  const customKeymap: KeyBinding[] = useMemo(() => {
+    const baseKeymap = [
       {
-        key: `Mod-${i}`,
+        key: 'Mod-p',
         preventDefault: true,
         run: () => {
-          handleLoadMemory(i.toString());
-          return true;
-        },
-        shift: () => {
-          handleSaveMemory(i.toString());
+          setLibraryOpening(true);
           return false;
         },
       },
-    ]),
-    ...braceJumpKeymap({ onBraceJump }),
-    ...defaultKeymap,
-  ], [onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+      {
+        key: 'Mod-s',
+        preventDefault: true,
+        run: () => {
+          onCompile();
+          return false;
+        },
+      },
+      {
+        key: 'Mod-r',
+        preventDefault: true,
+        run: () => {
+          onApply();
+          return false;
+        },
+        shift: () => {
+          onApplyImmediately();
+          return false;
+        },
+      },
+      ...[...Array(10)].flatMap((_, i) => [
+        {
+          key: `Mod-${i}`,
+          preventDefault: true,
+          run: () => {
+            handleLoadMemory(i.toString());
+            return true;
+          },
+          shift: () => {
+            handleSaveMemory(i.toString());
+            return false;
+          },
+        },
+      ]),
+      ...braceJumpKeymap({ onBraceJump }),
+    ];
+
+    return vimMode ? baseKeymap : [...baseKeymap, ...defaultKeymap];
+  }, [vimMode, onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
   // -- error layer --------------------------------------------------------------------------------
   const error = useAtomValue(errorAtom);
@@ -375,6 +387,7 @@ export const DeckEditor = forwardRef(({
           value={code}
           extensions={[
             cpp(),
+            ...(vimMode ? [vim()] : []),
             Prec.highest(keymap.of(customKeymap)),
             errorlayer,
             backlayer,
