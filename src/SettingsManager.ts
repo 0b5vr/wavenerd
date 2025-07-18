@@ -34,6 +34,8 @@ export interface Settings {
   headerItems: string;
   headerIcons: string;
   deckBShow: boolean;
+  libraryShow: boolean;
+  mixerShow: boolean;
   preferPixelFonts: boolean;
   editorFont: string;
   editorFontVariantLigatures: string;
@@ -68,6 +70,8 @@ export const defaultSettings: Settings = {
   headerItems: 'logo,transport,time,beat-number,bpm,nudge',
   headerIcons: 'recorder,midi,settings,help,github',
   deckBShow: true,
+  libraryShow: true,
+  mixerShow: true,
   preferPixelFonts: false,
   editorFont: '14px/18px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',
