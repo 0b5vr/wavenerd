@@ -40,6 +40,18 @@ export function SettingsContentAppearance() {
       />
 
       <SettingsItemBool
+        settingsKey="libraryShow"
+        name="Show Library"
+        stalkerText="Whether to show the library panel."
+      />
+
+      <SettingsItemBool
+        settingsKey="mixerShow"
+        name="Show Mixer"
+        stalkerText="Whether to show the mixer panel."
+      />
+
+      <SettingsItemBool
         settingsKey="preferPixelFonts"
         name="Prefer Pixel Fonts"
         stalkerText="Several text elements turn into pixel fonts when this is enabled."

@@ -1,34 +1,25 @@
-import { useRef } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
-import { useRect } from '../utils/useRect';
 
 // == styles =======================================================================================
-const Bg = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background: #000;
-  opacity: 0.8;
-  transform-origin: top left;
-`;
-
-const Bg2 = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background: #000;
-  opacity: 0.8;
-  transform-origin: top left;
-`;
-
 const Fg = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
 
   background: ${ThemeVars.levelMeter};
+`;
+
+const Svg = styled.svg`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
+const BlackOverlayRect = styled.rect`
+  fill: black;
+  opacity: 0.8;
 `;
 
 const Root = styled.div`
@@ -45,33 +36,20 @@ export function LevelMeter({
   peak: number;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const rect = useRect(ref);
-  const height = rect?.height ?? 0;
-
   const p = saturate(peak * 0.8);
   const l = saturate(level * 0.8);
 
-  const peakTop = height * (1.0 - p);
-  const peakBottom = Math.min(peakTop + 2, height);
-  const levelTop = height * (1.0 - l);
+  const peakTop = 1.0 - p;
+  const peakBottom = Math.min(peakTop + 0.02, 1.0);
+  const levelTop = 1.0 - l;
 
   return (
-    <Root
-      ref={ref}
-      className={className}
-    >
+    <Root className={className}>
       <Fg>
-        <Bg
-          style={{
-            transform: `scaleY(${peakTop})`,
-          }}
-        />
-        <Bg2
-          style={{
-            transform: `translateY(${peakBottom}px) scaleY(${levelTop - peakBottom})`,
-          }}
-        />
+        <Svg viewBox="0 0 1 1" preserveAspectRatio="none">
+          <BlackOverlayRect x="-1" y="0" width="3" height={peakTop} />
+          <BlackOverlayRect x="-1" y={peakBottom} width="3" height={Math.max(0.0, levelTop - peakBottom)} />
+        </Svg>
       </Fg>
     </Root>
   );

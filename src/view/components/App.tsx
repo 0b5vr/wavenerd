@@ -52,9 +52,9 @@ const DeckColumn = styled.div`
   flex-grow: 1;
 `;
 
-const SamplesColumn = styled.div`
+const CenterColumn = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   flex-direction: column;
   width: ${Metrics.sampleListWidth}px;
 `;
@@ -157,6 +157,9 @@ export function OutOfContextApp() {
 
   const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
+  const libraryShow = useSettings('libraryShow');
+  const mixerShow = useSettings('mixerShow');
+  const showCenterColumn = libraryShow || mixerShow;
 
   useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
@@ -203,14 +206,20 @@ export function OutOfContextApp() {
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
-          <SamplesColumn>
-            <StyledAssetList
-              hostDeck={deckA}
-              library={library}
-            />
-            <StyledMixerView />
-            <StyledXFader />
-          </SamplesColumn>
+          {showCenterColumn && (
+            <CenterColumn>
+              {libraryShow && (
+                <StyledAssetList
+                  hostDeck={deckA}
+                  library={library}
+                />
+              )}
+              {mixerShow && <>
+                <StyledMixerView />
+                <StyledXFader />
+              </>}
+            </CenterColumn>
+          )}
           {deckBShow && (
             <DeckColumn>
               <StyledDeck
