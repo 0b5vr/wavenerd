@@ -7,6 +7,7 @@ import { ThemeVars } from '../themes/ThemeVars';
 import { helpIsOpeningAtom } from '../stores/atoms/help';
 import styled from 'styled-components';
 import { useAtom } from 'jotai';
+import SimpleBar from 'simplebar-react';
 
 // == styles =======================================================================================
 const IconsInContent = styled.svg`
@@ -18,11 +19,12 @@ const IconsInContent = styled.svg`
   color: ${ThemeVars.fore};
 `;
 
-const Content = styled.div`
-  padding: 0 16px;
+const Content = styled(SimpleBar)`
+  padding: 0 16px 32px;
   font-size: 14px;
-  height: 80vh;
-  overflow-y: scroll;
+  width: calc(100vw - 64px);
+  max-width: 720px;
+  height: calc(100vh - 192px);
 
   h2 {
     margin: 32px 0 8px;
