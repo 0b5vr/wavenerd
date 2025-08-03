@@ -3,9 +3,9 @@
  * ```ts
  * const throttle = new Throttle();
  *
- * throttle.do( () => doExpensivePut() );
- * throttle.do( () => doExpensivePut() );
- * throttle.do( () => doExpensivePut() );
+ * throttle.do(() => doExpensivePut());
+ * throttle.do(() => doExpensivePut());
+ * throttle.do(() => doExpensivePut());
  * ```
  */
 export class Throttle<T = void> {

@@ -167,12 +167,12 @@ export function DeckLibrary({
     setSelectedIndexRaw((prev) => prev + inc);
   }, []);
 
-  const handleEnter = useCallback(() => {
+  const handleEnter = useCallback(async () => {
     if (selectedName == null) {
       return;
     }
 
-    const code = library.getCode(selectedName);
+    const code = await library.getCode(selectedName);
     if (code == null) {
       throw new Error('Unreachable. library.getCode returns undefined');
     }
@@ -188,8 +188,8 @@ export function DeckLibrary({
     setSelectedIndexRaw(0);
   }, []);
 
-  const handleSelect = useCallback((name: string) => {
-    const code = library.getCode(name);
+  const handleSelect = useCallback(async (name: string) => {
+    const code = await library.getCode(name);
     if (code == null) {
       throw new Error('Unreachable. library.getCode returns undefined');
     }

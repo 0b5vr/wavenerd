@@ -15,6 +15,11 @@ export const libraryListAddAtom = atom(null, (get, set, name: string) => {
   set(libraryListAtom, library);
 });
 
+export const libraryListSetAtom = atom(null, (_get, set, list: string[]) => {
+  const library = new Set<string>(list);
+  set(libraryListAtom, library);
+});
+
 export const libraryListDeleteAtom = atom(null, (get, set, name: string) => {
   const library = new Set(get(libraryListAtom));
   library.delete(name);

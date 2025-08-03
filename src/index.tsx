@@ -16,6 +16,7 @@ import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
 import { FrameEmitter } from './FrameEmitter';
 import { FirstOrderFilterNode } from './audio/FirstOrderFilterNode';
+import { StorageManager } from './StorageManager';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');
@@ -133,7 +134,11 @@ for (const [paramKey, value] of Object.entries(MIDIMAN.values)) {
 MIDIMAN.on('paramChange', ({ paramKey, value }) => applyMidiParam({ paramKey, value }));
 
 // == library ======================================================================================
+const storageManager = new StorageManager();
+await storageManager.initStorage();
+
 const library = new Library();
+await library.initStorage(storageManager);
 
 // == settings =====================================================================================
 function applySettings(settings: Partial<Settings>) {
