@@ -201,7 +201,7 @@ export function OutOfContextApp() {
               compileTimeAtom={deckACompileTimeAtom}
               analyser={mixer.analyserInA}
               deck={deckA}
-              storageKeyName="a"
+              storagePath="decks/a.glsl"
               gainParamName="/mixer/channel_a/gain"
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
@@ -228,7 +228,7 @@ export function OutOfContextApp() {
                 cueStatusAtom={deckBCueStatusAtom}
                 compileTimeAtom={deckBCompileTimeAtom}
                 deck={deckB}
-                storageKeyName="b"
+                storagePath="decks/b.glsl"
                 gainParamName="/mixer/channel_b/gain"
               />
               <StyledDeckKnobs paramPrefix="/deck_b" />

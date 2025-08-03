@@ -60,8 +60,15 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
     const targetDir = await this.__ensureDirectoryPath(dirPath, { create: false });
     if (!targetDir) { return undefined; }
 
-    const fileHandle = await targetDir.getFileHandle(fileName);
-    return await fileHandle.getFile();
+    const fileHandle = await targetDir.getFileHandle(fileName).catch((error) => {
+      if (error.name === 'NotFoundError') {
+        return undefined;
+      } else {
+        throw error;
+      }
+    });
+
+    return await fileHandle?.getFile();
   }
 
   public async listFiles(path: string): Promise<string[] | undefined> {

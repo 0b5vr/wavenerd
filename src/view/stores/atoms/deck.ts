@@ -1,10 +1,9 @@
 import { atom } from 'jotai';
-import { deckCodeStorage } from '../../../deckCodeStorage';
 import { defaultCodeA, defaultCodeB } from '../../../defaultCode';
 
 // == atoms ========================================================================================
-export const deckACodeAtom = atom<string>(deckCodeStorage.get('a') ?? defaultCodeA);
-export const deckBCodeAtom = atom<string>(deckCodeStorage.get('b') ?? defaultCodeB);
+export const deckACodeAtom = atom<string>(defaultCodeA);
+export const deckBCodeAtom = atom<string>(defaultCodeB);
 
 export const deckAHasEditAtom = atom(false);
 export const deckBHasEditAtom = atom(false);

@@ -1,11 +1,10 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
 import { atom, PrimitiveAtom } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { deckCodeStorage } from '../../deckCodeStorage';
 import styled, { keyframes } from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
@@ -13,6 +12,7 @@ import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
 import { DeckBraceJumpMap } from './DeckBraceJumpMap';
+import { StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const fadeOut = keyframes`
@@ -80,11 +80,11 @@ export const Deck = forwardRef(({
   analyser,
   deck,
   gainParamName,
-  storageKeyName,
+  storagePath,
 }: {
   deck: WavenerdDeck;
   gainParamName: string;
-  storageKeyName: 'a' | 'b';
+  storagePath: string;
   cueStatusAtom: PrimitiveAtom<'none' | 'ready' | 'applying' | 'compiling'>;
   errorAtom: PrimitiveAtom<string | null>;
   codeAtom: PrimitiveAtom<string>;
@@ -93,6 +93,8 @@ export const Deck = forwardRef(({
   analyser: Analyser;
   className?: string;
 }, ref: React.Ref<{ focusEditor: (highlight: boolean) => void }>) => {
+  const { storageManager } = useContext(StuffContext)!;
+
   // -- atoms and state ----------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
@@ -146,10 +148,10 @@ export const Deck = forwardRef(({
     await deck.compile(code);
     const compileTime = performance.now() - compileBegin;
 
-    deckCodeStorage.set(storageKeyName, code);
+    storageManager.save(storagePath, code);
     set(hasEditAtom, false);
     set(compileTimeAtom, compileTime);
-  }, [codeAtom, hasEditAtom, deck, storageKeyName]));
+  }, [codeAtom, hasEditAtom, deck, storagePath, compileTimeAtom, storageManager]));
 
   const handleApply = useCallback(
     async () => {
@@ -176,10 +178,25 @@ export const Deck = forwardRef(({
     refBraceJumpMap.current?.update(index);
   }, []);
 
-  // apply once on init
+  // -- init ---------------------------------------------------------------------------------------
   useEffect(() => {
-    handleApplyImmediately();
-  }, [handleApplyImmediately]);
+    const initCode = async () => {
+      const file = await storageManager.getFile(storagePath);
+      if (file != null) {
+        const code = await file.text();
+        handleLoad(code);
+      }
+
+      handleApplyImmediately();
+    }
+    initCode();
+
+    const handleInit = storageManager.on('init', initCode);
+
+    return () => {
+      storageManager.off('init', handleInit);
+    };
+  }, [storageManager, storagePath, handleLoad, handleApplyImmediately]);
 
   // -- imperative handle --------------------------------------------------------------------------
   useImperativeHandle(ref, () => ({ focusEditor }), [focusEditor]);

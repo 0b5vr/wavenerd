@@ -2,7 +2,7 @@ import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror, { Prec, ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
@@ -12,9 +12,9 @@ import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
-import { deckMemoryStorage } from '../../deckMemoryStorage';
 import { createCMTheme } from '../codemirror/createCMTheme';
 import { createErrorlayer } from '../codemirror/createErrorlayer';
+import { StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const StyledReactCodeMirror = styled(ReactCodeMirror)<{ guttersEnabled: boolean }>`
@@ -140,6 +140,8 @@ export const DeckEditor = forwardRef(({
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   className?: string;
 }, ref: React.Ref<{ focusEditor: () => void }>) => {
+  const { storageManager } = useContext(StuffContext)!;
+
   const refCodeMirror = useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
@@ -173,14 +175,14 @@ export const DeckEditor = forwardRef(({
     set(logsAtom, [log, ...logs].slice(0, 5));
   }, [logsAtom]));
 
-  const handleLoadMemory = useCallback((key: string) => {
-    const obj = deckMemoryStorage.get(key);
-    if (obj == null) {
+  const handleLoadMemory = useCallback(async (key: string) => {
+    const codeFile = await storageManager.getFile(`memories/${key}.glsl`);
+    if (codeFile == null) {
       setMemoryUpdate({ key, status: 'loadfailed' });
       return;
     }
 
-    const code = obj.code ?? '';
+    const code = await codeFile.text();
     const to = refCodeMirror.current?.view?.state?.doc.length;
     refCodeMirror.current?.view?.dispatch(
       { changes: [
@@ -188,7 +190,8 @@ export const DeckEditor = forwardRef(({
       ] },
     );
 
-    const head = obj.head ?? 0;
+    const headFile = await storageManager.getFile(`memories/${key}_head.txt`);
+    const head = parseInt(await headFile?.text() ?? '0');
     const scrollEffect = EditorView.scrollIntoView(head, { y: 'center' });
     refCodeMirror.current?.view?.dispatch(
       { selection: { anchor: head, head } },
@@ -198,9 +201,10 @@ export const DeckEditor = forwardRef(({
     setMemoryUpdate({ key, status: 'loaded' });
   }, [setMemoryUpdate]);
 
-  const handleSaveMemory = useCallback((key: string) => {
+  const handleSaveMemory = useCallback(async (key: string) => {
     const head = refCodeMirror.current?.view?.state.selection.main.head ?? 0;
-    deckMemoryStorage.set(key, { code, head });
+    await storageManager.save(`memories/${key}.glsl`, code);
+    await storageManager.save(`memories/${key}_head.txt`, head.toString());
 
     setMemoryUpdate({ key, status: 'saved' });
   }, [code, setMemoryUpdate]);
