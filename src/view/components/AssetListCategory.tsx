@@ -1,11 +1,13 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
 import { ThemeVars } from '../themes/ThemeVars';
-import { sanitizeAssetName } from './utils/sanitizeAssetName';
 import styled from 'styled-components';
 import IconNull from '~icons/mdi/circle-off-outline';
+import { atom, useAtomValue } from 'jotai';
+import { storageFileListAtom } from '../stores/atoms/storage';
+import { StuffContext } from '../StuffContext';
 
 // == styles =======================================================================================
 const NoAssetsIcon = styled(IconNull)`
@@ -74,17 +76,23 @@ function NoAssets({ text }: { text: string }): JSX.Element {
 // == components ===================================================================================
 export function AssetListCategory({
   title,
-  assets,
-  onLoadAsset,
-  onDeleteAsset,
+  dir,
   className,
 }: {
   title: string;
-  assets: string[];
-  onLoadAsset: (name: string, file: File) => Promise<void>;
-  onDeleteAsset: (name: string) => void;
+  dir: string;
   className?: string;
 }) {
+  const { storageManager } = useContext(StuffContext)!;
+
+  const assetsAtom = useMemo(() => atom((get) => {
+    const fileList = get(storageFileListAtom);
+    const array = Array.from(fileList).filter((name) => name.startsWith(`${dir}/`));
+    array.sort();
+    return array.map((name) => name.substring(dir.length + 1));
+  }), [dir]);
+  const assets = useAtomValue(assetsAtom);
+
   const [expand, setExpand] = useState(true);
   const handleChangeExpand = useCallback(
     () => {
@@ -118,16 +126,15 @@ export function AssetListCategory({
   const handleLoadFile = useCallback(
     async (files: FileList) => {
       Array.from(files).forEach(async (file) => {
-        const name = sanitizeAssetName(file.name.split('.')[0]);
-        if (name == null) {
-          throw new Error('The name of given sample file is not valid');
-        }
-
-        onLoadAsset(name, file);
+        storageManager.save(`${dir}/${file.name}`, file);
       });
     },
-    [onLoadAsset],
+    [dir, storageManager],
   );
+
+  const handleDeleteAsset = useCallback((name: string) => {
+    storageManager.delete(`${dir}/${name}`);
+  }, [dir, storageManager]);
 
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -164,7 +171,7 @@ export function AssetListCategory({
                 <StyledEntry
                   key={name}
                   name={name}
-                  onDeleteAsset={onDeleteAsset}
+                  onDeleteAsset={handleDeleteAsset}
                 />
               ))
             }

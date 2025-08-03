@@ -209,10 +209,7 @@ export function OutOfContextApp() {
           {showCenterColumn && (
             <CenterColumn>
               {libraryShow && (
-                <StyledAssetList
-                  hostDeck={deckA}
-                  storageManager={storageManager}
-                />
+                <StyledAssetList />
               )}
               {mixerShow && <>
                 <StyledMixerView />

@@ -10,10 +10,14 @@ function useStorageListSubscriber(storageManager: StorageManager) {
 
   useEffect(() => {
     // Initialize the storage file list with existing items
-    storageManager.listFilesRecursive('/').then((list) => {
-      for (const fileName of list || []) {
-        addList(fileName);
-      }
+    storageManager.listFilesRecursive('').then((list) => {
+      setList(list || []);
+    });
+
+    const handleInit = storageManager.on('init', async () => {
+      // Re-fetch the file list after initialization
+      const list = await storageManager.listFilesRecursive('');
+      setList(list || []);
     });
 
     const handleSave = storageManager.on('save', ({ path }) => {
@@ -25,6 +29,7 @@ function useStorageListSubscriber(storageManager: StorageManager) {
     });
 
     return () => {
+      storageManager.off('init', handleInit);
       storageManager.off('save', handleSave);
       storageManager.off('delete', handleDelete);
     };

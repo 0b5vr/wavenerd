@@ -16,6 +16,8 @@ import { DCRemovalNode } from './audio/DCRemovalNode';
 import { FrameEmitter } from './FrameEmitter';
 import { FirstOrderFilterNode } from './audio/FirstOrderFilterNode';
 import { StorageManager } from './StorageManager';
+import { loadFileAsImage } from './utils/loadFileAsImage';
+import { pathToAssetName } from './utils/pathToAssetName';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');
@@ -135,6 +137,60 @@ MIDIMAN.on('paramChange', ({ paramKey, value }) => applyMidiParam({ paramKey, va
 // == storage ======================================================================================
 const storageManager = new StorageManager();
 await storageManager.init();
+
+async function handleUpdateStorage(path: string) {
+  const name = pathToAssetName(path);
+
+  if (path.startsWith('samples/')) {
+    const file = await storageManager.getFile(path);
+    const buffer = await file?.arrayBuffer();
+    if (buffer == null) {
+      console.error(`Failed to load sample: ${path}`);
+    } else {
+      deckA.loadSample(name, buffer);
+    }
+  } else if (path.startsWith('wavetables/')) {
+    const file = await storageManager.getFile(path);
+    const buffer = await file?.arrayBuffer();
+    if (buffer == null) {
+      console.error(`Failed to load wavetable: ${path}`);
+    } else {
+      deckA.loadWavetable(name, new Float32Array(buffer));
+    }
+  } else if (path.startsWith('images/')) {
+    const file = await storageManager.getFile(path);
+    if (file == null) {
+      console.error(`Failed to load image: ${path}`);
+    } else {
+      const image = await loadFileAsImage(file);
+      deckA.loadImage(name, image);
+    }
+  }
+}
+
+function handleDeleteStorage(path: string) {
+  const name = pathToAssetName(path);
+
+  if (path.startsWith('samples/')) {
+    deckA.deleteSample(name);
+  } else if (path.startsWith('wavetables/')) {
+    deckA.deleteWavetable(name);
+  } else if (path.startsWith('images/')) {
+    deckA.deleteImage(name);
+  }
+}
+
+async function handleInitStorage() {
+  const list = await storageManager.listFilesRecursive('');
+  for (const path of list || []) {
+    handleUpdateStorage(path);
+  }
+}
+handleInitStorage();
+
+storageManager.on('init', handleInitStorage);
+storageManager.on('save', ({ path }) => handleUpdateStorage(path));
+storageManager.on('delete', ({ path }) => handleDeleteStorage(path));
 
 // == settings =====================================================================================
 function applySettings(settings: Partial<Settings>) {
