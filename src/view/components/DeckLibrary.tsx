@@ -1,10 +1,10 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { libraryListSortedAtom } from '../stores/atoms/library';
 import styled from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
 import { mod } from '@0b5vr/experimental';
 import { StuffContext } from '../StuffContext';
+import { storageFileListShadersAtom } from '../stores/atoms/storage';
 
 const StyledInput = styled.input`
   width: 100%;
@@ -141,26 +141,26 @@ export function DeckLibrary({
   onLoad: (code: string) => void;
   focusEditor: (highlight: boolean) => void;
 }) {
-  const { library } = useContext(StuffContext)!;
+  const { storageManager } = useContext(StuffContext)!;
   const [isLibraryOpening, setLibraryOpening] = useAtom(libraryOpeningAtom);
 
   const [textInputValue, setTextInputValue] = useState('');
 
-  const libraryListSorted = useAtomValue(libraryListSortedAtom);
-  const libraryListFiltered = useMemo(
-    () => libraryListSorted.filter((name) => name.includes(textInputValue)),
-    [libraryListSorted, textInputValue],
+  const shadersList = useAtomValue(storageFileListShadersAtom);
+  const shadersListFiltered = useMemo(
+    () => shadersList.filter((name) => name.includes(textInputValue)),
+    [shadersList, textInputValue],
   );
 
   const [selectedIndexRaw, setSelectedIndexRaw] = useState(0);
   const selectedIndex = useMemo(
-    () => mod(selectedIndexRaw, libraryListFiltered.length),
-    [selectedIndexRaw, libraryListFiltered.length],
+    () => mod(selectedIndexRaw, shadersListFiltered.length),
+    [selectedIndexRaw, shadersListFiltered.length],
   );
 
   const selectedName = useMemo(
-    () => libraryListFiltered[selectedIndex] as (string | undefined),
-    [libraryListFiltered, selectedIndex],
+    () => shadersListFiltered[selectedIndex] as (string | undefined),
+    [shadersListFiltered, selectedIndex],
   );
 
   const handleCursor = useCallback((inc: number) => {
@@ -172,7 +172,8 @@ export function DeckLibrary({
       return;
     }
 
-    const code = await library.getCode(selectedName);
+    const file = await storageManager.getFile(selectedName);
+    const code = await file?.text();
     if (code == null) {
       throw new Error('Unreachable. library.getCode returns undefined');
     }
@@ -180,7 +181,7 @@ export function DeckLibrary({
     onLoad(code);
     setLibraryOpening(false);
     focusEditor(false);
-  }, [onLoad, library, selectedName, focusEditor]);
+  }, [onLoad, storageManager, selectedName, focusEditor]);
 
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -189,7 +190,8 @@ export function DeckLibrary({
   }, []);
 
   const handleSelect = useCallback(async (name: string) => {
-    const code = await library.getCode(name);
+    const file = await storageManager.getFile(name);
+    const code = await file?.text();
     if (code == null) {
       throw new Error('Unreachable. library.getCode returns undefined');
     }
@@ -197,7 +199,7 @@ export function DeckLibrary({
     onLoad(code);
     setLibraryOpening(false);
     focusEditor(false);
-  }, [onLoad, library, focusEditor]);
+  }, [onLoad, storageManager, focusEditor]);
 
   if (!isLibraryOpening) {
     return null;
@@ -214,7 +216,7 @@ export function DeckLibrary({
           onChange={handleChange}
           focusEditor={focusEditor}
         />
-        {libraryListFiltered.map((name, i) => (
+        {shadersListFiltered.map((name, i) => (
           <DeckLibraryItem
             key={name}
             name={name}
@@ -222,9 +224,9 @@ export function DeckLibrary({
             onSelect={handleSelect}
           />
         ))}
-        {libraryListFiltered.length === 0 && (
+        {shadersListFiltered.length === 0 && (
           <DeckLibraryItem
-            name={libraryListSorted.length === 0 ? 'Library is empty' : 'No matching results'}
+            name={shadersList.length === 0 ? 'Library is empty' : 'No matching results'}
             isSelected={false}
           />
         )}

@@ -10,7 +10,6 @@ import { Reverb } from './audio/Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
-import { Library } from './Library';
 import { FullscreenManager } from './FullscreenManager';
 import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
@@ -133,12 +132,9 @@ for (const [paramKey, value] of Object.entries(MIDIMAN.values)) {
 
 MIDIMAN.on('paramChange', ({ paramKey, value }) => applyMidiParam({ paramKey, value }));
 
-// == library ======================================================================================
+// == storage ======================================================================================
 const storageManager = new StorageManager();
-await storageManager.initStorage();
-
-const library = new Library();
-await library.initStorage(storageManager);
+await storageManager.init();
 
 // == settings =====================================================================================
 function applySettings(settings: Partial<Settings>) {
@@ -195,8 +191,8 @@ root.render(
       hostDeck: deckA,
       mixer,
       recorder,
-      library,
       router,
+      storageManager,
       fullscreenManager,
       frameEmitter,
     }}

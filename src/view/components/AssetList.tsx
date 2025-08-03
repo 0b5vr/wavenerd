@@ -5,8 +5,8 @@ import WavenerdDeck from '@0b5vr/wavenerd-deck';
 import { loadFileAsImage } from './utils/loadFileAsImage';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
-import { libraryListSortedAtom } from '../stores/atoms/library';
-import { Library } from '../../Library';
+import { storageFileListShadersAtom } from '../stores/atoms/storage';
+import { StorageManager } from '../../StorageManager';
 
 // == styles =======================================================================================
 const StyledAssetListCategory = styled(AssetListCategory)`
@@ -18,27 +18,27 @@ const Root = styled.div`
 `;
 
 // == components ===================================================================================
-export function AssetList({ hostDeck, library, className }: {
+export function AssetList({ hostDeck, storageManager, className }: {
   hostDeck: WavenerdDeck;
-  library: Library;
+  storageManager: StorageManager;
   className?: string;
 }) {
-  const libraryListSorted = useAtomValue(libraryListSortedAtom);
+  const shadersList = useAtomValue(storageFileListShadersAtom);
   const sortedSampleList = useAtomValue(deckSortedSampleListAtom);
   const sortedWavetableList = useAtomValue(deckSortedWavetableListAtom);
   const sortedImageList = useAtomValue(deckSortedImageListAtom);
 
-  const handleLoadLibrary = useCallback(
+  const handleLoadShader = useCallback(
     async (name: string, file: File) => {
       const code = await file.text();
-      library.add(name, code);
+      storageManager.save(`shaders/${name}`, code);
     },
     [hostDeck],
   );
 
-  const handleDeleteLibrary = useCallback(
+  const handleDeleteShader = useCallback(
     (name: string) => {
-      library.delete(name);
+      storageManager.delete(`shaders/${name}`);
     },
     [hostDeck],
   );
@@ -94,10 +94,10 @@ export function AssetList({ hostDeck, library, className }: {
       className={className}
     >
       <StyledAssetListCategory
-        title="Library"
-        assets={libraryListSorted}
-        onLoadAsset={handleLoadLibrary}
-        onDeleteAsset={handleDeleteLibrary}
+        title="Shaders"
+        assets={shadersList}
+        onLoadAsset={handleLoadShader}
+        onDeleteAsset={handleDeleteShader}
       />
       <StyledAssetListCategory
         title="Samples"

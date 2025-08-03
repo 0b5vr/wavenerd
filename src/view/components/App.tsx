@@ -25,9 +25,9 @@ import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
-import { useLibrarySubscribers } from '../stores/hooks/useLibrarySubscribers';
 import { Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
+import { useStorageSubscribers } from '../stores/hooks/useStorageSubscribers';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -153,7 +153,7 @@ function useFocusDeckShortcuts({
 
 // == component ====================================================================================
 export function OutOfContextApp() {
-  const { deckA, deckB, mixer, recorder, library } = useContext(StuffContext)!;
+  const { deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
 
   const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
@@ -166,7 +166,7 @@ export function OutOfContextApp() {
   useSettingsSubscribers(SETTINGSMAN);
   useDeckSubscribers(deckA, deckA, deckB);
   useRecorderSubscribers(recorder);
-  useLibrarySubscribers(library);
+  useStorageSubscribers(storageManager);
   useFullscreenSubscriber();
 
   const refDeckA = useRef<{ focusEditor: (highlight: boolean) => void }>(null);
@@ -211,7 +211,7 @@ export function OutOfContextApp() {
               {libraryShow && (
                 <StyledAssetList
                   hostDeck={deckA}
-                  library={library}
+                  storageManager={storageManager}
                 />
               )}
               {mixerShow && <>

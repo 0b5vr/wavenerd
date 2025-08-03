@@ -120,7 +120,7 @@ export function HelpModal() {
         <ul>
           <li><code>Ctrl-J</code>: Focus deck A</li>
           <li><code>Ctrl-K</code>: Focus deck B</li>
-          <li><code>Ctrl-P</code>: Open the library</li>
+          <li><code>Ctrl-P</code>: Open the shader library</li>
           <li><code>Ctrl-S</code>: Compile the code</li>
           <li><code>Ctrl-R</code>: Apply the code</li>
           <li><code>Shift-Ctrl-R</code>: Apply the code immediately</li>

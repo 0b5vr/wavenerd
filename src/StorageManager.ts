@@ -1,13 +1,23 @@
-export class StorageManager {
+import { EventEmittable } from './utils/EventEmittable';
+
+interface StorageManagerEvents {
+  init: void;
+  save: { path: string };
+  delete: { path: string };
+}
+
+export class StorageManager extends EventEmittable<StorageManagerEvents> {
   private __root?: FileSystemDirectoryHandle;
   private __directoryCache = new Map<string, FileSystemDirectoryHandle>();
 
-  public async initStorage(): Promise<void> {
+  public async init(): Promise<void> {
     try {
       this.__root = await navigator.storage.getDirectory();
     } catch (error) {
       console.warn('OPFS not available:', error);
     }
+
+    this.__emit('init');
   }
 
   public async save(path: string, content: BufferSource | Blob | string): Promise<void> {
@@ -23,6 +33,8 @@ export class StorageManager {
     const writable = await fileHandle.createWritable();
     await writable.write(content);
     await writable.close();
+
+    this.__emit('save', { path: this.__normalizePath(path) });
   }
 
   public async delete(path: string): Promise<void> {
@@ -35,6 +47,8 @@ export class StorageManager {
     if (!targetDir) { return; }
 
     await targetDir.removeEntry(fileName);
+
+    this.__emit('delete', { path: this.__normalizePath(path) });
   }
 
   public async getFile(path: string): Promise<File | undefined> {
@@ -79,7 +93,7 @@ export class StorageManager {
       } else if (entry.kind === 'directory') {
         const subFiles = await this.listFilesRecursive(`${path}/${entry.name}`);
         if (subFiles) {
-          files.push(...subFiles.map(subFile => `${entry.name}/${subFile}`));
+          files.push(...subFiles.map((subFile) => `${entry.name}/${subFile}`));
         }
       }
     }
@@ -92,6 +106,11 @@ export class StorageManager {
     const fileName = parts.pop() || '';
     const dirPath = parts.join('/');
     return [dirPath, fileName];
+  }
+
+  private __normalizePath(path: string): string {
+    const parts = path.split('/').filter(part => part.length > 0);
+    return parts.join('/');
   }
 
   private async __ensureDirectoryPath(path: string, { create = false }: { create?: boolean }): Promise<FileSystemDirectoryHandle | undefined> {

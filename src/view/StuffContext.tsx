@@ -3,9 +3,9 @@ import { AudioDestinationRouter } from '../audio/AudioDestinationRouter';
 import { Recorder } from '../audio/Recorder';
 import { Mixer } from '../audio/Mixer';
 import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { Library } from '../Library';
 import { FullscreenManager } from '../FullscreenManager';
 import { FrameEmitter } from '../FrameEmitter';
+import { StorageManager } from '../StorageManager';
 
 export interface Stuff {
   deckA: WavenerdDeck;
@@ -13,7 +13,7 @@ export interface Stuff {
   hostDeck: WavenerdDeck;
   mixer: Mixer;
   recorder: Recorder;
-  library: Library;
+  storageManager: StorageManager;
   router: AudioDestinationRouter;
   fullscreenManager: FullscreenManager;
   frameEmitter: FrameEmitter;
