@@ -188,7 +188,7 @@ export const Deck = forwardRef(({
       }
 
       handleApplyImmediately();
-    }
+    };
     initCode();
 
     const handleInit = storageManager.on('init', initCode);

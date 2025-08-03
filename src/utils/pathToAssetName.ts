@@ -2,7 +2,7 @@ export function pathToAssetName(path: string): string {
   const filename = path.split('/').pop() || '';
 
   const splitted = filename.split('.');
-  const ext = splitted.pop();
+  splitted.pop(); // remove the file extension
   let sanitized = splitted.join('_');
 
   // replace any non-alphanumeric characters with underscores

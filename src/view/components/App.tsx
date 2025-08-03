@@ -211,10 +211,12 @@ export function OutOfContextApp() {
               {libraryShow && (
                 <StyledAssetList />
               )}
-              {mixerShow && <>
-                <StyledMixerView />
-                <StyledXFader />
-              </>}
+              {mixerShow && (
+                <>
+                  <StyledMixerView />
+                  <StyledXFader />
+                </>
+              )}
             </CenterColumn>
           )}
           {deckBShow && (

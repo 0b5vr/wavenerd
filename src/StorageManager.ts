@@ -116,14 +116,14 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
   }
 
   private __normalizePath(path: string): string {
-    const parts = path.split('/').filter(part => part.length > 0);
+    const parts = path.split('/').filter((part) => part.length > 0);
     return parts.join('/');
   }
 
   private async __ensureDirectoryPath(path: string, { create = false }: { create?: boolean }): Promise<FileSystemDirectoryHandle | undefined> {
     if (!this.__root) return undefined;
 
-    const parts = path.split('/').filter(part => part.length > 0);
+    const parts = path.split('/').filter((part) => part.length > 0);
     if (parts.length === 0) return this.__root;
 
     // Check cache first
