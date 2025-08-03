@@ -2,13 +2,6 @@ import { atom } from 'jotai';
 
 export const storageFileListAtom = atom(new Set<string>());
 
-export const storageFileListShadersAtom = atom((get) => {
-  const fileList = get(storageFileListAtom);
-  const array = Array.from(fileList).filter((name) => name.startsWith('shaders/'));
-  array.sort();
-  return array;
-});
-
 export const storageFileListAddAtom = atom(null, (get, set, name: string) => {
   const fileList = new Set(get(storageFileListAtom));
   fileList.add(name);

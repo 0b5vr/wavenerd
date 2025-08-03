@@ -1,11 +1,13 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
-import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { atom, PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import styled from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
 import { mod } from '@0b5vr/experimental';
 import { StuffContext } from '../StuffContext';
-import { storageFileListShadersAtom } from '../stores/atoms/storage';
+import SimpleBar from 'simplebar-react';
+import { storageFileListAtom } from '../stores/atoms/storage';
 
+// == styles =======================================================================================
 const StyledInput = styled.input`
   width: 100%;
   padding: 4px;
@@ -32,6 +34,12 @@ const ListItem = styled.div<{ isSelected: boolean }>`
   }
 `;
 
+const Result = styled(SimpleBar)`
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
+
 const Box = styled.div`
   margin-top: 8px;
   padding: 4px;
@@ -55,11 +63,20 @@ const Root = styled.div`
   pointer-events: none;
 `;
 
+// == atoms ========================================================================================
+const storageFileListShadersAtom = atom((get) => {
+  const fileList = get(storageFileListAtom);
+  const array = Array.from(fileList).filter((name) => name.startsWith('shaders/'));
+  array.sort();
+  return array.map((name) => name.substring(8));
+});
+
 // == children =====================================================================================
-const DeckLibraryItem = ({ name, isSelected, onSelect }: {
+const DeckLibraryItem = ({ name, isSelected, onSelect, itemRef }: {
   name: string;
   isSelected: boolean;
   onSelect?: (name: string) => void;
+  itemRef?: React.RefObject<HTMLDivElement>;
 }): JSX.Element => {
   const handlePointerDown = useCallback(() => {
     onSelect?.(name);
@@ -67,6 +84,7 @@ const DeckLibraryItem = ({ name, isSelected, onSelect }: {
 
   return (
     <ListItem
+      ref={itemRef}
       isSelected={isSelected}
       onPointerDown={handlePointerDown}
     >
@@ -158,10 +176,33 @@ export function DeckLibrary({
     [selectedIndexRaw, shadersListFiltered.length],
   );
 
+  const selectedItemRef = useRef<HTMLDivElement>(null);
+
   const selectedName = useMemo(
     () => shadersListFiltered[selectedIndex] as (string | undefined),
     [shadersListFiltered, selectedIndex],
   );
+
+  useEffect(() => {
+    if (isLibraryOpening && selectedItemRef.current) {
+      selectedItemRef.current.scrollIntoView({
+        behavior: 'instant',
+        block: 'center',
+      });
+    }
+  }, [isLibraryOpening, selectedIndex]);
+
+  const load = useCallback(async (name: string) => {
+    const file = await storageManager.getFile(`shaders/${name}`);
+    const code = await file?.text();
+    if (code == null) {
+      throw new Error('Unreachable. library.getCode returns undefined');
+    }
+
+    onLoad(code);
+    setLibraryOpening(false);
+    focusEditor(false);
+  }, [onLoad, storageManager, setLibraryOpening, focusEditor]);
 
   const handleCursor = useCallback((inc: number) => {
     setSelectedIndexRaw((prev) => prev + inc);
@@ -172,16 +213,8 @@ export function DeckLibrary({
       return;
     }
 
-    const file = await storageManager.getFile(selectedName);
-    const code = await file?.text();
-    if (code == null) {
-      throw new Error('Unreachable. library.getCode returns undefined');
-    }
-
-    onLoad(code);
-    setLibraryOpening(false);
-    focusEditor(false);
-  }, [onLoad, storageManager, selectedName, focusEditor]);
+    load(selectedName);
+  }, [selectedName, load]);
 
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -190,16 +223,9 @@ export function DeckLibrary({
   }, []);
 
   const handleSelect = useCallback(async (name: string) => {
-    const file = await storageManager.getFile(name);
-    const code = await file?.text();
-    if (code == null) {
-      throw new Error('Unreachable. library.getCode returns undefined');
-    }
-
-    onLoad(code);
-    setLibraryOpening(false);
-    focusEditor(false);
-  }, [onLoad, storageManager, focusEditor]);
+    setSelectedIndexRaw(shadersListFiltered.indexOf(name));
+    load(name);
+  }, [load]);
 
   if (!isLibraryOpening) {
     return null;
@@ -216,20 +242,23 @@ export function DeckLibrary({
           onChange={handleChange}
           focusEditor={focusEditor}
         />
-        {shadersListFiltered.map((name, i) => (
-          <DeckLibraryItem
-            key={name}
-            name={name}
-            isSelected={i === selectedIndex}
-            onSelect={handleSelect}
-          />
-        ))}
-        {shadersListFiltered.length === 0 && (
-          <DeckLibraryItem
-            name={shadersList.length === 0 ? 'Library is empty' : 'No matching results'}
-            isSelected={false}
-          />
-        )}
+        <Result>
+          {shadersListFiltered.map((name, i) => (
+            <DeckLibraryItem
+              key={name}
+              name={name}
+              isSelected={i === selectedIndex}
+              onSelect={handleSelect}
+              itemRef={i === selectedIndex ? selectedItemRef : undefined}
+            />
+          ))}
+          {shadersListFiltered.length === 0 && (
+            <DeckLibraryItem
+              name={shadersList.length === 0 ? 'Library is empty' : 'No matching results'}
+              isSelected={false}
+            />
+          )}
+        </Result>
       </Box>
     </Root>
   );
