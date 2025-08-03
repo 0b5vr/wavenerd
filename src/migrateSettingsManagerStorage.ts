@@ -19,7 +19,6 @@ export function migrateSettingsManagerStorage(key: string): void {
   let data = rawData ? JSON.parse(rawData) : { version: VERSION_LATEST };
 
   data = migrate20250304(data);
-  console.log(data);
 
   localStorage.setItem(key, JSON.stringify(data));
 }

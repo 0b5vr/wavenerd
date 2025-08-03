@@ -17,10 +17,8 @@ class FirstOrderFilterProcessor extends AudioWorkletProcessor {
     this._type = 'lowpass';
 
     this.port.onmessage = (ev) => {
-      console.log(ev);
       const { type, value } = ev.data;
       if (type === 'setType') {
-        console.log(value);
         this._type = value;
       }
     };
