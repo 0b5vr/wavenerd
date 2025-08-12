@@ -1,3 +1,6 @@
+import { Settings } from './SettingsManager';
+import { StorageManager } from './StorageManager';
+
 const VERSION_2025_03_04 = 2025_03_04;
 const VERSION_LATEST = VERSION_2025_03_04;
 
@@ -14,11 +17,24 @@ function migrate20250304(data: any): any {
   };
 }
 
-export function migrateSettingsManagerStorage(key: string): void {
-  const rawData = localStorage.getItem(key);
-  let data = rawData ? JSON.parse(rawData) : { version: VERSION_LATEST };
+export async function migrateSettingsManagerStorage(storageManager: StorageManager): Promise<Settings> {
+  // Try loading the settings from the storage manager
+  const rawDataFile = await storageManager.getFile('settings.json');
+  let rawData = await rawDataFile?.text();
+
+  if (!rawData) {
+    // Used to be stored in localStorage
+    rawData = localStorage.getItem('wavenerd-settings') ?? undefined;
+  }
+
+  if (!rawData) {
+    // If no data exists, return default settings
+    rawData = JSON.stringify({ version: VERSION_LATEST });
+  }
+
+  let data = JSON.parse(rawData);
 
   data = migrate20250304(data);
 
-  localStorage.setItem(key, JSON.stringify(data));
+  return data;
 }

@@ -1,8 +1,9 @@
 import { EventEmittable } from './utils/EventEmittable';
-import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
-import { migrateMIDIManagerStorage } from './migrateMIDIManagerStorage';
+import { migrateMIDIManagerStorage, MIDI_VERSION_LATEST } from './migrateMIDIManagerStorage';
+import { StorageManager } from './StorageManager';
+import { throttle } from 'throttle-debounce';
 
-interface MidiManagerStorageType {
+export interface MidiManagerStorageType {
   version?: number;
   values?: { [ key: string ]: number };
   mappings?: { [ key: string ]: string };
@@ -18,6 +19,7 @@ interface MidiManagerEvents {
   mappingAssign: { midiKey: string; paramKey: string };
   mappingUnassign: { midiKey: string };
   learn: { paramKey: string | null };
+  initStorage: void;
 }
 
 export class MidiManager extends EventEmittable<MidiManagerEvents> {
@@ -41,21 +43,37 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     return this.__mappings;
   }
 
-  private __storage: ThrottledJSONStorage<MidiManagerStorageType>;
   private __learningParam: string | null = null;
+
+  private __throttledSave?: () => void;
 
   public constructor() {
     super();
-
-    migrateMIDIManagerStorage('wavenerd-midiManager');
-    this.__storage = new ThrottledJSONStorage('wavenerd-midiManager');
 
     this.defaultValues = {};
 
     this.__deviceSet = new Set();
 
-    this.__values = this.__storage.get('values') ?? {};
-    this.__mappings = this.__storage.get('mappings') ?? {};
+    this.__values = {};
+    this.__mappings = {};
+  }
+
+  public async initStorage(storageManager: StorageManager): Promise<void> {
+    const data = await migrateMIDIManagerStorage(storageManager);
+
+    this.__values = data.values ?? {};
+    this.__mappings = data.mappings ?? {};
+
+    this.__emit('initStorage');
+
+    this.__throttledSave = throttle(1000, async () => {
+      const rawData = JSON.stringify({
+        version: MIDI_VERSION_LATEST,
+        values: this.__values,
+        mappings: this.__mappings,
+      });
+      await storageManager.save('midi.json', rawData);
+    });
   }
 
   public midi(key: string): number {
@@ -92,26 +110,24 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   public assignMapping(midiKey: string, paramKey: string): void {
     this.__mappings[midiKey] = paramKey;
-    this.__storage.set('mappings', this.__mappings);
     this.__emit('mappingAssign', { midiKey, paramKey });
+    this.__throttledSave?.();
   }
 
   public unassignMapping(midiKey: string): void {
     delete this.__mappings[midiKey];
-    this.__storage.set('mappings', this.__mappings);
     this.__emit('mappingUnassign', { midiKey });
+    this.__throttledSave?.();
   }
 
   public setValue(paramKey: string, value: number, midiKey?: string | null): void {
     this.__values[paramKey] = value;
-
-    this.__storage.set('values', this.__values);
-
     this.__emit('paramChange', {
       paramKey,
       value,
       midiKey: midiKey ?? null,
     });
+    this.__throttledSave?.();
   }
 
   private __handleMidiMessage(

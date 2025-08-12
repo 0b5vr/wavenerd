@@ -1,7 +1,8 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { MixerEQMode, MixerFilterMode } from './audio/MixerChannel';
-import { ThrottledJSONStorage } from './utils/ThrottledJSONStorage';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
+import { throttle } from 'throttle-debounce';
+import { StorageManager } from './StorageManager';
 
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
@@ -84,28 +85,41 @@ export const defaultSettings: Settings = {
 
 interface SettingsManagerEvents {
   change: Partial<Settings>;
+  initStorage: void;
 }
 
 export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
+  private __values: Settings;
   public get values(): Settings {
-    return {
-      ...defaultSettings,
-      ...this.__storage.values,
-    };
+    return this.__values;
   }
 
-  public set(key: keyof Settings, value: Settings[ keyof Settings ]): void {
-    this.__storage.set(key, value);
-    this.__emit('change', { [key]: value });
-  }
-
-  private __storage: ThrottledJSONStorage<Settings>;
+  private __throttledSave?: () => void;
 
   public constructor() {
     super();
 
-    migrateSettingsManagerStorage('wavenerd-settings');
-    this.__storage = new ThrottledJSONStorage('wavenerd-settings');
+    this.__values = structuredClone(defaultSettings);
+  }
+
+  public async initStorage(storageManager: StorageManager): Promise<void> {
+    this.__values = {
+      ...this.__values,
+      ...(await migrateSettingsManagerStorage(storageManager)),
+    };
+
+    this.__emit('initStorage');
+
+    this.__throttledSave = throttle(1000, async () => {
+      const rawData = JSON.stringify(this.__values);
+      await storageManager.save('settings.json', rawData);
+    });
+  }
+
+  public set<TKey extends keyof Settings>(key: TKey, value: Settings[TKey]): void {
+    this.__values[key] = value;
+    this.__emit('change', { [key]: value });
+    this.__throttledSave?.();
   }
 }
 

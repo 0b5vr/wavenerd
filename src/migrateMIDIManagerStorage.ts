@@ -1,7 +1,11 @@
+import { MidiManagerStorageType } from './MIDIManager';
+import { StorageManager } from './StorageManager';
+
 const VERSION_2024_11_23 = 2024_11_23;
 const VERSION_2025_02_11 = 2025_02_11;
-const VERSION_LATEST = VERSION_2025_02_11;
+export const MIDI_VERSION_LATEST = VERSION_2025_02_11;
 
+// == 2024-11-23 ===================================================================================
 const nameMap20241123: Record<string, string> = {
   'XFader': '/mixer/xfader_pos',
   'gainA': '/mixer/channel_a/gain',
@@ -70,6 +74,7 @@ function migrate20241123(data: any): any {
   };
 }
 
+// == 2025-02-11 ===================================================================================
 function migrate20250211(data: any): any {
   if (data.version != null && data.version >= VERSION_2025_02_11) { return data; }
 
@@ -98,12 +103,26 @@ function migrate20250211(data: any): any {
   };
 }
 
-export function migrateMIDIManagerStorage(key: string): void {
-  const rawData = localStorage.getItem(key);
-  let data = rawData ? JSON.parse(rawData) : { version: VERSION_LATEST };
+// == main =========================================================================================
+export async function migrateMIDIManagerStorage(storageManager: StorageManager): Promise<MidiManagerStorageType> {
+  // Try loading the data from the storage manager
+  const rawDataFile = await storageManager.getFile('midi.json');
+  let rawData = await rawDataFile?.text();
+
+  if (!rawData) {
+    // Used to be stored in localStorage
+    localStorage.getItem('wavenerd-midiManager');
+  }
+
+  if (!rawData) {
+    // If no data exists, return default values
+    rawData = JSON.stringify({ version: MIDI_VERSION_LATEST });
+  }
+
+  let data = JSON.parse(rawData);
 
   data = migrate20241123(data);
   data = migrate20250211(data);
 
-  localStorage.setItem(key, JSON.stringify(data));
+  return data;
 }
