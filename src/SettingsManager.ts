@@ -1,5 +1,6 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { MixerEQMode, MixerFilterMode } from './audio/MixerChannel';
+import type { MasterLimiterModeType } from './audio/Mixer';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
 import { throttle } from 'throttle-debounce';
 import { StorageManager } from './StorageManager';
@@ -16,6 +17,7 @@ export interface Settings {
   latencyBlocks: number;
   channelRouting: string;
   masterDCRemoval: boolean;
+  masterLimiterMode: MasterLimiterModeType;
   xfaderMode: XFaderModeType;
   eqMode: MixerEQMode;
   filterMode: MixerFilterMode;
@@ -52,6 +54,7 @@ export const defaultSettings: Settings = {
   latencyBlocks: 32,
   channelRouting: 'master:0,master:1,cue:0,cue:1',
   masterDCRemoval: true,
+  masterLimiterMode: 'hardClip',
   xfaderMode: 'transition',
   eqMode: 'none',
   filterMode: 'none',

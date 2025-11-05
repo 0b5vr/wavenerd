@@ -40,6 +40,15 @@ export function SettingsContentAudio() {
         stalkerText="Remove the DC offset from the master output.&#10;You usually want to keep this switch on to prevent damaging your speakers unless you are going to draw your masterpiece onto your oscilloscope."
       />
 
+      <SettingsItemSelect
+        settingsKey="masterLimiterMode"
+        name="Master Limiter"
+        stalkerText="Hard clip the master output to prevent overs.&#10;Disable if you need full dynamics for external processing."
+      >
+        <option value="hardClip">Hard Clip</option>
+        <option value="none">None</option>
+      </SettingsItemSelect>
+
       <SettingsItemMIDIKnob
         midiParamName="/mixer/master/reverb/mix"
         name="Master Reverb Mix"

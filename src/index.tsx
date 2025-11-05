@@ -13,6 +13,7 @@ import { Recorder } from './audio/Recorder';
 import { FullscreenManager } from './FullscreenManager';
 import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
+import { HardClipNode } from './audio/HardClipNode';
 import { FrameEmitter } from './FrameEmitter';
 import { FirstOrderFilterNode } from './audio/FirstOrderFilterNode';
 import { StorageManager } from './StorageManager';
@@ -29,6 +30,7 @@ audio.suspend();
 // install audio worklet modules
 await TimeDomainDataProbeNode.addModule(audio);
 await DCRemovalNode.addModule(audio);
+await HardClipNode.addModule(audio);
 await FirstOrderFilterNode.addModule(audio);
 
 const master = audio.createGain();
@@ -213,6 +215,10 @@ function applySettings(settings: Partial<Settings>) {
 
   if (settings.masterDCRemoval != null) {
     mixer.dcRemoval = settings.masterDCRemoval;
+  }
+
+  if (settings.masterLimiterMode != null) {
+    mixer.masterLimiterMode = settings.masterLimiterMode;
   }
 
   if (settings.eqMode != null) {

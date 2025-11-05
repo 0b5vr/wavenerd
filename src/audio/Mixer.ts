@@ -1,6 +1,7 @@
 import { MixerChannel, MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
 import { DCRemovalUnit } from './DCRemovalUnit';
+import { MasterLimiterHardClip } from './MasterLimiterHardClip';
 import { EventEmittable } from '../utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
 import { SETTINGSMAN } from '../SettingsManager';
@@ -9,8 +10,10 @@ import { xfaderCurveCut } from './xfaderCurveCut';
 import { xfaderCurveLinear } from './xfaderCurveLinear';
 import { xfaderCurveTransition } from './xfaderCurveTransition';
 import { LINEAR_RAMP_TIME } from './constants';
+import { MasterLimiter } from './MasterLimiter';
 
 export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
+export type MasterLimiterModeType = 'none' | 'hardClip';
 
 interface MixerChangeEvent {
   xfaderPos?: number;
@@ -61,6 +64,18 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
   private __dcRemovalUnit: DCRemovalUnit;
 
+  private __masterLimiterMode: MasterLimiterModeType = 'hardClip';
+  public get masterLimiterMode(): MasterLimiterModeType {
+    return this.__masterLimiterMode;
+  }
+
+  public set masterLimiterMode(value: MasterLimiterModeType) {
+    this.__masterLimiterMode = value;
+    this.__reconnectMasterLimiter(value);
+  }
+
+  private __masterLimiter?: MasterLimiter;
+
   private __gainXFaderA: GainNode;
   private __gainXFaderB: GainNode;
   private __gainNodeOut: GainNode;
@@ -97,12 +112,14 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__gainNodeOut = audio.createGain();
 
     this.__dcRemovalUnit = new DCRemovalUnit(audio);
+    this.__masterLimiter = new MasterLimiterHardClip(audio);
 
     this.__channelA.output.connect(this.__gainXFaderA);
     this.__channelB.output.connect(this.__gainXFaderB);
     this.__gainXFaderA.connect(this.__dcRemovalUnit.input);
     this.__gainXFaderB.connect(this.__dcRemovalUnit.input);
-    this.__dcRemovalUnit.output.connect(this.__gainNodeOut);
+    this.__dcRemovalUnit.output.connect(this.__masterLimiter.input);
+    this.__masterLimiter.output.connect(this.__gainNodeOut);
 
     this.analyserInA = new Analyser(audio);
     this.analyserInB = new Analyser(audio);
@@ -159,6 +176,20 @@ export class Mixer extends EventEmittable<MixerEvents> {
       return xfaderCurveLinear(x);
     } else {
       return xfaderCurveTransition(x);
+    }
+  }
+
+  private __reconnectMasterLimiter(mode: MasterLimiterModeType): void {
+    this.__dcRemovalUnit.output.disconnect();
+    this.__masterLimiter?.output.disconnect();
+
+    if (mode === 'none') {
+      this.__masterLimiter = undefined;
+      this.__dcRemovalUnit.output.connect(this.__gainNodeOut);
+    } else if (mode === 'hardClip') {
+      this.__masterLimiter = new MasterLimiterHardClip(this.__audio);
+      this.__dcRemovalUnit.output.connect(this.__masterLimiter.input);
+      this.__masterLimiter.output.connect(this.__gainNodeOut);
     }
   }
 }
