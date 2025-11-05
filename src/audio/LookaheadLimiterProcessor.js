@@ -1,9 +1,5 @@
 const BLOCK_SIZE = 128;
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
 /**
  * The implementation of lookahead limiter.
  *
