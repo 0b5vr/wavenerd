@@ -19,6 +19,7 @@ import { FirstOrderFilterNode } from './audio/FirstOrderFilterNode';
 import { StorageManager } from './StorageManager';
 import { loadFileAsImage } from './utils/loadFileAsImage';
 import { pathToAssetName } from './utils/pathToAssetName';
+import { LookaheadLimiterNode } from './audio/LookaheadLimiterNode';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');
@@ -31,6 +32,7 @@ audio.suspend();
 await TimeDomainDataProbeNode.addModule(audio);
 await DCRemovalNode.addModule(audio);
 await HardClipNode.addModule(audio);
+await LookaheadLimiterNode.addModule(audio);
 await FirstOrderFilterNode.addModule(audio);
 
 const master = audio.createGain();

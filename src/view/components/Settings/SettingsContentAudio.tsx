@@ -43,10 +43,11 @@ export function SettingsContentAudio() {
       <SettingsItemSelect
         settingsKey="masterLimiterMode"
         name="Master Limiter"
-        stalkerText="Hard clip the master output to prevent overs.&#10;Disable if you need full dynamics for external processing."
+        stalkerText="Change the master limiter mode.&#10;None: Disables the master limiter. Choose this if you want the full dynamics for external processing.&#10;Hard Clip: Simply clips the signal to [-1.0, 1.0]. The signal will be distorted.&#10;Lookahead: The lookahead limiter that preserves transients while limiting the peaks. It adds a small delay to the signal.&#10;"
       >
-        <option value="hardClip">Hard Clip</option>
         <option value="none">None</option>
+        <option value="hardClip">Hard Clip</option>
+        <option value="lookahead">Lookahead</option>
       </SettingsItemSelect>
 
       <SettingsItemMIDIKnob
