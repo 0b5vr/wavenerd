@@ -202,6 +202,7 @@ export function OutOfContextApp() {
               deck={deckA}
               storagePath="decks/a.glsl"
               gainParamName="/mixer/channel_a/gain"
+              filterParamName="/mixer/channel_a/filter"
             />
             <StyledDeckKnobs paramPrefix="/deck_a" />
           </DeckColumn>
@@ -231,6 +232,7 @@ export function OutOfContextApp() {
                 deck={deckB}
                 storagePath="decks/b.glsl"
                 gainParamName="/mixer/channel_b/gain"
+                filterParamName="/mixer/channel_b/filter"
               />
               <StyledDeckKnobs paramPrefix="/deck_b" />
             </DeckColumn>

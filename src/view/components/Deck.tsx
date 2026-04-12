@@ -80,10 +80,12 @@ export const Deck = forwardRef(({
   analyser,
   deck,
   gainParamName,
+  filterParamName,
   storagePath,
 }: {
   deck: WavenerdDeck;
   gainParamName: string;
+  filterParamName: string;
   storagePath: string;
   cueStatusAtom: PrimitiveAtom<'none' | 'ready' | 'applying' | 'compiling'>;
   errorAtom: PrimitiveAtom<string | null>;
@@ -232,6 +234,7 @@ export const Deck = forwardRef(({
         onApplyImmediately={handleApplyImmediately}
         onJumpToLine={jumpToLine}
         gainParamName={gainParamName}
+        filterParamName={filterParamName}
       />
 
       <DeckLibrary

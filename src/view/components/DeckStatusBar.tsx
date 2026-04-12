@@ -177,6 +177,7 @@ export function DeckStatusBar({
   errorAtom,
   compileTimeAtom,
   gainParamName,
+  filterParamName,
   className,
 }: {
   onCompile: () => void;
@@ -188,12 +189,14 @@ export function DeckStatusBar({
   errorAtom: PrimitiveAtom<string | null>;
   compileTimeAtom: PrimitiveAtom<number>;
   gainParamName: string;
+  filterParamName: string;
   className?: string;
 }) {
   const cueStatus = useAtomValue(cueStatusAtom);
   const error = useAtomValue(errorAtom);
   const hasEdit = useAtomValue(hasEditAtom);
   const gainValue = useMidiValue(gainParamName);
+  const filterValue = useMidiValue(filterParamName);
 
   const errorFirstLine = useMemo(() => {
     return error?.split('\n')[0];
@@ -288,6 +291,24 @@ export function DeckStatusBar({
       >
         <StyledIconMute />
         <TextErrorBlink>Gain is -INF dB</TextErrorBlink>
+      </Content>
+    );
+  } else if (filterValue === 0.0) {
+    content = (
+      <Content
+        data-stalker="Filter is LPF 100%, it might not output any sound&#10;Turn the filter knob!"
+      >
+        <StyledIconMute />
+        <TextErrorBlink>Filter is LPF 100%</TextErrorBlink>
+      </Content>
+    );
+  } else if (filterValue === 1.0) {
+    content = (
+      <Content
+        data-stalker="Filter is HPF 100%, it might not output any sound&#10;Turn the filter knob!"
+      >
+        <StyledIconMute />
+        <TextErrorBlink>Filter is HPF 100%</TextErrorBlink>
       </Content>
     );
   } else {
