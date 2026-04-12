@@ -1,4 +1,4 @@
-import style from './style.css';
+import style from './style.css?raw';
 import { type Analyser } from '../../../audio/Analyser';
 import { VisualizerWindowProxy } from './VisualizerWindowProxy';
 import { setupVisualizerWindowGUI } from './setupVisualizerWindowGUI';
