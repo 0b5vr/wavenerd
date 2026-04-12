@@ -31,7 +31,7 @@ export class Analyser {
     return this.__probeNodeLoL.data[0];
   }
 
-  public frequencyL: Float32Array;
+  public frequencyL: Float32Array<ArrayBuffer>;
 
   public get convolverBufferLength(): number {
     return this.__convolverLoL.buffer!.length;

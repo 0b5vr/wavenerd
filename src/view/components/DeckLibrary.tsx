@@ -76,7 +76,7 @@ function DeckLibraryItem({ name, isSelected, onSelect, itemRef }: {
   name: string;
   isSelected: boolean;
   onSelect?: (name: string) => void;
-  itemRef?: React.RefObject<HTMLDivElement>;
+  itemRef?: React.RefObject<HTMLDivElement | null>;
 }) {
   const handlePointerDown = useCallback(() => {
     onSelect?.(name);
