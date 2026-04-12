@@ -52,8 +52,8 @@ export function createThemeFlush(accent: string): Theme {
       knobShadow: 'transparent',
 
       accent: accent,
-      accentBright: accent,
-      green: accent,
+      accentBright: `color-mix(in oklab, ${accent} 50%, ${fore} 50%)`,
+      accentGray: `color-mix(in oklab, ${accent} 40%, ${gray8} 60%)`,
       error: accent,
 
       levelMeter: `linear-gradient(

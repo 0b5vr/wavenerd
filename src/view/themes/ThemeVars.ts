@@ -48,7 +48,8 @@ const knobGutter = `var(--knob-gutter, ${back1})`;
 const knobShadow = 'var(--knob-shadow, #0008)';
 
 const accent = 'var(--accent)';
-const accentBright = 'var(--accent-bright)';
+const accentBright = `var(--accent-bright, ${accent})`;
+const accentGray = `var(--accent-gray, ${accent})`;
 const green = 'var(--green)';
 const error = 'var(--error)';
 
@@ -106,6 +107,7 @@ export const ThemeVars = {
 
   accent,
   accentBright,
+  accentGray,
   green,
   error,
 

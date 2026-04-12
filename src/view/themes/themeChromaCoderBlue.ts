@@ -15,11 +15,9 @@ const foredark = '#aaaaaa';
 const background = '#0000ff';
 
 const red = '#ff2266';
-const redDark = '#991133';
 const orange = '#ff5a1f';
 const yellow = '#f7f025';
 const green = '#00ff88';
-const greenBright = '#77ffcc';
 const constgreen = '#ddff66';
 
 export const themeChromaCoderBlue: Theme = {
@@ -41,7 +39,7 @@ export const themeChromaCoderBlue: Theme = {
 
     inputBack: back3,
     inputFore: fore,
-    inputBackInvalid: redDark,
+    inputBackInvalid: `color-mix(in oklab, ${red} 60%, ${back3} 40%)`,
 
     fore,
     foresub,
@@ -57,7 +55,8 @@ export const themeChromaCoderBlue: Theme = {
     knobShadow: '#0000',
 
     accent: green,
-    accentBright: greenBright,
+    accentBright: `color-mix(in oklab, ${green} 50%, ${fore} 50%)`,
+    accentGray: `color-mix(in oklab, ${green} 50%, ${gray} 50%)`,
     green: green,
     error: red,
 

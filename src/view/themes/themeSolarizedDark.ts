@@ -17,9 +17,6 @@ const blue = '#268bd2';
 const cyan = '#2aa198';
 const green = '#859900';
 
-const redDark = '#920000';
-const blueBright = '#67b9ff';
-
 export const themeSolarizedDark: Theme = {
   ui: {
     black: '#000000',
@@ -38,7 +35,7 @@ export const themeSolarizedDark: Theme = {
 
     inputBack: base01,
     inputFore: base3,
-    inputBackInvalid: redDark,
+    inputBackInvalid: `color-mix(in oklab, ${red} 60%, ${base01} 40%)`,
 
     fore: base1,
     foresub: base0,
@@ -51,7 +48,8 @@ export const themeSolarizedDark: Theme = {
     knobShadow: 'transparent',
 
     accent: blue,
-    accentBright: blueBright,
+    accentBright: `color-mix(in oklab, ${blue} 50%, ${base1} 50%)`,
+    accentGray: `color-mix(in oklab, ${blue} 50%, ${base00} 50%)`,
     green: green,
     error: red,
 

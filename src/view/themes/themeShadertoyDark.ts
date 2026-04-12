@@ -24,9 +24,6 @@ const comments = '#794';
 const gutterText = '#999';
 const gutterBackground = '#000';
 
-const redDark = '#920000';
-const blueBright = '#67b9ff';
-
 export const themeShadertoyDark: Theme = {
   ui: {
     black,
@@ -44,7 +41,7 @@ export const themeShadertoyDark: Theme = {
 
     inputBack: pageBackground,
     inputFore: white,
-    inputBackInvalid: redDark,
+    inputBackInvalid: `color-mix(in oklab, ${red} 60%, ${pageBackground} 40%)`,
 
     fore: white,
     foresub: grayD,
@@ -57,7 +54,8 @@ export const themeShadertoyDark: Theme = {
     knobShadow: '#0004',
 
     accent: blue,
-    accentBright: blueBright,
+    accentBright: `color-mix(in oklab, ${blue} 50%, ${white} 50%)`,
+    accentGray: `color-mix(in oklab, ${blue} 50%, ${gray8} 50%)`,
     green: green,
     error: red,
 

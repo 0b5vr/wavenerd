@@ -17,6 +17,7 @@ const foredark = '#888888';
 const red = '#f71122';
 const redDark = '#a30a4a';
 const redBright = '#ff4f4f';
+const redGray = '#a54950';
 const green = '#62f74f';
 
 export const themeSwedishBox: Theme = {
@@ -50,6 +51,7 @@ export const themeSwedishBox: Theme = {
 
     accent: red,
     accentBright: redBright,
+    accentGray: redGray,
     green: green,
     error: red,
 

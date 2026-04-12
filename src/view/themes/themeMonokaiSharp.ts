@@ -6,6 +6,7 @@ const back3 = '#30343b';
 const back4 = '#3b4249';
 
 const gray2 = '#30343b';
+const gray7 = '#697681';
 const gray8 = '#75848f';
 
 const fore = '#d0edff';
@@ -13,12 +14,10 @@ const foresub = '#b9d3e3';
 const foredark = '#97abb9';
 
 const red = '#ff0066';
-const redDark = '#a30a4a';
 const orange = '#ff5a1f';
 const yellow = '#f7f025';
 const green = '#00ff91';
 const blue = '#00aaff';
-const blueBright = '53c5ff';
 const constblue = '#8a8aff';
 
 export const themeMonokaiSharp: Theme = {
@@ -38,19 +37,20 @@ export const themeMonokaiSharp: Theme = {
 
     inputBack: back4,
     inputFore: fore,
-    inputBackInvalid: redDark,
+    inputBackInvalid: `color-mix(in oklab, ${red} 60%, ${back4} 40%)`,
 
     fore,
     foresub,
     foredark,
 
-    gray: '#697681',
+    gray: gray7,
 
     knobColor: `linear-gradient(to bottom, ${fore}, ${foresub})`,
     knobShadow: '#0008',
 
     accent: blue,
-    accentBright: blueBright,
+    accentBright: `color-mix(in oklab, ${blue} 50%, ${fore} 50%)`,
+    accentGray: `color-mix(in oklab, ${blue} 50%, ${gray7} 50%)`,
     green: green,
     error: red,
 

@@ -16,6 +16,7 @@ const foredark = '#181411';
 const red = '#f71122';
 const redDark = '#a30a4a';
 const redBright = '#ff4f4f';
+const redGray = '#a54950';
 const green = '#66990f';
 
 const lcdbg = '#f5482f';
@@ -57,6 +58,7 @@ export const themeSwedishMachine: Theme = {
 
     accent: red,
     accentBright: redBright,
+    accentGray: redGray,
     green: green,
     error: red,
 
