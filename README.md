@@ -8,7 +8,7 @@ GLSL music live coding environment
 
 Wavenerd is a GLSL music live coding environment.
 
-It's basically a DJ setup but turntable decks are replaced with GLSL synthesizers. You can write and play GLSL music code to create your bangers, and mix them with the built-in DJ mixer.
+It's basically a 2-deck DJ setup but turntables are replaced with GLSL synthesizers. You can write and play GLSL music code to create your bangers, and mix them with the built-in DJ mixer.
 
 Since Wavenerd is designed for live performance, it has several features to make it easier to use in a live setting.
 
