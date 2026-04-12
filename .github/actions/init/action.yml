@@ -1,4 +1,5 @@
 name: Init
+description: Setup Node.js and install dependencies
 
 runs:
   using: 'composite'
@@ -9,6 +10,7 @@ runs:
       with:
         registry-url: 'https://registry.npmjs.org'
         node-version-file: './.node-version'
+        cache: 'npm'
 
     - name: Setup Git Config
       shell: bash
@@ -16,14 +18,6 @@ runs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
 
-    - name: Cache Deps
-      uses: actions/cache@v4
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles( 'yarn.lock' ) }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-
     - name: Fetch Deps
       shell: bash
-      run: yarn install --frozen-lockfile
+      run: npm ci
