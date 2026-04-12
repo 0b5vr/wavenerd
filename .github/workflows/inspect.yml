@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: init stuff
         uses: ./.github/actions/init
@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: init stuff
         uses: ./.github/actions/init
@@ -34,7 +34,7 @@ jobs:
         run: npm run build
 
       - name: upload build for pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
@@ -55,4 +55,4 @@ jobs:
 
     steps:
       - name: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
