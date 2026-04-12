@@ -21,7 +21,7 @@ function inputToValue(value: string, type: ValueType): number | null {
 }
 
 // == styles =======================================================================================
-const Input = styled.input< { isInvalid: boolean } >`
+const Input = styled.input<{ isInvalid: boolean }>`
   position: absolute;
   display: block;
   width: 100%;
