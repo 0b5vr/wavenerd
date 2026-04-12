@@ -46,7 +46,7 @@ export function SettingsContentAbout() {
         <code>{hash}</code> ({date})
       </p>
       <p>
-        Copyright (c) 2020-2025 0b5vr<br />
+        Copyright (c) 2020-2026 0b5vr<br />
         Wavenerd is released under the MIT License<br />
         <a href="https://github.com/0b5vr/wavenerd" target="_blank" rel="noreferrer">https://github.com/0b5vr/wavenerd</a>
       </p>
