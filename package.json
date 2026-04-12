@@ -19,10 +19,11 @@
     "@codemirror/language": "^6.10.8",
     "@codemirror/view": "^6.36.3",
     "@eslint/js": "^9.39.4",
-    "@iconify-json/mdi": "^1.1.19",
+    "@iconify-json/mdi": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@stylistic/eslint-plugin": "^2.11.0",
-    "@svgr/core": "^6.2.1",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
     "@tweakpane/core": "^2.0.5",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
@@ -48,7 +49,7 @@
     "tweakpane": "^4.0.5",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
-    "unplugin-icons": "^0.14.3",
+    "unplugin-icons": "^23.0.1",
     "vite": "^8.0.3"
   }
 }
