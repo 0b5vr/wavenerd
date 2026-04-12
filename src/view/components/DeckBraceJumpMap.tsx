@@ -118,7 +118,7 @@ function BracePair({ str, distanceFromCenter }: {
     } else {
       return commentPositions[0] ?? str.length;
     }
-  }, [str]);
+  }, [isCommentLine, str]);
 
   if (str === undefined) {
     return (
@@ -165,7 +165,7 @@ const DeckBraceJumpMapInside = forwardRef(({
   const update = useCallback((index: number) => {
     setCenterIndex(index);
     setKey((key) => key + 1);
-  }, [centerIndex]);
+  }, []);
   useImperativeHandle(ref, () => ({ update }), [update]);
 
   return (

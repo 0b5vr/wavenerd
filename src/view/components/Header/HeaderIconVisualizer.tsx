@@ -14,7 +14,7 @@ export function HeaderIconVisualizer() {
 
   const handleClick = useCallback(() => {
     openVisualizerWindow(mixer.analyserOut, frameEmitter);
-  }, [mixer.analyserOut]);
+  }, [frameEmitter, mixer.analyserOut]);
 
   return (
     <StyledIcon

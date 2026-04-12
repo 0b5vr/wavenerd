@@ -64,15 +64,17 @@ const Root = styled.div`
 
 // == components ===================================================================================
 interface Props {
-  memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
+  memoryUpdateAtom: PrimitiveAtom<{
+    renderKey: number;
+    memoryKey: string;
+    status: 'loaded' | 'loadfailed' | 'saved';
+  } | null>;
 }
 
 export function DeckMemoryUpdateBalloon(props: Props) {
   const { memoryUpdateAtom } = props;
 
   const memoryUpdate = useAtomValue(memoryUpdateAtom);
-
-  const key = useMemo(() => Date.now(), [memoryUpdate]);
 
   const icon = useMemo(() => {
     if (memoryUpdate == null) {
@@ -91,7 +93,7 @@ export function DeckMemoryUpdateBalloon(props: Props) {
       return null;
     }
 
-    let message = `Memory ${memoryUpdate.key}`;
+    let message = `Memory ${memoryUpdate.memoryKey}`;
 
     if (memoryUpdate.status === 'loaded') {
       message += ' loaded';
@@ -110,10 +112,10 @@ export function DeckMemoryUpdateBalloon(props: Props) {
 
   return (
     <Root>
-      <Balloon key={key}>
+      <Balloon key={memoryUpdate.renderKey}>
         <Row>
           <KeyLabel>
-            {memoryUpdate.key}
+            {memoryUpdate.memoryKey}
           </KeyLabel>
           {icon}
         </Row>

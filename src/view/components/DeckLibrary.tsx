@@ -225,7 +225,7 @@ export function DeckLibrary({
   const handleSelect = useCallback(async (name: string) => {
     setSelectedIndexRaw(shadersListFiltered.indexOf(name));
     load(name);
-  }, [load]);
+  }, [load, shadersListFiltered]);
 
   if (!isLibraryOpening) {
     return null;

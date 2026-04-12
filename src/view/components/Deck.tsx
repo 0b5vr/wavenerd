@@ -99,7 +99,8 @@ export const Deck = forwardRef(({
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
   const memoryUpdateAtom = useMemo(() => atom<{
-    key: string;
+    renderKey: number;
+    memoryKey: string;
     status: 'loaded' | 'loadfailed' | 'saved';
   } | null>(null), []);
 
@@ -133,9 +134,9 @@ export const Deck = forwardRef(({
   const jumpToLine = useCallback((line: number) => {
     focusEditor(false);
     refEditor.current?.jumpToLine(line);
-  }, [refEditor]);
+  }, [focusEditor]);
 
-  const handleLoad = useAtomCallback(useCallback(async (get, set, code: string) => {
+  const handleLoad = useAtomCallback(useCallback(async (_get, set, code: string) => {
     set(codeAtom, code);
     set(hasEditAtom, true);
     jumpToLine(1);
@@ -160,7 +161,7 @@ export const Deck = forwardRef(({
       }
       deck.applyCue();
     },
-    [handleCompile],
+    [deck, handleCompile],
   );
 
   const handleApplyImmediately = useCallback(
@@ -170,7 +171,7 @@ export const Deck = forwardRef(({
       }
       deck.applyCueImmediately();
     },
-    [handleCompile],
+    [deck, handleCompile],
   );
 
   const refBraceJumpMap = useRef<{ update: (index: number) => void }>(null);

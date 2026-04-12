@@ -1,10 +1,8 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
 import { type Analyser } from '../../../audio/Analyser';
 import { Visualizer } from '../../visualizers/Visualizer';
-import { useElement } from '../../utils/useElement';
-import { useRect } from '../../utils/useRect';
 import { useSpectrum } from './useSpectrum';
 import { useOscilloscope } from './useOscilloscope';
 import { StuffContext } from '../../StuffContext';
@@ -29,27 +27,29 @@ export function DeckVisualizer({
   const { frameEmitter } = useContext(StuffContext)!;
 
   const [visualizer, setVisualizer] = useState<Visualizer>();
-  const refCanvas = useRef<HTMLCanvasElement>(null);
-  const canvas = useElement(refCanvas);
-  const rectCanvas = useRect(refCanvas);
 
   // setup the visualizer
-  useEffect(() => {
+  const refCanvas = useCallback((canvas: HTMLCanvasElement | null) => {
     if (canvas == null) { return; }
 
+    // init / set visualizer
     const visualizer = new Visualizer(canvas);
     setVisualizer(visualizer);
 
+    // handle resize
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      const ratio = window.devicePixelRatio;
+      visualizer.resize(entry.contentRect.width * ratio, entry.contentRect.height * ratio);
+    });
+    resizeObserver.observe(canvas);
+
+    // dispose when unmounted
     return () => {
+      resizeObserver.disconnect();
       visualizer.dispose();
     };
-  }, [canvas]);
-
-  // handle resize
-  useEffect(() => {
-    const ratio = window.devicePixelRatio;
-    visualizer?.resize(rectCanvas.width * ratio, rectCanvas.height * ratio);
-  }, [visualizer, rectCanvas]);
+  }, []);
 
   // components
   const updateVectorscope = useVectorscope(visualizer, analyser);
@@ -69,7 +69,7 @@ export function DeckVisualizer({
     });
 
     return () => frameEmitter.off('update', udpate);
-  }, [frameEmitter, visualizer, updateVectorscope, updateSpectrum, updateOscilloscope]);
+  }, [frameEmitter, visualizer, updateVectorscope, updateSpectrum, updateOscilloscope, updateWaveform]);
 
   // render
   return (

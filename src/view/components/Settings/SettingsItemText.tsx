@@ -26,7 +26,7 @@ export function SettingsItemText(props: {
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
     SETTINGSMAN.set(settingsKey, value);
-  }, []);
+  }, [settingsKey]);
 
   return (
     <SettingsItemBase {...props}>

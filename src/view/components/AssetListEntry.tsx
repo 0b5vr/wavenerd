@@ -59,7 +59,7 @@ export function AssetListEntry({
 
       onDeleteAsset(name);
     },
-    [name],
+    [name, onDeleteAsset],
   );
 
   return (

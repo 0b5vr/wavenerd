@@ -29,5 +29,5 @@ export function useVectorscope(visualizer: Visualizer | undefined, analyser: Ana
       visualizer?.vectorscope.setData(timeDomainL, timeDomainR);
       visualizer?.vectorscope.render();
     }
-  }, [vectorscopeMode, visualizer]);
+  }, [analyser, vectorscopeMode, visualizer?.vectorscope]);
 }

@@ -19,5 +19,5 @@ export function useRecorderSubscribers(recorder: Recorder) {
       recorder.off('start', start);
       recorder.off('stop', stop);
     };
-  }, [recorder]);
+  }, [recorder, setIsRecording]);
 }

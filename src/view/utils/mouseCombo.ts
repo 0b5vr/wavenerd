@@ -1,11 +1,11 @@
-export enum MouseComboBit {
-  LMB = 1,
-  RMB = 2,
-  MMB = 4,
-  Shift = 8,
-  Ctrl = 16,
-  Alt = 32,
-}
+export const MouseComboBit = {
+  LMB: 1,
+  RMB: 2,
+  MMB: 4,
+  Shift: 8,
+  Ctrl: 16,
+  Alt: 32,
+};
 
 export function mouseCombo(
   callbacks: { [ combo: number ]: (event: React.MouseEvent) => void },

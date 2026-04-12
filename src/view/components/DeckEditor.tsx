@@ -136,7 +136,11 @@ export const DeckEditor = forwardRef(({
   onApply: () => void;
   onApplyImmediately: () => void;
   onBraceJump?: (index: number) => void;
-  memoryUpdateAtom: PrimitiveAtom<{ key: string; status: 'loaded' | 'loadfailed' | 'saved' } | null>;
+  memoryUpdateAtom: PrimitiveAtom<{
+    renderKey: number;
+    memoryKey: string;
+    status: 'loaded' | 'loadfailed' | 'saved';
+  } | null>;
   libraryOpeningAtom: PrimitiveAtom<boolean>;
   className?: string;
 }, ref: React.Ref<{ focusEditor: () => void }>) => {
@@ -175,10 +179,14 @@ export const DeckEditor = forwardRef(({
     set(logsAtom, [log, ...logs].slice(0, 5));
   }, [logsAtom]));
 
-  const handleLoadMemory = useCallback(async (key: string) => {
-    const codeFile = await storageManager.getFile(`memories/${key}.glsl`);
+  const handleLoadMemory = useCallback(async (memoryKey: string) => {
+    const codeFile = await storageManager.getFile(`memories/${memoryKey}.glsl`);
     if (codeFile == null) {
-      setMemoryUpdate({ key, status: 'loadfailed' });
+      setMemoryUpdate((prev) => ({
+        renderKey: (prev?.renderKey ?? 0) + 1,
+        memoryKey,
+        status: 'loadfailed',
+      }));
       return;
     }
 
@@ -190,7 +198,7 @@ export const DeckEditor = forwardRef(({
       ] },
     );
 
-    const headFile = await storageManager.getFile(`memories/${key}_head.txt`);
+    const headFile = await storageManager.getFile(`memories/${memoryKey}_head.txt`);
     const head = parseInt(await headFile?.text() ?? '0');
     const scrollEffect = EditorView.scrollIntoView(head, { y: 'center' });
     refCodeMirror.current?.view?.dispatch(
@@ -198,16 +206,24 @@ export const DeckEditor = forwardRef(({
       { effects: scrollEffect },
     );
 
-    setMemoryUpdate({ key, status: 'loaded' });
-  }, [setMemoryUpdate]);
+    setMemoryUpdate((prev) => ({
+      renderKey: (prev?.renderKey ?? 0) + 1,
+      memoryKey,
+      status: 'loaded',
+    }));
+  }, [setMemoryUpdate, storageManager]);
 
-  const handleSaveMemory = useCallback(async (key: string) => {
+  const handleSaveMemory = useCallback(async (memoryKey: string) => {
     const head = refCodeMirror.current?.view?.state.selection.main.head ?? 0;
-    await storageManager.save(`memories/${key}.glsl`, code);
-    await storageManager.save(`memories/${key}_head.txt`, head.toString());
+    await storageManager.save(`memories/${memoryKey}.glsl`, code);
+    await storageManager.save(`memories/${memoryKey}_head.txt`, head.toString());
 
-    setMemoryUpdate({ key, status: 'saved' });
-  }, [code, setMemoryUpdate]);
+    setMemoryUpdate((prev) => ({
+      renderKey: (prev?.renderKey ?? 0) + 1,
+      memoryKey,
+      status: 'saved',
+    }));
+  }, [code, setMemoryUpdate, storageManager]);
 
   // -- keymap -------------------------------------------------------------------------------------
   const customKeymap: KeyBinding[] = useMemo(() => [
@@ -289,7 +305,7 @@ export const DeckEditor = forwardRef(({
       setCode(value);
       setHasEdit(true);
     },
-    [],
+    [setCode, setHasEdit],
   );
 
   const handleFile = useCallback(
@@ -304,7 +320,7 @@ export const DeckEditor = forwardRef(({
         reader.readAsText(file);
       }
     },
-    [],
+    [setCode],
   );
 
   const handleDragOver = useCallback(

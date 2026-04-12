@@ -53,7 +53,7 @@ function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; device
         setMessageIndex((i) => i + 1);
       }
     });
-  }, []);
+  }, [deviceId]);
 
   return (
     <Row>

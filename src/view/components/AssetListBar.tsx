@@ -69,7 +69,7 @@ export function AssetListBar({
       };
       input.click();
     },
-    [],
+    [onFile],
   );
 
   return (

@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { throttle } from 'throttle-debounce';
 
 export function useThrottle<T>(value: T, interval: number): T {
   const [throttled, setThrottled] = useState(value);
 
-  const set = useCallback(
-    throttle(interval, (value: T) => setThrottled(value)),
+  const set = useMemo(
+    () => throttle(interval, (value: T) => setThrottled(value)),
     [interval],
   );
 

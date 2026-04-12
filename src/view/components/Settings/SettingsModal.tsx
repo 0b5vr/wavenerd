@@ -38,7 +38,7 @@ export function SettingsModal() {
 
   const handleClose = useCallback(() => {
     setOpening(false);
-  }, []);
+  }, [setOpening]);
 
   if (!isOpening) {
     return null;

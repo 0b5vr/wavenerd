@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
 
@@ -23,15 +23,27 @@ export interface StalkerProps {
 
 export function Stalker({ className }: StalkerProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [target, setTarget] = useState<EventTarget | null>(null);
   const [text, setText] = useState<string | null>(null);
+  const stalkerTextElementRef = useRef<HTMLElement | null>(null);
 
-  useEffect( // mouse listener
+  // mouse listener
+  useEffect(
     () => {
       function handleMouseMove(event: MouseEvent): void {
+        // update stalker position
         setPosition({ x: event.clientX, y: event.clientY });
+
+        // only update stalker text when not dragging
         if (event.buttons === 0) {
-          setTarget(event.target);
+          // traverse up to find element with data-stalker
+          let currentTarget: HTMLElement | null = event.target as HTMLElement;
+          while ((currentTarget != null) && !(currentTarget?.dataset?.stalker)) {
+            currentTarget = currentTarget?.parentElement ?? null;
+          }
+
+          // if found, set stalker text element and text
+          stalkerTextElementRef.current = currentTarget;
+          setText(currentTarget?.dataset?.stalker ?? null);
         }
       }
 
@@ -44,32 +56,13 @@ export function Stalker({ className }: StalkerProps) {
     [],
   );
 
-  useEffect( // kinda lame but call setTimeout to update the message while it's on something
-    () => {
-      let currentTarget: HTMLElement | null = target as HTMLElement;
-      while ((currentTarget != null) && !(currentTarget?.dataset?.stalker)) {
-        currentTarget = currentTarget?.parentElement || null;
-      }
-
-      const newText = currentTarget?.dataset?.stalker;
-      if (newText) {
-        setText(newText);
-
-        let halt = false;
-        const update = (): void => {
-          if (halt) { return; }
-          setText(currentTarget!.dataset!.stalker!);
-          setTimeout(update, 50);
-        };
-        update();
-
-        return () => { halt = true; };
-      } else {
-        setText(null);
-      }
-    },
-    [target],
-  );
+  // poll to update text
+  useEffect(() => {
+    const id = setInterval(() => {
+      setText(stalkerTextElementRef.current?.dataset?.stalker ?? null);
+    }, 50);
+    return () => clearInterval(id);
+  }, []);
 
   const style: React.CSSProperties = useMemo(
     () => {
@@ -96,11 +89,11 @@ export function Stalker({ className }: StalkerProps) {
 
   return (
     <>
-      { text && (
+      {text && (
         <Root className={className} style={style}>
-          { text }
+          {text}
         </Root>
-      ) }
+      )}
     </>
   );
 }

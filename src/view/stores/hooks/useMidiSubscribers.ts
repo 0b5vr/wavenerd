@@ -1,6 +1,6 @@
 import { midiDevicesAtom, midiIndicatorAtom, midiLearningAtom, midiMappingsAtom, midiParamsAtom } from '../atoms/midi';
 import { type MidiManager } from '../../../MIDIManager';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useSetAtom } from 'jotai';
 import { debounce } from 'throttle-debounce';
 
@@ -18,7 +18,7 @@ function useMidiParamsSubscriber(midiManager: MidiManager) {
     });
 
     return () => midiManager.off('paramChange', handleParamChange);
-  }, [midiManager]);
+  }, [midiManager, setMidiParams]);
 }
 
 function useMidiLearningSubscriber(midiManager: MidiManager) {
@@ -30,20 +30,23 @@ function useMidiLearningSubscriber(midiManager: MidiManager) {
     });
 
     return () => midiManager.off('learn', handleLearn);
-  }, [midiManager]);
+  }, [midiManager, setMidiLearning]);
 }
 
 function useMidiIndicatorSubscriber(midiManager: MidiManager) {
   const setMidiIndicator = useSetAtom(midiIndicatorAtom);
 
-  const debouncedOff = useCallback(debounce(200, () => {
-    setMidiIndicator(false);
-  }), []);
+  const debouncedOff = useMemo(
+    () => debounce(200, () => {
+      setMidiIndicator(false);
+    }),
+    [setMidiIndicator],
+  );
 
   const indicate = useCallback(() => {
     setMidiIndicator(true);
     debouncedOff();
-  }, []);
+  }, [debouncedOff, setMidiIndicator]);
 
   useEffect(() => {
     const handleNoteOn = midiManager.on('noteOn', () => indicate());
@@ -55,7 +58,7 @@ function useMidiIndicatorSubscriber(midiManager: MidiManager) {
       midiManager.off('noteOff', handleNoteOff);
       midiManager.off('cc', handleCC);
     };
-  }, [midiManager]);
+  }, [indicate, midiManager]);
 }
 
 function useMidiDevicesSubscriber(midiManager: MidiManager) {
@@ -68,7 +71,7 @@ function useMidiDevicesSubscriber(midiManager: MidiManager) {
     const handleDeviceDetect = midiManager.on('deviceDetect', update);
 
     return () => midiManager.off('deviceDetect', handleDeviceDetect);
-  }, [midiManager]);
+  }, [midiManager, setMidiDevices]);
 }
 
 function useMidiMappingsSubscriber(midiManager: MidiManager) {
@@ -85,7 +88,7 @@ function useMidiMappingsSubscriber(midiManager: MidiManager) {
       midiManager.off('mappingAssign', handleMappingAssign);
       midiManager.off('mappingUnassign', handleMappingUnassign);
     };
-  }, [midiManager]);
+  }, [midiManager, setMidiMappings]);
 }
 
 export function useMidiSubscribers(midiManager: MidiManager) {

@@ -109,7 +109,7 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
 
   const stalkerTextWithValue = useMemo(() => {
     return `${stalkerText}: ${valueToDisplayDB(value)}`;
-  }, [value]);
+  }, [stalkerText, value]);
 
   return (
     <KnobAndStuff>
@@ -133,7 +133,7 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
 
   const stalkerTextWithValue = useMemo(() => {
     return `${stalkerText}: ${valueToDisplayEQ(value)}`;
-  }, [value]);
+  }, [stalkerText, value]);
 
   return (
     <KnobAndStuff>
@@ -157,7 +157,7 @@ function MixerFilterKnob({ label, stalkerText, paramName }: {
 
   const stalkerTextWithValue = useMemo(() => {
     return `${stalkerText}: ${valueToDisplayFilter(value)}`;
-  }, [value]);
+  }, [stalkerText, value]);
 
   return (
     <KnobAndStuff>
@@ -181,7 +181,7 @@ function CueButton({ paramName, stalkerText }: {
   const handleClick = useCallback(() => {
     const currentValue = MIDIMAN.values[paramName];
     MIDIMAN.setValue(paramName, currentValue > 0.0 ? 0.0 : 1.0);
-  }, []);
+  }, [paramName]);
 
   return (
     <CueButtonRoot

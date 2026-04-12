@@ -67,7 +67,7 @@ export function HeaderNudge({ className }: { className?: string }) {
       setNudgeAmount(0.0);
       hostDeck.bpm = initBPM;
     });
-  }, []);
+  }, [hostDeck]);
 
   return (
     <Root

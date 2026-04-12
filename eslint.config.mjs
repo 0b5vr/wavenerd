@@ -34,6 +34,7 @@ export default defineConfig([
       '@stylistic/max-statements-per-line': ['error', { max: 2 }],
       '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
       'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+      'react-hooks/immutability': 'off', // mutating non-react-realm stuff passed via useContext
     },
   },
 ]);

@@ -32,5 +32,5 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
       visualizer?.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
       visualizer?.oscilloscope.render();
     }
-  }, [oscilloscopeMode, visualizer]);
+  }, [analyser, oscilloscopeMode, visualizer?.oscilloscope]);
 }

@@ -10,6 +10,6 @@ export function useDoubleTap(interval = 250): () => boolean {
       refLastClick.current = date;
       return (delta < interval);
     },
-    [],
+    [interval],
   );
 }

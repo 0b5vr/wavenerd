@@ -81,7 +81,7 @@ function Select({
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
     onChange(index, value);
-  }, []);
+  }, [index, onChange]);
 
   return (
     <StyledSelect

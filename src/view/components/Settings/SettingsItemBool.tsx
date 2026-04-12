@@ -19,7 +19,7 @@ export function SettingsItemBool(props: {
   const handleChange = useCallback((event: React.ChangeEvent) => {
     const checked = (event.target as HTMLInputElement).checked;
     SETTINGSMAN.set(settingsKey, checked);
-  }, []);
+  }, [settingsKey]);
 
   return (
     <SettingsItemBase {...props}>

@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
@@ -7,7 +7,7 @@ import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
-import { useRect } from '../utils/useRect';
+import useMeasure from 'react-use-measure';
 
 // == styles =======================================================================================
 const Gutter = styled.div`
@@ -89,8 +89,7 @@ export function Fader({
   midiParamName: string;
   className?: string;
 }) {
-  const refRoot = useRef<HTMLDivElement>(null);
-  const rectRoot = useRect(refRoot);
+  const [refRoot, rectRoot] = useMeasure();
 
   const value = useMidiValue(midiParamName);
 

@@ -47,15 +47,15 @@ export function HeaderTransport({ className }: { className?: string }) {
 
   const handleClickRewind = useCallback(() => {
     hostDeck.rewind();
-  }, []);
+  }, [hostDeck]);
 
   const handleClickPlay = useCallback(() => {
     hostDeck.play();
-  }, []);
+  }, [hostDeck]);
 
   const handleClickPause = useCallback(() => {
     hostDeck.pause();
-  }, []);
+  }, [hostDeck]);
 
   return (
     <Root

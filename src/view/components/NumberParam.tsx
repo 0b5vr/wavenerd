@@ -1,5 +1,5 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import styled from 'styled-components';
@@ -149,11 +149,11 @@ export function NumberParam(params: {
         },
       );
     },
-    [value, type, onChange, trySettle],
+    [value, deltaFine, deltaCoarse, type, onChange, trySettle],
   );
 
-  const handleClick = useCallback(
-    mouseCombo({
+  const handleClick = useMemo(
+    () => mouseCombo({
       [MouseComboBit.LMB]: () => {
         if (checkDoubleClick()) {
           openInput();
@@ -163,7 +163,7 @@ export function NumberParam(params: {
       },
       // TODO: LMB + Shift to reset the value. probably adding `resetValue` to props
     }),
-    [openInput, grabValue],
+    [openInput, grabValue, checkDoubleClick],
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => { // TODO: useCallback

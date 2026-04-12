@@ -36,7 +36,7 @@ export function SettingsItemLatencyBlocks() {
   const latencyBlocks = settings.latencyBlocks;
   const latencyTime = useMemo(() => (
     latencyBlocks * BLOCK_SIZE / mixer.audio.sampleRate * 1000.0
-  ), [latencyBlocks]);
+  ), [latencyBlocks, mixer.audio.sampleRate]);
 
   const handleChangeLatencyBlocks = useCallback((value: number) => {
     const valueValid = Math.max(1, value);

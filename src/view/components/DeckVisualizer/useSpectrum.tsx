@@ -31,5 +31,5 @@ export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analys
       visualizer?.spectrum.setData(frequencyL);
       visualizer?.spectrum.render();
     }
-  }, [spectrumMode, visualizer]);
+  }, [analyser, spectrumMode, visualizer?.spectrum]);
 }

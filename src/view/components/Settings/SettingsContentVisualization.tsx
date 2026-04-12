@@ -23,7 +23,7 @@ export function SettingsContentVisualization() {
 
   const handleClickOpenVisualizerWindow = useCallback(() => {
     openVisualizerWindow(mixer.analyserOut, frameEmitter);
-  }, [mixer.analyserOut]);
+  }, [frameEmitter, mixer.analyserOut]);
 
   return (
     <>
