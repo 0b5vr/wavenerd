@@ -7,7 +7,6 @@ import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
 import { Header } from './Header/Header';
-import { HelpModal } from './HelpModal';
 import { MIDIMAN } from '../../MIDIManager';
 import { Metrics } from '../constants/Metrics';
 import { MixerView } from './MixerView';
@@ -239,7 +238,6 @@ export function OutOfContextApp() {
         </DeckRow>
 
         <SettingsModal />
-        <HelpModal />
 
         <PlayOverlay />
         <ContextMenu />

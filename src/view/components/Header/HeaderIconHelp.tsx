@@ -2,17 +2,17 @@ import { useCallback } from 'react';
 import { headerIconStyle } from './headerIconStyle';
 import styled from 'styled-components';
 import IconHelpCircle from '~icons/mdi/help-circle';
-import { useAtomCallback } from 'jotai/utils';
-import { helpIsOpeningAtom } from '../../stores/atoms/help';
+
+const HELP_URL = 'https://github.com/0b5vr/wavenerd/blob/release/guides/help.md';
 
 const StyledIcon = styled(IconHelpCircle)`
   ${headerIconStyle}
 `;
 
 export function HeaderIconHelp() {
-  const handleClick = useAtomCallback(useCallback((_, set) => {
-    set(helpIsOpeningAtom, true);
-  }, []));
+  const handleClick = useCallback(() => {
+    window.open(HELP_URL, '_blank', 'noreferrer');
+  }, []);
 
   return (
     <StyledIcon
