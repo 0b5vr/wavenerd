@@ -40,7 +40,7 @@ const Root = styled.div`
 export function DeckKnobs({ paramPrefix, className }: {
   paramPrefix: string;
   className?: string;
-}): JSX.Element {
+}) {
   return (
     <Root className={className}>
       {paramNames.map((paramName, index) => (

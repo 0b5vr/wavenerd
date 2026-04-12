@@ -1,5 +1,5 @@
 import { type PrimitiveAtom, useAtomValue } from 'jotai';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, type JSX } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
@@ -303,7 +303,7 @@ export function DeckStatusBar({
     <Root
       className={className}
     >
-      { content }
+      {content}
       {compileTimeEnabled && <CompileTime compileTimeAtom={compileTimeAtom} />}
       <StyledIconBuild
         onClick={onCompile}

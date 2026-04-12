@@ -64,7 +64,7 @@ const Root = styled.div`
 `;
 
 // == microcomponent ===============================================================================
-function NoAssets({ text }: { text: string }): JSX.Element {
+function NoAssets({ text }: { text: string }) {
   return (
     <NoAssetsContainer>
       <NoAssetsIcon />

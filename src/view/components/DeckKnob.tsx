@@ -32,7 +32,7 @@ export function DeckKnob({ paramName, paramPrefix, label, stalker, className }: 
   label: string;
   stalker?: string;
   className?: string;
-}): JSX.Element {
+}) {
   const paramFullname = useMemo(
     () => `${paramPrefix}/${paramName}`,
     [paramPrefix, paramName],

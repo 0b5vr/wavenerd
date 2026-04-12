@@ -72,12 +72,12 @@ const storageFileListShadersAtom = atom((get) => {
 });
 
 // == children =====================================================================================
-const DeckLibraryItem = ({ name, isSelected, onSelect, itemRef }: {
+function DeckLibraryItem({ name, isSelected, onSelect, itemRef }: {
   name: string;
   isSelected: boolean;
   onSelect?: (name: string) => void;
   itemRef?: React.RefObject<HTMLDivElement>;
-}): JSX.Element => {
+}) {
   const handlePointerDown = useCallback(() => {
     onSelect?.(name);
   }, [onSelect, name]);

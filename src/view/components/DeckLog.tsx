@@ -34,7 +34,7 @@ interface Props {
   logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
 }
 
-function DeckLogInside({ logsAtom }: Props): JSX.Element {
+function DeckLogInside({ logsAtom }: Props) {
   const logs = useAtomValue(logsAtom);
   const font = useSettings('editorFont');
 
