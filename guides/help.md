@@ -4,6 +4,10 @@
 
 Wavenerd is an app that lets you write codes to generate sound in GLSL and do live coding performance.
 
+Wavenerd is a web app for now, so you can use it from most modern web browsers without installing anything.
+
+https://0b5vr.github.io/wavenerd/
+
 ## How to compile / apply
 
 You can compile shaders at anytime by clicking the Compile button 🔨 on the bottom of the editor.
@@ -17,7 +21,7 @@ This would be the most simple example:
 
 ```glsl
 vec2 mainAudio(vec4 time) {
-  return vec2(sin(440.0 * 2.0 * 3.1415 * time.x));
+  return 0.1 * vec2(sin(440.0 * 2.0 * 3.1415 * time.x));
 }
 ```
 
