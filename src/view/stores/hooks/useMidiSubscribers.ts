@@ -1,5 +1,5 @@
 import { midiDevicesAtom, midiIndicatorAtom, midiLearningAtom, midiMappingsAtom, midiParamsAtom } from '../atoms/midi';
-import { MidiManager } from '../../../MIDIManager';
+import { type MidiManager } from '../../../MIDIManager';
 import { useCallback, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 import { debounce } from 'throttle-debounce';

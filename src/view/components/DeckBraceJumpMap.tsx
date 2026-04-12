@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
-import { PrimitiveAtom, useAtomValue } from 'jotai';
+import { type PrimitiveAtom, useAtomValue } from 'jotai';
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import { findAllBracePairs } from '../../utils/findAllBracePairs';
 import { useSettings } from '../stores/hooks/useSettings';

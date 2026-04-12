@@ -4,7 +4,7 @@ import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import spectrumVert from './spectrum.vert?raw';
-import { Visualizer } from './Visualizer';
+import { type Visualizer } from './Visualizer';
 
 const BUFFER_LENGTH = ANALYSER_FREQUENCY_SIZE;
 

@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai';
-import { Recorder } from '../../../audio/Recorder';
+import { type Recorder } from '../../../audio/Recorder';
 import { recorderIsRecordingAtom } from '../atoms/recorder';
 import { useEffect } from 'react';
 

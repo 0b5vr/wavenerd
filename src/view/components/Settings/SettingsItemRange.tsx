@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { Settings, SETTINGSMAN } from '../../../SettingsManager';
+import { type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
-import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
+import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
 
 const StyledRange = styled.input`

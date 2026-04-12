@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
-import { Analyser } from '../../../audio/Analyser';
+import { type Analyser } from '../../../audio/Analyser';
 import { Visualizer } from '../../visualizers/Visualizer';
 import { useElement } from '../../utils/useElement';
 import { useRect } from '../../utils/useRect';

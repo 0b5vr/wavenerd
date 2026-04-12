@@ -1,5 +1,5 @@
-import { Settings } from './SettingsManager';
-import { StorageManager } from './StorageManager';
+import { type Settings } from './SettingsManager';
+import { type StorageManager } from './StorageManager';
 
 const VERSION_2025_03_04 = 2025_03_04;
 const VERSION_LATEST = VERSION_2025_03_04;

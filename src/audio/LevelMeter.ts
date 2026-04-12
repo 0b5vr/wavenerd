@@ -1,4 +1,4 @@
-import { Analyser } from './Analyser';
+import { type Analyser } from './Analyser';
 import { EventEmittable } from '../utils/EventEmittable';
 
 const ENV_SIZE_MAX = 2048;

@@ -1,6 +1,6 @@
 import 'symbol-observable';
 
-import { SETTINGSMAN, Settings } from './SettingsManager';
+import { SETTINGSMAN, type Settings } from './SettingsManager';
 import { App } from './view/components/App';
 import { AudioDestinationRouter } from './audio/AudioDestinationRouter';
 import { CueMixer } from './audio/CueMixer';

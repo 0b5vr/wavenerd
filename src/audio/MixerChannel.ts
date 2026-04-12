@@ -1,8 +1,8 @@
-import { MixerEQ, MixerEQChangeEvent } from './MixerEQ';
+import { type MixerEQ, type MixerEQChangeEvent } from './MixerEQ';
 import { EventEmittable } from '../utils/EventEmittable';
 import { MixerEQIsolator } from './MixerEQIsolator';
 import { MixerEQNone } from './MixerEQNone';
-import { MixerFilter, MixerFilterChangeEvent } from './MixerFilter';
+import { type MixerFilter, type MixerFilterChangeEvent } from './MixerFilter';
 import { MixerFilterNone } from './MixerFilterNone';
 import { MixerFilterBiquad } from './MixerFilterBiquad';
 import { LINEAR_RAMP_TIME } from './constants';

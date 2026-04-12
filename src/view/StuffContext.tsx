@@ -1,11 +1,11 @@
 import { createContext } from 'react';
-import { AudioDestinationRouter } from '../audio/AudioDestinationRouter';
-import { Recorder } from '../audio/Recorder';
-import { Mixer } from '../audio/Mixer';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
-import { FullscreenManager } from '../FullscreenManager';
-import { FrameEmitter } from '../FrameEmitter';
-import { StorageManager } from '../StorageManager';
+import { type AudioDestinationRouter } from '../audio/AudioDestinationRouter';
+import { type Recorder } from '../audio/Recorder';
+import { type Mixer } from '../audio/Mixer';
+import { type WavenerdDeck } from '@0b5vr/wavenerd-deck';
+import { type FullscreenManager } from '../FullscreenManager';
+import { type FrameEmitter } from '../FrameEmitter';
+import { type StorageManager } from '../StorageManager';
 
 export interface Stuff {
   deckA: WavenerdDeck;

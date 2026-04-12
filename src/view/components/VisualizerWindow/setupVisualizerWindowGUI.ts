@@ -1,5 +1,5 @@
 import { Pane } from 'tweakpane';
-import { VisualizerWindowParams } from './VisualizerWindowParams';
+import { type VisualizerWindowParams } from './VisualizerWindowParams';
 import { visualizerWindowDefaultParams } from './visualizerWindowDefaultParams';
 import { ANALYSER_TIME_DOMAIN_SIZE } from '../../../audio/constants';
 

@@ -1,4 +1,4 @@
-import { ThemeVars } from './ThemeVars';
+import { type ThemeVars } from './ThemeVars';
 
 export interface Theme {
   ui: Partial<Record<keyof typeof ThemeVars, string>>;

@@ -1,10 +1,10 @@
 import { forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Analyser } from '../../audio/Analyser';
+import { type Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
-import { atom, PrimitiveAtom } from 'jotai';
+import { atom, type PrimitiveAtom } from 'jotai';
 import { ThemeVars } from '../themes/ThemeVars';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
+import { type WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import styled, { keyframes } from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';

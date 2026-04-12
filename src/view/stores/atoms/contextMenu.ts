@@ -1,4 +1,4 @@
-import { ContextMenuCommand } from '../../types/ContextMenuCommand';
+import { type ContextMenuCommand } from '../../types/ContextMenuCommand';
 import { atom } from 'jotai';
 
 // == atoms ========================================================================================

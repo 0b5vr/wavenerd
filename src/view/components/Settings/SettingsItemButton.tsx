@@ -1,5 +1,5 @@
 import { ThemeVars } from '../../themes/ThemeVars';
-import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
+import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`

@@ -1,5 +1,5 @@
 import { RectangleMarker, layer } from '@codemirror/view';
-import { Extension } from '@uiw/react-codemirror';
+import { type Extension } from '@uiw/react-codemirror';
 
 export function createErrorlayer(lines: number[]): Extension {
   return layer({

@@ -1,4 +1,4 @@
-import { Theme } from './Theme';
+import { type Theme } from './Theme';
 
 export function createThemeFlush(accent: string): Theme {
   const black = '#000000';

@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai';
-import { StorageManager } from '../../../StorageManager';
+import { type StorageManager } from '../../../StorageManager';
 import { storageFileListAddAtom, storageFileListDeleteAtom, storageFileListSetAtom } from '../atoms/storage';
 import { useEffect } from 'react';
 

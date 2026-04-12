@@ -1,4 +1,4 @@
-import { MixerChannel, MixerChannelChangeEvent } from './MixerChannel';
+import { MixerChannel, type MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
 import { DCRemovalUnit } from './DCRemovalUnit';
 import { EventEmittable } from '../utils/EventEmittable';

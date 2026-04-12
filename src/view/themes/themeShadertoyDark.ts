@@ -1,4 +1,4 @@
-import { Theme } from './Theme';
+import { type Theme } from './Theme';
 
 const black = '#000';
 const gray8 = '#888';

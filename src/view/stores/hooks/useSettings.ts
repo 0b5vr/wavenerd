@@ -1,5 +1,5 @@
 import { atom, useAtomValue } from 'jotai';
-import { Settings } from '../../../SettingsManager';
+import { type Settings } from '../../../SettingsManager';
 import { settingsAtom } from '../atoms/settings';
 import { useMemo } from 'react';
 

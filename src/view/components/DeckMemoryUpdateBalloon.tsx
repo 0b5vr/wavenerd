@@ -1,4 +1,4 @@
-import { PrimitiveAtom, useAtomValue } from 'jotai';
+import { type PrimitiveAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';

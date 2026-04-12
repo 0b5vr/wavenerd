@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ContextMenuCommand } from '../types/ContextMenuCommand';
+import { type ContextMenuCommand } from '../types/ContextMenuCommand';
 import { ThemeVars } from '../themes/ThemeVars';
 import { resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import styled from 'styled-components';

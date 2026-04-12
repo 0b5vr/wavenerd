@@ -1,5 +1,5 @@
 import { lerp } from '@0b5vr/experimental';
-import { Visualizer } from './Visualizer';
+import { type Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';

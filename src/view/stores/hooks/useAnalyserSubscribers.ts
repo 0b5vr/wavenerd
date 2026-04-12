@@ -1,5 +1,5 @@
 import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../atoms/analyser';
-import { Mixer } from '../../../audio/Mixer';
+import { type Mixer } from '../../../audio/Mixer';
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 

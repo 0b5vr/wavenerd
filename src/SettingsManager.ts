@@ -1,9 +1,9 @@
 import { EventEmittable } from './utils/EventEmittable';
-import { MixerEQMode, MixerFilterMode } from './audio/MixerChannel';
-import type { MasterLimiterModeType } from './audio/Mixer';
+import { type MixerEQMode, type MixerFilterMode } from './audio/MixerChannel';
+import { type MasterLimiterModeType } from './audio/Mixer';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
 import { throttle } from 'throttle-debounce';
-import { StorageManager } from './StorageManager';
+import { type StorageManager } from './StorageManager';
 
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 

@@ -1,6 +1,6 @@
 import { Visualizer } from '../../visualizers/Visualizer';
-import { VisualizerWindowParams } from './VisualizerWindowParams';
-import { VisualizerWindowRequestData } from './VisualizerWindowRequestData';
+import { type VisualizerWindowParams } from './VisualizerWindowParams';
+import { type VisualizerWindowRequestData } from './VisualizerWindowRequestData';
 import { visualizerWindowDefaultParams } from './visualizerWindowDefaultParams';
 
 let params = structuredClone(visualizerWindowDefaultParams);

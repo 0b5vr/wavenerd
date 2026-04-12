@@ -1,4 +1,4 @@
-import { Settings, defaultSettings } from '../../../SettingsManager';
+import { type Settings, defaultSettings } from '../../../SettingsManager';
 import { atom } from 'jotai';
 
 export type SettingsCategory = 'audio' | 'midi' | 'visualization' | 'appearance' | 'editor' | 'about';

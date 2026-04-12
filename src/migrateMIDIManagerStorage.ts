@@ -1,5 +1,5 @@
-import { MidiManagerStorageType } from './MIDIManager';
-import { StorageManager } from './StorageManager';
+import { type MidiManagerStorageType } from './MIDIManager';
+import { type StorageManager } from './StorageManager';
 
 const VERSION_2024_11_23 = 2024_11_23;
 const VERSION_2025_02_11 = 2025_02_11;

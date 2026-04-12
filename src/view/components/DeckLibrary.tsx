@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { atom, PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, type PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import styled from 'styled-components';
 import { ThemeVars } from '../themes/ThemeVars';
 import { mod } from '@0b5vr/experimental';

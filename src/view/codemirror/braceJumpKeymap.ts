@@ -1,4 +1,4 @@
-import { EditorView, KeyBinding } from '@codemirror/view';
+import { EditorView, type KeyBinding } from '@codemirror/view';
 import { findAllBracePairs } from '../../utils/findAllBracePairs';
 import { binarySearch, clamp } from '@0b5vr/experimental';
 

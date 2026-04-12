@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { ThemeVars } from '../../themes/ThemeVars';
 import styled, { css } from 'styled-components';
-import { SettingsCategory, settingsCategoryAtom } from '../../stores/atoms/settings';
+import { type SettingsCategory, settingsCategoryAtom } from '../../stores/atoms/settings';
 import IconVolumeHigh from '~icons/mdi/volume-high';
 import IconPalette from '~icons/mdi/palette';
 import IconEye from '~icons/mdi/eye';

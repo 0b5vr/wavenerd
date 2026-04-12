@@ -1,6 +1,6 @@
-import { EditorView, Extension } from '@uiw/react-codemirror';
+import { EditorView, type Extension } from '@uiw/react-codemirror';
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
-import { Theme } from '../themes/Theme';
+import { type Theme } from '../themes/Theme';
 import { tags } from '@lezer/highlight';
 
 export function createCMTheme(theme: Theme): {

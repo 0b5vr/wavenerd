@@ -1,4 +1,4 @@
-import { PrimitiveAtom, useAtomValue } from 'jotai';
+import { type PrimitiveAtom, useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';

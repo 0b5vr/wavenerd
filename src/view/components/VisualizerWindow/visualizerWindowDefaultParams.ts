@@ -1,5 +1,5 @@
 import { ANALYSER_TIME_DOMAIN_SIZE } from '../../../audio/constants';
-import { VisualizerWindowParams } from './VisualizerWindowParams';
+import { type VisualizerWindowParams } from './VisualizerWindowParams';
 
 export const visualizerWindowDefaultParams: VisualizerWindowParams = {
   mode: 'vectorscope',

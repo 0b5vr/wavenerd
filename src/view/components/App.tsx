@@ -25,7 +25,7 @@ import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
 import { useSettingsSubscribers } from '../stores/hooks/useSettingsSubscribers';
 import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
-import { Stuff, StuffContext } from '../StuffContext';
+import { type Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
 import { useStorageSubscribers } from '../stores/hooks/useStorageSubscribers';
 

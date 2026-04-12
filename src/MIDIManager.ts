@@ -1,6 +1,6 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { migrateMIDIManagerStorage, MIDI_VERSION_LATEST } from './migrateMIDIManagerStorage';
-import { StorageManager } from './StorageManager';
+import { type StorageManager } from './StorageManager';
 import { throttle } from 'throttle-debounce';
 
 export interface MidiManagerStorageType {

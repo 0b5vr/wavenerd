@@ -1,7 +1,7 @@
-import { Analyser } from '../../../audio/Analyser';
+import { type Analyser } from '../../../audio/Analyser';
 import VisualizerWindowWorker from './VisualizerWindowWorker.worker.ts?worker';
-import { VisualizerWindowParams } from './VisualizerWindowParams';
-import { VisualizerWindowRequestData } from './VisualizerWindowRequestData';
+import { type VisualizerWindowParams } from './VisualizerWindowParams';
+import { type VisualizerWindowRequestData } from './VisualizerWindowRequestData';
 import { visualizerWindowDefaultParams } from './visualizerWindowDefaultParams';
 
 export class VisualizerWindowProxy {

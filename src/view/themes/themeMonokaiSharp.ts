@@ -1,4 +1,4 @@
-import { Theme } from './Theme';
+import { type Theme } from './Theme';
 
 const back1 = '#191a1f';
 const back2 = '#24272d';

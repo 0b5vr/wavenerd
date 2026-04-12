@@ -1,5 +1,5 @@
 import { deckACueStatusAtom, deckAErrorAtom, deckBCueStatusAtom, deckBErrorAtom, deckBPMAtom, deckBeatsAtom, deckIsPlayingAtom, deckTimeAtom } from '../atoms/deck';
-import WavenerdDeck from '@0b5vr/wavenerd-deck';
+import { type WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 

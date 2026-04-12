@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { defaultSettings, Settings, SETTINGSMAN } from '../../../SettingsManager';
+import { defaultSettings, type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useCallback } from 'react';
 import IconRefresh from '~icons/mdi/refresh';
 import { ThemeVars } from '../../themes/ThemeVars';

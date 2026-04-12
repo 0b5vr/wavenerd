@@ -1,4 +1,4 @@
-import { SettingsItemBase, SettingsItemBaseProps } from './SettingsItemBase';
+import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
 import styled from 'styled-components';
 import { Knob } from '../Knob';
 import { useMidiValue } from '../../stores/hooks/useMidiValue';

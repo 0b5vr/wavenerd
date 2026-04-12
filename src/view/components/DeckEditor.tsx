@@ -1,7 +1,7 @@
-import { EditorView, KeyBinding, keymap } from '@codemirror/view';
+import { EditorView, type KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
-import ReactCodeMirror, { Prec, ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import ReactCodeMirror, { Prec, type ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
@@ -10,7 +10,7 @@ import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
 import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
-import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { type PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
 import { createCMTheme } from '../codemirror/createCMTheme';
 import { createErrorlayer } from '../codemirror/createErrorlayer';

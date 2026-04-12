@@ -1,4 +1,4 @@
-import { Theme } from './Theme';
+import { type Theme } from './Theme';
 import { themeChromaCoderGreen } from './themeChromaCoderGreen';
 import { themeMonokaiSharp } from './themeMonokaiSharp';
 import { themeShadertoyDark } from './themeShadertoyDark';

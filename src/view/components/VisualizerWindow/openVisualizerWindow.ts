@@ -1,8 +1,8 @@
 import style from './style.css';
-import { Analyser } from '../../../audio/Analyser';
+import { type Analyser } from '../../../audio/Analyser';
 import { VisualizerWindowProxy } from './VisualizerWindowProxy';
 import { setupVisualizerWindowGUI } from './setupVisualizerWindowGUI';
-import { FrameEmitter } from '../../../FrameEmitter';
+import { type FrameEmitter } from '../../../FrameEmitter';
 
 export function openVisualizerWindow(analyser: Analyser, frameEmitter: FrameEmitter): void {
   const visualizerWindow = window.open('about:blank', '_blank', 'height=480,width=480');

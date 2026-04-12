@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useSettings } from '../../stores/hooks/useSettings';
-import { Visualizer } from '../../visualizers/Visualizer';
-import { Analyser } from '../../../audio/Analyser';
+import { type Visualizer } from '../../visualizers/Visualizer';
+import { type Analyser } from '../../../audio/Analyser';
 
 export function useWaveform(visualizer: Visualizer | undefined, analyser: Analyser): () => void {
   const waveformMode = useSettings('waveformMode');

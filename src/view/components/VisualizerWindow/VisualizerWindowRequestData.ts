@@ -1,4 +1,4 @@
-import { VisualizerWindowParams } from './VisualizerWindowParams';
+import { type VisualizerWindowParams } from './VisualizerWindowParams';
 
 export type VisualizerWindowRequestData = (
   | { type: 'init'; canvas: OffscreenCanvas }

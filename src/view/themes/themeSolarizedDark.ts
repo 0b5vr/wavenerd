@@ -1,4 +1,4 @@
-import { Theme } from './Theme';
+import { type Theme } from './Theme';
 
 const base03 = '#002b36';
 const base02 = '#073642';

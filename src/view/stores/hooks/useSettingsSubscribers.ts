@@ -1,4 +1,4 @@
-import { SettingsManager } from '../../../SettingsManager';
+import { type SettingsManager } from '../../../SettingsManager';
 import { settingsAtom } from '../atoms/settings';
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
