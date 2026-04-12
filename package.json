@@ -6,6 +6,7 @@
     "all": "npm run lint && npm run clean && npm run build",
     "clean": "rimraf dist/",
     "dev": "vite",
+    "typecheck": "tsc -b --noEmit",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
