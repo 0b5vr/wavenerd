@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "esnext",
-    "types": ["vite/client", "unplugin-icons/types/react"],
+    "types": ["vite/client", "unplugin-icons/types/react", "webmidi"],
     "skipLibCheck": true,
 
     /* Bundler mode */
