@@ -6,7 +6,7 @@ GLSL music live coding environment
 
 ## Overview
 
-Wavenerd is a GLSL music live coding environment.
+Wavenerd is a GLSL music live coding environment runs in your web browser.
 
 It's basically a 2-deck DJ setup but turntables are replaced with GLSL synthesizers. You can write and play GLSL music code to create your bangers, and mix them with the built-in DJ mixer.
 
