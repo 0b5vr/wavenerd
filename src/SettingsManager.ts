@@ -47,6 +47,7 @@ export interface Settings {
   editorBraceJumpMapEnabled: boolean;
   editorBraceJumpMapScale: number;
   editorCompileTimeEnabled: boolean;
+  recorderFormat: string;
 }
 
 export const defaultSettings: Settings = {
@@ -84,6 +85,7 @@ export const defaultSettings: Settings = {
   editorBraceJumpMapEnabled: true,
   editorBraceJumpMapScale: 0.8,
   editorCompileTimeEnabled: true,
+  recorderFormat: 'wav',
 };
 
 interface SettingsManagerEvents {

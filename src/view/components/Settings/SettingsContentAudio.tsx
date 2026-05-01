@@ -7,6 +7,8 @@ import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
 import { SettingsItemMIDIKnob } from './SettingsItemMIDIKnob';
 import { SettingsItemSelect } from './SettingsItemSelect';
 import { ThemeVars } from '../../themes/ThemeVars';
+import { Recorder } from '../../../audio/Recorder';
+import { useMemo } from 'react';
 
 const Suffix = styled.div`
   font-size: 12px;
@@ -23,6 +25,24 @@ function suffixFnPercent(value: number) {
 function suffixFnSquaredDB(value: number) {
   const str = voltageToDisplayDB(value * value);
   return <Suffix>{str}</Suffix>;
+}
+
+function SettingsItemRecorderFormat() {
+  const availableFormats = useMemo(() => Recorder.getAvailableFormats(), []);
+
+  return (
+    <SettingsItemSelect
+      settingsKey="recorderFormat"
+      name="Recorder Format"
+      stalkerText="Change the recording output format."
+    >
+      {availableFormats.map((format) => (
+        <option key={format.format} value={format.format}>
+          {format.displayName}
+        </option>
+      ))}
+    </SettingsItemSelect>
+  );
 }
 
 export function SettingsContentAudio() {
@@ -100,6 +120,8 @@ export function SettingsContentAudio() {
         <option value="biquad">Biquad</option>
         <option value="gate">Gate</option>
       </SettingsItemSelect>
+
+      <SettingsItemRecorderFormat />
     </>
   );
 }

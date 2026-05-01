@@ -1,5 +1,44 @@
+import { MediaRecorder, register } from 'extendable-media-recorder';
+import { connect } from 'extendable-media-recorder-wav-encoder';
 import { EventEmittable } from '../utils/EventEmittable';
 import { saveBlob } from '../utils/saveBlob';
+import { SETTINGSMAN } from '../SettingsManager';
+
+await register(await connect());
+
+interface FormatConfig {
+  format: string;
+  displayName: string;
+  ext: string;
+  mimeType: string;
+}
+
+const formatConfigs: Record<string, FormatConfig> = {
+  'wav': {
+    format: 'wav',
+    displayName: 'wav',
+    ext: 'wav',
+    mimeType: 'audio/wav',
+  },
+  'webm-opus': {
+    format: 'webm-opus',
+    displayName: 'webm (Opus)',
+    ext: 'webm',
+    mimeType: 'audio/webm;codecs=opus',
+  },
+  'ogg-opus': {
+    format: 'ogg-opus',
+    displayName: 'ogg (Opus)',
+    ext: 'ogg',
+    mimeType: 'audio/ogg;codecs=opus',
+  },
+  'm4a-aac': {
+    format: 'm4a-aac',
+    displayName: 'm4a (AAC)',
+    ext: 'm4a',
+    mimeType: 'audio/mp4;codecs=aac',
+  },
+};
 
 interface RecorderEvents {
   start: void;
@@ -7,6 +46,11 @@ interface RecorderEvents {
 }
 
 export class Recorder extends EventEmittable<RecorderEvents> {
+  public static getAvailableFormats(): FormatConfig[] {
+    return Object.values(formatConfigs)
+      .filter((config) => MediaRecorder.isTypeSupported(config.mimeType));
+  }
+
   public readonly audio: AudioContext;
 
   public get isRecording(): boolean {
@@ -14,7 +58,7 @@ export class Recorder extends EventEmittable<RecorderEvents> {
   }
 
   private __streamDest: MediaStreamAudioDestinationNode;
-  private __recorder: MediaRecorder | null;
+  private __recorder: InstanceType<typeof MediaRecorder> | null;
   private __chunks: Blob[] = [];
 
   public get input(): AudioNode {
@@ -54,9 +98,16 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     this.__emit('stop');
   }
 
-  private __createRecorder(): MediaRecorder {
+  private __createRecorder(): InstanceType<typeof MediaRecorder> {
+    const format = SETTINGSMAN.values.recorderFormat;
+    const config = formatConfigs[format];
+
+    if (config == null) {
+      throw new Error(`Unreachable. Unsupported recorder format: ${format}`);
+    }
+
     const recorder = new MediaRecorder(this.__streamDest.stream, {
-      mimeType: 'audio/webm;codecs=opus',
+      mimeType: config.mimeType,
       audioBitsPerSecond: 256 * 1024,
     });
 
@@ -65,8 +116,9 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     });
 
     recorder.addEventListener('stop', () => {
-      const blob = new Blob(this.__chunks, { type: 'audio/ogg;codecs=opus' });
-      saveBlob(blob, `wavenerd-${Date.now()}.ogg`);
+      const blob = new Blob(this.__chunks, { type: config.mimeType });
+      const filename = `wavenerd-${Date.now()}.${config.ext}`;
+      saveBlob(blob, filename);
 
       this.__chunks = [];
     });
