@@ -10,11 +10,11 @@ export class Recorder extends EventEmittable<RecorderEvents> {
   public readonly audio: AudioContext;
 
   public get isRecording(): boolean {
-    return this.__recorder.state === 'recording';
+    return this.__recorder?.state === 'recording';
   }
 
   private __streamDest: MediaStreamAudioDestinationNode;
-  private __recorder: MediaRecorder;
+  private __recorder: MediaRecorder | null;
   private __chunks: Blob[] = [];
 
   public get input(): AudioNode {
@@ -26,32 +26,51 @@ export class Recorder extends EventEmittable<RecorderEvents> {
 
     this.audio = audio;
 
+    this.__recorder = null;
     this.__streamDest = new MediaStreamAudioDestinationNode(audio);
+  }
 
-    this.__recorder = new MediaRecorder(this.__streamDest.stream, {
+  public start() {
+    if (this.__recorder != null) {
+      console.error('Recorder is already recording.');
+      return;
+    }
+
+    this.__recorder = this.__createRecorder();
+    this.__recorder.start();
+
+    this.__emit('start');
+  }
+
+  public stop() {
+    if (this.__recorder == null) {
+      console.error('Recorder is not recording.');
+      return;
+    }
+
+    this.__recorder.stop();
+    this.__recorder = null;
+
+    this.__emit('stop');
+  }
+
+  private __createRecorder(): MediaRecorder {
+    const recorder = new MediaRecorder(this.__streamDest.stream, {
       mimeType: 'audio/webm;codecs=opus',
       audioBitsPerSecond: 256 * 1024,
     });
 
-    this.__recorder.addEventListener('dataavailable', (event) => {
+    recorder.addEventListener('dataavailable', (event) => {
       this.__chunks.push(event.data);
     });
 
-    this.__recorder.addEventListener('stop', () => {
+    recorder.addEventListener('stop', () => {
       const blob = new Blob(this.__chunks, { type: 'audio/ogg;codecs=opus' });
       saveBlob(blob, `wavenerd-${Date.now()}.ogg`);
 
       this.__chunks = [];
     });
-  }
 
-  public start() {
-    this.__recorder.start();
-    this.__emit('start');
-  }
-
-  public stop() {
-    this.__recorder.stop();
-    this.__emit('stop');
+    return recorder;
   }
 }
