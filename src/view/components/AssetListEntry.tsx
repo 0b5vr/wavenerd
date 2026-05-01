@@ -2,19 +2,24 @@ import { useCallback } from 'react';
 import IconBin from '~icons/mdi/delete';
 import { ThemeVars } from '../themes/ThemeVars';
 import styled from 'styled-components';
+import { useIsTruncated } from '../utils/useIsTruncated';
 
 // == styles =======================================================================================
 const Name = styled.div`
   margin-left: 4px;
   flex-grow: 1;
   flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const ButtonDelete = styled(IconBin)`
   display: none;
   width: 16px;
   height: 16px;
-  margin-right: 8px;
+  flex-shrink: 0;
 
   fill: ${ThemeVars.fore};
   cursor: pointer;
@@ -33,10 +38,6 @@ const Root = styled.div`
   align-items: center;
   font-size: 12px;
 
-  * {
-    flex-shrink: 0;
-  }
-
   &:hover ${ButtonDelete} {
     display: block;
   }
@@ -52,6 +53,8 @@ export function AssetListEntry({
   onDeleteAsset: (name: string) => void;
   className?: string;
 }) {
+  const [nameRef, isTruncated] = useIsTruncated<HTMLDivElement>();
+
   const handleClickDelete = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
@@ -66,7 +69,12 @@ export function AssetListEntry({
     <Root
       className={className}
     >
-      <Name>{ name }</Name>
+      <Name
+        ref={nameRef}
+        data-stalker={isTruncated ? name : undefined}
+      >
+        { name }
+      </Name>
       <ButtonDelete
         onClick={handleClickDelete}
       />
