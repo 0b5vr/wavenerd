@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import IconCasette from '~icons/mdi/cassette';
 import { StuffContext } from '../../StuffContext';
 import { useSettings } from '../../stores/hooks/useSettings';
+import { Recorder } from '../../../audio/Recorder';
 
 const StyledIcon = styled(IconCasette)`
   ${headerIconStyle}
@@ -54,13 +55,19 @@ export function HeaderIconRecorder() {
     return () => clearInterval(id);
   }, [isRecording, recorder]);
 
+  const displayFormat = useMemo(() => {
+    const availableFormats = Recorder.getAvailableFormats();
+    const fmt = availableFormats.find((f) => f.format === format);
+    return fmt ? fmt.displayName : format;
+  }, [format]);
+
   const stalkerText = useMemo(() => {
     if (isRecording) {
-      return `Recording (${format})\n${displayTime}\nClick to stop`;
+      return `Recording in ${displayFormat}\n${displayTime}\nClick to stop`;
     } else {
-      return `Record (${format})`;
+      return `Record in ${displayFormat}`;
     }
-  }, [isRecording, format, displayTime]);
+  }, [isRecording, displayFormat, displayTime]);
 
   return (
     <StyledIcon
