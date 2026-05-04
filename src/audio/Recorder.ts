@@ -57,9 +57,15 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     return this.__recorder?.state === 'recording';
   }
 
+  public get recordingTime(): number {
+    if (this.__recordingStartTime == null) { return 0; }
+    return (Date.now() - this.__recordingStartTime) / 1000.0;
+  }
+
   private __streamDest: MediaStreamAudioDestinationNode;
   private __recorder: InstanceType<typeof MediaRecorder> | null;
   private __chunks: Blob[] = [];
+  private __recordingStartTime: number | null = null;
 
   public get input(): AudioNode {
     return this.__streamDest;
@@ -80,6 +86,7 @@ export class Recorder extends EventEmittable<RecorderEvents> {
       return;
     }
 
+    this.__recordingStartTime = Date.now();
     this.__recorder = this.__createRecorder();
     this.__recorder.start();
 
@@ -94,6 +101,7 @@ export class Recorder extends EventEmittable<RecorderEvents> {
 
     this.__recorder.stop();
     this.__recorder = null;
+    this.__recordingStartTime = null;
 
     this.__emit('stop');
   }
