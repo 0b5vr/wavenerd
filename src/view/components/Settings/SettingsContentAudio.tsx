@@ -9,6 +9,8 @@ import { SettingsItemSelect } from './SettingsItemSelect';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { Recorder } from '../../../audio/Recorder';
 import { useMemo } from 'react';
+import { useAtomValue } from 'jotai';
+import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
 
 const Suffix = styled.div`
   font-size: 12px;
@@ -28,13 +30,15 @@ function suffixFnSquaredDB(value: number) {
 }
 
 function SettingsItemRecorderFormat() {
+  const isRecording = useAtomValue(recorderIsRecordingAtom);
   const availableFormats = useMemo(() => Recorder.getAvailableFormats(), []);
 
   return (
     <SettingsItemSelect
       settingsKey="recorderFormat"
       name="Recorder Format"
-      stalkerText="Change the recording output format."
+      disabled={isRecording}
+      stalkerText={isRecording ? 'Recording in progress. Please stop the recording to change the format.' : 'Change the recording output format.'}
     >
       {availableFormats.map((format) => (
         <option key={format.format} value={format.format}>

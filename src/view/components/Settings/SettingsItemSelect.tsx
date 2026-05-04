@@ -17,6 +17,7 @@ const StyledSelect = styled.select`
 
 export function SettingsItemSelect(props: {
   settingsKey: keyof Settings;
+  disabled?: boolean;
   children: React.ReactNode;
 } & SettingsItemBaseProps) {
   const { settingsKey, children } = props;
@@ -31,6 +32,7 @@ export function SettingsItemSelect(props: {
     <SettingsItemBase {...props}>
       <StyledSelect
         value={value}
+        disabled={props.disabled}
         onChange={handleChange}
       >
         {children}
