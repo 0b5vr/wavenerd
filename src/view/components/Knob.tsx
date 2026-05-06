@@ -67,6 +67,11 @@ const Root = styled.div`
 `;
 
 // == functions ====================================================================================
+/**
+ * Calculates the knob direction vector for a given value in the range [0, 1].
+ * Returns a 7 o'clock position for value = 0, Returns a 5 o'clock position for value = 1.
+ * The direction vector is a unit vector and assumes y-axis points downwards.
+ */
 function valueToDir(value: number): [number, number] {
   const x = Math.cos(PI / 6 * (10 * value + 4));
   const y = Math.sin(PI / 6 * (10 * value + 4));
@@ -152,15 +157,18 @@ export function Knob(props: Props) {
       return;
     }
 
-    const y0 = event.clientY;
-    const v0 = MIDIMAN.midi(midiParamName);
+    let x = event.clientX - event.clientY;
+    let v = MIDIMAN.midi(midiParamName);
 
     registerMouseEvent(
       (event) => {
-        const y = y0 - event.clientY;
-        const mod = event.ctrlKey ? 0.1 : 1.0;
-        const dv = y * deltaValuePerPixel * mod;
-        const v = saturate(v0 + dv);
+        const x1 = event.clientX - event.clientY;
+        const dx = x1 - x;
+        x = x1;
+
+        const multiplier = event.ctrlKey ? 0.1 : 1.0;
+        const dv = dx * deltaValuePerPixel * multiplier;
+        v = saturate(v + dv);
         MIDIMAN.setValue(midiParamName, v);
       },
     );
