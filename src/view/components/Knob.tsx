@@ -168,8 +168,8 @@ export function Knob(props: Props) {
 
         const multiplier = event.ctrlKey ? 0.1 : 1.0;
         const dv = dx * deltaValuePerPixel * multiplier;
-        v = saturate(v + dv);
-        MIDIMAN.setValue(midiParamName, v);
+        v += dv;
+        MIDIMAN.setValue(midiParamName, saturate(v));
       },
     );
   }, [checkDoubleClick, midiParamName, resetValue, deltaValuePerPixel]);
