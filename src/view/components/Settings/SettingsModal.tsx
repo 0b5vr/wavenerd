@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { settingsCategoryAtom, settingsIsOpeningAtom } from '../../stores/atoms/settings';
 import { useAtom, useAtomValue } from 'jotai';
 import { Modal } from '../Modal';
-import styled from 'styled-components';
 import { SettingsCategoriesMenu } from './SettingsCategoriesMenu';
 import { SettingsContentAudio } from './SettingsContentAudio';
 import { SettingsContentVisualization } from './SettingsContentVisualization';
@@ -10,26 +9,7 @@ import { SettingsContentAppearance } from './SettingsContentAppearance';
 import { SettingsContentEditor } from './SettingsContentEditor';
 import { SettingsContentAbout } from './SettingsContentAbout';
 import { SettingsContentMIDI } from './SettingsContentMIDI';
-import { ThemeVars } from '../../themes/ThemeVars';
 import SimpleBar from 'simplebar-react';
-
-// == styles =======================================================================================
-const Content = styled(SimpleBar)`
-  display: flex;
-  flex-direction: column;
-  height: 480px;
-`;
-
-const VR = styled.div`
-  background: ${ThemeVars.gray};
-`;
-
-const Root = styled.div`
-  display: grid;
-  width: 720px;
-  grid-template-columns: 120px 1px 1fr;
-  gap: 8px;
-`;
 
 // == components ===================================================================================
 export function SettingsModal() {
@@ -46,20 +26,20 @@ export function SettingsModal() {
 
   return (
     <Modal onClose={handleClose}>
-      <Root>
+      <div className="grid w-180 grid-cols-[120px_1px_1fr] gap-2">
         <SettingsCategoriesMenu />
 
-        <VR />
+        <div className="bg-gray" />
 
-        <Content>
+        <SimpleBar className="flex flex-col h-120">
           {category === 'audio' && <SettingsContentAudio />}
           {category === 'midi' && <SettingsContentMIDI />}
           {category === 'editor' && <SettingsContentEditor />}
           {category === 'appearance' && <SettingsContentAppearance />}
           {category === 'visualization' && <SettingsContentVisualization />}
           {category === 'about' && <SettingsContentAbout />}
-        </Content>
-      </Root>
+        </SimpleBar>
+      </div>
     </Modal>
   );
 }

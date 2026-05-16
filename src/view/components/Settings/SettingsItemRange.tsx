@@ -2,12 +2,6 @@ import { useCallback } from 'react';
 import { type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
-import styled from 'styled-components';
-
-const StyledRange = styled.input`
-  margin: 0 4px;
-  height: 16px;
-`;
 
 export function SettingsItemRange(props: {
   settingsKey: keyof Settings;
@@ -26,7 +20,8 @@ export function SettingsItemRange(props: {
 
   return (
     <SettingsItemBase {...props}>
-      <StyledRange
+      <input
+        className="mx-1 h-4"
         type="range"
         min={min}
         max={max}

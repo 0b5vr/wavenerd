@@ -2,18 +2,6 @@ import { useCallback } from 'react';
 import { type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
-import styled from 'styled-components';
-import { ThemeVars } from '../../themes/ThemeVars';
-
-const StyledSelect = styled.select`
-  display: inline-block;
-  color: ${ThemeVars.inputFore};
-  background: ${ThemeVars.inputBack};
-  height: 16px;
-  border: none;
-  border-radius: 4px;
-  font: 12px 'Inter', sans-serif;
-`;
 
 export function SettingsItemSelect(props: {
   settingsKey: keyof Settings;
@@ -30,13 +18,14 @@ export function SettingsItemSelect(props: {
 
   return (
     <SettingsItemBase {...props}>
-      <StyledSelect
+      <select
+        className="inline-block text-input-fore bg-input-back h-4 border-0 rounded text-xs font-sans"
         value={value}
         disabled={props.disabled}
         onChange={handleChange}
       >
         {children}
-      </StyledSelect>
+      </select>
     </SettingsItemBase>
   );
 }

@@ -1,39 +1,6 @@
-import styled from 'styled-components';
-import { defaultSettings, type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useCallback } from 'react';
 import IconRefresh from '~icons/mdi/refresh';
-import { ThemeVars } from '../../themes/ThemeVars';
-
-const StyledResetButton = styled(IconRefresh)`
-  width: 16px;
-  height: 16px;
-  margin-left: 4px;
-  cursor: pointer;
-  color: ${ThemeVars.gray};
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const Line = styled.div`
-  display: flex;
-  align-items: start;
-  font-size: 12px;
-
-  & + & {
-    margin-top: 8px;
-  }
-`;
-
-const Name = styled.div`
-  width: 12em;
-  height: 16px;
-  flex-shrink: 0;
-  text-align: right;
-  margin-right: 8px;
-  color: ${ThemeVars.foresub};
-`;
+import { defaultSettings, type Settings, SETTINGSMAN } from '../../../SettingsManager';
 
 export interface SettingsItemBaseProps {
   name: string;
@@ -54,15 +21,16 @@ export function SettingsItemBase(props: {
   }, [settingsKey]);
 
   return (
-    <Line data-stalker={stalkerText}>
-      <Name>{name}</Name>
+    <div className="flex items-start text-xs [&+&]:mt-2" data-stalker={stalkerText}>
+      <div className="w-[12em] h-4 shrink-0 text-right mr-2 text-foresub">{name}</div>
       {children}
       {resettable && (
-        <StyledResetButton
+        <IconRefresh
+          className="w-4 h-4 ml-1 cursor-pointer text-gray hover:opacity-80"
           onClick={handleReset}
           data-stalker="Reset to default"
         />
       )}
-    </Line>
+    </div>
   );
 }

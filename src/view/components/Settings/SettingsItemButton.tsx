@@ -1,16 +1,4 @@
-import { ThemeVars } from '../../themes/ThemeVars';
 import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
-import styled from 'styled-components';
-
-const StyledButton = styled.button`
-  background: ${ThemeVars.modalFg};
-  color: ${ThemeVars.modalBg};
-  border: none;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font: 12px 'Inter', sans-serif;
-  cursor: pointer;
-`;
 
 export function SettingsItemButton(props: {
   label: string;
@@ -20,9 +8,12 @@ export function SettingsItemButton(props: {
 
   return (
     <SettingsItemBase {...props}>
-      <StyledButton onClick={onClick}>
+      <button
+        className="bg-modal-fg text-modal-bg border-0 rounded py-1 px-2 text-xs font-sans cursor-pointer"
+        onClick={onClick}
+      >
         { label }
-      </StyledButton>
+      </button>
     </SettingsItemBase>
   );
 }

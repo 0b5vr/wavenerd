@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { voltageToDisplayDB } from '../../utils/valueToDisplayDB';
 import { SettingsItemBlocksPerRender } from './SettingsItemBlocksPerRender';
 import { SettingsItemBool } from './SettingsItemBool';
@@ -6,27 +5,19 @@ import { SettingsItemChannelRouting } from './SettingsItemChannelRouting';
 import { SettingsItemLatencyBlocks } from './SettingsItemLatencyBlocks';
 import { SettingsItemMIDIKnob } from './SettingsItemMIDIKnob';
 import { SettingsItemSelect } from './SettingsItemSelect';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { Recorder } from '../../../audio/Recorder';
 import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
 
-const Suffix = styled.div`
-  font-size: 12px;
-  color: ${ThemeVars.foresub};
-  align-self: flex-end;
-  margin-left: 8px;
-`;
-
 function suffixFnPercent(value: number) {
   const str = (value * 100).toFixed() + '%';
-  return <Suffix>{str}</Suffix>;
+  return <div className="text-xs text-foresub self-end ml-2">{str}</div>;
 }
 
 function suffixFnSquaredDB(value: number) {
   const str = voltageToDisplayDB(value * value);
-  return <Suffix>{str}</Suffix>;
+  return <div className="text-xs text-foresub self-end ml-2">{str}</div>;
 }
 
 function SettingsItemRecorderFormat() {

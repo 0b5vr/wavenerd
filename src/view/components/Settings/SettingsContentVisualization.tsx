@@ -3,19 +3,12 @@ import { openVisualizerWindow } from '../VisualizerWindow/openVisualizerWindow';
 import { SettingsItemColor } from './SettingsItemColor';
 import { SettingsItemRange } from './SettingsItemRange';
 import { SettingsItemSelect } from './SettingsItemSelect';
-import styled from 'styled-components';
 import { useCallback } from 'react';
 import { useContext } from 'react';
 import { StuffContext } from '../../StuffContext';
 
-const StyledPercent = styled.span`
-  width: 32px;
-  font-size: 12px;
-  text-align: right;
-`;
-
 function suffixFnPercent(value: number) {
-  return <StyledPercent>{`${(value * 100).toFixed(0)}%`}</StyledPercent>;
+  return <span className="w-8 text-xs text-right">{`${(value * 100).toFixed(0)}%`}</span>;
 }
 
 export function SettingsContentVisualization() {

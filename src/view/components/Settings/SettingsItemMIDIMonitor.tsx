@@ -1,21 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
 import { MIDIMAN } from '../../../MIDIManager';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { SettingsItemBase } from './SettingsItemBase';
-
-// == styles =======================================================================================
-const MonitorBox = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  margin-right: 8px;
-  white-space: pre;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: ${ThemeVars.inputBack};
-  font: 400 10px 'Roboto Mono', sans-serif;
-`;
 
 // == components ===================================================================================
 const MONITOR_LOG_SIZE = 5;
@@ -60,11 +45,11 @@ export function SettingsItemMIDIMonitor() {
 
   return (
     <SettingsItemBase name="MIDI Monitor">
-      <MonitorBox>
+      <div className="grow flex flex-col mr-2 whitespace-pre py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
         {log.map((message, i) => (
           <span key={i}>{message}</span>
         ))}
-      </MonitorBox>
+      </div>
     </SettingsItemBase>
   );
 }

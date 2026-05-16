@@ -1,43 +1,9 @@
-import styled, { css } from 'styled-components';
+import { clsx } from 'clsx';
 import { SettingsItemBase } from './SettingsItemBase';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { useCallback, useContext, useMemo } from 'react';
 import { SETTINGSMAN } from '../../../SettingsManager';
 import { StuffContext } from '../../StuffContext';
-
-// == styles =======================================================================================
-const StyledSelect = styled.select`
-  display: inline-block;
-  color: ${ThemeVars.inputFore};
-  background: ${ThemeVars.inputBack};
-  height: 16px;
-  border: none;
-  border-radius: 4px;
-  font: 12px 'Inter', sans-serif;
-`;
-
-const LabelSpan = styled.span<{ isActive: boolean }>`
-  width: 16px;
-  color: ${ThemeVars.foresub};
-  opacity: 0.5;
-
-  ${({ isActive }) => isActive && css`
-    opacity: 1;
-  `}
-`;
-
-const Label = styled.div`
-  font: 12px 'Roboto Mono', monospace;
-`;
-
-const Root = styled.div`
-  display: grid;
-  grid-template-columns: 24px repeat(2, 1fr);
-  align-items: center;
-  justify-items: center;
-  gap: 4px;
-`;
 
 // == components ===================================================================================
 const options = [
@@ -61,11 +27,11 @@ function ChannelLabel({ index1, index2 }: { index1: number; index2: number }) {
   const isActive2 = channelCount >= index2;
 
   return (
-    <Label>
-      <LabelSpan isActive={isActive1}>{index1}</LabelSpan>
-      <LabelSpan isActive={isActive2}>/</LabelSpan>
-      <LabelSpan isActive={isActive2}>{index2}</LabelSpan>
-    </Label>
+    <div className="text-xs font-['Roboto_Mono'] font-normal">
+      <span className={clsx('w-4 text-foresub opacity-50', isActive1 && 'opacity-100')}>{index1}</span>
+      <span className={clsx('w-4 text-foresub opacity-50', isActive2 && 'opacity-100')}>/</span>
+      <span className={clsx('w-4 text-foresub opacity-50', isActive2 && 'opacity-100')}>{index2}</span>
+    </div>
   );
 }
 
@@ -84,7 +50,8 @@ function Select({
   }, [index, onChange]);
 
   return (
-    <StyledSelect
+    <select
+      className="inline-block text-input-fore bg-input-back h-4 border-0 rounded text-xs font-sans"
       value={value}
       onChange={handleChange}
     >
@@ -93,7 +60,7 @@ function Select({
           {option.label}
         </option>
       ))}
-    </StyledSelect>
+    </select>
   );
 }
 
@@ -114,7 +81,7 @@ export function SettingsItemChannelRouting() {
       resettable
       stalkerText="Channel routing.&#10;WebAudio supports up to 8 channels, if the audio output device is capable.&#10;If wavenerd doesn't recognize more than 2 channels, check your OS' audio settings.&#10;I recommend VB-Audio Matrix to bind two or more channels at once."
     >
-      <Root>
+      <div className="grid grid-cols-[24px_repeat(2,1fr)] items-center justify-items-center gap-1">
         <ChannelLabel index1={1} index2={2} />
         <Select value={maps[0]} index={0} onChange={handleChange} />
         <Select value={maps[1]} index={1} onChange={handleChange} />
@@ -130,7 +97,7 @@ export function SettingsItemChannelRouting() {
         <ChannelLabel index1={7} index2={8} />
         <Select value={maps[6]} index={6} onChange={handleChange} />
         <Select value={maps[7]} index={7} onChange={handleChange} />
-      </Root>
+      </div>
     </SettingsItemBase>
   );
 }
