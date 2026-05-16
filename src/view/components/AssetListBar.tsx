@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import IconBin from '~icons/mdi/delete';
 import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
@@ -13,10 +14,9 @@ const Title = styled.div`
 `;
 
 const IconButton = styled.svg`
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   margin: 2px;
-
   cursor: pointer;
 
   &:hover {
@@ -30,6 +30,7 @@ const IconButton = styled.svg`
 
 const Root = styled.div`
   display: flex;
+  padding-right: 4px;
   align-items: center;
   background: ${ThemeVars.barBg};
   color: ${ThemeVars.barFg};
@@ -45,12 +46,14 @@ export function AssetListBar({
   title,
   onFile,
   expand,
+  onWipeAssets,
   onChangeExpand,
   className,
 }: {
   title: string;
   onFile: (files: FileList) => void;
   expand: boolean;
+  onWipeAssets: () => void;
   onChangeExpand: () => void;
   className?: string;
 }) {
@@ -72,6 +75,16 @@ export function AssetListBar({
     [onFile],
   );
 
+  const handleClickWipe = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      onWipeAssets();
+    },
+    [onWipeAssets],
+  );
+
   return (
     <Root
       className={className}
@@ -85,6 +98,11 @@ export function AssetListBar({
         as={IconFolder}
         onClick={handleClickOpen}
         data-stalker="Open local file... (you can also drag and drop)"
+      />
+      <IconButton
+        as={IconBin}
+        onClick={handleClickWipe}
+        data-stalker="Delete all assets"
       />
     </Root>
   );

@@ -136,6 +136,15 @@ export function AssetListCategory({
     storageManager.delete(`${dir}/${name}`);
   }, [dir, storageManager]);
 
+  const handleWipeAssets = useCallback(() => {
+    const sure = confirm(`Are you sure you want to delete all ${title.toLowerCase()}?`);
+    if (sure) {
+      for (const name of assets) {
+        storageManager.delete(`${dir}/${name}`);
+      }
+    }
+  }, [assets, dir, storageManager, title]);
+
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -161,6 +170,7 @@ export function AssetListCategory({
         title={title}
         onFile={handleLoadFile}
         expand={expand}
+        onWipeAssets={handleWipeAssets}
         onChangeExpand={handleChangeExpand}
       />
       {expand && (
