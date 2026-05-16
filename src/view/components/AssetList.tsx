@@ -1,39 +1,28 @@
+import { clsx } from 'clsx';
 import { AssetListCategory } from './AssetListCategory';
-import styled from 'styled-components';
-
-// == styles =======================================================================================
-const StyledAssetListCategory = styled(AssetListCategory)`
-`;
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 // == components ===================================================================================
 export function AssetList({ className }: {
   className?: string;
 }) {
   return (
-    <Root
-      className={className}
-    >
-      <StyledAssetListCategory
+    <div className={clsx('flex flex-col', className)}>
+      <AssetListCategory
         title="Shaders"
         dir="shaders"
       />
-      <StyledAssetListCategory
+      <AssetListCategory
         title="Samples"
         dir="samples"
       />
-      <StyledAssetListCategory
+      <AssetListCategory
         title="Wavetables"
         dir="wavetables"
       />
-      <StyledAssetListCategory
+      <AssetListCategory
         title="Images"
         dir="images"
       />
-    </Root>
+    </div>
   );
 }

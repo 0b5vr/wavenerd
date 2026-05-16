@@ -5,6 +5,7 @@ import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
 import { clsx } from 'clsx';
 
+// == styles =======================================================================================
 const iconCls = 'w-4 h-4 m-0.5 shrink-0 cursor-pointer hover:opacity-80 active:opacity-60';
 
 // == components ===================================================================================
