@@ -1,17 +1,9 @@
 import { useCallback } from 'react';
-import { headerIconStyle } from './headerIconStyle';
-import styled, { css } from 'styled-components';
+import { headerIconCls } from './headerIconCls';
+import { clsx } from 'clsx';
 import IconCog from '~icons/mdi/cog';
 import { useAtomCallback } from 'jotai/utils';
 import { settingsIsOpeningAtom } from '../../stores/atoms/settings';
-
-const StyledIcon = styled(IconCog)<{ hidden?: boolean }>`
-  ${headerIconStyle}
-
-  ${({ hidden }) => hidden && css`
-    opacity: 0.0;
-  `}
-`;
 
 export function HeaderIconSettings({ hidden }: { hidden?: boolean }) {
   const handleClick = useAtomCallback(useCallback((_, set) => {
@@ -19,9 +11,9 @@ export function HeaderIconSettings({ hidden }: { hidden?: boolean }) {
   }, []));
 
   return (
-    <StyledIcon
+    <IconCog
+      className={clsx(headerIconCls, hidden && 'opacity-0')}
       onClick={handleClick}
-      hidden={hidden}
       data-stalker="Settings"
     />
   );

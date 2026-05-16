@@ -1,13 +1,8 @@
 import { useCallback } from 'react';
-import { headerIconStyle } from './headerIconStyle';
-import styled from 'styled-components';
+import { headerIconCls } from './headerIconCls';
 import IconHelpCircle from '~icons/mdi/help-circle';
 
 const HELP_URL = 'https://github.com/0b5vr/wavenerd/blob/release/guides/help.md';
-
-const StyledIcon = styled(IconHelpCircle)`
-  ${headerIconStyle}
-`;
 
 export function HeaderIconHelp() {
   const handleClick = useCallback(() => {
@@ -15,7 +10,8 @@ export function HeaderIconHelp() {
   }, []);
 
   return (
-    <StyledIcon
+    <IconHelpCircle
+      className={headerIconCls}
       onClick={handleClick}
       data-stalker="Show help"
     />

@@ -1,9 +1,9 @@
 import { deckTimeAtom } from '../../stores/atoms/deck';
-import styled from 'styled-components';
 import { atom, useAtomValue } from 'jotai';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
+import { clsx } from 'clsx';
 
 // == atoms ========================================================================================
 const textAtom = atom((get) => {
@@ -16,33 +16,22 @@ const textAtom = atom((get) => {
   return `${hours}:${minutes}:${seconds}`;
 });
 
-// == styles =======================================================================================
-const StyledUILabel = styled(UILabel)`
-  color: ${ThemeVars.headerFg};
-`;
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
 // == components ===================================================================================
 export function HeaderTimeHMS({ className }: { className?: string }) {
   const text = useAtomValue(textAtom);
 
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx('flex flex-col text-center', className)}
       data-stalker="Current Global Time"
     >
-      <StyledUILabel text="TIME" />
+      <UILabel className="text-header-fg" text="TIME" />
       <UINumber
         text={text}
         activeColor={ThemeVars.headerFg}
         inactiveColor={ThemeVars.gray}
         forceActiveFrom={3}
       />
-    </Root>
+    </div>
   );
 }

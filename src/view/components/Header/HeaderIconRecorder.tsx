@@ -1,17 +1,12 @@
 import { useAtomValue } from 'jotai';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
-import { ThemeVars } from '../../themes/ThemeVars';
-import { headerIconStyle } from './headerIconStyle';
-import styled from 'styled-components';
+import { headerIconCls } from './headerIconCls';
+import { clsx } from 'clsx';
 import IconCasette from '~icons/mdi/cassette';
 import { StuffContext } from '../../StuffContext';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { Recorder } from '../../../audio/Recorder';
-
-const StyledIcon = styled(IconCasette)`
-  ${headerIconStyle}
-`;
 
 function zeropad(num: number, length: number): string {
   return num.toString().padStart(length, '0');
@@ -70,9 +65,9 @@ export function HeaderIconRecorder() {
   }, [isRecording, displayFormat, displayTime]);
 
   return (
-    <StyledIcon
+    <IconCasette
+      className={clsx(headerIconCls, isRecording && 'text-error')}
       onClick={handleClick}
-      style={{ color: isRecording ? ThemeVars.error : 'inherit' }}
       data-stalker={stalkerText}
     />
   );
