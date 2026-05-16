@@ -1,7 +1,7 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
@@ -17,7 +17,6 @@ import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
 import { ThemeVars } from '../themes/ThemeVars';
 import { XFader } from './XFader';
-import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
 import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
@@ -27,6 +26,7 @@ import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { type Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
 import { useStorageSubscribers } from '../stores/hooks/useStorageSubscribers';
+import { ThemeStyle } from './ThemeStyle';
 
 // == styles =======================================================================================
 const StyledHeader = styled(Header)`
@@ -76,22 +76,7 @@ const StyledXFader = styled(XFader)`
   margin: 8px 16px;
 `;
 
-function themeVarsCss(themeString: string): ReturnType<typeof css> {
-  const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
-  const map = Object.entries(theme.ui)
-    .map(([key, value]) => {
-      const cssVar = ThemeVars[key as keyof typeof ThemeVars];
-      if (cssVar == null) { return ''; }
-
-      const cssKey = cssVar.match(/^var\(([a-z0-9-]+)/)?.[1];
-      if (cssKey == null) { return ''; }
-
-      return `${cssKey}: ${value};`;
-    });
-  return css`${map.join('')}`;
-}
-
-const Root = styled.div<{ themeString: string }>`
+const Root = styled.div`
   position: fixed;
   left: 0;
   top: 0;
@@ -106,12 +91,6 @@ const Root = styled.div<{ themeString: string }>`
   * {
     box-sizing: border-box;
   }
-
-  ${({ themeString }) => themeVarsCss(themeString)}
-
-  ${({ themeString }) => (themeString.startsWith('chromaCoder')) && css`
-    filter: brightness(1.0);
-  `}
 `;
 
 const GlobalStyleDisableSwipeNavi = createGlobalStyle`
@@ -154,7 +133,6 @@ function useFocusDeckShortcuts({
 export function OutOfContextApp() {
   const { deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
 
-  const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
   const libraryShow = useSettings('libraryShow');
   const mixerShow = useSettings('mixerShow');
@@ -186,8 +164,9 @@ export function OutOfContextApp() {
   return (
     <>
       <GlobalStyleDisableSwipeNavi />
+      <ThemeStyle />
 
-      <Root themeString={themeString}>
+      <Root>
         <StyledHeader />
         <DeckRow>
           <DeckColumn>
