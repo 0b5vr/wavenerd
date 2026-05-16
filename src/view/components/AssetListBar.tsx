@@ -3,43 +3,9 @@ import IconBin from '~icons/mdi/delete';
 import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
+import { clsx } from 'clsx';
 
-// == styles =======================================================================================
-const Title = styled.div`
-  margin-left: 4px;
-  flex-grow: 1;
-  flex-shrink: 1;
-`;
-
-const IconButton = styled.svg`
-  width: 16px;
-  height: 16px;
-  margin: 2px;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.6;
-  }
-`;
-
-const Root = styled.div`
-  display: flex;
-  padding-right: 4px;
-  align-items: center;
-  background: ${ThemeVars.barBg};
-  color: ${ThemeVars.barFg};
-  line-height: 1;
-
-  * {
-    flex-shrink: 0;
-  }
-`;
+const iconCls = 'w-4 h-4 m-0.5 shrink-0 cursor-pointer hover:opacity-80 active:opacity-60';
 
 // == components ===================================================================================
 export function AssetListBar({
@@ -85,25 +51,22 @@ export function AssetListBar({
     [onWipeAssets],
   );
 
+  const ChevronIcon = expand ? IconChevronDown : IconChevronRight;
+
   return (
-    <Root
-      className={className}
-    >
-      <IconButton
-        as={expand ? IconChevronDown : IconChevronRight}
-        onClick={onChangeExpand}
-      />
-      <Title>{ title }</Title>
-      <IconButton
-        as={IconFolder}
+    <div className={clsx('flex pr-1 items-center bg-bar-bg text-bar-fg leading-none', className)}>
+      <ChevronIcon className={iconCls} onClick={onChangeExpand} />
+      <div className="ml-1 grow shrink">{ title }</div>
+      <IconFolder
+        className={iconCls}
         onClick={handleClickOpen}
         data-stalker="Open local file... (you can also drag and drop)"
       />
-      <IconButton
-        as={IconBin}
+      <IconBin
+        className={iconCls}
         onClick={handleClickWipe}
         data-stalker="Delete all assets"
       />
-    </Root>
+    </div>
   );
 }

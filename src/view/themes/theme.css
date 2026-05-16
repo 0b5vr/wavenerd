@@ -1,0 +1,58 @@
+@theme {
+  --color-black: var(--black);
+  --color-white: var(--white);
+
+  --color-back1: var(--back1);
+  --color-back2: var(--back2);
+  --color-back3: var(--back3);
+
+  --color-overlay-back: var(--overlay-back, var(--color-back3));
+
+  --color-ui-shadow: var(--ui-shadow, #0008);
+
+  --color-code-background: var(--code-background);
+
+  --color-fore: var(--fore);
+  --color-foresub: var(--foresub);
+  --color-foredark: var(--foredark);
+
+  --color-bar-bg: var(--bar-bg, var(--color-back3));
+  --color-bar-fg: var(--bar-fg, var(--color-fore));
+
+  --color-list-bg: var(--list-bg, var(--color-back2));
+  --color-list-hover-bg: var(--list-hover-bg, var(--color-back3));
+  --color-list-focused-bg: var(--list-focused-bg, var(--color-back3));
+  --color-list-fg: var(--list-fg, var(--color-fore));
+  --color-list-hover-fg: var(--list-hover-fg, var(--color-list-fg));
+  --color-list-focused-fg: var(--list-focused-fg, var(--color-list-fg));
+
+  --color-header-bg: var(--header-bg, var(--color-bar-bg));
+  --color-header-fg: var(--header-fg, var(--color-bar-fg));
+
+  --color-context-menu-bg: var(--context-menu-bg, var(--color-back2));
+  --color-context-menu-fg: var(--context-menu-fg, var(--color-fore));
+
+  --color-modal-bg: var(--modal-bg, var(--color-overlay-back));
+  --color-modal-fg: var(--modal-fg, var(--color-fore));
+
+  --color-input-back: var(--input-back);
+  --color-input-back-invalid: var(--input-back-invalid);
+  --color-input-fore: var(--input-fore);
+
+  --color-gray: var(--gray);
+
+  --color-knob-color: var(--knob-color, var(--color-fore));
+  --color-knob-notch: var(--knob-notch, var(--color-back1));
+  --color-knob-guide: var(--knob-guide, var(--color-gray));
+  --color-knob-border: var(--knob-border, var(--color-back1));
+  --color-knob-gutter: var(--knob-gutter, var(--color-back1));
+  --color-knob-shadow: var(--knob-shadow, #0008);
+
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright, var(--color-accent));
+  --color-accent-gray: var(--accent-gray, var(--color-accent));
+  --color-green: var(--green);
+  --color-error: var(--error);
+
+  --color-level-meter: var(--level-meter, var(--color-accent));
+}
