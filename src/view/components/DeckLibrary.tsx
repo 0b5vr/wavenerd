@@ -1,67 +1,10 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { atom, type PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
-import styled from 'styled-components';
-import { ThemeVars } from '../themes/ThemeVars';
 import { mod } from '@0b5vr/experimental';
 import { StuffContext } from '../StuffContext';
 import SimpleBar from 'simplebar-react';
 import { storageFileListAtom } from '../stores/atoms/storage';
-
-// == styles =======================================================================================
-const StyledInput = styled.input`
-  width: 100%;
-  padding: 4px;
-  margin-bottom: 4px;
-  font-size: 14px;
-  border: none;
-  outline: none;
-  background: ${ThemeVars.inputBack};
-  border-radius: 4px;
-  color: ${ThemeVars.inputFore};
-`;
-
-const ListItem = styled.div<{ isSelected: boolean }>`
-  padding: 2px 8px;
-  margin: 0 -4px;
-  font-size: 12px;
-  background: ${({ isSelected }) => (isSelected ? ThemeVars.listFocusedBg : 'transparent')};
-  color: ${({ isSelected }) => (isSelected ? ThemeVars.listFocusedFg : ThemeVars.listFg)};
-  cursor: pointer;
-
-  &:hover {
-    background: ${({ isSelected }) => (isSelected ? ThemeVars.listFocusedBg : ThemeVars.listHoverBg)};
-    color: ${({ isSelected }) => (isSelected ? ThemeVars.listFocusedFg : ThemeVars.listHoverFg)};
-  }
-`;
-
-const Result = styled(SimpleBar)`
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
-
-const Box = styled.div`
-  margin-top: 8px;
-  padding: 4px;
-  width: 80%;
-  max-width: 480px;
-  background: ${ThemeVars.listBg};
-  pointer-events: auto;
-  border-radius: 4px;
-  box-shadow: 0 0 8px 0 ${ThemeVars.black};
-`;
-
-const Root = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  pointer-events: none;
-`;
+import { clsx } from 'clsx';
 
 // == atoms ========================================================================================
 const storageFileListShadersAtom = atom((get) => {
@@ -83,15 +26,20 @@ function DeckLibraryItem({ name, isSelected, onSelect, itemRef }: {
   }, [onSelect, name]);
 
   return (
-    <ListItem
+    <div
       ref={itemRef}
-      isSelected={isSelected}
+      className={clsx(
+        'py-0.5 px-2 -mx-1 text-xs cursor-pointer',
+        isSelected
+          ? 'bg-list-focused-bg text-list-focused-fg hover:bg-list-focused-bg hover:text-list-focused-fg'
+          : 'bg-transparent text-list-fg hover:bg-list-hover-bg hover:text-list-hover-fg',
+      )}
       onPointerDown={handlePointerDown}
     >
       {name}
-    </ListItem>
+    </div>
   );
-};
+}
 
 function TextInput({
   value,
@@ -138,8 +86,9 @@ function TextInput({
   }, [setLibraryOpening, focusEditor]);
 
   return (
-    <StyledInput
+    <input
       ref={refTextInputFocusOnOpen}
+      className="w-full p-1 mb-1 text-sm border-0 outline-none bg-input-back rounded text-input-fore"
       value={value}
       placeholder="Search library by name"
       onChange={onChange}
@@ -232,8 +181,8 @@ export function DeckLibrary({
   }
 
   return (
-    <Root>
-      <Box>
+    <div className="absolute inset-0 flex justify-center items-start pointer-events-none">
+      <div className="mt-2 p-1 w-4/5 max-w-120 bg-list-bg pointer-events-auto rounded shadow-[0_0_8px_0_var(--color-black)]">
         <TextInput
           value={textInputValue}
           libraryOpeningAtom={libraryOpeningAtom}
@@ -242,7 +191,7 @@ export function DeckLibrary({
           onChange={handleChange}
           focusEditor={focusEditor}
         />
-        <Result>
+        <SimpleBar className="max-h-75 overflow-y-auto overflow-x-hidden">
           {shadersListFiltered.map((name, i) => (
             <DeckLibraryItem
               key={name}
@@ -258,8 +207,8 @@ export function DeckLibrary({
               isSelected={false}
             />
           )}
-        </Result>
-      </Box>
-    </Root>
+        </SimpleBar>
+      </div>
+    </div>
   );
 }

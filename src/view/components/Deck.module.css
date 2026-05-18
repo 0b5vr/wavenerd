@@ -1,0 +1,8 @@
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.focusFrameFadeOut {
+  animation: step-end fade-out 0.2s forwards;
+}

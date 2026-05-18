@@ -1,81 +1,10 @@
-import styled, { css, keyframes } from 'styled-components';
-import { ThemeVars } from '../themes/ThemeVars';
 import { type PrimitiveAtom, useAtomValue } from 'jotai';
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import { findAllBracePairs } from '../../utils/findAllBracePairs';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
-
-// == styles =======================================================================================
-const fadeOut = keyframes`
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-`;
-
-const SpanCommentHighlight = styled.span<{
-  isCommentLine: boolean;
-}>`
-  color: ${ThemeVars.accent};
-
-  ${({ isCommentLine }) => isCommentLine && css`
-    color: ${ThemeVars.accentGray};
-  `}
-`;
-
-const SpanLine = styled.span<{
-  isCommentLine: boolean;
-}>`
-  color: ${ThemeVars.fore};
-
-  ${({ isCommentLine }) => isCommentLine && css`
-    color: ${ThemeVars.gray};
-  `}
-`;
-
-const BracePairStyle = styled.div<{
-  fontStyle: string;
-  fontVariantLigatures: string;
-  distanceFromCenter: number;
-}>`
-  padding-left: 4px;
-  white-space: pre;
-  font: ${({ fontStyle }) => fontStyle};
-  font-variant-ligatures: ${({ fontVariantLigatures }) => fontVariantLigatures};
-
-  ${({ distanceFromCenter }) => distanceFromCenter === 0 && css`
-    border: 1px solid ${ThemeVars.fore};
-  `}
-`;
-
-const Box = styled.div<{ isActive: boolean }>`
-  margin-right: 16px;
-  width: 50%;
-  max-width: 320px;
-  background: ${ThemeVars.overlayBack};
-  color: ${ThemeVars.fore};
-  border-radius: 8px;
-  box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
-  overflow: hidden;
-  transform-origin: center right;
-  opacity: 0;
-
-  ${({ isActive }) => isActive && css`
-    animation: ease-in-out ${fadeOut} 2s forwards;
-  `}
-`;
-
-const Root = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  pointer-events: none;
-`;
+import styles from './DeckBraceJumpMap.module.css';
+import { clsx } from 'clsx';
 
 // == functions ====================================================================================
 /**
@@ -120,27 +49,34 @@ function BracePair({ str, distanceFromCenter }: {
     }
   }, [isCommentLine, str]);
 
+  const pairCls = clsx(
+    'pl-1 whitespace-pre',
+    distanceFromCenter === 0 && 'border border-fore',
+  );
+
   if (str === undefined) {
     return (
-      <BracePairStyle
-        distanceFromCenter={distanceFromCenter}
-        fontStyle={font}
-        fontVariantLigatures={fontVariantLigatures}
+      <div
+        className={pairCls}
+        style={{ font, fontVariantLigatures }}
       >
-        <SpanLine isCommentLine={false}>&nbsp;</SpanLine>
-      </BracePairStyle>
+        <span className="text-fore">&nbsp;</span>
+      </div>
     );
   }
 
   return (
-    <BracePairStyle
-      distanceFromCenter={distanceFromCenter}
-      fontStyle={font}
-      fontVariantLigatures={fontVariantLigatures}
+    <div
+      className={pairCls}
+      style={{ font, fontVariantLigatures }}
     >
-      <SpanLine isCommentLine={isCommentLine}>{str.substring(0, commentHighlightPos)}</SpanLine>
-      <SpanCommentHighlight isCommentLine={isCommentLine}>{str.substring(commentHighlightPos)}</SpanCommentHighlight>
-    </BracePairStyle>
+      <span className={isCommentLine ? 'text-gray' : 'text-fore'}>
+        {str.substring(0, commentHighlightPos)}
+      </span>
+      <span className={isCommentLine ? 'text-accent-gray' : 'text-accent'}>
+        {str.substring(commentHighlightPos)}
+      </span>
+    </div>
   );
 }
 
@@ -169,10 +105,13 @@ const DeckBraceJumpMapInside = forwardRef(({
   useImperativeHandle(ref, () => ({ update }), [update]);
 
   return (
-    <Root className={className}>
-      <Box
+    <div className={`absolute inset-0 flex justify-end items-center pointer-events-none ${className ?? ''}`}>
+      <div
         key={key}
-        isActive={key !== 0}
+        className={clsx(
+          'mr-4 w-1/2 max-w-80 bg-overlay-back text-fore rounded-lg shadow-[0_4px_8px_2px_var(--color-ui-shadow)] overflow-hidden origin-[center_right] opacity-0',
+          key !== 0 && styles.boxFadeOut,
+        )}
         style={{ transform: `scale(${scale})` }}
       >
         {arraySerial(21).map((i) => (
@@ -182,8 +121,8 @@ const DeckBraceJumpMapInside = forwardRef(({
             str={bracePairs[centerIndex + i - 10]?.firstLine}
           />
         ))}
-      </Box>
-    </Root>
+      </div>
+    </div>
   );
 });
 DeckBraceJumpMapInside.displayName = 'DeckBraceJumpMapInside';

@@ -1,0 +1,8 @@
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.balloon {
+  animation: fade-out 0.5s step-end forwards;
+}

@@ -1,0 +1,11 @@
+.root {
+  :global(.deck-editor-simplebar) :global(.simplebar-content) {
+    min-height: 100%;
+  }
+}
+
+.hideGutters {
+  :global(.cm-gutters) {
+    display: none;
+  }
+}

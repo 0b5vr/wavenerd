@@ -1,6 +1,6 @@
 import { type PrimitiveAtom, useAtomValue } from 'jotai';
+import styles from './DeckStatusBar.module.css';
 import { useCallback, useMemo, type JSX } from 'react';
-import styled, { css, keyframes } from 'styled-components';
 import IconApply from '~icons/mdi/skip-forward';
 import IconBuild from '~icons/mdi/hammer';
 import IconCheck from '~icons/mdi/check-bold';
@@ -8,161 +8,22 @@ import IconCircle from '~icons/mdi/circle-medium';
 import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
-import { ThemeVars } from '../themes/ThemeVars';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 
-// == styles =======================================================================================
-const StyleIcon = css`
-  width: 20px;
-  height: 20px;
-  margin: 2px;
-`;
-
-const StyleIconButton = css`
-  ${StyleIcon}
-
-  color: ${ThemeVars.fore};
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.6;
-  }
-`;
-
-const DivCompileTime = styled.div`
-  font-size: 12px;
-  margin: 0 4px;
-`;
-
-const StyledIconHasChange = styled(IconCircle)`
-  ${StyleIcon}
-  color: ${ThemeVars.accentBright};
-`;
-
-const StyledIconPlay = styled(IconPlay)`
-  ${StyleIcon}
-  color: ${ThemeVars.gray};
-`;
-
-const StyledIconBuilding = styled(IconBuild)`
-  ${StyleIcon}
-  color: ${ThemeVars.accent};
-`;
-
-const StyledIconError = styled(IconError)`
-  ${StyleIcon}
-  color: ${ThemeVars.error};
-`;
-
-const StyledIconMute = styled(IconMute)`
-  ${StyleIcon}
-  color: ${ThemeVars.error};
-`;
-
-const StyledIconCheck = styled(IconCheck)`
-  ${StyleIcon}
-  color: ${ThemeVars.green};
-`;
-
-const StyledIconApplying = styled(IconApply)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  color: ${ThemeVars.accent};
-`;
-
-const IconStopwatchContainer = styled.div`
-  ${StyleIcon}
-  position: relative;
-`;
-
-const StyledIconBuild = styled(IconBuild)`
-  ${StyleIconButton}
-`;
-
-const StyledIconApply = styled(IconApply)`
-  ${StyleIconButton}
-`;
-
-const animationBlink = (altColor: string, duration: string, timing: string) => css`
-  animation: ${keyframes`
-    0% { color: ${ThemeVars.fore}; }
-    50% { color: ${altColor}; }
-    100% { color: ${ThemeVars.fore}; }
-  `} ${duration} ${timing} infinite;
-`;
-
-const Content = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-grow: 1;
-  flex-shrink: 1;
-`;
-
-const CodeErrorContent = styled(Content)`
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const Text = styled.div`
-`;
-
-const TextGray = styled(Text)`
-  color: ${ThemeVars.gray};
-`;
-
-const TextError = styled(Text)`
-  color: ${ThemeVars.error};
-`;
-
-const TextHasChangeBlink = styled(Text)`
-  ${animationBlink(ThemeVars.accentBright, '2s', 'ease-in-out')}
-`;
-
-const TextReadyBlink = styled(Text)`
-  ${animationBlink(ThemeVars.green, '2s', 'ease-in-out')}
-`;
-
-const TextApplyingBlink = styled(Text)`
-  ${animationBlink(ThemeVars.accent, '0.2s', 'step-start')}
-`;
-
-const TextErrorBlink = styled(Text)`
-  ${animationBlink(ThemeVars.error, '0.5s', 'step-start')}
-`;
-
-const Root = styled.div`
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  background: ${ThemeVars.barBg};
-  color: ${ThemeVars.barFg};
-  overflow: hidden;
-
-  * {
-    flex-shrink: 0;
-  }
-`;
+// == constants ====================================================================================
+const iconCls = 'w-5 h-5 m-0.5';
+const iconButtonCls = `${iconCls} text-fore cursor-pointer hover:opacity-80 active:opacity-60`;
+const contentCls = 'flex items-center gap-1 grow shrink';
 
 // == children =====================================================================================
 function CompileTime({ compileTimeAtom }: { compileTimeAtom: PrimitiveAtom<number> }) {
   const compileTime = useAtomValue(compileTimeAtom);
 
   return (
-    <DivCompileTime
-      data-stalker="The last compilation time taken"
-    >
+    <div className="text-xs mx-1" data-stalker="The last compilation time taken">
       {`${compileTime.toFixed()}ms`}
-    </DivCompileTime>
+    </div>
   );
 }
 
@@ -230,22 +91,21 @@ export function DeckStatusBar({
 
   if (error != null) {
     content = (
-      <CodeErrorContent
+      <div
+        className={`${contentCls} cursor-pointer hover:opacity-80`}
         data-stalker="Click here to jump to the line of the error"
         onClick={handleClickCodeError}
       >
-        <StyledIconError />
-        <TextError>{errorFirstLine}</TextError>
-      </CodeErrorContent>
+        <IconError className={`${iconCls} text-error`} />
+        <div className="text-error">{errorFirstLine}</div>
+      </div>
     );
   } else if (cueStatus === 'compiling') {
     content = (
-      <Content
-        data-stalker="The shader code is being compiled"
-      >
-        <StyledIconBuilding />
-        <TextApplyingBlink>Compiling...</TextApplyingBlink>
-      </Content>
+      <div className={contentCls} data-stalker="The shader code is being compiled">
+        <IconBuild className={`${iconCls} text-accent`} />
+        <div className={styles.blinkAccent}>Compiling...</div>
+      </div>
     );
   } else if (cueStatus === 'ready') {
     const text = hasEdit
@@ -253,12 +113,13 @@ export function DeckStatusBar({
       : 'Ready to apply';
 
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="A shader is successfully compiled and ready to be applied&#10;Ctrl+R to apply the shader at the next bar"
       >
-        <StyledIconCheck />
-        <TextReadyBlink>{text}</TextReadyBlink>
-      </Content>
+        <IconCheck className={`${iconCls} text-green`} />
+        <div className={styles.blinkGreen}>{text}</div>
+      </div>
     );
   } else if (cueStatus === 'applying') {
     const text = hasEdit
@@ -266,74 +127,81 @@ export function DeckStatusBar({
       : 'Applying...';
 
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="The shader will be applied at the next bar"
       >
-        <IconStopwatchContainer>
-          <StyledIconApplying />
-        </IconStopwatchContainer>
-        <TextApplyingBlink>{text}</TextApplyingBlink>
-      </Content>
+        <div className={`${iconCls} relative`}>
+          <IconApply className="absolute w-full h-full text-accent" />
+        </div>
+        <div className={styles.blinkAccent}>{text}</div>
+      </div>
     );
   } else if (hasEdit) {
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="The code has been edited&#10;Ctrl+S to compile or Ctrl+R to apply"
       >
-        <StyledIconHasChange />
-        <TextHasChangeBlink>The code has been edited</TextHasChangeBlink>
-      </Content>
+        <IconCircle className={`${iconCls} text-accent-bright`} />
+        <div className={styles.blinkAccentBright}>The code has been edited</div>
+      </div>
     );
   } else if (gainValue === 0.0) {
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="Gain is -INF dB so no sound is output from the deck&#10;Turn the gain knob!"
       >
-        <StyledIconMute />
-        <TextErrorBlink>Gain is -INF dB</TextErrorBlink>
-      </Content>
+        <IconMute className={`${iconCls} text-error`} />
+        <div className={styles.blinkError}>Gain is -INF dB</div>
+      </div>
     );
   } else if (filterValue === 0.0) {
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="Filter is LPF 100%, it might not output any sound&#10;Turn the filter knob!"
       >
-        <StyledIconMute />
-        <TextErrorBlink>Filter is LPF 100%</TextErrorBlink>
-      </Content>
+        <IconMute className={`${iconCls} text-error`} />
+        <div className={styles.blinkError}>Filter is LPF 100%</div>
+      </div>
     );
   } else if (filterValue === 1.0) {
     content = (
-      <Content
+      <div
+        className={contentCls}
         data-stalker="Filter is HPF 100%, it might not output any sound&#10;Turn the filter knob!"
       >
-        <StyledIconMute />
-        <TextErrorBlink>Filter is HPF 100%</TextErrorBlink>
-      </Content>
+        <IconMute className={`${iconCls} text-error`} />
+        <div className={styles.blinkError}>Filter is HPF 100%</div>
+      </div>
     );
   } else {
     content = (
-      <Content>
-        <StyledIconPlay />
-        <TextGray>Playing</TextGray>
-      </Content>
+      <div className={contentCls}>
+        <IconPlay className={`${iconCls} text-gray`} />
+        <div className="text-gray">Playing</div>
+      </div>
     );
   }
 
   return (
-    <Root
-      className={className}
+    <div
+      className={`flex items-center leading-none bg-bar-bg text-bar-fg overflow-hidden *:shrink-0 ${className ?? ''}`}
     >
       {content}
       {compileTimeEnabled && <CompileTime compileTimeAtom={compileTimeAtom} />}
-      <StyledIconBuild
+      <IconBuild
+        className={iconButtonCls}
         onClick={onCompile}
         data-stalker="Compile the shader code (Ctrl+S)"
       />
-      <StyledIconApply
+      <IconApply
+        className={iconButtonCls}
         onClick={handleClickApply}
         data-stalker="Apply the compiled shader code (Ctrl+R)&#10;Shift+Ctrl+R to apply immediately"
       />
-    </Root>
+    </div>
   );
 }
