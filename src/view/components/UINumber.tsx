@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { useMemo } from 'react';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
@@ -87,22 +86,6 @@ function calcIsActiveArray(text: string, forceActiveFrom?: number): boolean[] {
   return ret;
 }
 
-// == styles =======================================================================================
-const RootBase = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const PixelRoot = styled(RootBase)`
-  gap: 2px;
-  padding: 2px 0 2px;
-`;
-
-const TextRoot = styled(RootBase)`
-  font: 14px/16px "Roboto Mono", monospace;
-`;
-
 // == children =====================================================================================
 function PixelChar({
   char,
@@ -165,7 +148,7 @@ function PixelNumber({
   );
 
   return (
-    <PixelRoot>
+    <div className="flex flex-row justify-center gap-0.5 py-0.5">
       {Array.from(text).map((char, i) => (
         <Char
           key={i}
@@ -173,7 +156,7 @@ function PixelNumber({
           color={isActiveArray[i] ? activeColor : inactiveColor}
         />
       ))}
-    </PixelRoot>
+    </div>
   );
 }
 
@@ -194,7 +177,7 @@ function TextNumber({
   );
 
   return (
-    <TextRoot>
+    <div className="flex flex-row justify-center font-['Roboto_Mono',monospace] text-[14px] leading-4">
       {Array.from(text).map((char, i) => (
         <Char
           key={i}
@@ -202,7 +185,7 @@ function TextNumber({
           color={isActiveArray[i] ? activeColor : inactiveColor}
         />
       ))}
-    </TextRoot>
+    </div>
   );
 }
 
