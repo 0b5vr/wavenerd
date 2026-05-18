@@ -5,73 +5,17 @@ import { MIDIMAN } from '../../MIDIManager';
 import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { linearstep, saturate, vecAdd, vecScale } from '@0b5vr/experimental';
-import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
+import { clsx } from 'clsx';
+import styles from './Knob.module.css';
 
 // == constants ====================================================================================
 const PI = Math.PI;
 
 const SIZE = 64;
 
-// == styles =======================================================================================
-const Body = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10000px;
-  background: ${ThemeVars.knobColor};
-  transform: scale(0.72);
-  box-shadow: 0 4px 8px 2px ${ThemeVars.knobShadow};
-`;
-
-const RingPath = styled.path`
-  fill: none;
-  stroke-width: 4;
-  stroke-linecap: round;
-`;
-
-const RingPathBack = styled(RingPath)`
-  stroke-width: 6;
-  stroke: ${ThemeVars.knobGutter};
-`;
-
-const RingPathFore = styled(RingPath)`
-  stroke-width: 4;
-  stroke: ${ThemeVars.accent};
-`;
-
-const HeadLine = styled.line`
-  stroke: ${ThemeVars.knobNotch};
-  stroke-width: 4;
-  stroke-linecap: round;
-`;
-
-const SVG = styled.svg`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
-
-const Root = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
 // == functions ====================================================================================
-/**
- * Calculates the knob direction vector for a given value in the range [0, 1].
- * Returns a 7 o'clock position for value = 0, Returns a 5 o'clock position for value = 1.
- * The direction vector is a unit vector and assumes y-axis points downwards.
- */
 function valueToDir(value: number): [number, number] {
   const x = Math.cos(PI / 6 * (10 * value + 4));
   const y = Math.sin(PI / 6 * (10 * value + 4));
@@ -101,10 +45,12 @@ export function Ring({
 
   return (
     <>
-      <RingPathBack
+      <path
+        className="fill-none stroke-6 [stroke-linecap:round] stroke-knob-gutter"
         d={`M ${xb0} ${yb0} A ${radius} ${radius} 0 1 1 ${xb1} ${yb1}`}
       />
-      <RingPathFore
+      <path
+        className="fill-none stroke-4 [stroke-linecap:round] stroke-accent"
         d={`M ${x0} ${y0} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${x1} ${y1}`}
         opacity={opacity}
       />
@@ -124,7 +70,9 @@ export function Head({
   const [x2, y2] = vecAdd(vecScale(valueToDir(value), r2), [center, center]);
 
   return (
-    <HeadLine
+    <line
+      className="[stroke-linecap:round] stroke-4 stroke-knob-notch"
+      style={{ stroke: ThemeVars.knobNotch }}
       x1={x1}
       y1={y1}
       x2={x2}
@@ -182,20 +130,20 @@ export function Knob(props: Props) {
   }, [beginDrag]);
 
   return (
-    <Root
+    <div
+      className={clsx('relative flex flex-col justify-center items-center cursor-pointer', className)}
       onMouseDown={handleClick}
-      className={className}
       data-stalker={stalkerText}
     >
-      <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
+      <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${SIZE} ${SIZE}`}>
         <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill={ThemeVars.knobBorder} />
         <Ring value={value} ringOrigin={ringOrigin} />
-      </SVG>
-      <Body />
-      <SVG viewBox={`0 0 ${SIZE} ${SIZE}`}>
+      </svg>
+      <div className={clsx('absolute inset-0 w-full h-full rounded-full scale-[0.72]', styles.body)} />
+      <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${SIZE} ${SIZE}`}>
         <Head value={value} />
-      </SVG>
+      </svg>
       <MIDILearnable paramName={midiParamName} />
-    </Root>
+    </div>
   );
 }

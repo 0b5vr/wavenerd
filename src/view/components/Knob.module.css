@@ -1,0 +1,4 @@
+.body {
+  background: var(--color-knob-color);
+  box-shadow: 0 4px 8px 2px var(--color-knob-shadow);
+}
