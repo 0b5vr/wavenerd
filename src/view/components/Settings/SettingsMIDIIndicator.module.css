@@ -1,0 +1,8 @@
+@keyframes indicator-blink {
+  0% { background-color: var(--color-modal-fg); }
+  100% { background-color: var(--color-modal-bg); }
+}
+
+.indicatorBlink {
+  animation: step-end indicator-blink 0.2s forwards;
+}

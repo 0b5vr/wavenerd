@@ -1,10 +1,10 @@
 import { useAtomValue } from 'jotai';
 import { useState, useEffect } from 'react';
-import { clsx } from 'clsx';
 import { MIDIMAN } from '../../../MIDIManager';
 import { midiDevicesSortedAtom } from '../../stores/atoms/midi';
 import { SettingsItemBase } from './SettingsItemBase';
 import SimpleBar from 'simplebar-react';
+import { SettingsMIDIIndicator } from './SettingsMIDIIndicator';
 
 // == components ===================================================================================
 function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; deviceName: string }) {
@@ -20,13 +20,7 @@ function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; device
 
   return (
     <div className="flex items-center gap-1 pl-1">
-      <div
-        key={messageIndex}
-        className={clsx(
-          'w-1.25 h-1.25 rounded-[2.5px] bg-modal-bg',
-          messageIndex > 0 && 'animate-[step-end_indicator-blink_0.2s_forwards]',
-        )}
-      />
+      <SettingsMIDIIndicator messageIndex={messageIndex} />
       {deviceName}
     </div>
   );

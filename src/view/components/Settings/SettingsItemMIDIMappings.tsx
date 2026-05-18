@@ -1,11 +1,11 @@
 import { useAtomValue } from 'jotai';
 import { useState, useEffect, useCallback } from 'react';
-import { clsx } from 'clsx';
 import { MIDIMAN } from '../../../MIDIManager';
 import { midiMappingsSortedAtom } from '../../stores/atoms/midi';
 import { SettingsItemBase } from './SettingsItemBase';
 import IconClose from '~icons/mdi/close';
 import SimpleBar from 'simplebar-react';
+import { SettingsMIDIIndicator } from './SettingsMIDIIndicator';
 
 // == components ===================================================================================
 function MappingItem({ midiKey, paramKey }: { midiKey: string; paramKey: string }) {
@@ -25,13 +25,7 @@ function MappingItem({ midiKey, paramKey }: { midiKey: string; paramKey: string 
 
   return (
     <div className="flex items-center gap-1 pl-1">
-      <div
-        key={eventIndex}
-        className={clsx(
-          'w-1.25 h-1.25 rounded-[2.5px] bg-modal-bg',
-          eventIndex > 0 && 'animate-[step-end_indicator-blink_0.2s_forwards]',
-        )}
-      />
+      <SettingsMIDIIndicator messageIndex={eventIndex} />
       <div className="w-14">{midiKey}</div>
       <IconClose
         className="w-3 h-3 cursor-pointer text-gray hover:opacity-80"
