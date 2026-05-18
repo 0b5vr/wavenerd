@@ -2,7 +2,7 @@ import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { useDoubleTap } from '../utils/useDoubleTap';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == helpers ======================================================================================
 type ValueType = 'int' | 'float';

@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { SettingsItemBase } from './SettingsItemBase';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { useCallback, useContext, useMemo } from 'react';

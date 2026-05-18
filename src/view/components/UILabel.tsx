@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
 

@@ -7,7 +7,7 @@ import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { linearstep, saturate, vecAdd, vecScale } from '@0b5vr/experimental';
 import { useDoubleTap } from '../utils/useDoubleTap';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import styles from './Knob.module.css';
 
 // == constants ====================================================================================

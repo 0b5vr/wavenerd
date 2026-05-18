@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
 import { headerIconCls } from './headerIconCls';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import IconCasette from '~icons/mdi/cassette';
 import { StuffContext } from '../../StuffContext';
 import { useSettings } from '../../stores/hooks/useSettings';

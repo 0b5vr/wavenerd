@@ -1,5 +1,5 @@
 import { saturate } from '@0b5vr/experimental';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import styles from './LevelMeter.module.css';
 
 export function LevelMeter({

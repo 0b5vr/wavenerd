@@ -3,7 +3,7 @@ import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
 import IconNull from '~icons/mdi/circle-off-outline';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { atom, useAtomValue } from 'jotai';
 import { storageFileListAtom } from '../stores/atoms/storage';
 import { StuffContext } from '../StuffContext';

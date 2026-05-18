@@ -9,7 +9,7 @@ import { useSettings } from '../stores/hooks/useSettings';
 import { UILabel } from './UILabel';
 import { linearstep } from '@0b5vr/experimental';
 import { voltageToDisplayDB } from '../utils/valueToDisplayDB';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == functions ====================================================================================
 function valueToDisplayDB(value: number): string {

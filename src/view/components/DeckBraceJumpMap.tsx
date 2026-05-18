@@ -4,7 +4,7 @@ import { findAllBracePairs } from '../../utils/findAllBracePairs';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
 import styles from './DeckBraceJumpMap.module.css';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == functions ====================================================================================
 /**

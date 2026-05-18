@@ -3,7 +3,7 @@ import { atom, useAtomValue } from 'jotai';
 import { ThemeVars } from '../../themes/ThemeVars';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == atoms ========================================================================================
 const textAtom = atom((get) => {

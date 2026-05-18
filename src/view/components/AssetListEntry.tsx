@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import IconBin from '~icons/mdi/delete';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { useIsTruncated } from '../utils/useIsTruncated';
 
 // == components ===================================================================================

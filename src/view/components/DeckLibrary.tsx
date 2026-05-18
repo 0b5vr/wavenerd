@@ -4,7 +4,7 @@ import { mod } from '@0b5vr/experimental';
 import { StuffContext } from '../StuffContext';
 import SimpleBar from 'simplebar-react';
 import { storageFileListAtom } from '../stores/atoms/storage';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == atoms ========================================================================================
 const storageFileListShadersAtom = atom((get) => {

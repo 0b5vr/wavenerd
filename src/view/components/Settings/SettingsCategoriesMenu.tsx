@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { type SettingsCategory, settingsCategoryAtom } from '../../stores/atoms/settings';
 import IconVolumeHigh from '~icons/mdi/volume-high';
 import IconPalette from '~icons/mdi/palette';

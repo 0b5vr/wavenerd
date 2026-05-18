@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { type ContextMenuCommand } from '../types/ContextMenuCommand';
 import { resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import { useAtomCallback } from 'jotai/utils';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 interface ContextMenuEntryProps {
   className?: string;

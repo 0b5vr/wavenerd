@@ -1,6 +1,6 @@
 import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { atom, useAtomValue } from 'jotai';
 
 // == atoms ========================================================================================

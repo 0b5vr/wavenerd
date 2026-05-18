@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../stores/atoms/analyser';
 import { LevelMeter } from './LevelMeter';
 import { useAtomValue } from 'jotai';

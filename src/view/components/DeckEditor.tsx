@@ -13,7 +13,7 @@ import { useAtomCallback } from 'jotai/utils';
 import { createCMTheme } from '../codemirror/createCMTheme';
 import { createErrorlayer } from '../codemirror/createErrorlayer';
 import { StuffContext } from '../StuffContext';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import styles from './DeckEditor.module.css';
 
 // == utils ========================================================================================

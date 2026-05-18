@@ -5,7 +5,7 @@ import IconRewind from '~icons/mdi/skip-previous';
 import { deckIsPlayingAtom } from '../../stores/atoms/deck';
 import { useAtomValue } from 'jotai';
 import { StuffContext } from '../../StuffContext';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 
 // == styles =======================================================================================
 const iconCls = 'w-7 h-7 cursor-pointer hover:opacity-80 active:opacity-60';

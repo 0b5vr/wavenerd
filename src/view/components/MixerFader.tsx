@@ -6,7 +6,7 @@ import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import useMeasure from 'react-use-measure';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import styles from './MixerFader.module.css';
 
 // == constants ====================================================================================

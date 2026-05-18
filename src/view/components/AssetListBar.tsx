@@ -3,7 +3,7 @@ import IconBin from '~icons/mdi/delete';
 import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import categoryStyles from './AssetListCategory.module.css';
 
 // == styles =======================================================================================
