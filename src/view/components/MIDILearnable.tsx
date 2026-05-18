@@ -1,30 +1,10 @@
 import { MIDIMAN } from '../../MIDIManager';
-import { ThemeVars } from '../themes/ThemeVars';
 import { openContextMenuAtom } from '../stores/atoms/contextMenu';
-import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { useCallback } from 'react';
 import { useMidiLearning } from '../stores/hooks/useMidiLearning';
+import clsx from 'clsx';
 
-// == styles =======================================================================================
-const LearningBorder = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 0 0 2px ${ThemeVars.accent};
-`;
-
-const Root = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-`;
-
-// == component ====================================================================================
 interface Props {
   paramName: string;
   className?: string;
@@ -55,11 +35,13 @@ export function MIDILearnable(props: Props) {
   ));
 
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx('absolute inset-0', className)}
       onContextMenu={handleContextMenu}
     >
-      { isLearning && <LearningBorder /> }
-    </Root>
+      {isLearning && (
+        <div className="absolute inset-0 shadow-[0_0_0_2px_var(--color-accent)]" />
+      )}
+    </div>
   );
 }
