@@ -1,0 +1,9 @@
+.iconButton {
+  visibility: hidden;
+}
+
+.root:hover {
+  & .iconButton {
+    visibility: visible;
+  }
+}

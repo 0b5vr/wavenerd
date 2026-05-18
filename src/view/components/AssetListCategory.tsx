@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 import { atom, useAtomValue } from 'jotai';
 import { storageFileListAtom } from '../stores/atoms/storage';
 import { StuffContext } from '../StuffContext';
+import styles from './AssetListCategory.module.css';
 
 // == microcomponent ===============================================================================
 function NoAssets({ text }: { text: string }) {
@@ -105,7 +106,7 @@ export function AssetListCategory({
 
   return (
     <div
-      className={clsx('flex flex-col relative bg-back1', className)}
+      className={clsx('flex flex-col relative bg-back1', styles.root, className)}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

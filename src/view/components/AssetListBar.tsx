@@ -4,6 +4,7 @@ import IconChevronDown from '~icons/mdi/chevron-down';
 import IconChevronRight from '~icons/mdi/chevron-right';
 import IconFolder from '~icons/mdi/folder';
 import { clsx } from 'clsx';
+import categoryStyles from './AssetListCategory.module.css';
 
 // == styles =======================================================================================
 const iconCls = 'w-4 h-4 m-0.5 shrink-0 cursor-pointer hover:opacity-80 active:opacity-60';
@@ -59,12 +60,12 @@ export function AssetListBar({
       <ChevronIcon className={iconCls} onClick={onChangeExpand} />
       <div className="ml-1 grow shrink">{ title }</div>
       <IconFolder
-        className={iconCls}
+        className={clsx(iconCls, categoryStyles.iconButton)}
         onClick={handleClickOpen}
         data-stalker="Open local file... (you can also drag and drop)"
       />
       <IconBin
-        className={iconCls}
+        className={clsx(iconCls, categoryStyles.iconButton)}
         onClick={handleClickWipe}
         data-stalker="Delete all assets"
       />
