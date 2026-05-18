@@ -2,42 +2,9 @@ import { useCallback, useMemo } from 'react';
 import { contextMenuCommandsAtom, contextMenuIsOpeningAtom, contextMenuPositionAtom, resetContextMenuAtom } from '../stores/atoms/contextMenu';
 import { ContextMenuEntry } from './ContextMenuEntry';
 import { ContextMenuHr } from './ContextMenuHr';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { useAtomValue } from 'jotai';
 
-// == styles =======================================================================================
-const Container = styled.div`
-  position: absolute;
-  overflow: hidden;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  background: ${ThemeVars.contextMenuBg};
-  color: ${ThemeVars.contextMenuFg};
-  filter: drop-shadow( 0 0 2px ${ThemeVars.black} );
-  font-size: 0.8rem;
-`;
-
-const OverlayBG = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba( 0, 0, 0, 0 );
-`;
-
-const Root = styled.div`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba( 0, 0, 0, 0 );
-`;
-
-// == component ====================================================================================
 export function ContextMenu() {
   const isOpening = useAtomValue(contextMenuIsOpeningAtom);
   const [x, y] = useAtomValue(contextMenuPositionAtom);
@@ -81,21 +48,22 @@ export function ContextMenu() {
     [x, y],
   );
 
-  // -- component ----------------------------------------------------------------------------------
   if (!isOpening) {
     return null;
   }
 
   return (
-    <Root>
-      <OverlayBG
+    <div className="fixed inset-0">
+      <div
+        className="absolute inset-0"
         onClick={handleClickBG}
         onContextMenu={handleContextMenuBG}
       />
-      <Container
+      <div
+        className="absolute overflow-hidden p-1 rounded text-[0.8rem] bg-context-menu-bg text-context-menu-fg filter-[drop-shadow(0_0_2px_var(--color-black))]"
         style={style}
       >
-        { commands.map((command, iCommand) => (
+        {commands.map((command, iCommand) => (
           command === 'hr'
             ? <ContextMenuHr key={iCommand} />
             : (
@@ -104,8 +72,8 @@ export function ContextMenu() {
                   command={command}
                 />
               )
-        )) }
-      </Container>
-    </Root>
+        ))}
+      </div>
+    </div>
   );
 }

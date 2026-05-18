@@ -1,42 +1,9 @@
 import { useCallback } from 'react';
 import { type ContextMenuCommand } from '../types/ContextMenuCommand';
-import { ThemeVars } from '../themes/ThemeVars';
 import { resetContextMenuAtom } from '../stores/atoms/contextMenu';
-import styled from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
+import { clsx } from 'clsx';
 
-// == styles =======================================================================================
-const Name = styled.div`
-  padding: 0.1rem 0.2rem;
-  font-size: 0.8rem;
-  line-height: 1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: ${ThemeVars.fore};
-`;
-
-const Root = styled.div<{ isSelected?: boolean }>`
-  display: flex;
-  width: 100%;
-  height: 1rem;
-  border-radius: 0.25rem;
-  justify-content: space-between;
-  background: ${({ isSelected }) => (
-    isSelected ? ThemeVars.back3 : 'none'
-  )};
-  cursor: pointer;
-
-  &:hover {
-    background: ${ThemeVars.back3};
-  }
-
-  &:active {
-    opacity: 0.5;
-  }
-`;
-
-// == components ===================================================================================
 interface ContextMenuEntryProps {
   className?: string;
   command: ContextMenuCommand;
@@ -54,11 +21,16 @@ export function ContextMenuEntry({ className, command }: ContextMenuEntryProps) 
   ));
 
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx(
+        'flex w-full h-4 rounded justify-between cursor-pointer bg-none hover:bg-back3 active:opacity-50',
+        className,
+      )}
       onClick={handleClick}
     >
-      <Name>{ name }</Name>
-    </Root>
+      <div className="px-[0.2rem] py-[0.1rem] text-[0.8rem] leading-none overflow-hidden text-ellipsis whitespace-nowrap text-fore">
+        {name}
+      </div>
+    </div>
   );
 }
