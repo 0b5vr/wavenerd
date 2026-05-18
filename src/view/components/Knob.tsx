@@ -2,7 +2,6 @@ import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import { useCallback } from 'react';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
-import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { linearstep, saturate, vecAdd, vecScale } from '@0b5vr/experimental';
 import { useDoubleTap } from '../utils/useDoubleTap';
@@ -72,7 +71,6 @@ export function Head({
   return (
     <line
       className="[stroke-linecap:round] stroke-4 stroke-knob-notch"
-      style={{ stroke: ThemeVars.knobNotch }}
       x1={x1}
       y1={y1}
       x2={x2}
@@ -136,7 +134,7 @@ export function Knob(props: Props) {
       data-stalker={stalkerText}
     >
       <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${SIZE} ${SIZE}`}>
-        <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill={ThemeVars.knobBorder} />
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} className="fill-knob-border" />
         <Ring value={value} ringOrigin={ringOrigin} />
       </svg>
       <div className={clsx('absolute inset-0 w-full h-full rounded-full scale-[0.72]', styles.body)} />

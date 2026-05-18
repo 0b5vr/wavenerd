@@ -1,19 +1,19 @@
 import { useSettings } from '../stores/hooks/useSettings';
 import { themes } from '../themes/themes';
-import { ThemeVars } from '../themes/ThemeVars';
 
 function themeVarsCss(themeString: string): string {
   const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
   const map = Object.entries(theme.ui)
     .map(([key, value]) => {
-      const cssVar = ThemeVars[key as keyof typeof ThemeVars];
-      if (cssVar == null) { return ''; }
+      // camelCase to kebab-case
+      const colorName = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+      const cssKey = `--rawcolor-${colorName}`;
 
-      const cssKey = cssVar.match(/^var\(([a-z0-9-]+)/)?.[1];
       if (cssKey == null) { return ''; }
 
       return `${cssKey}: ${value};`;
     });
+
   return map.join('');
 }
 

@@ -1,6 +1,5 @@
 import { deckTimeAtom } from '../../stores/atoms/deck';
 import { atom, useAtomValue } from 'jotai';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
 import clsx from 'clsx';
@@ -28,8 +27,8 @@ export function HeaderTimeHMS({ className }: { className?: string }) {
       <UILabel className="text-header-fg" text="TIME" />
       <UINumber
         text={text}
-        activeColor={ThemeVars.headerFg}
-        inactiveColor={ThemeVars.gray}
+        activeColor="var(--color-header-fg)"
+        inactiveColor="var(--color-gray)"
         forceActiveFrom={3}
       />
     </div>

@@ -3,7 +3,6 @@ import { BeatManager } from '@0b5vr/wavenerd-deck';
 import { atom, useAtomValue } from 'jotai';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
-import { ThemeVars } from '../../themes/ThemeVars';
 
 // == atoms ========================================================================================
 const textAtom = atom((get) => {
@@ -31,8 +30,8 @@ export function HeaderBeatHex({ className }: { className?: string }) {
       <UILabel className="text-header-fg" text="BEAT" />
       <UINumber
         text={text}
-        activeColor={ThemeVars.headerFg}
-        inactiveColor={ThemeVars.gray}
+        activeColor="var(--color-header-fg)"
+        inactiveColor="var(--color-gray)"
         forceActiveFrom={0}
       />
     </div>

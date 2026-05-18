@@ -1,7 +1,7 @@
-import { type ThemeVars } from './ThemeVars';
+import { type ThemeColorKey } from './ThemeColorKey';
 
 export interface Theme {
-  ui: Partial<Record<keyof typeof ThemeVars, string>>;
+  ui: Partial<Record<ThemeColorKey, string>>;
   code: {
     text: string;
     background: string;

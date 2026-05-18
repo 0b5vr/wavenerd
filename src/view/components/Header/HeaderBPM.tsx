@@ -5,7 +5,6 @@ import { useContext } from 'react';
 import { StuffContext } from '../../StuffContext';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { clamp } from '@0b5vr/experimental';
 
 // == components ===================================================================================
@@ -32,8 +31,8 @@ export function HeaderBPM({ className }: { className?: string }) {
       >
         <UINumber
           text={('0' + bpm.toFixed(2)).slice(-6)}
-          activeColor={ThemeVars.headerFg}
-          inactiveColor={ThemeVars.gray}
+          activeColor="var(--color-header-fg)"
+          inactiveColor="var(--color-gray)"
         />
       </NumberParam>
     </div>
