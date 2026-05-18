@@ -2,6 +2,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { registerMouseEvent } from '../../utils/registerMouseEvent';
 import { StuffContext } from '../../StuffContext';
 import { UILabel } from '../UILabel';
+import clsx from 'clsx';
 
 // == components ===================================================================================
 export function HeaderNudge({ className }: { className?: string }) {
@@ -34,7 +35,7 @@ export function HeaderNudge({ className }: { className?: string }) {
 
   return (
     <div
-      className={`relative w-12 h-[calc(100%-8px)] bg-header-fg flex justify-center items-center cursor-pointer *:pointer-events-none ${className ?? ''}`}
+      className={clsx('relative w-12 h-[calc(100%-8px)] bg-header-fg flex justify-center items-center cursor-pointer *:pointer-events-none', className)}
       ref={refRoot}
       onMouseDown={handleMouseDown}
       data-stalker="Nudge the beat (drag left and right)"
