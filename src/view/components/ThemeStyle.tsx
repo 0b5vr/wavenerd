@@ -25,7 +25,7 @@ export function ThemeStyle() {
   const styleThemeVars = `@layer theme {
     :root {
       ${themeVarsCss(themeString)}
-      ${isChromaCoder && 'filter: brightness(1.0);'}
+      ${isChromaCoder ? 'filter: brightness(1.0);' : ''}
     }
   }`;
 
