@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { ThemeVars } from '../../themes/ThemeVars';
-import styled, { css } from 'styled-components';
+import clsx from 'clsx';
 import { type SettingsCategory, settingsCategoryAtom } from '../../stores/atoms/settings';
 import IconVolumeHigh from '~icons/mdi/volume-high';
 import IconPalette from '~icons/mdi/palette';
@@ -11,62 +10,7 @@ import IconMidiPort from '~icons/mdi/midi-port';
 import { useAtom } from 'jotai';
 
 // == styles =======================================================================================
-const StyledIcon = css`
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
-`;
-
-const StyledIconAudio = styled(IconVolumeHigh)`
-  ${StyledIcon}
-`;
-
-const StyledIconMIDI = styled(IconMidiPort)`
-  ${StyledIcon}
-`;
-
-const StyledIconVisualization = styled(IconEye)`
-  ${StyledIcon}
-`;
-
-const StyledIconAppearance = styled(IconPalette)`
-  ${StyledIcon}
-`;
-
-const StyledIconEditor = styled(IconCodeBraces)`
-  ${StyledIcon}
-`;
-
-const StyledIconAbout = styled(IconInformation)`
-  ${StyledIcon}
-`;
-
-const StyledCategory = styled.div<{ isSelected: boolean }>`
-  padding: 2px 4px;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${ThemeVars.gray};
-  }
-
-  ${({ isSelected }) => isSelected && css`
-    background-color: ${ThemeVars.modalFg};
-    color: ${ThemeVars.modalBg};
-
-    &:hover {
-      background-color: ${ThemeVars.modalFg};
-    }
-  `}
-`;
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const iconCls = 'w-4 h-4 mr-1';
 
 // == components ===================================================================================
 const settingsCategories: SettingsCategory[] = [
@@ -88,12 +32,12 @@ const settingsCategoryNameMap: Record<SettingsCategory, string> = {
 };
 
 const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
-  audio: <StyledIconAudio />,
-  midi: <StyledIconMIDI />,
-  editor: <StyledIconEditor />,
-  appearance: <StyledIconAppearance />,
-  visualization: <StyledIconVisualization />,
-  about: <StyledIconAbout />,
+  audio: <IconVolumeHigh className={iconCls} />,
+  midi: <IconMidiPort className={iconCls} />,
+  editor: <IconCodeBraces className={iconCls} />,
+  appearance: <IconPalette className={iconCls} />,
+  visualization: <IconEye className={iconCls} />,
+  about: <IconInformation className={iconCls} />,
 };
 
 function Category({
@@ -109,13 +53,16 @@ function Category({
     onClick(id);
   }, [onClick, id]);
   return (
-    <StyledCategory
-      isSelected={isSelected}
+    <div
+      className={clsx(
+        'py-0.5 px-1 text-xs flex items-center rounded cursor-pointer hover:bg-gray',
+        isSelected && 'bg-modal-fg text-modal-bg hover:bg-modal-fg',
+      )}
       onClick={handleClick}
     >
       {settingsCategoryIconMap[id]}
       {settingsCategoryNameMap[id]}
-    </StyledCategory>
+    </div>
   );
 }
 
@@ -127,7 +74,7 @@ export function SettingsCategoriesMenu() {
   }, [setCategory]);
 
   return (
-    <Root>
+    <div className="flex flex-col">
       {settingsCategories.map((id) => (
         <Category
           key={id}
@@ -136,6 +83,6 @@ export function SettingsCategoriesMenu() {
           onClick={handleSelect}
         />
       ))}
-    </Root>
+    </div>
   );
 }

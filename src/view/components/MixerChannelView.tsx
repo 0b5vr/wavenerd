@@ -4,77 +4,12 @@ import { Knob } from './Knob';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
 import { MixerFader } from './MixerFader';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
 import { UILabel } from './UILabel';
 import { linearstep } from '@0b5vr/experimental';
 import { voltageToDisplayDB } from '../utils/valueToDisplayDB';
-
-// == styles =======================================================================================
-const StyledKnob = styled(Knob)`
-  width: 28px;
-  height: 28px;
-`;
-
-const StyledMixerFader = styled(MixerFader)`
-  flex-grow: 1;
-  margin: 4px 0;
-`;
-
-const KnobAndStuff = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyledIconCue = styled(IconCue)`
-  width: 100%;
-  height: 100%;
-`;
-
-const CueButtonRoot = styled.div<{ active: boolean }>`
-  position: relative;
-  width: 32px;
-  height: 36px;
-  padding: 6px;
-  color: ${({ active }) => active ? ThemeVars.accent : ThemeVars.gray};
-  cursor: pointer;
-`;
-
-const GainAndFader = styled.div`
-  width: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const Row = styled.div<{ side: 'A' | 'B'; height: string }>`
-  display: flex;
-  gap: 8px;
-  flex-direction: ${({ side }) => side === 'A' ? 'row' : 'row-reverse'};
-  justify-content: center;
-  align-items: stretch;
-  height: ${({ height }) => height};
-`;
-
-const EQs = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Root = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import clsx from 'clsx';
 
 // == functions ====================================================================================
 function valueToDisplayDB(value: number): string {
@@ -100,6 +35,14 @@ function valueToDisplayFilter(value: number): string {
 }
 
 // == microcomponents ==============================================================================
+function KnobAndStuff({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col justify-center items-center">
+      {children}
+    </div>
+  );
+}
+
 function MixerGainKnob({ label, stalkerText, paramName }: {
   label: string;
   stalkerText: string;
@@ -113,7 +56,8 @@ function MixerGainKnob({ label, stalkerText, paramName }: {
 
   return (
     <KnobAndStuff>
-      <StyledKnob
+      <Knob
+        className="w-7 h-7"
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -137,7 +81,8 @@ function MixerEQKnob({ label, stalkerText, paramName }: {
 
   return (
     <KnobAndStuff>
-      <StyledKnob
+      <Knob
+        className="w-7 h-7"
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -161,7 +106,8 @@ function MixerFilterKnob({ label, stalkerText, paramName }: {
 
   return (
     <KnobAndStuff>
-      <StyledKnob
+      <Knob
+        className="w-7 h-7"
         midiParamName={paramName}
         resetValue={0.5}
         deltaValuePerPixel={1.0 / 256.0}
@@ -184,14 +130,17 @@ function CueButton({ paramName, stalkerText }: {
   }, [paramName]);
 
   return (
-    <CueButtonRoot
-      active={value > 0.0}
+    <div
+      className={clsx(
+        'relative w-8 h-9 p-1.5 cursor-pointer',
+        value > 0.0 ? 'text-accent' : 'text-gray',
+      )}
       onClick={handleClick}
       data-stalker={stalkerText}
     >
-      <StyledIconCue />
+      <IconCue className="w-full h-full" />
       <MIDILearnable paramName={paramName} />
-    </CueButtonRoot>
+    </div>
   );
 }
 
@@ -211,10 +160,14 @@ export function MixerChannelView({
   const filterMode = useSettings('filterMode');
 
   return (
-    <Root
-      className={className}
-    >
-      <Row side={side} height="36px">
+    <div className={clsx('flex gap-2 flex-col justify-center items-center', className)}>
+      <div
+        className={clsx(
+          'flex gap-2 items-stretch justify-center',
+          side === 'A' ? 'flex-row' : 'flex-row-reverse',
+        )}
+        style={{ height: '36px' }}
+      >
         <MixerGainKnob
           label="GAIN"
           stalkerText="Deck Gain"
@@ -224,10 +177,16 @@ export function MixerChannelView({
           paramName={cueParamName}
           stalkerText="Deck Cue"
         />
-      </Row>
-      <Row side={side} height="124px">
+      </div>
+      <div
+        className={clsx(
+          'flex gap-2 items-stretch justify-center',
+          side === 'A' ? 'flex-row' : 'flex-row-reverse',
+        )}
+        style={{ height: '124px' }}
+      >
         {eqMode !== 'none' && (
-          <EQs>
+          <div className="flex gap-2 flex-col justify-center items-center">
             <MixerEQKnob
               label="HI"
               stalkerText="Deck EQ High"
@@ -243,9 +202,9 @@ export function MixerChannelView({
               stalkerText="Deck EQ Low"
               paramName={paramPrefix + '/eq/low'}
             />
-          </EQs>
+          </div>
         )}
-        <GainAndFader>
+        <div className="w-8 flex flex-col gap-2">
           {filterMode !== 'none' && (
             <MixerFilterKnob
               label="FILT"
@@ -253,12 +212,13 @@ export function MixerChannelView({
               paramName={paramPrefix + '/filter'}
             />
           )}
-          <StyledMixerFader
+          <MixerFader
+            className="grow my-1"
             midiParamName={paramPrefix + '/volume'}
             stalkerText="Deck Volume"
           />
-        </GainAndFader>
-      </Row>
-    </Root>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,0 +1,39 @@
+@keyframes status-blink-accent-bright {
+  0% { color: var(--color-fore); }
+  50% { color: var(--color-accent-bright); }
+  100% { color: var(--color-fore); }
+}
+
+@keyframes status-blink-green {
+  0% { color: var(--color-fore); }
+  50% { color: var(--color-green); }
+  100% { color: var(--color-fore); }
+}
+
+@keyframes status-blink-accent {
+  0% { color: var(--color-fore); }
+  50% { color: var(--color-accent); }
+  100% { color: var(--color-fore); }
+}
+
+@keyframes status-blink-error {
+  0% { color: var(--color-fore); }
+  50% { color: var(--color-error); }
+  100% { color: var(--color-fore); }
+}
+
+.blinkAccentBright {
+  animation: status-blink-accent-bright 2s ease-in-out infinite;
+}
+
+.blinkGreen {
+  animation: status-blink-green 2s ease-in-out infinite;
+}
+
+.blinkAccent {
+  animation: status-blink-accent 0.2s step-start infinite;
+}
+
+.blinkError {
+  animation: status-blink-error 0.5s step-start infinite;
+}

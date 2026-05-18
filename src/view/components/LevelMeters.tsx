@@ -1,59 +1,35 @@
+import clsx from 'clsx';
 import { levelMeterInAAtom, levelMeterInBAtom, levelMeterOutAtom } from '../stores/atoms/analyser';
 import { LevelMeter } from './LevelMeter';
-import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 
-// == styles =======================================================================================
-const StyledLevelMeterA = styled(LevelMeter)`
-  width: 2px;
-  margin-right: 4px;
-`;
-
-const StyledLevelMeterB = styled(LevelMeter)`
-  width: 2px;
-  margin-left: 4px;
-`;
-
-const StyledLevelMeterL = styled(LevelMeter)`
-  width: 4px;
-  margin-right: 2px;
-`;
-
-const StyledLevelMeterR = styled(LevelMeter)`
-  width: 4px;
-`;
-
-const Root = styled.div`
-  display: flex;
-  height: 100%;
-`;
-
-// == components ===================================================================================
 export function LevelMeters({ className }: { className?: string }) {
   const levelMeterInA = useAtomValue(levelMeterInAAtom);
   const levelMeterInB = useAtomValue(levelMeterInBAtom);
   const levelMeterOut = useAtomValue(levelMeterOutAtom);
 
   return (
-    <Root
-      className={className}
-    >
-      <StyledLevelMeterA
+    <div className={clsx('flex h-full', className)}>
+      <LevelMeter
+        className="w-0.5 mr-1"
         level={levelMeterInA.level}
         peak={levelMeterInA.peak}
       />
-      <StyledLevelMeterL
+      <LevelMeter
+        className="w-1 mr-0.5"
         level={levelMeterOut.levelL}
         peak={levelMeterOut.peakL}
       />
-      <StyledLevelMeterR
+      <LevelMeter
+        className="w-1"
         level={levelMeterOut.levelR}
         peak={levelMeterOut.peakR}
       />
-      <StyledLevelMeterB
+      <LevelMeter
+        className="w-0.5 ml-1"
         level={levelMeterInB.level}
         peak={levelMeterInB.peak}
       />
-    </Root>
+    </div>
   );
 }

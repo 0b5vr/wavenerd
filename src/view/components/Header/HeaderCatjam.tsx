@@ -1,7 +1,6 @@
 // Shoutouts to taronuke
 // https://taro.heysora.net/ecfa/#item9
 
-import styled from 'styled-components';
 import { deckBeatsAtom, deckBPMAtom, deckTimeAtom } from '../../stores/atoms/deck';
 import cajamPng from '../../assets/catjam.png';
 import { BeatManager } from '@0b5vr/wavenerd-deck';
@@ -27,21 +26,15 @@ const frameAtom = atom((get) => {
   return ~~(beats * FRAMES / BEATS) % FRAMES;
 });
 
-// == styles =======================================================================================
-const Catjam = styled.div`
-  width: 32px;
-  height: 32px;
-  background-image: url(${cajamPng});
-  background-repeat: no-repeat;
-`;
-
 // == component ====================================================================================
 export function HeaderCatjam() {
   const frame = useAtomValue(frameAtom);
 
   return (
-    <Catjam
+    <div
+      className="w-8 h-8 bg-no-repeat"
       style={{
+        backgroundImage: `url(${cajamPng})`,
         backgroundPosition: `-${frame * 32}px 0`,
       }}
       data-stalker="live cat reaction"

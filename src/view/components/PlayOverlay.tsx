@@ -1,53 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import IconPlay from '~icons/mdi/play';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 import { StuffContext } from '../StuffContext';
 
-// == styles =======================================================================================
-const StyledIconPlay = styled(IconPlay)`
-  width: 128px;
-  height: 128px;
-  fill: ${ThemeVars.white};
-`;
-
-const Description = styled.div`
-  line-height: 1;
-`;
-
-const Underlay = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: ${ThemeVars.black};
-  opacity: 0.8;
-`;
-
-const Content = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  color: ${ThemeVars.white};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Root = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-`;
-
-// == components ===================================================================================
 export function PlayOverlay({ className }: { className?: string }) {
   const { hostDeck } = useContext(StuffContext)!;
 
@@ -64,17 +18,17 @@ export function PlayOverlay({ className }: { className?: string }) {
   }
 
   return (
-    <Root
+    <div
+      className={`absolute inset-0 cursor-pointer ${className ?? ''}`}
       onClick={handleClick}
-      className={className}
     >
-      <Underlay />
-      <Content>
-        <StyledIconPlay />
-        <Description>
+      <div className="absolute inset-0 bg-black opacity-80" />
+      <div className="absolute inset-0 text-white flex flex-col justify-center items-center">
+        <IconPlay className="w-32 h-32 fill-white" />
+        <div className="leading-none">
           Wavenerd needs you to press here to activate its audio context.
-        </Description>
-      </Content>
-    </Root>
+        </div>
+      </div>
+    </div>
   );
 }

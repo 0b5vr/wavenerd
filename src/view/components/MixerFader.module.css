@@ -1,0 +1,4 @@
+.knob {
+  background: var(--color-knob-color);
+  box-shadow: 0 0 0 2px var(--color-knob-border), 0 4px 8px 2px var(--color-knob-shadow);
+}

@@ -2,73 +2,16 @@ import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import { useCallback } from 'react';
 import { MIDILearnable } from './MIDILearnable';
 import { MIDIMAN } from '../../MIDIManager';
-import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
 import { saturate } from '@0b5vr/experimental';
-import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import useMeasure from 'react-use-measure';
+import clsx from 'clsx';
+import styles from './MixerFader.module.css';
 
-// == styles =======================================================================================
-const Gutter = styled.div`
-  position: absolute;
-  top: 0;
-  left: calc( 50% - 3px );
-  width: 6px;
-  height: 100%;
-  background: ${ThemeVars.knobGutter};
-  pointer-events: none;
-`;
-
-const GutterGlow = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: calc( 50% - 1px );
-  width: 2px;
-  background: ${ThemeVars.accent};
-  pointer-events: none;
-`;
-
-const Ruler = styled.div`
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 1px;
-  background: ${ThemeVars.knobGuide};
-  pointer-events: none;
-`;
-
-const ShortRuler = styled(Ruler)`
-  width: 50%;
-  left: 25%;
-`;
-
-const KnobLine = styled.div`
-  position: absolute;
-  left: 2px;
-  top: 3px;
-  width: calc( 100% - 4px );
-  height: 2px;
-  background: ${ThemeVars.knobNotch};
-  border-radius: 1px;
-  pointer-events: none;
-`;
-
-const Knob = styled.div`
-  position: absolute;
-  top: 4px;
-  width: 100%;
-  height: 8px;
-  border-radius: 1px;
-  background: ${ThemeVars.knobColor};
-  pointer-events: none;
-  box-shadow: 0 0 0 2px ${ThemeVars.knobBorder}, 0 4px 8px 2px ${ThemeVars.knobShadow};
-`;
-
-const Root = styled.div`
-  position: relative;
-  cursor: pointer;
-`;
+// == constants ====================================================================================
+const rulerCls = 'absolute top-0 w-full h-px bg-knob-guide pointer-events-none';
+const shortRulerCls = 'absolute top-0 w-1/2 left-1/4 h-px bg-knob-guide pointer-events-none';
 
 // == components ===================================================================================
 export function MixerFader({
@@ -107,33 +50,35 @@ export function MixerFader({
   );
 
   return (
-    <Root
+    <div
       ref={refRoot}
+      className={`relative cursor-pointer ${className ?? ''}`}
       onMouseDown={handleClick}
-      className={className}
       data-stalker={stalkerText}
     >
-      <Ruler style={{ top: '0px' }} />
-      <ShortRuler style={{ top: 'calc( 0.1 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.2 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.3 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.4 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.5 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.6 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.7 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.8 * ( 100% - 1px ) )' }} />
-      <ShortRuler style={{ top: 'calc( 0.9 * ( 100% - 1px ) )' }} />
-      <Ruler style={{ top: 'calc( 100% - 1px )' }} />
-      <Gutter />
-      <GutterGlow style={{ height: `${100.0 * value}%` }} />
-      <Knob
-        style={{
-          top: `calc( ${100.0 * (1.0 - value)}% - 4px )`,
-        }}
+      <div className={rulerCls} style={{ top: '0px' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.1 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.2 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.3 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.4 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.5 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.6 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.7 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.8 * ( 100% - 1px ) )' }} />
+      <div className={shortRulerCls} style={{ top: 'calc( 0.9 * ( 100% - 1px ) )' }} />
+      <div className={rulerCls} style={{ top: 'calc( 100% - 1px )' }} />
+      <div className="absolute top-0 left-[calc(50%-3px)] w-1.5 h-full bg-knob-gutter pointer-events-none" />
+      <div
+        className="absolute bottom-0 left-[calc(50%-1px)] w-0.5 bg-accent pointer-events-none"
+        style={{ height: `${100.0 * value}%` }}
+      />
+      <div
+        className={clsx('absolute w-full h-2 rounded-[1px] pointer-events-none', styles.knob)}
+        style={{ top: `calc( ${100.0 * (1.0 - value)}% - 4px )` }}
       >
-        <KnobLine />
-      </Knob>
+        <div className="absolute left-0.5 top-0.75 w-[calc(100%-4px)] h-0.5 bg-knob-notch rounded-[1px] pointer-events-none" />
+      </div>
       <MIDILearnable paramName={midiParamName} />
-    </Root>
+    </div>
   );
 }

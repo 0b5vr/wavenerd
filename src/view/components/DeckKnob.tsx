@@ -1,31 +1,9 @@
 import { useMemo } from 'react';
 import { Knob } from './Knob';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { UILabel } from './UILabel';
+import clsx from 'clsx';
 
-// == styles =======================================================================================
-const StyledKnob = styled(Knob)`
-  width: 32px;
-  height: 32px;
-`;
-
-const Root = styled.div<{ isLearning: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  box-shadow: ${({ isLearning }) => (
-    isLearning
-      ? `0 0 0 2px ${ThemeVars.accent}`
-      : 'none'
-  )};
-`;
-
-// == components ===================================================================================
 export function DeckKnob({ paramName, paramPrefix, label, stalker, className }: {
   paramName: string;
   paramPrefix: string;
@@ -45,17 +23,17 @@ export function DeckKnob({ paramName, paramPrefix, label, stalker, className }: 
   }, [stalker, value]);
 
   return (
-    <Root
-      isLearning={false}
-      className={className}
+    <div
+      className={clsx('flex flex-col justify-center items-center cursor-pointer', className)}
       data-stalker={stalkerWithValue}
     >
-      <StyledKnob
+      <Knob
+        className="w-8 h-8"
         midiParamName={paramFullname}
         resetValue={0.0}
         deltaValuePerPixel={1.0 / 64.0}
       />
       <UILabel text={label} />
-    </Root>
+    </div>
   );
 }

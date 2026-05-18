@@ -1,17 +1,6 @@
-import styled from 'styled-components';
 import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 import { settingsCategoryAtom, settingsIsOpeningAtom } from '../../stores/atoms/settings';
-
-const Logo = styled.div`
-  font: 700 24px 'Inter', sans-serif;
-  line-height: 1;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
 
 export function HeaderLogo() {
   const setSettingsOpening = useSetAtom(settingsIsOpeningAtom);
@@ -23,6 +12,11 @@ export function HeaderLogo() {
   }, [setSettingsOpening, setSettingsCategory]);
 
   return (
-    <Logo onClick={handleClick}>Wavenerd</Logo>
+    <div
+      className="font-bold text-2xl font-sans leading-none cursor-pointer hover:opacity-80"
+      onClick={handleClick}
+    >
+      Wavenerd
+    </div>
   );
 }

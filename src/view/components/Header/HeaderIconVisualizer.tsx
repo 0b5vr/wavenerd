@@ -1,13 +1,8 @@
 import { useCallback, useContext } from 'react';
-import { headerIconStyle } from './headerIconStyle';
-import styled from 'styled-components';
+import { headerIconCls } from './headerIconCls';
 import { openVisualizerWindow } from '../VisualizerWindow/openVisualizerWindow';
 import { StuffContext } from '../../StuffContext';
 import IconEye from '~icons/mdi/eye';
-
-const StyledIcon = styled(IconEye)`
-  ${headerIconStyle}
-`;
 
 export function HeaderIconVisualizer() {
   const { mixer, frameEmitter } = useContext(StuffContext)!;
@@ -17,7 +12,8 @@ export function HeaderIconVisualizer() {
   }, [frameEmitter, mixer.analyserOut]);
 
   return (
-    <StyledIcon
+    <IconEye
+      className={headerIconCls}
       onClick={handleClick}
       data-stalker="Open visualizer window"
     />

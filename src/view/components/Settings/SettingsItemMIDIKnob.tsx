@@ -1,12 +1,6 @@
 import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
-import styled from 'styled-components';
 import { Knob } from '../Knob';
 import { useMidiValue } from '../../stores/hooks/useMidiValue';
-
-const StyledKnob = styled(Knob)`
-  width: 32px;
-  height: 32px;
-`;
 
 export function SettingsItemMIDIKnob(props: {
   midiParamName: string;
@@ -20,7 +14,8 @@ export function SettingsItemMIDIKnob(props: {
 
   return (
     <SettingsItemBase {...props}>
-      <StyledKnob
+      <Knob
+        className="w-8 h-8"
         midiParamName={midiParamName}
         deltaValuePerPixel={deltaValuePerPixel}
         resetValue={resetValue}

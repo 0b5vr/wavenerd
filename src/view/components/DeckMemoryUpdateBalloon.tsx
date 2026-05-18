@@ -1,68 +1,11 @@
 import { type PrimitiveAtom, useAtomValue } from 'jotai';
+import styles from './DeckMemoryUpdateBalloon.module.css';
 import { useMemo } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { ThemeVars } from '../themes/ThemeVars';
 import IconLoad from '~icons/mdi/file-download';
 import IconX from '~icons/mdi/close';
 import IconSave from '~icons/mdi/content-save';
+import clsx from 'clsx';
 
-// == styles =======================================================================================
-const Message = styled.div`
-  display: block;
-  width: 10em;
-  text-align: center;
-`;
-
-const KeyLabel = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1em;
-  height: 1em;
-`;
-
-const fadeOut = keyframes`
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-`;
-
-const Row = styled.div`
-  font-size: 32px;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`;
-
-const Balloon = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font: 400 12px 'Inter', sans-serif;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background: ${ThemeVars.overlayBack};
-  color: ${ThemeVars.fore};
-  box-shadow: 0 4px 8px 2px ${ThemeVars.uiShadow};
-  animation: step-end ${fadeOut} 0.5s forwards;
-`;
-
-const Root = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-`;
-
-// == components ===================================================================================
 interface Props {
   memoryUpdateAtom: PrimitiveAtom<{
     renderKey: number;
@@ -111,16 +54,19 @@ export function DeckMemoryUpdateBalloon(props: Props) {
   }
 
   return (
-    <Root>
-      <Balloon key={memoryUpdate.renderKey}>
-        <Row>
-          <KeyLabel>
+    <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+      <div
+        key={memoryUpdate.renderKey}
+        className={clsx('flex flex-col justify-center items-center gap-2 text-xs font-normal py-2 px-4 rounded-lg bg-overlay-back text-fore shadow-[0_4px_8px_2px_var(--color-ui-shadow)]', styles.balloon)}
+      >
+        <div className="text-[32px] font-bold flex justify-center items-center gap-2">
+          <div className="flex justify-center items-center w-[1em] h-[1em]">
             {memoryUpdate.memoryKey}
-          </KeyLabel>
+          </div>
           {icon}
-        </Row>
-        <Message>{message}</Message>
-      </Balloon>
-    </Root>
+        </div>
+        <div className="block w-[10em] text-center">{message}</div>
+      </div>
+    </div>
   );
 }

@@ -1,44 +1,8 @@
 import { useCallback, useContext, useRef, useState } from 'react';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { registerMouseEvent } from '../../utils/registerMouseEvent';
-import styled from 'styled-components';
 import { StuffContext } from '../../StuffContext';
 import { UILabel } from '../UILabel';
-
-// == styles =======================================================================================
-const StyledLabel = styled(UILabel)`
-  color: ${ThemeVars.headerBg};
-`;
-
-const Rect = styled.div`
-  position: absolute;
-  height: 100%;
-  background: #fff;
-  mix-blend-mode: difference;
-`;
-
-const CenterLine = styled.div`
-  position: absolute;
-  left: calc( 50% - 0.5px );
-  width: 1px;
-  height: 100%;
-  background: ${ThemeVars.headerBg};
-`;
-
-const Root = styled.div`
-  position: relative;
-  width: 48px;
-  height: calc( 100% - 8px );
-  background: ${ThemeVars.headerFg};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  * {
-    pointer-events: none;
-  }
-`;
+import clsx from 'clsx';
 
 // == components ===================================================================================
 export function HeaderNudge({ className }: { className?: string }) {
@@ -70,20 +34,21 @@ export function HeaderNudge({ className }: { className?: string }) {
   }, [hostDeck]);
 
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx('relative w-12 h-[calc(100%-8px)] bg-header-fg flex justify-center items-center cursor-pointer *:pointer-events-none', className)}
       ref={refRoot}
       onMouseDown={handleMouseDown}
       data-stalker="Nudge the beat (drag left and right)"
     >
-      <StyledLabel text="Nudge" />
-      <CenterLine />
-      <Rect
+      <UILabel className="text-header-bg" text="Nudge" />
+      <div className="absolute left-[calc(50%-0.5px)] w-px h-full bg-header-bg" />
+      <div
+        className="absolute h-full bg-white mix-blend-difference"
         style={{
           width: `${Math.abs(nudgeAmount)}px`,
           left: nudgeAmount < 0 ? `calc( 50% - ${-nudgeAmount}px )` : '50%',
         }}
       />
-    </Root>
+    </div>
   );
 }

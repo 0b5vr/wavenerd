@@ -1,23 +1,19 @@
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { deckACodeAtom, deckACompileTimeAtom, deckACueStatusAtom, deckAErrorAtom, deckAHasEditAtom, deckBCodeAtom, deckBCompileTimeAtom, deckBCueStatusAtom, deckBErrorAtom, deckBHasEditAtom } from '../stores/atoms/deck';
-import styled, { createGlobalStyle, css } from 'styled-components';
 import { AssetList } from './AssetList';
 import { ContextMenu } from './ContextMenu';
 import { Deck } from './Deck';
 import { DeckKnobs } from './DeckKnobs';
 import { Header } from './Header/Header';
 import { MIDIMAN } from '../../MIDIManager';
-import { Metrics } from '../constants/Metrics';
 import { MixerView } from './MixerView';
 import { PlayOverlay } from './PlayOverlay';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
-import { ThemeVars } from '../themes/ThemeVars';
 import { XFader } from './XFader';
-import { themes } from '../themes/themes';
 import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
 import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
@@ -27,104 +23,7 @@ import { useRecorderSubscribers } from '../stores/hooks/useRecorderSubscribers';
 import { type Stuff, StuffContext } from '../StuffContext';
 import { useFullscreenSubscriber } from '../stores/hooks/useFullscreenSubscriber';
 import { useStorageSubscribers } from '../stores/hooks/useStorageSubscribers';
-
-// == styles =======================================================================================
-const StyledHeader = styled(Header)`
-  height: ${Metrics.headerHeight}px;
-`;
-
-const DeckRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-grow: 1;
-  gap: 2px;
-`;
-
-const StyledDeck = styled(Deck)`
-  flex-grow: 1;
-`;
-
-const DeckColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
-
-const CenterColumn = styled.div`
-  display: flex;
-  justify-content: end;
-  flex-direction: column;
-  width: ${Metrics.sampleListWidth}px;
-`;
-
-const StyledAssetList = styled(AssetList)`
-  flex-grow: 1;
-`;
-
-const StyledMixerView = styled(MixerView)`
-  padding: 8px 0;
-`;
-
-const StyledDeckKnobs = styled(DeckKnobs)`
-  height: ${Metrics.deckKnobsHeight}px;
-`;
-
-const StyledXFader = styled(XFader)`
-  width: ${Metrics.xFaderWidth}px;
-  height: ${Metrics.xFaderHeight}px;
-  margin: 8px 16px;
-`;
-
-function themeVarsCss(themeString: string): ReturnType<typeof css> {
-  const theme = (themes[themeString] ?? themes['monokaiSharp']).theme;
-  const map = Object.entries(theme.ui)
-    .map(([key, value]) => {
-      const cssVar = ThemeVars[key as keyof typeof ThemeVars];
-      if (cssVar == null) { return ''; }
-
-      const cssKey = cssVar.match(/^var\(([a-z0-9-]+)/)?.[1];
-      if (cssKey == null) { return ''; }
-
-      return `${cssKey}: ${value};`;
-    });
-  return css`${map.join('')}`;
-}
-
-const Root = styled.div<{ themeString: string }>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: ${ThemeVars.fore};
-  background: ${ThemeVars.back2};
-  font-family: 'Inter', monospace;
-
-  * {
-    box-sizing: border-box;
-  }
-
-  ${({ themeString }) => themeVarsCss(themeString)}
-
-  ${({ themeString }) => (themeString.startsWith('chromaCoder')) && css`
-    filter: brightness(1.0);
-  `}
-`;
-
-const GlobalStyleDisableSwipeNavi = createGlobalStyle`
-  // Disable two finger swipe navigation
-  // Ref: https://stackoverflow.com/questions/17474930/disable-chrome-two-fingers-back-forward-swipe
-  html {
-    overscroll-behavior-x: none;
-  }
-
-  body {
-    overscroll-behavior-x: none;
-  }
-`;
+import { ThemeStyle } from './ThemeStyle';
 
 // == hooks ========================================================================================
 function useFocusDeckShortcuts({
@@ -154,7 +53,6 @@ function useFocusDeckShortcuts({
 export function OutOfContextApp() {
   const { deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
 
-  const themeString = useSettings('theme');
   const deckBShow = useSettings('deckBShow');
   const libraryShow = useSettings('libraryShow');
   const mixerShow = useSettings('mixerShow');
@@ -185,14 +83,15 @@ export function OutOfContextApp() {
 
   return (
     <>
-      <GlobalStyleDisableSwipeNavi />
+      <ThemeStyle />
 
-      <Root themeString={themeString}>
-        <StyledHeader />
-        <DeckRow>
-          <DeckColumn>
-            <StyledDeck
+      <div className="fixed inset-0 flex flex-col text-fore bg-back2 font-[Inter,monospace]">
+        <Header className="h-8" />
+        <div className="flex justify-between flex-row grow gap-0.5">
+          <div className="flex flex-col grow">
+            <Deck
               ref={refDeckA}
+              className="grow"
               codeAtom={deckACodeAtom}
               hasEditAtom={deckAHasEditAtom}
               errorAtom={deckAErrorAtom}
@@ -204,25 +103,26 @@ export function OutOfContextApp() {
               gainParamName="/mixer/channel_a/gain"
               filterParamName="/mixer/channel_a/filter"
             />
-            <StyledDeckKnobs paramPrefix="/deck_a" />
-          </DeckColumn>
+            <DeckKnobs className="h-16" paramPrefix="/deck_a" />
+          </div>
           {showCenterColumn && (
-            <CenterColumn>
+            <div className="flex justify-end flex-col w-48">
               {libraryShow && (
-                <StyledAssetList />
+                <AssetList className="grow" />
               )}
               {mixerShow && (
                 <>
-                  <StyledMixerView />
-                  <StyledXFader />
+                  <MixerView className="py-2" />
+                  <XFader className="w-40 h-10 my-2 mx-4" />
                 </>
               )}
-            </CenterColumn>
+            </div>
           )}
           {deckBShow && (
-            <DeckColumn>
-              <StyledDeck
+            <div className="flex flex-col grow">
+              <Deck
                 ref={refDeckB}
+                className="grow"
                 codeAtom={deckBCodeAtom}
                 hasEditAtom={deckBHasEditAtom}
                 errorAtom={deckBErrorAtom}
@@ -234,17 +134,17 @@ export function OutOfContextApp() {
                 gainParamName="/mixer/channel_b/gain"
                 filterParamName="/mixer/channel_b/filter"
               />
-              <StyledDeckKnobs paramPrefix="/deck_b" />
-            </DeckColumn>
+              <DeckKnobs className="h-16" paramPrefix="/deck_b" />
+            </div>
           )}
-        </DeckRow>
+        </div>
 
         <SettingsModal />
 
         <PlayOverlay />
         <ContextMenu />
         <Stalker />
-      </Root>
+      </div>
     </>
   );
 }

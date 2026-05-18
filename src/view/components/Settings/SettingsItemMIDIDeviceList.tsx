@@ -1,47 +1,10 @@
 import { useAtomValue } from 'jotai';
 import { useState, useEffect } from 'react';
-import styled, { css, keyframes } from 'styled-components';
 import { MIDIMAN } from '../../../MIDIManager';
 import { midiDevicesSortedAtom } from '../../stores/atoms/midi';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { SettingsItemBase } from './SettingsItemBase';
 import SimpleBar from 'simplebar-react';
-
-// == styles =======================================================================================
-const blink = keyframes`
-  0% { background: ${ThemeVars.modalFg}; }
-  100% { background: ${ThemeVars.modalBg}; }
-`;
-
-const Indicator = styled.div<{ isActive: boolean }>`
-  width: 5px;
-  height: 5px;
-  border-radius: 2.5px;
-  background: ${ThemeVars.modalBg};
-
-  ${({ isActive }) => isActive && css`
-    animation: step-end ${blink} 0.2s forwards;
-  `}
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-left: 4px;
-`;
-
-const Root = styled(SimpleBar)`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  margin-right: 8px;
-  height: 120px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: ${ThemeVars.inputBack};
-  font: 400 10px 'Roboto Mono', sans-serif;
-`;
+import { SettingsMIDIIndicator } from './SettingsMIDIIndicator';
 
 // == components ===================================================================================
 function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; deviceName: string }) {
@@ -56,10 +19,10 @@ function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; device
   }, [deviceId]);
 
   return (
-    <Row>
-      <Indicator key={messageIndex} isActive={messageIndex > 0} />
+    <div className="flex items-center gap-1 pl-1">
+      <SettingsMIDIIndicator messageIndex={messageIndex} />
       {deviceName}
-    </Row>
+    </div>
   );
 }
 
@@ -68,7 +31,7 @@ export function SettingsItemMIDIDeviceList() {
 
   return (
     <SettingsItemBase name="Detected Devices">
-      <Root>
+      <SimpleBar className="grow flex flex-col mr-2 h-30 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
         {devices.map(({ deviceId, deviceName }) => (
           <MidiDeviceListItem
             key={deviceId}
@@ -76,7 +39,7 @@ export function SettingsItemMIDIDeviceList() {
             deviceName={deviceName}
           />
         ))}
-      </Root>
+      </SimpleBar>
     </SettingsItemBase>
   );
 }

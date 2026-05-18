@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+
+@import './view/themes/theme.css';
+
+html,
+body {
+  overscroll-behavior-x: none;
+}

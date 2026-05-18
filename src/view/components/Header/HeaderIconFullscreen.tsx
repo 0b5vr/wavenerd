@@ -1,19 +1,10 @@
 import { useCallback, useContext } from 'react';
-import { headerIconStyle } from './headerIconStyle';
-import styled from 'styled-components';
+import { headerIconCls } from './headerIconCls';
 import IconFullscreen from '~icons/mdi/fullscreen';
 import IconFullscreenExit from '~icons/mdi/fullscreen-exit';
 import { isFullscreenAtom } from '../../stores/atoms/fullscreen';
 import { useAtomValue } from 'jotai';
 import { StuffContext } from '../../StuffContext';
-
-const StyledIconEnter = styled(IconFullscreen)`
-  ${headerIconStyle}
-`;
-
-const StyledIconExit = styled(IconFullscreenExit)`
-  ${headerIconStyle}
-`;
 
 export function HeaderIconFullscreen() {
   const { fullscreenManager } = useContext(StuffContext)!;
@@ -29,14 +20,16 @@ export function HeaderIconFullscreen() {
 
   if (isFullscreen) {
     return (
-      <StyledIconExit
+      <IconFullscreenExit
+        className={headerIconCls}
         onClick={handleClickExit}
         data-stalker="Exit fullscreen"
       />
     );
   } else {
     return (
-      <StyledIconEnter
+      <IconFullscreen
+        className={headerIconCls}
         onClick={handleClickEnter}
         data-stalker="Enter fullscreen"
       />

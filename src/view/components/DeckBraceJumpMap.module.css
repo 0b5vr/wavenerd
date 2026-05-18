@@ -1,0 +1,9 @@
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.boxFadeOut {
+  opacity: 1;
+  animation: ease-in-out fade-out 0.2s 1.8s forwards;
+}

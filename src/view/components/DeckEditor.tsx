@@ -3,11 +3,9 @@ import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import ReactCodeMirror, { Prec, type ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
 import { braceJumpKeymap } from '../codemirror/braceJumpKeymap';
-import { ThemeVars } from '../themes/ThemeVars';
 import { themes } from '../themes/themes';
 import { useSettings } from '../stores/hooks/useSettings';
 import { type PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
@@ -15,40 +13,8 @@ import { useAtomCallback } from 'jotai/utils';
 import { createCMTheme } from '../codemirror/createCMTheme';
 import { createErrorlayer } from '../codemirror/createErrorlayer';
 import { StuffContext } from '../StuffContext';
-
-// == styles =======================================================================================
-const StyledReactCodeMirror = styled(ReactCodeMirror)<{ guttersEnabled: boolean }>`
-  height: 100%;
-
-  .cm-gutters {
-    display: ${({ guttersEnabled }) => guttersEnabled ? 'inherit' : 'none'};
-  }
-`;
-
-const StyledSimpleBar = styled(SimpleBar)`
-  width: 100%;
-  height: 100%;
-
-  .simplebar-content {
-    min-height: 100%;
-  }
-`;
-
-const DraggingOverlay = styled.div`
-  display: 'block';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: ${ThemeVars.fore};
-  opacity: 0.125;
-  pointer-events: 'auto';
-`;
-
-const Root = styled.div`
-  transform: translateZ(0);
-`;
+import clsx from 'clsx';
+import styles from './DeckEditor.module.css';
 
 // == utils ========================================================================================
 /** Ref: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values */
@@ -383,15 +349,21 @@ export const DeckEditor = forwardRef(({
 
   // -- component ----------------------------------------------------------------------------------
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx(
+        'transform-gpu',
+        styles.root,
+        !guttersEnabled && styles.hideGutters,
+        className,
+      )}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <StyledSimpleBar>
-        <StyledReactCodeMirror
+      <SimpleBar className="w-full h-full deck-editor-simplebar">
+        <ReactCodeMirror
           ref={refCodeMirror}
+          className="h-full"
           value={code}
           extensions={[
             cpp(),
@@ -403,13 +375,14 @@ export const DeckEditor = forwardRef(({
             theme.extensions,
             fontExtension,
           ]}
-          guttersEnabled={guttersEnabled}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
         />
-      </StyledSimpleBar>
-      {isDragging && <DraggingOverlay />}
-    </Root>
+      </SimpleBar>
+      {isDragging && (
+        <div className="absolute inset-0 bg-fore opacity-[0.125]" />
+      )}
+    </div>
   );
 });
 DeckEditor.displayName = 'DeckEditor';

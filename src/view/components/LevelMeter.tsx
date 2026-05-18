@@ -1,32 +1,7 @@
-import { ThemeVars } from '../themes/ThemeVars';
 import { saturate } from '@0b5vr/experimental';
-import styled from 'styled-components';
+import clsx from 'clsx';
+import styles from './LevelMeter.module.css';
 
-// == styles =======================================================================================
-const Fg = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  background: ${ThemeVars.levelMeter};
-`;
-
-const Svg = styled.svg`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-`;
-
-const BlackOverlayRect = styled.rect`
-  fill: black;
-  opacity: 0.8;
-`;
-
-const Root = styled.div`
-  position: relative;
-`;
-
-// == components ===================================================================================
 export function LevelMeter({
   level,
   peak,
@@ -44,13 +19,13 @@ export function LevelMeter({
   const levelTop = 1.0 - l;
 
   return (
-    <Root className={className}>
-      <Fg>
-        <Svg viewBox="0 0 1 1" preserveAspectRatio="none">
-          <BlackOverlayRect x="-1" y="0" width="3" height={peakTop} />
-          <BlackOverlayRect x="-1" y={peakBottom} width="3" height={Math.max(0.0, levelTop - peakBottom)} />
-        </Svg>
-      </Fg>
-    </Root>
+    <div className={clsx('relative', className)}>
+      <div className={clsx('absolute inset-0', styles.fg)}>
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1 1" preserveAspectRatio="none">
+          <rect fill="black" opacity="0.8" x="-1" y="0" width="3" height={peakTop} />
+          <rect fill="black" opacity="0.8" x="-1" y={peakBottom} width="3" height={Math.max(0.0, levelTop - peakBottom)} />
+        </svg>
+      </div>
+    </div>
   );
 }

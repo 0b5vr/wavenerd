@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
-import styled from 'styled-components';
 import { HeaderBPM } from './HeaderBPM';
 import { HeaderBeatNumber } from './HeaderBeatNumber';
 import { HeaderNudge } from './HeaderNudge';
 import { HeaderTimeSeconds } from './HeaderTimeSeconds';
 import { HeaderTransport } from './HeaderTransport';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderItemUnknown } from './HeaderItemUnknown';
@@ -25,38 +23,6 @@ import { HeaderTimeHMS } from './HeaderTimeHMS';
 import { HeaderCatjam } from './HeaderCatjam';
 import { HeaderOBSVR } from './HeaderOBSVR';
 
-// == styles =======================================================================================
-const Margin = styled.div`
-  flex-grow: 1 !important;
-`;
-
-const Left = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  margin-left: 8px;
-  gap: 16px;
-`;
-
-const Right = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-const Root = styled.div`
-  display: flex;
-  align-items: center;
-  background: ${ThemeVars.headerBg};
-  color: ${ThemeVars.headerFg};
-  box-sizing: content-box;
-
-  & > * {
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-`;
-
 // == components ===================================================================================
 export function Header({ className }: { className?: string }) {
   const headerItems = useSettings('headerItems');
@@ -67,10 +33,8 @@ export function Header({ className }: { className?: string }) {
   const headerIconsHasSettings = useMemo(() => headerIconsArray.includes('settings'), [headerIconsArray]);
 
   return (
-    <Root
-      className={className}
-    >
-      <Left>
+    <div className={`flex items-center bg-header-bg text-header-fg box-content *:shrink-0 ${className ?? ''}`}>
+      <div className="h-full flex items-center ml-2 gap-4 shrink-0">
         {headerItemsArray.map((item, i) => {
           if (item === '') {
             return null;
@@ -102,11 +66,11 @@ export function Header({ className }: { className?: string }) {
             return <HeaderItemUnknown key={i} name={item} />;
           }
         })}
-      </Left>
+      </div>
 
-      <Margin />
+      <div className="grow" />
 
-      <Right>
+      <div className="h-full flex items-center shrink-0">
         {!headerIconsHasSettings && (
           <HeaderIconSettings hidden={true} />
         )}
@@ -134,7 +98,7 @@ export function Header({ className }: { className?: string }) {
             return <HeaderIconUnknown key={i} name={item} />;
           }
         })}
-      </Right>
-    </Root>
+      </div>
+    </div>
   );
 }

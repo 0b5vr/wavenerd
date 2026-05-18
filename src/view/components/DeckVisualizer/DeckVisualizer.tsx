@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useVectorscope } from './useVectorscope';
 import { type Analyser } from '../../../audio/Analyser';
 import { Visualizer } from '../../visualizers/Visualizer';
@@ -8,15 +7,6 @@ import { useOscilloscope } from './useOscilloscope';
 import { StuffContext } from '../../StuffContext';
 import { useWaveform } from './useWaveform';
 
-// == styles =======================================================================================
-const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
-`;
-
-const Root = styled.div``;
-
-// == components ===================================================================================
 export function DeckVisualizer({
   analyser,
   className,
@@ -73,10 +63,8 @@ export function DeckVisualizer({
 
   // render
   return (
-    <Root className={className}>
-      <Canvas
-        ref={refCanvas}
-      />
-    </Root>
+    <div className={className}>
+      <canvas className="w-full h-full" ref={refCanvas} />
+    </div>
   );
 }

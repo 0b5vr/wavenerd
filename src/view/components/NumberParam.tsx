@@ -1,9 +1,8 @@
 import { MouseComboBit, mouseCombo } from '../utils/mouseCombo';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
 import { registerMouseEvent } from '../utils/registerMouseEvent';
-import styled from 'styled-components';
 import { useDoubleTap } from '../utils/useDoubleTap';
+import clsx from 'clsx';
 
 // == helpers ======================================================================================
 type ValueType = 'int' | 'float';
@@ -19,29 +18,6 @@ function inputToValue(value: string, type: ValueType): number | null {
     return result;
   }
 }
-
-// == styles =======================================================================================
-const Input = styled.input<{ isInvalid: boolean }>`
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  font-family: monospace;
-  border: none;
-  background: ${({ isInvalid }) => (isInvalid ? ThemeVars.inputBackInvalid : ThemeVars.inputBack)};
-  color: ${ThemeVars.inputFore};
-`;
-
-const Value = styled.div`
-  cursor: pointer;
-`;
-
-const Root = styled.div`
-  position: relative;
-  overflow: hidden;
-`;
 
 // == element ======================================================================================
 export function NumberParam(params: {
@@ -89,7 +65,8 @@ export function NumberParam(params: {
   const [isInputInvalid, setIsInputInvalid] = useState<boolean>(false);
   const checkDoubleClick = useDoubleTap();
 
-  useEffect(() => { // focus on the input
+  // focus on the input
+  useEffect(() => {
     if (isInput) {
       refInput.current!.focus();
     }
@@ -209,24 +186,23 @@ export function NumberParam(params: {
   );
 
   return (
-    <Root className={className}>
-      <Value
-        onMouseDown={handleClick}
-      >
+    <div className={`relative overflow-hidden ${className ?? ''}`}>
+      <div className="cursor-pointer" onMouseDown={handleClick}>
         {children}
-      </Value>
-      {
-        isInput && (
-          <Input
-            ref={refInput}
-            value={inputValue}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            isInvalid={isInputInvalid}
-          />
-        )
-      }
-    </Root>
+      </div>
+      {isInput && (
+        <input
+          ref={refInput}
+          className={clsx(
+            'absolute block w-full h-full top-0 left-0 font-mono border-0 text-input-fore',
+            isInputInvalid ? 'bg-input-back-invalid' : 'bg-input-back',
+          )}
+          value={inputValue}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
+        />
+      )}
+    </div>
   );
 }

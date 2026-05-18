@@ -2,74 +2,20 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 import IconNull from '~icons/mdi/circle-off-outline';
+import clsx from 'clsx';
 import { atom, useAtomValue } from 'jotai';
 import { storageFileListAtom } from '../stores/atoms/storage';
 import { StuffContext } from '../StuffContext';
-
-// == styles =======================================================================================
-const NoAssetsIcon = styled(IconNull)`
-  font-size: 24px;
-  transform: rotate(-90deg);
-`;
-
-const NoAssetsContainer = styled.div`
-  position: absolute;
-  left: 0;
-  top: 24px;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: ${ThemeVars.gray};
-`;
-
-const StyledEntry = styled(AssetListEntry)`
-  width: calc( 100% - 4px );
-  height: 16px;
-`;
-
-const Body = styled(SimpleBar)`
-  height: 0;
-  flex-basis: 0;
-  flex-grow: 1;
-`;
-
-const StyledAssetListBar = styled(AssetListBar)`
-  height: 24px;
-`;
-
-const DraggingOverlay = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: ${ThemeVars.fore};
-  opacity: 0.125;
-  pointer-events: none;
-`;
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  background: ${ThemeVars.back1};
-`;
+import styles from './AssetListCategory.module.css';
 
 // == microcomponent ===============================================================================
 function NoAssets({ text }: { text: string }) {
   return (
-    <NoAssetsContainer>
-      <NoAssetsIcon />
+    <div className="absolute left-0 top-6 right-0 bottom-0 flex flex-col justify-center items-center gap-2 text-xs text-gray">
+      <IconNull className="text-2xl -rotate-90" />
       {text}
-    </NoAssetsContainer>
+    </div>
   );
 }
 
@@ -159,14 +105,15 @@ export function AssetListCategory({
   );
 
   return (
-    <Root
-      className={className}
+    <div
+      className={clsx('flex flex-col relative bg-back1', styles.root, className)}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       style={{ flexGrow: expand ? 1 : undefined }}
     >
-      <StyledAssetListBar
+      <AssetListBar
+        className="h-6"
         title={title}
         onFile={handleLoadFile}
         expand={expand}
@@ -175,17 +122,18 @@ export function AssetListCategory({
       />
       {expand && (
         <>
-          <Body>
+          <SimpleBar className="h-0 basis-0 grow">
             {
               assets.map((name) => (
-                <StyledEntry
+                <AssetListEntry
                   key={name}
+                  className="w-[calc(100%-4px)] h-4"
                   name={name}
                   onDeleteAsset={handleDeleteAsset}
                 />
               ))
             }
-          </Body>
+          </SimpleBar>
           {
             (assets.length === 0) && (
               <NoAssets text={`No ${title}`} />
@@ -193,7 +141,9 @@ export function AssetListCategory({
           }
         </>
       )}
-      {isDragging && <DraggingOverlay />}
-    </Root>
+      {isDragging && (
+        <div className="absolute inset-0 bg-fore opacity-[0.125] pointer-events-none" />
+      )}
+    </div>
   );
 }

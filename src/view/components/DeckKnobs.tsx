@@ -1,7 +1,6 @@
+import clsx from 'clsx';
 import { DeckKnob } from './DeckKnob';
-import styled from 'styled-components';
 
-// == constants ====================================================================================
 const paramNames = [
   'knob0',
   'knob1',
@@ -24,27 +23,14 @@ const labels = [
   '7',
 ];
 
-// == styles =======================================================================================
-const StyledDeckKnob = styled(DeckKnob)`
-`;
-
-const Root = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-
-`;
-
-// == components ===================================================================================
 export function DeckKnobs({ paramPrefix, className }: {
   paramPrefix: string;
   className?: string;
 }) {
   return (
-    <Root className={className}>
+    <div className={clsx('flex justify-center items-center gap-1', className)}>
       {paramNames.map((paramName, index) => (
-        <StyledDeckKnob
+        <DeckKnob
           key={paramName}
           paramPrefix={paramPrefix}
           label={labels[index]}
@@ -52,6 +38,6 @@ export function DeckKnobs({ paramPrefix, className }: {
           stalker={`param_${paramName}`}
         />
       ))}
-    </Root>
+    </div>
   );
-};
+}

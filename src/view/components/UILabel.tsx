@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import { ThemeVars } from '../themes/ThemeVars';
+import clsx from 'clsx';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
 
@@ -26,24 +25,7 @@ const paths = arraySerial(charWidthTable.length).map((i) => {
 });
 
 // == styles =======================================================================================
-const RootBase = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  color: ${ThemeVars.foresub};
-`;
-
-const PixelRoot = styled(RootBase)`
-  gap: 1px;
-  padding: 2px 0 1px;
-`;
-
-const TextRoot = styled(RootBase)`
-  flex-direction: column;
-  text-align: center;
-  font-size: 8px;
-  line-height: 8px;
-`;
+const baseCls = 'flex justify-center text-foresub';
 
 // == children =====================================================================================
 function PixelLabelChar({ char }: { char: string }) {
@@ -60,19 +42,19 @@ function PixelLabelChar({ char }: { char: string }) {
 
 function PixelLabel({ text, className }: { text: string; className?: string }) {
   return (
-    <PixelRoot className={className}>
+    <div className={clsx(baseCls, 'flex-row gap-px pt-0.5 pb-px', className)}>
       {Array.from(text).map((char, i) => (
         <PixelLabelChar key={i} char={char} />
       ))}
-    </PixelRoot>
+    </div>
   );
 }
 
 function TextLabel({ text, className }: { text: string; className?: string }) {
   return (
-    <TextRoot className={className}>
+    <div className={clsx(baseCls, 'flex-col text-center text-[8px] leading-2', className)}>
       {text}
-    </TextRoot>
+    </div>
   );
 }
 

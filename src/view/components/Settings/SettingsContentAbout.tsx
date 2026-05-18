@@ -1,38 +1,3 @@
-import styled from 'styled-components';
-import { ThemeVars } from '../../themes/ThemeVars';
-
-const Content = styled.div`
-  padding: 0 16px;
-  font-size: 12px;
-
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-  }
-
-  p {
-    margin: 0;
-    margin-top: 8px;
-  }
-
-  a {
-    color: ${ThemeVars.accent};
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  code {
-    padding: 0px 4px;
-    font: 400 12px 'Roboto Mono', sans-serif;
-    background-color: ${ThemeVars.inputBack};
-    border-radius: 4px;
-  }
-`;
-
 export function SettingsContentAbout() {
   const hash = COMMIT_HASH.slice(0, 7);
   const date = new Date(COMMIT_DATE).toISOString().slice(0, 10);
@@ -40,17 +5,17 @@ export function SettingsContentAbout() {
   /* eslint-disable @stylistic/jsx-one-expression-per-line */
 
   return (
-    <Content>
-      <h1>Wavenerd</h1>
-      <p>
-        <code>{hash}</code> ({date})
+    <div className="px-4 text-xs">
+      <h1 className="text-2xl font-bold m-0">Wavenerd</h1>
+      <p className="m-0 mt-2">
+        <code className="px-1 font-['Roboto_Mono'] bg-input-back rounded">{hash}</code> ({date})
       </p>
-      <p>
+      <p className="m-0 mt-2">
         Copyright (c) 2020-2026 0b5vr<br />
         Wavenerd is released under the MIT License<br />
-        <a href="https://github.com/0b5vr/wavenerd" target="_blank" rel="noreferrer">https://github.com/0b5vr/wavenerd</a>
+        <a className="text-accent no-underline hover:underline" href="https://github.com/0b5vr/wavenerd" target="_blank" rel="noreferrer">https://github.com/0b5vr/wavenerd</a>
       </p>
-    </Content>
+    </div>
   );
 
   /* eslint-enable @stylistic/jsx-one-expression-per-line */

@@ -1,22 +1,6 @@
+import clsx from 'clsx';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 
-// == styles =======================================================================================
-const Root = styled.div`
-  position: fixed;
-  font-size: 12px;
-  padding: 4px 8px;
-  margin: 8px 16px;
-  white-space: pre-line;
-  color: ${ThemeVars.foresub};
-  background: ${ThemeVars.overlayBack};
-  box-shadow: 0 2px 4px 2px #0008;
-  border-radius: 4px;
-  z-index: 10000;
-`;
-
-// == element ======================================================================================
 export interface StalkerProps {
   className?: string;
 }
@@ -90,9 +74,12 @@ export function Stalker({ className }: StalkerProps) {
   return (
     <>
       {text && (
-        <Root className={className} style={style}>
+        <div
+          className={clsx('fixed text-xs py-1 px-2 my-2 mx-4 whitespace-pre-line text-foresub bg-overlay-back shadow-[0_2px_4px_2px_#0008] rounded z-10000', className)}
+          style={style}
+        >
           {text}
-        </Root>
+        </div>
       )}
     </>
   );

@@ -3,9 +3,7 @@ import { type Analyser } from '../../audio/Analyser';
 import { DeckEditor } from './DeckEditor';
 import { DeckStatusBar } from './DeckStatusBar';
 import { atom, type PrimitiveAtom } from 'jotai';
-import { ThemeVars } from '../themes/ThemeVars';
 import { type WavenerdDeck } from '@0b5vr/wavenerd-deck';
-import styled, { keyframes } from 'styled-components';
 import { useAtomCallback } from 'jotai/utils';
 import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
@@ -13,63 +11,9 @@ import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
 import { DeckBraceJumpMap } from './DeckBraceJumpMap';
 import { StuffContext } from '../StuffContext';
+import styles from './Deck.module.css';
+import clsx from 'clsx';
 
-// == styles =======================================================================================
-const fadeOut = keyframes`
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-`;
-
-const DeckFocusHighlight = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  border: 4px solid ${ThemeVars.fore};
-  animation: step-end ${fadeOut} 0.2s forwards;
-  pointer-events: none;
-`;
-
-const StyledEditor = styled(DeckEditor)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: calc( 100% - 24px );
-`;
-
-const StyledStatusBar = styled(DeckStatusBar)`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 24px;
-`;
-
-const StyledVisualizer = styled(DeckVisualizer)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: calc( 100% - 24px );
-  pointer-events: none;
-`;
-
-const StyledDeckBraceJumpMap = styled(DeckBraceJumpMap)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: calc( 100% - 24px );
-`;
-
-const Root = styled.div`
-  position: relative;
-  background: ${ThemeVars.codeBackground};
-`;
-
-// == components ===================================================================================
 export const Deck = forwardRef(({
   className,
   cueStatusAtom,
@@ -206,12 +150,14 @@ export const Deck = forwardRef(({
 
   // -- render -------------------------------------------------------------------------------------
   return (
-    <Root
-      className={className}
-    >
-      <StyledVisualizer analyser={analyser} />
-      <StyledEditor
+    <div className={clsx('relative bg-code-background', className)}>
+      <DeckVisualizer
+        className="absolute left-0 top-0 w-full h-[calc(100%-24px)] pointer-events-none"
+        analyser={analyser}
+      />
+      <DeckEditor
         ref={refEditor}
+        className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
         logsAtom={logsAtom}
         errorAtom={errorAtom}
@@ -224,7 +170,8 @@ export const Deck = forwardRef(({
         libraryOpeningAtom={libraryOpeningAtom}
       />
       <DeckLog logsAtom={logsAtom} />
-      <StyledStatusBar
+      <DeckStatusBar
+        className="absolute left-0 bottom-0 w-full h-6"
         errorAtom={errorAtom}
         cueStatusAtom={cueStatusAtom}
         hasEditAtom={hasEditAtom}
@@ -236,21 +183,24 @@ export const Deck = forwardRef(({
         gainParamName={gainParamName}
         filterParamName={filterParamName}
       />
-
       <DeckLibrary
         libraryOpeningAtom={libraryOpeningAtom}
         onLoad={handleLoad}
         focusEditor={focusEditor}
       />
-      <StyledDeckBraceJumpMap
+      <DeckBraceJumpMap
         ref={refBraceJumpMap}
+        className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
       {focusHighlightKey > 0 && (
-        <DeckFocusHighlight key={focusHighlightKey} />
+        <div
+          key={focusHighlightKey}
+          className={clsx('absolute inset-0 border-4 border-fore pointer-events-none', styles.focusFrameFadeOut)}
+        />
       )}
-    </Root>
+    </div>
   );
 });
 Deck.displayName = 'Deck';

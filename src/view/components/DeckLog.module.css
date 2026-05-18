@@ -1,0 +1,8 @@
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.logEntry {
+  animation: fade-out 2s cubic-bezier(0.9, 0.0, 1.0, 0.75) forwards;
+}

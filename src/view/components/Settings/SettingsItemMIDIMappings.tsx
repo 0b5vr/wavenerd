@@ -1,63 +1,11 @@
 import { useAtomValue } from 'jotai';
 import { useState, useEffect, useCallback } from 'react';
-import styled, { css, keyframes } from 'styled-components';
 import { MIDIMAN } from '../../../MIDIManager';
 import { midiMappingsSortedAtom } from '../../stores/atoms/midi';
-import { ThemeVars } from '../../themes/ThemeVars';
 import { SettingsItemBase } from './SettingsItemBase';
 import IconClose from '~icons/mdi/close';
 import SimpleBar from 'simplebar-react';
-
-// == styles =======================================================================================
-const RemoveButton = styled(IconClose)`
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  color: ${ThemeVars.gray};
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const blink = keyframes`
-  0% { background: ${ThemeVars.modalFg}; }
-  100% { background: ${ThemeVars.modalBg}; }
-`;
-
-const Indicator = styled.div<{ isActive: boolean }>`
-  width: 5px;
-  height: 5px;
-  border-radius: 2.5px;
-  background: ${ThemeVars.modalBg};
-
-  ${({ isActive }) => isActive && css`
-    animation: step-end ${blink} 0.2s forwards;
-  `}
-`;
-
-const MidiKey = styled.div`
-  width: 56px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-left: 4px;
-`;
-
-const Root = styled(SimpleBar)`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  margin-right: 8px;
-  height: 240px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: ${ThemeVars.inputBack};
-  font: 400 10px 'Roboto Mono', sans-serif;
-`;
+import { SettingsMIDIIndicator } from './SettingsMIDIIndicator';
 
 // == components ===================================================================================
 function MappingItem({ midiKey, paramKey }: { midiKey: string; paramKey: string }) {
@@ -76,12 +24,16 @@ function MappingItem({ midiKey, paramKey }: { midiKey: string; paramKey: string 
   }, [midiKey]);
 
   return (
-    <Row>
-      <Indicator key={eventIndex} isActive={eventIndex > 0} />
-      <MidiKey>{midiKey}</MidiKey>
-      <RemoveButton onClick={handleClickRemove} data-stalker="Remove mapping" />
+    <div className="flex items-center gap-1 pl-1">
+      <SettingsMIDIIndicator messageIndex={eventIndex} />
+      <div className="w-14">{midiKey}</div>
+      <IconClose
+        className="w-3 h-3 cursor-pointer text-gray hover:opacity-80"
+        onClick={handleClickRemove}
+        data-stalker="Remove mapping"
+      />
       {`${paramKey}`}
-    </Row>
+    </div>
   );
 }
 
@@ -90,11 +42,11 @@ export function SettingsItemMIDIMappings() {
 
   return (
     <SettingsItemBase name="MIDI Mappings">
-      <Root>
+      <SimpleBar className="grow flex flex-col mr-2 h-60 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
         {mappings.map(([midiKey, paramKey]) => (
           <MappingItem key={midiKey} midiKey={midiKey} paramKey={paramKey} />
         ))}
-      </Root>
+      </SimpleBar>
     </SettingsItemBase>
   );
 }

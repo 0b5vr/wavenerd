@@ -20,6 +20,7 @@ import { StorageManager } from './StorageManager';
 import { loadFileAsImage } from './utils/loadFileAsImage';
 import { pathToAssetName } from './utils/pathToAssetName';
 import { LookaheadLimiterNode } from './audio/LookaheadLimiterNode';
+import './index.css';
 
 // == setup ========================================================================================
 const canvas = document.createElement('canvas');

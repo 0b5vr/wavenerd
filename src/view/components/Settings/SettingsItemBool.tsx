@@ -2,13 +2,6 @@ import { useCallback } from 'react';
 import { type Settings, SETTINGSMAN } from '../../../SettingsManager';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SettingsItemBase, type SettingsItemBaseProps } from './SettingsItemBase';
-import styled from 'styled-components';
-
-const StyledCheckbox = styled.input`
-  margin: 2px 4px;
-  width: 12px;
-  height: 12px;
-`;
 
 export function SettingsItemBool(props: {
   settingsKey: keyof Settings;
@@ -23,8 +16,9 @@ export function SettingsItemBool(props: {
 
   return (
     <SettingsItemBase {...props}>
-      <StyledCheckbox
+      <input
         type="checkbox"
+        className="my-0.5 mx-1 w-3 h-3"
         checked={value}
         onChange={handleChange}
       />

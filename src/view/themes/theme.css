@@ -1,0 +1,58 @@
+@theme {
+  --color-black: var(--rawcolor-black);
+  --color-white: var(--rawcolor-white);
+
+  --color-back1: var(--rawcolor-back1);
+  --color-back2: var(--rawcolor-back2);
+  --color-back3: var(--rawcolor-back3);
+
+  --color-overlay-back: var(--rawcolor-overlay-back, var(--color-back3));
+
+  --color-ui-shadow: var(--rawcolor-ui-shadow, #0008);
+
+  --color-code-background: var(--rawcolor-code-background);
+
+  --color-fore: var(--rawcolor-fore);
+  --color-foresub: var(--rawcolor-foresub);
+  --color-foredark: var(--rawcolor-foredark);
+
+  --color-bar-bg: var(--rawcolor-bar-bg, var(--color-back3));
+  --color-bar-fg: var(--rawcolor-bar-fg, var(--color-fore));
+
+  --color-list-bg: var(--rawcolor-list-bg, var(--color-back2));
+  --color-list-hover-bg: var(--rawcolor-list-hover-bg, var(--color-back3));
+  --color-list-focused-bg: var(--rawcolor-list-focused-bg, var(--color-back3));
+  --color-list-fg: var(--rawcolor-list-fg, var(--color-fore));
+  --color-list-hover-fg: var(--rawcolor-list-hover-fg, var(--color-list-fg));
+  --color-list-focused-fg: var(--rawcolor-list-focused-fg, var(--color-list-fg));
+
+  --color-header-bg: var(--rawcolor-header-bg, var(--color-bar-bg));
+  --color-header-fg: var(--rawcolor-header-fg, var(--color-bar-fg));
+
+  --color-context-menu-bg: var(--rawcolor-context-menu-bg, var(--color-back2));
+  --color-context-menu-fg: var(--rawcolor-context-menu-fg, var(--color-fore));
+
+  --color-modal-bg: var(--rawcolor-modal-bg, var(--color-overlay-back));
+  --color-modal-fg: var(--rawcolor-modal-fg, var(--color-fore));
+
+  --color-input-back: var(--rawcolor-input-back, var(--color-back1));
+  --color-input-back-invalid: var(--rawcolor-input-back-invalid, var(--color-back1));
+  --color-input-fore: var(--rawcolor-input-fore, var(--color-fore));
+
+  --color-gray: var(--rawcolor-gray, var(--color-fore));
+
+  --color-knob-color: var(--rawcolor-knob-color, var(--color-fore));
+  --color-knob-notch: var(--rawcolor-knob-notch, var(--color-back1));
+  --color-knob-guide: var(--rawcolor-knob-guide, var(--color-gray));
+  --color-knob-border: var(--rawcolor-knob-border, var(--color-back1));
+  --color-knob-gutter: var(--rawcolor-knob-gutter, var(--color-back1));
+  --color-knob-shadow: var(--rawcolor-knob-shadow, #0008);
+
+  --color-accent: var(--rawcolor-accent, var(--color-accent));
+  --color-accent-bright: var(--rawcolor-accent-bright, var(--color-accent));
+  --color-accent-gray: var(--rawcolor-accent-gray, var(--color-accent));
+  --color-green: var(--rawcolor-green, var(--color-green));
+  --color-error: var(--rawcolor-error, var(--color-error));
+
+  --color-level-meter: var(--rawcolor-level-meter, var(--color-accent));
+}

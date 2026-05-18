@@ -1,53 +1,6 @@
 import { useCallback } from 'react';
 import IconClose from '~icons/mdi/close';
-import { ThemeVars } from '../themes/ThemeVars';
-import styled from 'styled-components';
 
-// == styles =======================================================================================
-const Close = styled(IconClose)`
-  position: absolute;
-  right: 0px;
-  top: -32px;
-  width: 32px;
-  height: 32px;
-  padding: 3px;
-  color: ${ThemeVars.fore};
-  cursor: pointer;
-  border-radius: 16px;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:active {
-    opacity: 0.6;
-  }
-`;
-
-const Plane = styled.div`
-  position: relative;
-  margin: 16px;
-  padding: 16px;
-  max-width: calc(100% - 32px);
-  max-height: calc(100% - 32px);
-  overflow: visible;
-  border-radius: 4px;
-  background: ${ThemeVars.modalBg};
-  color: ${ThemeVars.modalFg};
-  box-shadow: 0 0 8px 0 ${ThemeVars.black};
-`;
-
-const Root = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba( 0, 0, 0, 0.5 );
-`;
-
-// == components ===================================================================================
 export function Modal({
   onClose,
   children,
@@ -65,14 +18,18 @@ export function Modal({
   }, [onClose]);
 
   return (
-    <Root onClick={handleClickClose}>
-      <Plane onClick={noopStopPropagation}>
-        <Close
+    <div className="fixed w-full h-full flex justify-center items-center bg-black/50" onClick={handleClickClose}>
+      <div
+        className="relative m-4 p-4 max-w-[calc(100%-32px)] max-h-[calc(100%-32px)] overflow-visible rounded bg-modal-bg text-modal-fg shadow-[0_0_8px_0_var(--color-black)]"
+        onClick={noopStopPropagation}
+      >
+        <IconClose
+          className="absolute right-0 -top-8 w-8 h-8 p-0.75 text-fore cursor-pointer rounded-full hover:opacity-80 active:opacity-60"
           onClick={handleClickClose}
           data-stalker="Close"
         />
-        { children }
-      </Plane>
-    </Root>
+        {children}
+      </div>
+    </div>
   );
 }

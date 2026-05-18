@@ -1,5 +1,6 @@
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { execSync } from 'child_process';
 
@@ -15,6 +16,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    tailwindcss(),
     Icons({ compiler: 'jsx', jsx: 'react' }),
   ],
   define: {
