@@ -45,7 +45,7 @@ export function SettingsItemMIDIMonitor() {
 
   return (
     <SettingsItemBase name="MIDI Monitor">
-      <div className="grow flex flex-col mr-2 whitespace-pre py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
+      <div className="grow flex flex-col mr-2 whitespace-pre py-1 px-2 rounded bg-input-back text-[10px] font-normal font-mono">
         {log.map((message, i) => (
           <span key={i}>{message}</span>
         ))}

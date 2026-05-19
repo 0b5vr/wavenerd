@@ -177,7 +177,7 @@ function TextNumber({
   );
 
   return (
-    <div className="flex flex-row justify-center font-['Roboto_Mono',monospace] text-[14px] leading-4">
+    <div className="flex flex-row justify-center font-mono text-[14px] leading-4">
       {Array.from(text).map((char, i) => (
         <Char
           key={i}

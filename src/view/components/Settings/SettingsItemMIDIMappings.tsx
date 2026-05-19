@@ -42,7 +42,7 @@ export function SettingsItemMIDIMappings() {
 
   return (
     <SettingsItemBase name="MIDI Mappings">
-      <SimpleBar className="grow flex flex-col mr-2 h-60 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
+      <SimpleBar className="grow flex flex-col mr-2 h-60 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-mono">
         {mappings.map(([midiKey, paramKey]) => (
           <MappingItem key={midiKey} midiKey={midiKey} paramKey={paramKey} />
         ))}

@@ -27,7 +27,7 @@ function ChannelLabel({ index1, index2 }: { index1: number; index2: number }) {
   const isActive2 = channelCount >= index2;
 
   return (
-    <div className="text-xs font-['Roboto_Mono'] font-normal">
+    <div className="text-xs font-mono font-normal">
       <span className={clsx('w-4 text-foresub opacity-50', isActive1 && 'opacity-100')}>{index1}</span>
       <span className={clsx('w-4 text-foresub opacity-50', isActive2 && 'opacity-100')}>/</span>
       <span className={clsx('w-4 text-foresub opacity-50', isActive2 && 'opacity-100')}>{index2}</span>

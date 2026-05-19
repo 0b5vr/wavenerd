@@ -21,7 +21,7 @@ export function HeaderBPM({ className }: { className?: string }) {
       <UILabel className="text-header-fg" text="BPM" />
       <NumberParam
         type="float"
-        className="font-['Roboto_Mono'] text-[14px] leading-none min-w-13"
+        className="font-mono text-[14px] leading-none min-w-13"
         value={bpm}
         onChange={(value) => {
           hostDeck.bpm = clamp(value, 40.0, 999.0);

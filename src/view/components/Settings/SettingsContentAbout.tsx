@@ -8,7 +8,7 @@ export function SettingsContentAbout() {
     <div className="px-4 text-xs">
       <h1 className="text-2xl font-bold m-0">Wavenerd</h1>
       <p className="m-0 mt-2">
-        <code className="px-1 font-['Roboto_Mono'] bg-input-back rounded">{hash}</code> ({date})
+        <code className="px-1 font-mono bg-input-back rounded">{hash}</code> ({date})
       </p>
       <p className="m-0 mt-2">
         Copyright (c) 2020-2026 0b5vr<br />

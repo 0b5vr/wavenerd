@@ -85,7 +85,7 @@ export function OutOfContextApp() {
     <>
       <ThemeStyle />
 
-      <div className="fixed inset-0 flex flex-col text-fore bg-back2 font-[Inter,monospace]">
+      <div className="fixed inset-0 flex flex-col text-fore bg-back2 font-sans">
         <Header className="h-8" />
         <div className="flex justify-between flex-row grow gap-0.5">
           <div className="flex flex-col grow">

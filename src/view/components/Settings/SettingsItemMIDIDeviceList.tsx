@@ -31,7 +31,7 @@ export function SettingsItemMIDIDeviceList() {
 
   return (
     <SettingsItemBase name="Detected Devices">
-      <SimpleBar className="grow flex flex-col mr-2 h-30 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-['Roboto_Mono']">
+      <SimpleBar className="grow flex flex-col mr-2 h-30 py-1 px-2 rounded bg-input-back text-[10px] font-normal font-mono">
         {devices.map(({ deviceId, deviceName }) => (
           <MidiDeviceListItem
             key={deviceId}

@@ -6,3 +6,8 @@ html,
 body {
   overscroll-behavior-x: none;
 }
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
