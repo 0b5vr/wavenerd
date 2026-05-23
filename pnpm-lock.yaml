@@ -12,8 +12,8 @@ importers:
         specifier: ^0.9.10
         version: 0.9.10
       '@0b5vr/wavenerd-deck':
-        specifier: ^0.8.9
-        version: 0.8.9
+        specifier: ^0.8.10
+        version: 0.8.10
       '@codemirror/commands':
         specifier: ^6.8.0
         version: 6.10.3
@@ -146,8 +146,8 @@ packages:
   '@0b5vr/experimental@0.9.10':
     resolution: {integrity: sha512-BZ4zwyGaZPtNakrs2m2RC1Acvo83/GPXF6rzwapnkbG5P9eZUlLd9DcA//9sfpY9CgLt//2MDnXtMdnIxA8Hvw==}
 
-  '@0b5vr/wavenerd-deck@0.8.9':
-    resolution: {integrity: sha512-ZuyzyBpBAKxuuQDRG6REqS+0y58jIPUx61pj8z1PFwoIlZ5in7KloFNujxiqv8SO2F00pAOz5X4/N1TbBoCIQg==}
+  '@0b5vr/wavenerd-deck@0.8.10':
+    resolution: {integrity: sha512-PMIhD5B78Lu9PCSPn0RN6pIwWPuioDGZgGq6T1RY4O/fewLA3JQQDacNPYbSjzPBQpCOV1/lhw8FDF1tFNf+Iw==}
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
@@ -2160,7 +2160,7 @@ snapshots:
 
   '@0b5vr/experimental@0.9.10': {}
 
-  '@0b5vr/wavenerd-deck@0.8.9': {}
+  '@0b5vr/wavenerd-deck@0.8.10': {}
 
   '@antfu/install-pkg@1.1.0':
     dependencies:
