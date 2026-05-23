@@ -99,19 +99,29 @@ export function NumberParam(params: {
     [value],
   );
 
-  const grabValue = useCallback(
-    () => {
+  const beginDrag = useCallback(
+    (event: React.MouseEvent) => {
+      if (checkDoubleClick()) {
+        openInput();
+        return;
+      }
+
+      let x = event.clientX - event.clientY;
       const vPrev = value;
-      let v = vPrev;
+      let v = value;
       let hasMoved = false;
 
       registerMouseEvent(
-        (event, movementSum) => {
+        (event) => {
           hasMoved = true;
 
-          const fine = event.altKey;
-          const delta = fine ? deltaFine : deltaCoarse;
-          v += delta * -movementSum.y;
+          const x1 = event.clientX - event.clientY;
+          const dx = x1 - x;
+          x = x1;
+
+          const fine = event.ctrlKey;
+          const dv = dx * (fine ? deltaFine : deltaCoarse);
+          v += dv;
 
           if (type === 'int') {
             onChange?.(Math.round(v));
@@ -122,25 +132,23 @@ export function NumberParam(params: {
         () => {
           if (!hasMoved) { return; }
 
-          trySettle(v, vPrev);
+          if (type === 'int') {
+            trySettle(Math.round(v), vPrev);
+          } else {
+            trySettle(v, vPrev);
+          }
         },
       );
     },
-    [value, deltaFine, deltaCoarse, type, onChange, trySettle],
+    [checkDoubleClick, value, openInput, deltaFine, deltaCoarse, type, onChange, trySettle],
   );
 
   const handleClick = useMemo(
     () => mouseCombo({
-      [MouseComboBit.LMB]: () => {
-        if (checkDoubleClick()) {
-          openInput();
-        } else {
-          grabValue();
-        }
-      },
-      // TODO: LMB + Shift to reset the value. probably adding `resetValue` to props
+      [MouseComboBit.LMB]: beginDrag,
+      [MouseComboBit.LMB | MouseComboBit.Ctrl]: beginDrag,
     }),
-    [openInput, grabValue, checkDoubleClick],
+    [beginDrag],
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => { // TODO: useCallback

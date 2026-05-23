@@ -23,7 +23,7 @@ export function SettingsContentAppearance() {
         settingsKey="headerItems"
         name="Header Items"
         resettable
-        stalkerText="Change the items to show in the header.&#10;Available items: logo, 0b5vr, transport, time-seconds, time-hms, beat-number, beat-hex, beat-dots, bars-grid, bpm, nudge, catjam.&#10;I will implement a proper UI for this later 😅"
+        stalkerText="Change the items to show in the header.&#10;Available items: logo, 0b5vr, transport, time-seconds, time-hms, beat-number, beat-hex, beat-dots, bars-grid, bpm, latency-blocks, nudge, catjam.&#10;I will implement a proper UI for this later 😅"
       />
 
       <SettingsItemText

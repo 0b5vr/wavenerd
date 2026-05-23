@@ -22,6 +22,7 @@ import { HeaderBarsGrid } from './HeaderBarsGrid';
 import { HeaderTimeHMS } from './HeaderTimeHMS';
 import { HeaderCatjam } from './HeaderCatjam';
 import { HeaderOBSVR } from './HeaderOBSVR';
+import { HeaderLatencyBlocks } from './HeaderLatencyBlocks';
 
 // == components ===================================================================================
 export function Header({ className }: { className?: string }) {
@@ -58,6 +59,8 @@ export function Header({ className }: { className?: string }) {
             return <HeaderBarsGrid key={i} />;
           } else if (item === 'bpm') {
             return <HeaderBPM key={i} />;
+          } else if (item === 'latency-blocks') {
+            return <HeaderLatencyBlocks key={i} />;
           } else if (item === 'nudge') {
             return <HeaderNudge key={i} />;
           } else if (item === 'catjam') {

@@ -1,25 +1,13 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { SettingsItemBase } from './SettingsItemBase';
 import { StuffContext } from '../../StuffContext';
 import { useSettings } from '../../stores/hooks/useSettings';
 import clsx from 'clsx';
 import { deckIsPlayingAtom } from '../../stores/atoms/deck';
 import { useAtomValue } from 'jotai';
+import { useFrame } from '../../utils/useFrame';
 
 const BLOCK_SIZE = 128;
-
-function useFrame(callback: () => void) {
-  useEffect(() => {
-    let rAFId = requestAnimationFrame(function tick() {
-      callback();
-      rAFId = requestAnimationFrame(tick);
-    });
-
-    return () => {
-      cancelAnimationFrame(rAFId);
-    };
-  }, [callback]);
-}
 
 export function SettingsItemBlocksMonitor() {
   const [blocksAhead, setBlocksAhead] = useState(0);
