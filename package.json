@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@0b5vr/experimental": "^0.9.10",
-    "@0b5vr/wavenerd-deck": "^0.8.8",
+    "@0b5vr/wavenerd-deck": "^0.8.9",
     "@codemirror/commands": "^6.8.0",
     "@codemirror/lang-cpp": "^6.0.2",
     "@codemirror/language": "^6.10.8",
