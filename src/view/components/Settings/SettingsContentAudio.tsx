@@ -9,6 +9,7 @@ import { Recorder } from '../../../audio/Recorder';
 import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { recorderIsRecordingAtom } from '../../stores/atoms/recorder';
+import { SettingsItemBlocksMonitor } from './SettingsItemBlocksMonitor';
 
 function suffixFnPercent(value: number) {
   const str = (value * 100).toFixed() + '%';
@@ -46,6 +47,8 @@ export function SettingsContentAudio() {
       <SettingsItemBlocksPerRender />
 
       <SettingsItemLatencyBlocks />
+
+      <SettingsItemBlocksMonitor />
 
       <SettingsItemChannelRouting />
 
