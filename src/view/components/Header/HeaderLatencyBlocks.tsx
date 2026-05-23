@@ -33,7 +33,7 @@ export function HeaderLatencyBlocks({ className }: { className?: string }) {
       className={`flex flex-col text-center ${className ?? ''}`}
       data-stalker="Latency Blocks&#10;Drag up/down to change latency blocks, Double click to edit"
     >
-      <UILabel className="text-header-fg" text="Lat." />
+      <UILabel className="text-header-fg" text="LAT." />
       <NumberParam
         type="int"
         className="font-mono text-[14px] leading-none min-w-8"
