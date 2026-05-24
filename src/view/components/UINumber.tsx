@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
 
@@ -87,7 +87,7 @@ function calcIsActiveArray(text: string, forceActiveFrom?: number): boolean[] {
 }
 
 // == children =====================================================================================
-function PixelChar({
+const PixelChar = memo(function PixelChar({
   char,
   color,
 }: {
@@ -103,9 +103,9 @@ function PixelChar({
       <path d={path} fill={color} />
     </svg>
   );
-}
+});
 
-function TextChar({
+const TextChar = memo(function TextChar({
   char,
   color,
 }: {
@@ -113,23 +113,7 @@ function TextChar({
   color: string;
 }) {
   return <div style={{ color }}>{char}</div>;
-}
-
-function Char({
-  char,
-  color,
-}: {
-  char: string;
-  color: string;
-}) {
-  const preferPixelFonts = useSettings('preferPixelFonts');
-
-  if (preferPixelFonts) {
-    return <PixelChar char={char} color={color} />;
-  } else {
-    return <TextChar char={char} color={color} />;
-  }
-}
+});
 
 function PixelNumber({
   text,
@@ -150,7 +134,7 @@ function PixelNumber({
   return (
     <div className="flex flex-row justify-center gap-0.5 py-0.5">
       {Array.from(text).map((char, i) => (
-        <Char
+        <PixelChar
           key={i}
           char={char}
           color={isActiveArray[i] ? activeColor : inactiveColor}
@@ -179,7 +163,7 @@ function TextNumber({
   return (
     <div className="flex flex-row justify-center font-mono text-[14px] leading-4">
       {Array.from(text).map((char, i) => (
-        <Char
+        <TextChar
           key={i}
           char={char}
           color={isActiveArray[i] ? activeColor : inactiveColor}

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 import { useSettings } from '../stores/hooks/useSettings';
 import { arraySerial } from '@0b5vr/experimental';
 
@@ -28,7 +29,7 @@ const paths = arraySerial(charWidthTable.length).map((i) => {
 const baseCls = 'flex justify-center text-foresub';
 
 // == children =====================================================================================
-function PixelLabelChar({ char }: { char: string }) {
+const PixelLabelChar = memo(function PixelLabelChar({ char }: { char: string }) {
   const index = char.charCodeAt(0) - 32;
   const width = parseInt(charWidthTable[index], 10);
   const path = paths[index];
@@ -38,9 +39,9 @@ function PixelLabelChar({ char }: { char: string }) {
       <path d={path} fill="currentColor" />
     </svg>
   );
-}
+});
 
-function PixelLabel({ text, className }: { text: string; className?: string }) {
+const PixelLabel = memo(function PixelLabel({ text, className }: { text: string; className?: string }) {
   return (
     <div className={clsx(baseCls, 'flex-row gap-px pt-0.5 pb-px', className)}>
       {Array.from(text).map((char, i) => (
@@ -48,18 +49,18 @@ function PixelLabel({ text, className }: { text: string; className?: string }) {
       ))}
     </div>
   );
-}
+});
 
-function TextLabel({ text, className }: { text: string; className?: string }) {
+const TextLabel = memo(function TextLabel({ text, className }: { text: string; className?: string }) {
   return (
     <div className={clsx(baseCls, 'flex-col text-center text-[8px] leading-2', className)}>
       {text}
     </div>
   );
-}
+});
 
 // == components ===================================================================================
-export function UILabel({ text, className }: { text: string; className?: string }) {
+export const UILabel = memo(function UILabel({ text, className }: { text: string; className?: string }) {
   const preferPixelFonts = useSettings('preferPixelFonts');
 
   if (preferPixelFonts) {
@@ -67,4 +68,4 @@ export function UILabel({ text, className }: { text: string; className?: string 
   } else {
     return <TextLabel text={text} className={className} />;
   }
-}
+});
