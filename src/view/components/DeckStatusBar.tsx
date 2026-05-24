@@ -1,4 +1,4 @@
-import { type PrimitiveAtom, useAtomValue } from 'jotai';
+import { atom, type PrimitiveAtom, useAtomValue } from 'jotai';
 import styles from './DeckStatusBar.module.css';
 import { useCallback, useMemo } from 'react';
 import IconApply from '~icons/mdi/skip-forward';
@@ -8,13 +8,33 @@ import IconCircle from '~icons/mdi/circle-medium';
 import IconError from '~icons/mdi/close-octagon';
 import IconMute from '~icons/mdi/volume-mute';
 import IconPlay from '~icons/mdi/play';
-import { useMidiValue } from '../stores/hooks/useMidiValue';
 import { useSettings } from '../stores/hooks/useSettings';
+import { midiParamsAtom } from '../stores/atoms/midi';
 
 // == constants ====================================================================================
 const iconCls = 'w-5 h-5 m-0.5';
 const iconButtonCls = `${iconCls} text-fore cursor-pointer hover:opacity-80 active:opacity-60`;
 const contentCls = 'flex items-center gap-1 grow shrink';
+
+// == hooks ========================================================================================
+/**
+ * A hook that returns whether the specified midi param is equal to the target value.
+ * Much less rerenders compared to using `useMidiValue`.
+ *
+ * @param paramName - The name of the midi param to check
+ * @param targetValue - The target value.
+ * @returns `true` if the midi param value is equal to the target value.
+ */
+function useMidiValueIsTargetValue(paramName: string, targetValue: number): boolean {
+  const a = useMemo(
+    () => atom((get) => {
+      const value = get(midiParamsAtom)[paramName] ?? 0;
+      return value === targetValue;
+    }),
+    [paramName, targetValue],
+  );
+  return useAtomValue(a);
+}
 
 // == children =====================================================================================
 function CompileTime({ compileTimeAtom }: { compileTimeAtom: PrimitiveAtom<number> }) {
@@ -45,8 +65,9 @@ function Message({
   const cueStatus = useAtomValue(cueStatusAtom);
   const error = useAtomValue(errorAtom);
   const hasEdit = useAtomValue(hasEditAtom);
-  const gainValue = useMidiValue(gainParamName);
-  const filterValue = useMidiValue(filterParamName);
+  const gainIsZero = useMidiValueIsTargetValue(gainParamName, 0);
+  const filterIsZero = useMidiValueIsTargetValue(filterParamName, 0);
+  const filterIsOne = useMidiValueIsTargetValue(filterParamName, 1);
 
   const errorFirstLine = useMemo(() => {
     return error?.split('\n')[0];
@@ -124,7 +145,7 @@ function Message({
         <div className={styles.blinkAccentBright}>The code has been edited</div>
       </div>
     );
-  } else if (gainValue === 0.0) {
+  } else if (gainIsZero) {
     return (
       <div
         className={contentCls}
@@ -134,7 +155,7 @@ function Message({
         <div className={styles.blinkError}>Gain is -INF dB</div>
       </div>
     );
-  } else if (filterValue === 0.0) {
+  } else if (filterIsZero) {
     return (
       <div
         className={contentCls}
@@ -144,7 +165,7 @@ function Message({
         <div className={styles.blinkError}>Filter is LPF 100%</div>
       </div>
     );
-  } else if (filterValue === 1.0) {
+  } else if (filterIsOne) {
     return (
       <div
         className={contentCls}
