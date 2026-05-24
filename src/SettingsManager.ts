@@ -39,6 +39,7 @@ export interface Settings {
   deckBShow: boolean;
   libraryShow: boolean;
   mixerShow: boolean;
+  stalkerShow: boolean;
   preferPixelFonts: boolean;
   editorFont: string;
   editorFontVariantLigatures: string;
@@ -77,6 +78,7 @@ export const defaultSettings: Settings = {
   deckBShow: true,
   libraryShow: true,
   mixerShow: true,
+  stalkerShow: true,
   preferPixelFonts: false,
   editorFont: '14px/18px "Roboto Mono", monospace',
   editorFontVariantLigatures: 'normal',

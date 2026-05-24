@@ -52,6 +52,12 @@ export function SettingsContentAppearance() {
       />
 
       <SettingsItemBool
+        settingsKey="stalkerShow"
+        name="Show Stalker"
+        stalkerText="Whether to show the stalker tooltip."
+      />
+
+      <SettingsItemBool
         settingsKey="preferPixelFonts"
         name="Prefer Pixel Fonts"
         stalkerText="Several text elements turn into pixel fonts when this is enabled."

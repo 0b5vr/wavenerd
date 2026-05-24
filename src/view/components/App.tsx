@@ -55,6 +55,7 @@ export function OutOfContextApp() {
   const deckBShow = useSettings('deckBShow');
   const libraryShow = useSettings('libraryShow');
   const mixerShow = useSettings('mixerShow');
+  const stalkerShow = useSettings('stalkerShow');
   const showCenterColumn = libraryShow || mixerShow;
 
   useMidiSubscribers(MIDIMAN);
@@ -141,7 +142,7 @@ export function OutOfContextApp() {
 
         <PlayOverlay />
         <ContextMenu />
-        <Stalker />
+        {stalkerShow && <Stalker />}
       </div>
     </>
   );
