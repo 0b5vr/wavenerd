@@ -1,40 +1,49 @@
 import { type Analyser } from './Analyser';
-import { EventEmittable } from '../utils/EventEmittable';
 
 const ENV_SIZE_MAX = 2048;
 
-export interface LevelMeterResult {
-  level: number;
-  levelL: number;
-  levelR: number;
-  peak: number;
-  peakL: number;
-  peakR: number;
-}
-
-interface LevelMeterEvents {
-  update: LevelMeterResult;
-}
-
-export class LevelMeter extends EventEmittable<LevelMeterEvents> {
+export class LevelMeter {
   public readonly analyser: Analyser;
 
   private __level = 0.0;
+  public get level(): number {
+    return this.__level;
+  }
+
   private __levelL = 0.0;
+  public get levelL(): number {
+    return this.__levelL;
+  }
+
   private __levelR = 0.0;
+  public get levelR(): number {
+    return this.__levelR;
+  }
+
   private __peak = 0.0;
+  public get peak(): number {
+    return this.__peak;
+  }
+
   private __peakL = 0.0;
+  public get peakL(): number {
+    return this.__peakL;
+  }
+
   private __peakR = 0.0;
+  public get peakR(): number {
+    return this.__peakR;
+  }
+
   private __vpeak = 0.0;
   private __vpeakL = 0.0;
   private __vpeakR = 0.0;
 
   public constructor(analyser: Analyser) {
-    super();
     this.analyser = analyser;
   }
 
-  public update(deltaTime: number): LevelMeterResult {
+  public update(deltaTime: number): void {
     const { timeDomainL, timeDomainR } = this.analyser;
 
     const decay = Math.exp(-5.0 * deltaTime);
@@ -76,18 +85,5 @@ export class LevelMeter extends EventEmittable<LevelMeterEvents> {
       this.__peak = this.__level;
       this.__vpeak = 0.0;
     }
-
-    const ret = {
-      level: this.__level,
-      levelL: this.__levelL,
-      levelR: this.__levelR,
-      peak: this.__peak,
-      peakL: this.__peakL,
-      peakR: this.__peakR,
-    };
-
-    this.__emit('update', ret);
-
-    return ret;
   }
 }

@@ -14,7 +14,6 @@ import { SETTINGSMAN } from '../../SettingsManager';
 import { SettingsModal } from './Settings/SettingsModal';
 import { Stalker } from './Stalker';
 import { XFader } from './XFader';
-import { useAnalyserSubscribers } from '../stores/hooks/useAnalyserSubscribers';
 import { useDeckSubscribers } from '../stores/hooks/useDeckSubscribers';
 import { useMidiSubscribers } from '../stores/hooks/useMidiSubscribers';
 import { useSettings } from '../stores/hooks/useSettings';
@@ -58,7 +57,6 @@ export function OutOfContextApp() {
   const mixerShow = useSettings('mixerShow');
   const showCenterColumn = libraryShow || mixerShow;
 
-  useAnalyserSubscribers(mixer);
   useMidiSubscribers(MIDIMAN);
   useSettingsSubscribers(SETTINGSMAN);
   useDeckSubscribers(deckA, deckA, deckB);
