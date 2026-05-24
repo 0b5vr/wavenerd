@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { StuffContext } from '../StuffContext';
 
-export function useFrame(callback: (timestamp?: number) => void) {
+export function useFrame(callback: () => void) {
+  const { frameEmitter } = useContext(StuffContext)!;
+
   useEffect(() => {
-    let rAFId = requestAnimationFrame(function update(timestamp) {
-      callback(timestamp);
-      rAFId = requestAnimationFrame(update);
-    });
+    const handleUpdate = frameEmitter.on('update', callback);
 
     return () => {
-      cancelAnimationFrame(rAFId);
+      frameEmitter.off('update', handleUpdate);
     };
-  }, [callback]);
+  }, [callback, frameEmitter]);
 }
