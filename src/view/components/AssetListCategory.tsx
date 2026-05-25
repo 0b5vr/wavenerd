@@ -1,13 +1,12 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { AssetListBar } from './AssetListBar';
 import { AssetListEntry } from './AssetListEntry';
 import SimpleBar from 'simplebar-react';
 import IconNull from '~icons/mdi/circle-off-outline';
 import clsx from 'clsx';
-import { atom, useAtomValue } from 'jotai';
-import { storageFileListAtom } from '../stores/atoms/storage';
 import { StuffContext } from '../StuffContext';
 import styles from './AssetListCategory.module.css';
+import { useLs } from '../utils/useLs';
 
 // == microcomponent ===============================================================================
 function NoAssets({ text }: { text: string }) {
@@ -31,13 +30,7 @@ export function AssetListCategory({
 }) {
   const { storageManager } = useContext(StuffContext)!;
 
-  const assetsAtom = useMemo(() => atom((get) => {
-    const fileList = get(storageFileListAtom);
-    const array = Array.from(fileList).filter((name) => name.startsWith(`${dir}/`));
-    array.sort();
-    return array.map((name) => name.substring(dir.length + 1));
-  }), [dir]);
-  const assets = useAtomValue(assetsAtom);
+  const assets = useLs(dir);
 
   const [expand, setExpand] = useState(true);
   const handleChangeExpand = useCallback(

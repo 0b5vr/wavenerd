@@ -1,18 +1,10 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { atom, type PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { type PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { mod } from '@0b5vr/experimental';
 import { StuffContext } from '../StuffContext';
 import SimpleBar from 'simplebar-react';
-import { storageFileListAtom } from '../stores/atoms/storage';
 import clsx from 'clsx';
-
-// == atoms ========================================================================================
-const storageFileListShadersAtom = atom((get) => {
-  const fileList = get(storageFileListAtom);
-  const array = Array.from(fileList).filter((name) => name.startsWith('shaders/'));
-  array.sort();
-  return array.map((name) => name.substring(8));
-});
+import { useLs } from '../utils/useLs';
 
 // == children =====================================================================================
 function DeckLibraryItem({ name, isSelected, onSelect, itemRef }: {
@@ -113,7 +105,7 @@ export function DeckLibrary({
 
   const [textInputValue, setTextInputValue] = useState('');
 
-  const shadersList = useAtomValue(storageFileListShadersAtom);
+  const shadersList = useLs('shaders');
   const shadersListFiltered = useMemo(
     () => shadersList.filter((name) => name.includes(textInputValue)),
     [shadersList, textInputValue],
