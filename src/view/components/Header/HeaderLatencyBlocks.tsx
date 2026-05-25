@@ -1,32 +1,22 @@
 import { NumberParam } from '../NumberParam';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback } from 'react';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
 import { clamp } from '@0b5vr/experimental';
 import { useSettings } from '../../stores/hooks/useSettings';
 import { SETTINGSMAN } from '../../../SettingsManager';
-import { useFrame } from '../../utils/useFrame';
-import { StuffContext } from '../../StuffContext';
+import { useUnderrun } from '../../utils/useUnderrun';
 
 // == components ===================================================================================
 export function HeaderLatencyBlocks({ className }: { className?: string }) {
-  const [underrun, setUnderrun] = useState(false);
+  const underrun = useUnderrun();
 
-  const { hostDeck } = useContext(StuffContext)!;
   const latencyBlocks = useSettings('latencyBlocks');
 
   const handleChange = useCallback((value: number) => {
-    const valueValid = clamp(value, 0, 256);
+    const valueValid = clamp(value, 1, 256);
     SETTINGSMAN.set('latencyBlocks', valueValid);
   }, []);
-
-  useFrame(
-    useCallback(() => {
-      const isPlaying = hostDeck.isPlaying;
-      const blocksAhead = hostDeck.bufferWriteBlocks - hostDeck.bufferReadBlocks;
-      setUnderrun(isPlaying && blocksAhead < 0);
-    }, [hostDeck]),
-  );
 
   return (
     <div
