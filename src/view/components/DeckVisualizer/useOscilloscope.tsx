@@ -3,7 +3,7 @@ import { useSettings } from '../../stores/hooks/useSettings';
 import { type Visualizer } from '../../visualizers/Visualizer';
 import { type Analyser } from '../../../audio/Analyser';
 
-export function useOscilloscope(visualizer: Visualizer | undefined, analyser: Analyser): () => void {
+export function useOscilloscope(visualizer: Visualizer | undefined, analyser: Analyser): (() => void) | null {
   const oscilloscopeMode = useSettings('oscilloscopeMode');
   const oscilloscopeOpacity = useSettings('oscilloscopeOpacity');
   const oscilloscopeColor = useSettings('oscilloscopeColor');
@@ -25,12 +25,16 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
   }, [visualizer, oscilloscopeMode, oscilloscopeColor, oscilloscopeOpacity]);
 
   // update the visualizer
-  return useCallback(() => {
-    if (oscilloscopeMode !== 'none') {
-      const { timeDomainL, timeDomainLoL } = analyser;
-      visualizer?.oscilloscope.setData(timeDomainL);
-      visualizer?.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
-      visualizer?.oscilloscope.render();
-    }
-  }, [analyser, oscilloscopeMode, visualizer?.oscilloscope]);
+  const update = useCallback(() => {
+    const { timeDomainL, timeDomainLoL } = analyser;
+    visualizer?.oscilloscope.setData(timeDomainL);
+    visualizer?.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
+    visualizer?.oscilloscope.render();
+  }, [analyser, visualizer?.oscilloscope]);
+
+  if (oscilloscopeMode === 'none') {
+    return null;
+  }
+
+  return update;
 }

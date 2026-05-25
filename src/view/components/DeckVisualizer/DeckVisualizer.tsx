@@ -49,13 +49,18 @@ export function DeckVisualizer({
 
   // update
   useEffect(() => {
+    if (updateVectorscope == null && updateSpectrum == null && updateOscilloscope == null && updateWaveform == null) {
+      visualizer?.clear();
+      return;
+    }
+
     const udpate = frameEmitter.on('update', () => {
       visualizer?.clear();
 
-      updateVectorscope();
-      updateSpectrum();
-      updateOscilloscope();
-      updateWaveform();
+      updateVectorscope?.();
+      updateSpectrum?.();
+      updateOscilloscope?.();
+      updateWaveform?.();
     });
 
     return () => frameEmitter.off('update', udpate);

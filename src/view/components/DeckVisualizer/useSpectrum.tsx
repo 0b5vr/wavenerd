@@ -3,7 +3,7 @@ import { useSettings } from '../../stores/hooks/useSettings';
 import { type Visualizer } from '../../visualizers/Visualizer';
 import { type Analyser } from '../../../audio/Analyser';
 
-export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analyser): () => void {
+export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analyser): (() => void) | null {
   const spectrumMode = useSettings('spectrumMode');
   const spectrumOpacity = useSettings('spectrumOpacity');
   const spectrumColor = useSettings('spectrumColor');
@@ -25,11 +25,15 @@ export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analys
   }, [visualizer, spectrumMode, spectrumColor, spectrumOpacity]);
 
   // update the visualizer
-  return useCallback(() => {
-    if (spectrumMode !== 'none') {
-      const { frequencyL } = analyser;
-      visualizer?.spectrum.setData(frequencyL);
-      visualizer?.spectrum.render();
-    }
-  }, [analyser, spectrumMode, visualizer?.spectrum]);
+  const update = useCallback(() => {
+    const { frequencyL } = analyser;
+    visualizer?.spectrum.setData(frequencyL);
+    visualizer?.spectrum.render();
+  }, [analyser, visualizer?.spectrum]);
+
+  if (spectrumMode === 'none') {
+    return null;
+  }
+
+  return update;
 }

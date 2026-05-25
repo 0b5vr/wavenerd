@@ -3,7 +3,7 @@ import { useSettings } from '../../stores/hooks/useSettings';
 import { type Visualizer } from '../../visualizers/Visualizer';
 import { type Analyser } from '../../../audio/Analyser';
 
-export function useWaveform(visualizer: Visualizer | undefined, analyser: Analyser): () => void {
+export function useWaveform(visualizer: Visualizer | undefined, analyser: Analyser): (() => void) | null {
   const waveformMode = useSettings('waveformMode');
   const waveformOpacity = useSettings('waveformOpacity');
   const waveformColor = useSettings('waveformColor');
@@ -25,11 +25,15 @@ export function useWaveform(visualizer: Visualizer | undefined, analyser: Analys
   }, [visualizer, waveformMode, waveformColor, waveformOpacity]);
 
   // update the visualizer
-  return useCallback(() => {
-    if (waveformMode !== 'none') {
-      const { timeDomainL } = analyser;
-      visualizer?.waveform.setData(timeDomainL);
-      visualizer?.waveform.render();
-    }
-  }, [waveformMode, visualizer, analyser]);
+  const update = useCallback(() => {
+    const { timeDomainL } = analyser;
+    visualizer?.waveform.setData(timeDomainL);
+    visualizer?.waveform.render();
+  }, [analyser, visualizer?.waveform]);
+
+  if (waveformMode === 'none') {
+    return null;
+  }
+
+  return update;
 }

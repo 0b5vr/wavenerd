@@ -3,7 +3,7 @@ import { useSettings } from '../../stores/hooks/useSettings';
 import { type Visualizer } from '../../visualizers/Visualizer';
 import { type Analyser } from '../../../audio/Analyser';
 
-export function useVectorscope(visualizer: Visualizer | undefined, analyser: Analyser): () => void {
+export function useVectorscope(visualizer: Visualizer | undefined, analyser: Analyser): (() => void) | null {
   const vectorscopeMode = useSettings('vectorscopeMode');
   const vectorscopeOpacity = useSettings('vectorscopeOpacity');
   const vectorscopeColor = useSettings('vectorscopeColor');
@@ -23,11 +23,15 @@ export function useVectorscope(visualizer: Visualizer | undefined, analyser: Ana
   }, [visualizer, vectorscopeMode, vectorscopeColor, vectorscopeOpacity]);
 
   // update the visualizer
-  return useCallback(() => {
-    if (vectorscopeMode !== 'none') {
-      const { timeDomainL, timeDomainR } = analyser;
-      visualizer?.vectorscope.setData(timeDomainL, timeDomainR);
-      visualizer?.vectorscope.render();
-    }
-  }, [analyser, vectorscopeMode, visualizer?.vectorscope]);
+  const update = useCallback(() => {
+    const { timeDomainL, timeDomainR } = analyser;
+    visualizer?.vectorscope.setData(timeDomainL, timeDomainR);
+    visualizer?.vectorscope.render();
+  }, [analyser, visualizer?.vectorscope]);
+
+  if (vectorscopeMode === 'none') {
+    return null;
+  }
+
+  return update;
 }
