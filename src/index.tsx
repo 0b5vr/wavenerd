@@ -10,6 +10,7 @@ import { Reverb } from './audio/Reverb';
 import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
+import { WavRecorderNode } from './audio/WavRecorderNode';
 import { FullscreenManager } from './FullscreenManager';
 import { TimeDomainDataProbeNode } from './audio/TimeDomainDataProbeNode';
 import { DCRemovalNode } from './audio/DCRemovalNode';
@@ -35,6 +36,7 @@ await DCRemovalNode.addModule(audio);
 await HardClipNode.addModule(audio);
 await LookaheadLimiterNode.addModule(audio);
 await FirstOrderFilterNode.addModule(audio);
+await WavRecorderNode.addModule(audio);
 
 const master = audio.createGain();
 

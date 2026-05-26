@@ -1,10 +1,8 @@
-import { MediaRecorder, register } from 'extendable-media-recorder';
-import { connect } from 'extendable-media-recorder-wav-encoder';
 import { EventEmittable } from '../utils/EventEmittable';
-import { saveBlob } from '../utils/saveBlob';
+import { type RecordingSession } from './RecordingSession';
+import { WavRecordingSession } from './WavRecordingSession';
+import { NativeMediaRecordingSession } from './NativeMediaRecordingSession';
 import { SETTINGSMAN } from '../SettingsManager';
-
-await register(await connect());
 
 interface FormatConfig {
   format: string;
@@ -47,14 +45,16 @@ interface RecorderEvents {
 
 export class Recorder extends EventEmittable<RecorderEvents> {
   public static getAvailableFormats(): FormatConfig[] {
-    return Object.values(formatConfigs)
-      .filter((config) => MediaRecorder.isTypeSupported(config.mimeType));
+    return Object.values(formatConfigs).filter((config) => {
+      if (config.format === 'wav') return true; // always available via RecorderNode
+      return MediaRecorder.isTypeSupported(config.mimeType);
+    });
   }
 
   public readonly audio: AudioContext;
 
   public get isRecording(): boolean {
-    return this.__recorder?.state === 'recording';
+    return this.__session != null;
   }
 
   public get recordingTime(): number {
@@ -62,13 +62,12 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     return (Date.now() - this.__recordingStartTime) / 1000.0;
   }
 
-  private __streamDest: MediaStreamAudioDestinationNode;
-  private __recorder: InstanceType<typeof MediaRecorder> | null;
-  private __chunks: Blob[] = [];
+  private __inputGain: GainNode;
+  private __session: RecordingSession | null = null;
   private __recordingStartTime: number | null = null;
 
   public get input(): AudioNode {
-    return this.__streamDest;
+    return this.__inputGain;
   }
 
   public constructor(audio: AudioContext) {
@@ -76,61 +75,41 @@ export class Recorder extends EventEmittable<RecorderEvents> {
 
     this.audio = audio;
 
-    this.__recorder = null;
-    this.__streamDest = new MediaStreamAudioDestinationNode(audio);
+    this.__inputGain = new GainNode(audio);
   }
 
   public start() {
-    if (this.__recorder != null) {
+    if (this.__session != null) {
       console.error('Recorder is already recording.');
       return;
     }
 
-    this.__recordingStartTime = Date.now();
-    this.__recorder = this.__createRecorder();
-    this.__recorder.start();
+    const format = SETTINGSMAN.values.recorderFormat;
 
+    if (format === 'wav') {
+      this.__session = new WavRecordingSession(this.__inputGain, this.audio);
+    } else {
+      const config = formatConfigs[format];
+      if (config == null) {
+        throw new Error(`Unreachable. Unsupported recorder format: ${format}`);
+      }
+      this.__session = new NativeMediaRecordingSession(this.__inputGain, this.audio, config);
+    }
+
+    this.__recordingStartTime = Date.now();
     this.__emit('start');
   }
 
   public stop() {
-    if (this.__recorder == null) {
+    if (this.__session == null) {
       console.error('Recorder is not recording.');
       return;
     }
 
-    this.__recorder.stop();
-    this.__recorder = null;
+    this.__session.stop();
+    this.__session = null;
     this.__recordingStartTime = null;
 
     this.__emit('stop');
-  }
-
-  private __createRecorder(): InstanceType<typeof MediaRecorder> {
-    const format = SETTINGSMAN.values.recorderFormat;
-    const config = formatConfigs[format];
-
-    if (config == null) {
-      throw new Error(`Unreachable. Unsupported recorder format: ${format}`);
-    }
-
-    const recorder = new MediaRecorder(this.__streamDest.stream, {
-      mimeType: config.mimeType,
-      audioBitsPerSecond: 256 * 1024,
-    });
-
-    recorder.addEventListener('dataavailable', (event) => {
-      this.__chunks.push(event.data);
-    });
-
-    recorder.addEventListener('stop', () => {
-      const blob = new Blob(this.__chunks, { type: config.mimeType });
-      const filename = `wavenerd-${Date.now()}.${config.ext}`;
-      saveBlob(blob, filename);
-
-      this.__chunks = [];
-    });
-
-    return recorder;
   }
 }
