@@ -26,10 +26,12 @@ export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analys
 
   // update the visualizer
   const update = useCallback(() => {
+    if (visualizer == null) { return; }
+
     const { frequencyL } = analyser;
-    visualizer?.spectrum.setData(frequencyL);
-    visualizer?.spectrum.render();
-  }, [analyser, visualizer?.spectrum]);
+    visualizer.spectrum.setData(frequencyL);
+    visualizer.spectrum.render();
+  }, [analyser, visualizer]);
 
   if (spectrumMode === 'none') {
     return null;

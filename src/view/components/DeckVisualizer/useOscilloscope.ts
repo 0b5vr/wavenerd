@@ -26,11 +26,13 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
 
   // update the visualizer
   const update = useCallback(() => {
+    if (visualizer == null) { return; }
+
     const { timeDomainL, timeDomainLoL } = analyser;
-    visualizer?.oscilloscope.setData(timeDomainL);
-    visualizer?.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
-    visualizer?.oscilloscope.render();
-  }, [analyser, visualizer?.oscilloscope]);
+    visualizer.oscilloscope.setData(timeDomainL);
+    visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
+    visualizer.oscilloscope.render();
+  }, [analyser, visualizer]);
 
   if (oscilloscopeMode === 'none') {
     return null;

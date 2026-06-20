@@ -20,10 +20,10 @@ export class Visualizer {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.getExtension('EXT_color_buffer_float');
 
-    this.vectorscope = new VisualizerVectorscope(this);
-    this.spectrum = new VisualizerSpectrum(this);
-    this.oscilloscope = new VisualizerOscilloscope(this);
-    this.waveform = new VisualizerWaveform(this);
+    this.vectorscope = new VisualizerVectorscope(gl);
+    this.spectrum = new VisualizerSpectrum(gl);
+    this.oscilloscope = new VisualizerOscilloscope(gl);
+    this.waveform = new VisualizerWaveform(gl);
   }
 
   public clear(): void {

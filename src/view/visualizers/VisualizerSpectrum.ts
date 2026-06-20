@@ -4,12 +4,11 @@ import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import spectrumVert from './spectrum.vert?raw';
-import { type Visualizer } from './Visualizer';
 
 const BUFFER_LENGTH = ANALYSER_FREQUENCY_SIZE;
 
 export class VisualizerSpectrum {
-  public readonly visualizer: Visualizer;
+  public readonly gl: WebGL2RenderingContext;
 
   public mode: 'none' | 'line';
   public color: [ number, number, number, number ];
@@ -26,9 +25,8 @@ export class VisualizerSpectrum {
 
   private readonly __textureL: WebGLTexture;
 
-  public constructor(visualizer: Visualizer) {
-    this.visualizer = visualizer;
-    const { gl } = visualizer;
+  public constructor(gl: WebGL2RenderingContext) {
+    this.gl = gl;
 
     const array = new Float32Array(BUFFER_LENGTH);
     for (let i = 0; i < BUFFER_LENGTH; i++) {
@@ -52,7 +50,7 @@ export class VisualizerSpectrum {
   }
 
   public setData(dataL: Float32Array): void {
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
     gl.texImage2D(
@@ -72,7 +70,7 @@ export class VisualizerSpectrum {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.useProgram(this.__program);
 

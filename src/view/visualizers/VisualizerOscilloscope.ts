@@ -1,5 +1,4 @@
 import { lerp } from '@0b5vr/experimental';
-import { type Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
@@ -10,7 +9,7 @@ const DRAW_LENGTH = 4096;
 const BUFFER_SIZE = 8192;
 
 export class VisualizerOscilloscope {
-  public readonly visualizer: Visualizer;
+  public readonly gl: WebGL2RenderingContext;
 
   public mode: 'none' | 'line';
   public color: [number, number, number, number];
@@ -31,9 +30,8 @@ export class VisualizerOscilloscope {
 
   private __zc: number;
 
-  constructor(visualizer: Visualizer) {
-    this.visualizer = visualizer;
-    const { gl } = visualizer;
+  constructor(gl: WebGL2RenderingContext) {
+    this.gl = gl;
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
@@ -65,7 +63,7 @@ export class VisualizerOscilloscope {
    * @param data The time domain data. The length must be equal or greater than BUFFER_SIZE.
    */
   public setData(data: Float32Array): void {
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
     gl.texImage2D(
@@ -106,7 +104,7 @@ export class VisualizerOscilloscope {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.useProgram(this.__program);
 

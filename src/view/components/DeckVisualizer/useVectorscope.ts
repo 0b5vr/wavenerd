@@ -24,10 +24,12 @@ export function useVectorscope(visualizer: Visualizer | undefined, analyser: Ana
 
   // update the visualizer
   const update = useCallback(() => {
+    if (visualizer == null) { return; }
+
     const { timeDomainL, timeDomainR } = analyser;
-    visualizer?.vectorscope.setData(timeDomainL, timeDomainR);
-    visualizer?.vectorscope.render();
-  }, [analyser, visualizer?.vectorscope]);
+    visualizer.vectorscope.setData(timeDomainL, timeDomainR);
+    visualizer.vectorscope.render();
+  }, [analyser, visualizer]);
 
   if (vectorscopeMode === 'none') {
     return null;

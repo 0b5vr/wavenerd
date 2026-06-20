@@ -1,5 +1,4 @@
 import { lerp } from '@0b5vr/experimental';
-import { type Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
@@ -10,7 +9,7 @@ import { ANALYSER_TIME_DOMAIN_SIZE } from '../../audio/constants';
 const DRAW_LENGTH = 4096;
 
 export class VisualizerWaveform {
-  public readonly visualizer: Visualizer;
+  public readonly gl: WebGL2RenderingContext;
 
   public mode: 'none' | 'line';
   public color: [number, number, number, number];
@@ -27,9 +26,8 @@ export class VisualizerWaveform {
 
   private readonly __textureL: WebGLTexture;
 
-  constructor(visualizer: Visualizer) {
-    this.visualizer = visualizer;
-    const { gl } = visualizer;
+  constructor(gl: WebGL2RenderingContext) {
+    this.gl = gl;
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
@@ -54,7 +52,7 @@ export class VisualizerWaveform {
   }
 
   public setData(data: Float32Array): void {
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     const dataDownsampled = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
@@ -80,7 +78,7 @@ export class VisualizerWaveform {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.useProgram(this.__program);
 

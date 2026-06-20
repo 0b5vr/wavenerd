@@ -26,10 +26,12 @@ export function useWaveform(visualizer: Visualizer | undefined, analyser: Analys
 
   // update the visualizer
   const update = useCallback(() => {
+    if (visualizer == null) { return; }
+
     const { timeDomainL } = analyser;
-    visualizer?.waveform.setData(timeDomainL);
-    visualizer?.waveform.render();
-  }, [analyser, visualizer?.waveform]);
+    visualizer.waveform.setData(timeDomainL);
+    visualizer.waveform.render();
+  }, [analyser, visualizer]);
 
   if (waveformMode === 'none') {
     return null;

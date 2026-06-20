@@ -1,4 +1,3 @@
-import { type Visualizer } from './Visualizer';
 import colorFrag from './color.frag?raw';
 import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
@@ -9,7 +8,7 @@ const DRAW_LENGTH = 4096;
 const BUFFER_SIZE = 1024;
 
 export class VisualizerVectorscope {
-  public readonly visualizer: Visualizer;
+  public readonly gl: WebGL2RenderingContext;
 
   public mode: 'none' | 'line' | 'points';
   public color: [ number, number, number, number ];
@@ -32,9 +31,8 @@ export class VisualizerVectorscope {
   private readonly __textureL: WebGLTexture;
   private readonly __textureR: WebGLTexture;
 
-  constructor(visualizer: Visualizer) {
-    this.visualizer = visualizer;
-    const { gl } = visualizer;
+  constructor(gl: WebGL2RenderingContext) {
+    this.gl = gl;
 
     const array = new Float32Array(DRAW_LENGTH);
     for (let i = 0; i < DRAW_LENGTH; i++) {
@@ -65,7 +63,7 @@ export class VisualizerVectorscope {
   }
 
   public setData(dataL: Float32Array, dataR: Float32Array): void {
-    const { gl } = this.visualizer;
+    const { gl } = this;
 
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
     gl.texImage2D(
@@ -99,7 +97,7 @@ export class VisualizerVectorscope {
   public render(): void {
     if (this.mode === 'none') { return; }
 
-    const { canvas, gl } = this.visualizer;
+    const { gl } = this;
 
     gl.useProgram(this.__program);
 
@@ -108,7 +106,7 @@ export class VisualizerVectorscope {
     gl.vertexAttribPointer(0, 1, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    gl.uniform1f(this.__locations.aspect, canvas.width / canvas.height);
+    gl.uniform1f(this.__locations.aspect, gl.canvas.width / gl.canvas.height);
     gl.uniform1f(this.__locations.bufferSize, BUFFER_SIZE);
     gl.uniform4f(this.__locations.color, ...this.color);
     gl.uniform1f(this.__locations.pointSize, this.pointSize);
