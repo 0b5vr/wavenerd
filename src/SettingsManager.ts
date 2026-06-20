@@ -7,7 +7,7 @@ import { type StorageManager } from './StorageManager';
 
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
-export type VectorscopeModeType = 'none' | 'line' | 'crispline' | 'points';
+export type VectorscopeModeType = 'none' | 'line' | 'crispline' | 'points' | 'crisppoints';
 export type SpectrumModeType = 'none' | 'line' | 'crispline';
 export type OscilloscopeModeType = 'none' | 'line' | 'crispline';
 export type WaveformModeType = 'none' | 'line' | 'crispline';

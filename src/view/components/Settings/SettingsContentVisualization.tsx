@@ -29,6 +29,7 @@ export function SettingsContentVisualization() {
         <option value="line">Line</option>
         <option value="crispline">Crispline</option>
         <option value="points">Points</option>
+        <option value="crisppoints">Crisppoints</option>
       </SettingsItemSelect>
 
       <SettingsItemRange

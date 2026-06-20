@@ -82,6 +82,7 @@ export function setupVisualizerWindowGUI(
     label: 'Mode',
     options: {
       'Points': 'points',
+      'Crisppoints': 'crisppoints',
       'Line': 'line',
       'Crispline': 'crispline',
     },
