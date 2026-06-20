@@ -30,7 +30,7 @@ export function useSpectrum(visualizer: Visualizer | undefined, analyser: Analys
 
     const { frequencyL } = analyser;
     visualizer.spectrum.setData(frequencyL);
-    visualizer.spectrum.render();
+    visualizer.spectrum.render(visualizer.crispFramebuffer);
   }, [analyser, visualizer]);
 
   if (spectrumMode === 'none') {

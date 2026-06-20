@@ -16,9 +16,11 @@ export const visualizerWindowDefaultParams: VisualizerWindowParams = {
     scale: 0.8,
   },
   spectrum: {
+    mode: 'line',
     scale: 1.0,
   },
   waveform: {
+    mode: 'line',
     width: ANALYSER_TIME_DOMAIN_SIZE,
     scale: 0.8,
   },

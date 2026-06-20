@@ -83,6 +83,7 @@ export function setupVisualizerWindowGUI(
     options: {
       'Points': 'points',
       'Line': 'line',
+      'Crispline': 'crispline',
     },
   }).on('change', () => callback(params));
 
@@ -128,6 +129,14 @@ export function setupVisualizerWindowGUI(
     expanded: false,
   }).on('change', () => callback(params));
 
+  spectrumFolder.addBinding(params.spectrum, 'mode', {
+    label: 'Mode',
+    options: {
+      'Line': 'line',
+      'Crispline': 'crispline',
+    },
+  }).on('change', () => callback(params));
+
   spectrumFolder.addBinding(params.spectrum, 'scale', {
     label: 'Scale',
     min: 0.0,
@@ -137,6 +146,14 @@ export function setupVisualizerWindowGUI(
   const waveformFolder = pane.addFolder({
     title: 'Waveform',
     expanded: false,
+  }).on('change', () => callback(params));
+
+  waveformFolder.addBinding(params.waveform, 'mode', {
+    label: 'Mode',
+    options: {
+      'Line': 'line',
+      'Crispline': 'crispline',
+    },
   }).on('change', () => callback(params));
 
   waveformFolder.addBinding(params.waveform, 'width', {

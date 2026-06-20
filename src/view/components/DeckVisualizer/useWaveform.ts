@@ -30,7 +30,7 @@ export function useWaveform(visualizer: Visualizer | undefined, analyser: Analys
 
     const { timeDomainL } = analyser;
     visualizer.waveform.setData(timeDomainL);
-    visualizer.waveform.render();
+    visualizer.waveform.render(visualizer.crispFramebuffer);
   }, [analyser, visualizer]);
 
   if (waveformMode === 'none') {

@@ -27,6 +27,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
+        <option value="crispline">Crispline</option>
         <option value="points">Points</option>
       </SettingsItemSelect>
 
@@ -53,6 +54,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
+        <option value="crispline">Crispline</option>
       </SettingsItemSelect>
 
       <SettingsItemRange
@@ -104,6 +106,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
+        <option value="crispline">Crispline</option>
       </SettingsItemSelect>
 
       <SettingsItemRange

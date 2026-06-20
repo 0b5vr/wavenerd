@@ -3,6 +3,7 @@ import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import vectorscopeVert from './vectorscope.vert?raw';
+import { type VisualizerCrispFramebuffer } from './VisualizerCrispFramebuffer';
 
 const DRAW_LENGTH = 4096;
 const BUFFER_SIZE = 1024;
@@ -10,7 +11,7 @@ const BUFFER_SIZE = 1024;
 export class VisualizerVectorscope {
   public readonly gl: WebGL2RenderingContext;
 
-  public mode: 'none' | 'line' | 'points';
+  public mode: 'none' | 'line' | 'crispline' | 'points';
   public color: [ number, number, number, number ];
   public pointSize: number;
   public pointShape: number;
@@ -94,10 +95,15 @@ export class VisualizerVectorscope {
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
-  public render(): void {
+  public render(crispFramebuffer: VisualizerCrispFramebuffer): void {
     if (this.mode === 'none') { return; }
 
     const { gl } = this;
+
+    if (this.mode === 'crispline') {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, crispFramebuffer.framebuffer);
+      crispFramebuffer.usedThisFrame = true;
+    }
 
     gl.useProgram(this.__program);
 
@@ -121,7 +127,11 @@ export class VisualizerVectorscope {
     gl.bindTexture(gl.TEXTURE_2D, this.__textureR);
     gl.uniform1i(this.__locations.samplerR, 1);
 
-    const primitive = this.mode === 'line' ? gl.LINE_STRIP : gl.POINTS;
+    const primitive = this.mode === 'line' || this.mode === 'crispline' ? gl.LINE_STRIP : gl.POINTS;
     gl.drawArrays(primitive, 0, DRAW_LENGTH);
+
+    if (this.mode === 'crispline') {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
   }
 }

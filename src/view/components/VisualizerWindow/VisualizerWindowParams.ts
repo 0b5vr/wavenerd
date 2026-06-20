@@ -3,7 +3,7 @@ export interface VisualizerWindowParams {
   color: { r: number; g: number; b: number };
   opacity: number;
   vectorscope: {
-    mode: 'points' | 'line';
+    mode: 'points' | 'line' | 'crispline';
     scale: number;
     pointSize: number;
     pointShape: number;
@@ -13,9 +13,11 @@ export interface VisualizerWindowParams {
     scale: number;
   };
   spectrum: {
+    mode: 'line' | 'crispline';
     scale: number;
   };
   waveform: {
+    mode: 'line' | 'crispline';
     width: number;
     scale: number;
   };

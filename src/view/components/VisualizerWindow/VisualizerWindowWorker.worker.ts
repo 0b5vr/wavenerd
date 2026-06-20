@@ -44,9 +44,12 @@ function handleUpdateVectorscope(message: VisualizerWindowRequestData & { type: 
   } = message;
 
   visualizer.clear();
+  visualizer.crispFramebuffer.clear();
 
   visualizer.vectorscope.setData(timeDomainL, timeDomainR);
-  visualizer.vectorscope.render();
+  visualizer.vectorscope.render(visualizer.crispFramebuffer);
+
+  visualizer.crispFramebuffer.blit();
 }
 
 function handleUpdateOscilloscope(message: VisualizerWindowRequestData & { type: 'updateOscilloscope' }): void {
@@ -76,9 +79,12 @@ function handleUpdateSpectrum(message: VisualizerWindowRequestData & { type: 'up
   } = message;
 
   visualizer.clear();
+  visualizer.crispFramebuffer.clear();
 
   visualizer.spectrum.setData(frequencyL);
-  visualizer.spectrum.render();
+  visualizer.spectrum.render(visualizer.crispFramebuffer);
+
+  visualizer.crispFramebuffer.blit();
 }
 
 function handleUpdateWaveform(message: VisualizerWindowRequestData & { type: 'updateWaveform' }): void {
@@ -89,9 +95,12 @@ function handleUpdateWaveform(message: VisualizerWindowRequestData & { type: 'up
   } = message;
 
   visualizer.clear();
+  visualizer.crispFramebuffer.clear();
 
   visualizer.waveform.setData(timeDomainL);
-  visualizer.waveform.render();
+  visualizer.waveform.render(visualizer.crispFramebuffer);
+
+  visualizer.crispFramebuffer.blit();
 }
 
 function setParams(params: VisualizerWindowParams): void {
@@ -114,11 +123,11 @@ function setParams(params: VisualizerWindowParams): void {
   visualizer.oscilloscope.color = color;
   visualizer.oscilloscope.scale = params.oscilloscope.scale;
 
-  visualizer.spectrum.mode = 'line';
+  visualizer.spectrum.mode = params.spectrum.mode;
   visualizer.spectrum.color = color;
   visualizer.spectrum.scale = params.spectrum.scale;
 
-  visualizer.waveform.mode = 'line';
+  visualizer.waveform.mode = params.waveform.mode;
   visualizer.waveform.color = color;
   visualizer.waveform.windowWidth = params.waveform.width;
   visualizer.waveform.scale = params.waveform.scale;

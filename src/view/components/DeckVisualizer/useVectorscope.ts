@@ -28,7 +28,7 @@ export function useVectorscope(visualizer: Visualizer | undefined, analyser: Ana
 
     const { timeDomainL, timeDomainR } = analyser;
     visualizer.vectorscope.setData(timeDomainL, timeDomainR);
-    visualizer.vectorscope.render();
+    visualizer.vectorscope.render(visualizer.crispFramebuffer);
   }, [analyser, visualizer]);
 
   if (vectorscopeMode === 'none') {
