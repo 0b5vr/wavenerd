@@ -19,7 +19,8 @@ export class Visualizer {
     const gl = this.gl = canvas.getContext('webgl2')!;
 
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    gl.blendFunc(gl.ONE, gl.ONE);
+    gl.blendEquation(gl.MAX);
     gl.getExtension('EXT_color_buffer_float');
 
     this.crispFramebuffer = new VisualizerCrispFramebuffer(gl);

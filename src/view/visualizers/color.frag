@@ -9,5 +9,5 @@ out vec4 fragColor;
 
 void main() {
   float shape = smoothstep(0.5, 0.499 * pointShape, length(gl_PointCoord - 0.5));
-  fragColor = shape * color;
+  fragColor = shape * vec4(color.rgb, 1.0) * color.a;
 }
