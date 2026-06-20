@@ -1,9 +1,8 @@
 import { saturate } from '@0b5vr/experimental';
 import clsx from 'clsx';
 import styles from './LevelMeter.module.css';
-import useMeasure from 'react-use-measure';
 import { useFrame } from '../utils/useFrame';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { type LevelMeter } from '../../audio/LevelMeter';
 
 export function LevelMeterView({
@@ -17,33 +16,14 @@ export function LevelMeterView({
   peakKey: 'peak' | 'peakL' | 'peakR';
   className?: string;
 }) {
-  const refCanvas = useRef<HTMLCanvasElement>(null);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [refRoot, rectRoot] = useMeasure();
+  const refMaskTop = useRef<HTMLDivElement>(null);
+  const refMaskMid = useRef<HTMLDivElement>(null);
 
-  const canvasWidth = rectRoot.width * window.devicePixelRatio;
-  const canvasHeight = rectRoot.height * window.devicePixelRatio;
-
-  // init / resize canvas
-  useEffect(() => {
-    const canvas = refCanvas.current;
-    if (canvas == null) {
-      return;
-    }
-
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-
-    setContext((prev) => {
-      if (prev != null) { return prev; }
-      return canvas.getContext('2d');
-    });
-  }, [canvasWidth, canvasHeight]);
-
-  // render
   useFrame(
     useCallback(() => {
-      if (context == null) {
+      const maskTop = refMaskTop.current;
+      const maskMid = refMaskMid.current;
+      if (maskTop == null || maskMid == null) {
         return;
       }
 
@@ -53,24 +33,23 @@ export function LevelMeterView({
       const peakTop = 1.0 - p;
       const peakBottom = Math.min(peakTop + 0.02, 1.0);
       const levelTop = 1.0 - l;
+      const midHeight = Math.max(0.0, levelTop - peakBottom);
 
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      context.fillStyle = 'rgba(0, 0, 0, 0.8)';
-      context.fillRect(0, 0, canvasWidth, peakTop * canvasHeight);
-      context.fillRect(0, peakBottom * canvasHeight, canvasWidth, Math.max(0.0, levelTop - peakBottom) * canvasHeight);
-    }, [context, levelMeter, peakKey, levelKey, canvasWidth, canvasHeight]),
+      maskTop.style.transform = `scaleY(${peakTop})`;
+      maskMid.style.transform = `translateY(${peakBottom * 100}%) scaleY(${midHeight})`;
+    }, [levelMeter, peakKey, levelKey]),
   );
 
   return (
-    <div
-      ref={refRoot}
-      className={clsx('relative', className)}
-    >
+    <div className={clsx('relative', className)}>
       <div className={clsx('absolute inset-0', styles.fg)}>
-        <canvas
-          ref={refCanvas}
-          className="absolute inset-0 w-full h-full"
+        <div
+          ref={refMaskTop}
+          className="absolute inset-x-0 top-0 h-full bg-black/80 origin-top will-change-transform"
+        />
+        <div
+          ref={refMaskMid}
+          className="absolute inset-x-0 top-0 h-full bg-black/80 origin-top will-change-transform"
         />
       </div>
     </div>
