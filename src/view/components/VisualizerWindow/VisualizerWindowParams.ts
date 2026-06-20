@@ -3,21 +3,21 @@ export interface VisualizerWindowParams {
   color: { r: number; g: number; b: number };
   opacity: number;
   vectorscope: {
-    mode: 'points' | 'crisppoints' | 'line' | 'crispline';
+    mode: 'points' | 'crisp-points' | 'line' | 'crisp-line';
     scale: number;
     pointSize: number;
     pointShape: number;
   };
   oscilloscope: {
-    mode: 'line' | 'crispline';
+    mode: 'line' | 'crisp-line';
     scale: number;
   };
   spectrum: {
-    mode: 'line' | 'crispline';
+    mode: 'line' | 'crisp-line';
     scale: number;
   };
   waveform: {
-    mode: 'line' | 'crispline';
+    mode: 'line' | 'crisp-line';
     width: number;
     scale: number;
   };

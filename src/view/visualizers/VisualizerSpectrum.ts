@@ -11,7 +11,7 @@ const BUFFER_LENGTH = ANALYSER_FREQUENCY_SIZE;
 export class VisualizerSpectrum {
   public readonly gl: WebGL2RenderingContext;
 
-  public mode: 'none' | 'line' | 'crispline';
+  public mode: 'none' | 'line' | 'crisp-line';
   public color: [ number, number, number, number ];
   public scale: number;
 
@@ -73,7 +73,7 @@ export class VisualizerSpectrum {
 
     const { gl } = this;
 
-    if (this.mode === 'crispline') {
+    if (this.mode === 'crisp-line') {
       gl.bindFramebuffer(gl.FRAMEBUFFER, crispFramebuffer.framebuffer);
       crispFramebuffer.usedThisFrame = true;
     }
@@ -94,7 +94,7 @@ export class VisualizerSpectrum {
 
     gl.drawArrays(gl.LINE_STRIP, 0, BUFFER_LENGTH);
 
-    if (this.mode === 'crispline') {
+    if (this.mode === 'crisp-line') {
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
   }

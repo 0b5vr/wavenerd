@@ -12,7 +12,7 @@ const DRAW_LENGTH = 4096;
 export class VisualizerWaveform {
   public readonly gl: WebGL2RenderingContext;
 
-  public mode: 'none' | 'line' | 'crispline';
+  public mode: 'none' | 'line' | 'crisp-line';
   public color: [number, number, number, number];
   public scale: number;
   public windowWidth: number;
@@ -81,7 +81,7 @@ export class VisualizerWaveform {
 
     const { gl } = this;
 
-    if (this.mode === 'crispline') {
+    if (this.mode === 'crisp-line') {
       gl.bindFramebuffer(gl.FRAMEBUFFER, crispFramebuffer.framebuffer);
       crispFramebuffer.usedThisFrame = true;
     }
@@ -104,7 +104,7 @@ export class VisualizerWaveform {
 
     gl.drawArrays(gl.LINE_STRIP, 0, DRAW_LENGTH);
 
-    if (this.mode === 'crispline') {
+    if (this.mode === 'crisp-line') {
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
   }

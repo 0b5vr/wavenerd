@@ -82,9 +82,9 @@ export function setupVisualizerWindowGUI(
     label: 'Mode',
     options: {
       'Points': 'points',
-      'Crisppoints': 'crisppoints',
+      'Crisp Points': 'crisp-points',
       'Line': 'line',
-      'Crispline': 'crispline',
+      'Crisp Line': 'crisp-line',
     },
   }).on('change', () => callback(params));
 
@@ -115,7 +115,7 @@ export function setupVisualizerWindowGUI(
     label: 'Mode',
     options: {
       'Line': 'line',
-      'Crispline': 'crispline',
+      'Crisp Line': 'crisp-line',
     },
   }).on('change', () => callback(params));
 
@@ -134,7 +134,7 @@ export function setupVisualizerWindowGUI(
     label: 'Mode',
     options: {
       'Line': 'line',
-      'Crispline': 'crispline',
+      'Crisp Line': 'crisp-line',
     },
   }).on('change', () => callback(params));
 
@@ -153,7 +153,7 @@ export function setupVisualizerWindowGUI(
     label: 'Mode',
     options: {
       'Line': 'line',
-      'Crispline': 'crispline',
+      'Crisp Line': 'crisp-line',
     },
   }).on('change', () => callback(params));
 

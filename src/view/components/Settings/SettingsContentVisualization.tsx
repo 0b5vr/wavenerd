@@ -27,9 +27,9 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
-        <option value="crispline">Crispline</option>
+        <option value="crisp-line">Crisp Line</option>
         <option value="points">Points</option>
-        <option value="crisppoints">Crisppoints</option>
+        <option value="crisp-points">Crisp Points</option>
       </SettingsItemSelect>
 
       <SettingsItemRange
@@ -55,7 +55,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
-        <option value="crispline">Crispline</option>
+        <option value="crisp-line">Crisp Line</option>
       </SettingsItemSelect>
 
       <SettingsItemRange
@@ -81,7 +81,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
-        <option value="crispline">Crispline</option>
+        <option value="crisp-line">Crisp Line</option>
       </SettingsItemSelect>
 
       <SettingsItemRange
@@ -107,7 +107,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
-        <option value="crispline">Crispline</option>
+        <option value="crisp-line">Crisp Line</option>
       </SettingsItemSelect>
 
       <SettingsItemRange

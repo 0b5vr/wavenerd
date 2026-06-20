@@ -7,10 +7,10 @@ import { type StorageManager } from './StorageManager';
 
 export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
-export type VectorscopeModeType = 'none' | 'line' | 'crispline' | 'points' | 'crisppoints';
-export type SpectrumModeType = 'none' | 'line' | 'crispline';
-export type OscilloscopeModeType = 'none' | 'line' | 'crispline';
-export type WaveformModeType = 'none' | 'line' | 'crispline';
+export type VectorscopeModeType = 'none' | 'line' | 'crisp-line' | 'points' | 'crisp-points';
+export type SpectrumModeType = 'none' | 'line' | 'crisp-line';
+export type OscilloscopeModeType = 'none' | 'line' | 'crisp-line';
+export type WaveformModeType = 'none' | 'line' | 'crisp-line';
 
 export interface Settings {
   blocksPerRender: number;
