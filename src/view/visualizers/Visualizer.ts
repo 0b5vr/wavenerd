@@ -1,3 +1,4 @@
+import { VisualizerCrispFramebuffer } from './VisualizerCrispFramebuffer';
 import { VisualizerOscilloscope } from './VisualizerOscilloscope';
 import { VisualizerSpectrum } from './VisualizerSpectrum';
 import { VisualizerVectorscope } from './VisualizerVectorscope';
@@ -7,6 +8,7 @@ export class Visualizer {
   public readonly canvas: HTMLCanvasElement;
   public readonly gl: WebGL2RenderingContext;
 
+  public readonly crispFramebuffer: VisualizerCrispFramebuffer;
   public readonly vectorscope: VisualizerVectorscope;
   public readonly spectrum: VisualizerSpectrum;
   public readonly oscilloscope: VisualizerOscilloscope;
@@ -20,6 +22,7 @@ export class Visualizer {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.getExtension('EXT_color_buffer_float');
 
+    this.crispFramebuffer = new VisualizerCrispFramebuffer(gl);
     this.vectorscope = new VisualizerVectorscope(gl);
     this.spectrum = new VisualizerSpectrum(gl);
     this.oscilloscope = new VisualizerOscilloscope(gl);

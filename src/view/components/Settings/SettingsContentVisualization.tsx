@@ -78,6 +78,7 @@ export function SettingsContentVisualization() {
       >
         <option value="none">None</option>
         <option value="line">Line</option>
+        <option value="crispline">Crispline</option>
       </SettingsItemSelect>
 
       <SettingsItemRange

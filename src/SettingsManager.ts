@@ -9,7 +9,7 @@ export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'tran
 
 export type VectorscopeModeType = 'none' | 'line' | 'points';
 export type SpectrumModeType = 'none' | 'line';
-export type OscilloscopeModeType = 'none' | 'line';
+export type OscilloscopeModeType = 'none' | 'line' | 'crispline';
 export type WaveformModeType = 'none' | 'line';
 
 export interface Settings {

@@ -59,10 +59,13 @@ function handleUpdateOscilloscope(message: VisualizerWindowRequestData & { type:
   } = message;
 
   visualizer.clear();
+  visualizer.crispFramebuffer.clear();
 
   visualizer.oscilloscope.setData(timeDomainL);
   visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL, convolverBufferLength);
-  visualizer.oscilloscope.render();
+  visualizer.oscilloscope.render(visualizer.crispFramebuffer);
+
+  visualizer.crispFramebuffer.blit();
 }
 
 function handleUpdateSpectrum(message: VisualizerWindowRequestData & { type: 'updateSpectrum' }): void {
@@ -107,7 +110,7 @@ function setParams(params: VisualizerWindowParams): void {
   visualizer.vectorscope.pointSize = params.vectorscope.pointSize;
   visualizer.vectorscope.pointShape = params.vectorscope.pointShape;
 
-  visualizer.oscilloscope.mode = 'line';
+  visualizer.oscilloscope.mode = params.oscilloscope.mode;
   visualizer.oscilloscope.color = color;
   visualizer.oscilloscope.scale = params.oscilloscope.scale;
 

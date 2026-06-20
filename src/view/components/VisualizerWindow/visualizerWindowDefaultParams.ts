@@ -12,6 +12,7 @@ export const visualizerWindowDefaultParams: VisualizerWindowParams = {
     pointShape: 0.0,
   },
   oscilloscope: {
+    mode: 'line',
     scale: 0.8,
   },
   spectrum: {

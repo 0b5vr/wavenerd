@@ -4,6 +4,7 @@ import { glCreateBuffer } from './gl/glCreateBuffer';
 import { glCreateProgram } from './gl/glCreateProgram';
 import { glCreateTexture } from './gl/glCreateTexture';
 import oscilloscopeVert from './oscilloscope.vert?raw';
+import { type VisualizerCrispFramebuffer } from './VisualizerCrispFramebuffer';
 
 const DRAW_LENGTH = 4096;
 const BUFFER_SIZE = 8192;
@@ -11,7 +12,7 @@ const BUFFER_SIZE = 8192;
 export class VisualizerOscilloscope {
   public readonly gl: WebGL2RenderingContext;
 
-  public mode: 'none' | 'line';
+  public mode: 'none' | 'line' | 'crispline';
   public color: [number, number, number, number];
   public scale: number;
   public windowWidth: number;
@@ -101,10 +102,15 @@ export class VisualizerOscilloscope {
     }
   }
 
-  public render(): void {
+  public render(crispFramebuffer: VisualizerCrispFramebuffer): void {
     if (this.mode === 'none') { return; }
 
     const { gl } = this;
+
+    if (this.mode === 'crispline') {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, crispFramebuffer.framebuffer);
+      crispFramebuffer.usedThisFrame = true;
+    }
 
     gl.useProgram(this.__program);
 
@@ -123,7 +129,10 @@ export class VisualizerOscilloscope {
     gl.bindTexture(gl.TEXTURE_2D, this.__textureL);
     gl.uniform1i(this.__locations.samplerL, 0);
 
-    const primitive = this.mode === 'line' ? gl.LINE_STRIP : gl.POINTS;
-    gl.drawArrays(primitive, 0, DRAW_LENGTH);
+    gl.drawArrays(gl.LINE_STRIP, 0, DRAW_LENGTH);
+
+    if (this.mode === 'crispline') {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
   }
 }

@@ -9,6 +9,7 @@ export interface VisualizerWindowParams {
     pointShape: number;
   };
   oscilloscope: {
+    mode: 'line' | 'crispline';
     scale: number;
   };
   spectrum: {

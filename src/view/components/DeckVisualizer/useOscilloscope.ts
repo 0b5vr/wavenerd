@@ -31,7 +31,7 @@ export function useOscilloscope(visualizer: Visualizer | undefined, analyser: An
     const { timeDomainL, timeDomainLoL } = analyser;
     visualizer.oscilloscope.setData(timeDomainL);
     visualizer.oscilloscope.calcZeroCrossing(timeDomainLoL, analyser.convolverBufferLength);
-    visualizer.oscilloscope.render();
+    visualizer.oscilloscope.render(visualizer.crispFramebuffer);
   }, [analyser, visualizer]);
 
   if (oscilloscopeMode === 'none') {

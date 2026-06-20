@@ -109,6 +109,14 @@ export function setupVisualizerWindowGUI(
     expanded: false,
   }).on('change', () => callback(params));
 
+  oscilloscopeFolder.addBinding(params.oscilloscope, 'mode', {
+    label: 'Mode',
+    options: {
+      'Line': 'line',
+      'Crispline': 'crispline',
+    },
+  }).on('change', () => callback(params));
+
   oscilloscopeFolder.addBinding(params.oscilloscope, 'scale', {
     label: 'Scale',
     min: 0.0,
