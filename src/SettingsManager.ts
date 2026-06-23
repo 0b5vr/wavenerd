@@ -34,6 +34,7 @@ export interface Settings {
   waveformOpacity: number;
   waveformColor: string;
   theme: string;
+  uiMargin: string;
   headerItems: string;
   headerIcons: string;
   deckBShow: boolean;
@@ -73,6 +74,7 @@ export const defaultSettings: Settings = {
   waveformOpacity: 0.2,
   waveformColor: '#ffffff',
   theme: 'monokaiSharp',
+  uiMargin: '0px 0px 0px 0px',
   headerItems: 'logo,transport,time,beat-number,bpm,nudge',
   headerIcons: 'recorder,midi,settings,help,github',
   deckBShow: true,

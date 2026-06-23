@@ -20,6 +20,13 @@ export function SettingsContentAppearance() {
       </SettingsItemSelect>
 
       <SettingsItemText
+        settingsKey="uiMargin"
+        name="UI Margin"
+        resettable
+        stalkerText="Change the margin of the entire UI.&#10;CSS syntax is supported."
+      />
+
+      <SettingsItemText
         settingsKey="headerItems"
         name="Header Items"
         resettable

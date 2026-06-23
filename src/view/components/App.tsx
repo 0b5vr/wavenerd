@@ -52,6 +52,7 @@ function useFocusDeckShortcuts({
 export function OutOfContextApp() {
   const { deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
 
+  const uiMargin = useSettings('uiMargin');
   const deckBShow = useSettings('deckBShow');
   const libraryShow = useSettings('libraryShow');
   const mixerShow = useSettings('mixerShow');
@@ -84,58 +85,60 @@ export function OutOfContextApp() {
     <>
       <ThemeStyle />
 
-      <div className="fixed inset-0 flex flex-col text-fore bg-back2 font-sans">
-        <Header className="h-8" />
-        <div className="flex justify-between flex-row grow gap-0.5">
-          <div className="flex flex-col grow">
-            <Deck
-              ref={refDeckA}
-              className="grow"
-              codeAtom={deckACodeAtom}
-              hasEditAtom={deckAHasEditAtom}
-              errorAtom={deckAErrorAtom}
-              cueStatusAtom={deckACueStatusAtom}
-              compileTimeAtom={deckACompileTimeAtom}
-              analyser={mixer.analyserInA}
-              deck={deckA}
-              storagePath="decks/a.glsl"
-              gainParamName="/mixer/channel_a/gain"
-              filterParamName="/mixer/channel_a/filter"
-            />
-            <DeckKnobs className="h-16" paramPrefix="/deck_a" />
-          </div>
-          {showCenterColumn && (
-            <div className="flex justify-end flex-col w-48">
-              {libraryShow && (
-                <AssetList className="grow" />
-              )}
-              {mixerShow && (
-                <>
-                  <MixerView className="py-2" />
-                  <XFader className="w-40 h-10 my-2 mx-4" />
-                </>
-              )}
-            </div>
-          )}
-          {deckBShow && (
+      <div className="fixed inset-0 text-fore bg-back2 font-sans">
+        <div className="absolute inset-0 flex flex-col" style={{ margin: uiMargin }}>
+          <Header className="h-8" />
+          <div className="flex justify-between flex-row grow gap-0.5">
             <div className="flex flex-col grow">
               <Deck
-                ref={refDeckB}
+                ref={refDeckA}
                 className="grow"
-                codeAtom={deckBCodeAtom}
-                hasEditAtom={deckBHasEditAtom}
-                errorAtom={deckBErrorAtom}
-                analyser={mixer.analyserInB}
-                cueStatusAtom={deckBCueStatusAtom}
-                compileTimeAtom={deckBCompileTimeAtom}
-                deck={deckB}
-                storagePath="decks/b.glsl"
-                gainParamName="/mixer/channel_b/gain"
-                filterParamName="/mixer/channel_b/filter"
+                codeAtom={deckACodeAtom}
+                hasEditAtom={deckAHasEditAtom}
+                errorAtom={deckAErrorAtom}
+                cueStatusAtom={deckACueStatusAtom}
+                compileTimeAtom={deckACompileTimeAtom}
+                analyser={mixer.analyserInA}
+                deck={deckA}
+                storagePath="decks/a.glsl"
+                gainParamName="/mixer/channel_a/gain"
+                filterParamName="/mixer/channel_a/filter"
               />
-              <DeckKnobs className="h-16" paramPrefix="/deck_b" />
+              <DeckKnobs className="h-16" paramPrefix="/deck_a" />
             </div>
-          )}
+            {showCenterColumn && (
+              <div className="flex justify-end flex-col w-48">
+                {libraryShow && (
+                  <AssetList className="grow" />
+                )}
+                {mixerShow && (
+                  <>
+                    <MixerView className="py-2" />
+                    <XFader className="w-40 h-10 my-2 mx-4" />
+                  </>
+                )}
+              </div>
+            )}
+            {deckBShow && (
+              <div className="flex flex-col grow">
+                <Deck
+                  ref={refDeckB}
+                  className="grow"
+                  codeAtom={deckBCodeAtom}
+                  hasEditAtom={deckBHasEditAtom}
+                  errorAtom={deckBErrorAtom}
+                  analyser={mixer.analyserInB}
+                  cueStatusAtom={deckBCueStatusAtom}
+                  compileTimeAtom={deckBCompileTimeAtom}
+                  deck={deckB}
+                  storagePath="decks/b.glsl"
+                  gainParamName="/mixer/channel_b/gain"
+                  filterParamName="/mixer/channel_b/filter"
+                />
+                <DeckKnobs className="h-16" paramPrefix="/deck_b" />
+              </div>
+            )}
+          </div>
         </div>
 
         <SettingsModal />
