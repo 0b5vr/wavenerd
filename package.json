@@ -54,7 +54,7 @@
     "tweakpane": "^4.0.5",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.70.1",
-    "unplugin-icons": "^23.0.1",
+    "unplugin-icons": "^24.0.0",
     "vite": "^8.3.1"
   }
 }
