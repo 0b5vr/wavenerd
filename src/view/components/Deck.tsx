@@ -9,7 +9,7 @@ import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
-import { DeckBraceJumpMap } from './DeckBraceJumpMap';
+import { DeckBraceJumpMap, type DeckBraceJumpMapHandle } from './DeckBraceJumpMap';
 import { StuffContext } from '../StuffContext';
 import styles from './Deck.module.css';
 import clsx from 'clsx';
@@ -121,9 +121,12 @@ export const Deck = forwardRef(({
     [deck, handleCompile],
   );
 
-  const refBraceJumpMap = useRef<{ update: (index: number) => void }>(null);
+  const refBraceJumpMap = useRef<DeckBraceJumpMapHandle>(null);
   const handleBraceJump = useCallback((index: number) => {
     refBraceJumpMap.current?.update(index);
+  }, []);
+  const handleToggleComment = useCallback(() => {
+    refBraceJumpMap.current?.extend();
   }, []);
 
   // -- init ---------------------------------------------------------------------------------------
@@ -168,6 +171,7 @@ export const Deck = forwardRef(({
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
         onBraceJump={handleBraceJump}
+        onToggleComment={handleToggleComment}
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
       />

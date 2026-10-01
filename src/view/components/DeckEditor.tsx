@@ -91,6 +91,7 @@ export const DeckEditor = forwardRef(({
   onApply,
   onApplyImmediately,
   onBraceJump,
+  onToggleComment,
   memoryUpdateAtom,
   libraryOpeningAtom,
   className,
@@ -104,6 +105,7 @@ export const DeckEditor = forwardRef(({
   onApply: () => void;
   onApplyImmediately: () => void;
   onBraceJump?: (index: number) => void;
+  onToggleComment?: () => void;
   memoryUpdateAtom: PrimitiveAtom<{
     renderKey: number;
     memoryKey: string;
@@ -238,9 +240,16 @@ export const DeckEditor = forwardRef(({
         },
       },
     ]),
+    {
+      key: 'Mod-/',
+      run: () => {
+        onToggleComment?.();
+        return false; // fall through to toggleComment in defaultKeymap
+      },
+    },
     ...braceJumpKeymap({ onBraceJump }),
     ...defaultKeymap,
-  ], [onCompile, onApply, onApplyImmediately, onBraceJump, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
+  ], [onCompile, onApply, onApplyImmediately, onBraceJump, onToggleComment, setLibraryOpening, handleLoadMemory, handleSaveMemory]);
 
   // -- error layer --------------------------------------------------------------------------------
   const error = useAtomValue(errorAtom);
