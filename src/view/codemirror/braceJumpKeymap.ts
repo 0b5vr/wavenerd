@@ -74,7 +74,7 @@ const braceExtend = (view: EditorView, dir: -1 | 1, onBraceJump?: (index: number
 
   // if there are no selected brace pairs, perform the brace jump instead
   if (selectedIndices.length === 0) {
-    return braceJump(view, dir);
+    return braceJump(view, dir, onBraceJump);
   }
 
   // make sure the selected brace pairs are siblings

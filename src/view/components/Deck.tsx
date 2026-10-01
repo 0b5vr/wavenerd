@@ -44,6 +44,7 @@ export const Deck = forwardRef(({
   // -- atoms and state ----------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
+  const editorSelectionAtom = useMemo(() => atom({ from: 0, to: 0 }), []);
   const memoryUpdateAtom = useMemo(() => atom<{
     renderKey: number;
     memoryKey: string;
@@ -159,6 +160,7 @@ export const Deck = forwardRef(({
         ref={refEditor}
         className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
+        editorSelectionAtom={editorSelectionAtom}
         logsAtom={logsAtom}
         errorAtom={errorAtom}
         hasEditAtom={hasEditAtom}
@@ -192,6 +194,7 @@ export const Deck = forwardRef(({
         ref={refBraceJumpMap}
         className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
+        editorSelectionAtom={editorSelectionAtom}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
       {focusHighlightKey > 0 && (

@@ -26,9 +26,10 @@ function getCommentPositions(str: string): number[] {
 }
 
 // == microcomponents ==============================================================================
-function BracePair({ str, distanceFromCenter }: {
+function BracePair({ str, distanceFromCenter, isSelected }: {
   str: string | undefined;
   distanceFromCenter: number;
+  isSelected: boolean;
 }) {
   const font = useSettings('editorFont');
   const fontVariantLigatures = useSettings('editorFontVariantLigatures');
@@ -52,6 +53,7 @@ function BracePair({ str, distanceFromCenter }: {
   const pairCls = clsx(
     'pl-1 whitespace-pre',
     distanceFromCenter === 0 && 'border border-fore',
+    isSelected && 'bg-fore/25',
   );
 
   if (str === undefined) {
@@ -83,11 +85,13 @@ function BracePair({ str, distanceFromCenter }: {
 // == component ====================================================================================
 interface Props {
   codeAtom: PrimitiveAtom<string>;
+  editorSelectionAtom: PrimitiveAtom<{ from: number; to: number }>;
   className?: string;
 }
 
 const DeckBraceJumpMapInside = forwardRef(({
   codeAtom,
+  editorSelectionAtom,
   className,
 }: Props, ref: React.Ref<{ update: (index: number) => void }>) => {
   const scale = useSettings('editorBraceJumpMapScale');
@@ -96,6 +100,7 @@ const DeckBraceJumpMapInside = forwardRef(({
   const [key, setKey] = useState(0);
 
   const code = useAtomValue(codeAtom);
+  const selection = useAtomValue(editorSelectionAtom);
   const bracePairs = useMemo(() => findAllBracePairs(code), [code]);
 
   const update = useCallback((index: number) => {
@@ -114,13 +119,19 @@ const DeckBraceJumpMapInside = forwardRef(({
         )}
         style={{ transform: `scale(${scale})` }}
       >
-        {arraySerial(21).map((i) => (
-          <BracePair
-            key={i}
-            distanceFromCenter={i - 10}
-            str={bracePairs[centerIndex + i - 10]?.firstLine}
-          />
-        ))}
+        {arraySerial(21).map((i) => {
+          const pair = bracePairs[centerIndex + i - 10];
+          const isSelected = pair != null && selection.from <= pair.from && pair.to <= selection.to;
+
+          return (
+            <BracePair
+              key={i}
+              distanceFromCenter={i - 10}
+              str={pair?.firstLine}
+              isSelected={isSelected}
+            />
+          );
+        })}
       </div>
     </div>
   );

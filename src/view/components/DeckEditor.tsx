@@ -1,7 +1,7 @@
 import { EditorView, type KeyBinding, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
-import ReactCodeMirror, { Prec, type ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import ReactCodeMirror, { Prec, type ReactCodeMirrorRef, type ViewUpdate } from '@uiw/react-codemirror';
 import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import { backlayer } from '../codemirror/backlayer';
@@ -83,6 +83,7 @@ function keyToLog(event: KeyboardEvent): string | null {
 // == component ====================================================================================
 export const DeckEditor = forwardRef(({
   codeAtom,
+  editorSelectionAtom,
   logsAtom,
   errorAtom,
   hasEditAtom,
@@ -95,6 +96,7 @@ export const DeckEditor = forwardRef(({
   className,
 }: {
   codeAtom: PrimitiveAtom<string>;
+  editorSelectionAtom: PrimitiveAtom<{ from: number; to: number }>;
   logsAtom: PrimitiveAtom<[ id: number, text: string ][]>;
   errorAtom: PrimitiveAtom<string | null>;
   hasEditAtom: PrimitiveAtom<boolean>;
@@ -115,6 +117,7 @@ export const DeckEditor = forwardRef(({
   const refCodeMirror = useRef<ReactCodeMirrorRef>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [code, setCode] = useAtom(codeAtom);
+  const setSelection = useSetAtom(editorSelectionAtom);
   const setMemoryUpdate = useSetAtom(memoryUpdateAtom);
   const setLibraryOpening = useSetAtom(libraryOpeningAtom);
   const setHasEdit = useSetAtom(hasEditAtom);
@@ -274,6 +277,16 @@ export const DeckEditor = forwardRef(({
     [setCode, setHasEdit],
   );
 
+  const handleUpdate = useCallback(
+    (update: ViewUpdate) => {
+      if (update.selectionSet || update.docChanged) {
+        const { from, to } = update.state.selection.main;
+        setSelection({ from, to });
+      }
+    },
+    [setSelection],
+  );
+
   const handleFile = useCallback(
     (files: FileList) => {
       const file = files && files[0];
@@ -377,6 +390,7 @@ export const DeckEditor = forwardRef(({
           ]}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
+          onUpdate={handleUpdate}
         />
       </SimpleBar>
       {isDragging && (
