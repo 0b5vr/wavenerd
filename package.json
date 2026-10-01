@@ -13,7 +13,7 @@
     "lint-fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@0b5vr/experimental": "^0.9.10",
+    "@0b5vr/experimental": "^0.11.0",
     "@0b5vr/wavenerd-deck": "^0.9.0",
     "@codemirror/commands": "^6.11.1",
     "@codemirror/lang-cpp": "^6.0.2",
