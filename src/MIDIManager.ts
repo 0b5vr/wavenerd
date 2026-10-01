@@ -131,7 +131,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
   }
 
   private __handleMidiMessage(
-    event: WebMidi.MIDIMessageEvent,
+    event: MIDIMessageEvent,
     deviceId: string,
     deviceName: string,
   ): void {
