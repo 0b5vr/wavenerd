@@ -9,7 +9,7 @@ import { DeckLog } from './DeckLog';
 import { DeckMemoryUpdateBalloon } from './DeckMemoryUpdateBalloon';
 import { DeckVisualizer } from './DeckVisualizer/DeckVisualizer';
 import { DeckLibrary } from './DeckLibrary';
-import { DeckBraceJumpMap } from './DeckBraceJumpMap';
+import { DeckBraceJumpMap, type DeckBraceJumpMapHandle } from './DeckBraceJumpMap';
 import { StuffContext } from '../StuffContext';
 import styles from './Deck.module.css';
 import clsx from 'clsx';
@@ -44,6 +44,7 @@ export const Deck = forwardRef(({
   // -- atoms and state ----------------------------------------------------------------------------
   const libraryOpeningAtom = useMemo(() => atom(false), []);
   const logsAtom = useMemo(() => atom<[ id: number, text: string ][]>([]), []);
+  const editorSelectionAtom = useMemo(() => atom({ from: 0, to: 0 }), []);
   const memoryUpdateAtom = useMemo(() => atom<{
     renderKey: number;
     memoryKey: string;
@@ -120,9 +121,12 @@ export const Deck = forwardRef(({
     [deck, handleCompile],
   );
 
-  const refBraceJumpMap = useRef<{ update: (index: number) => void }>(null);
+  const refBraceJumpMap = useRef<DeckBraceJumpMapHandle>(null);
   const handleBraceJump = useCallback((index: number) => {
     refBraceJumpMap.current?.update(index);
+  }, []);
+  const handleToggleComment = useCallback(() => {
+    refBraceJumpMap.current?.extend();
   }, []);
 
   // -- init ---------------------------------------------------------------------------------------
@@ -159,6 +163,7 @@ export const Deck = forwardRef(({
         ref={refEditor}
         className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
+        editorSelectionAtom={editorSelectionAtom}
         logsAtom={logsAtom}
         errorAtom={errorAtom}
         hasEditAtom={hasEditAtom}
@@ -166,6 +171,7 @@ export const Deck = forwardRef(({
         onApply={handleApply}
         onApplyImmediately={handleApplyImmediately}
         onBraceJump={handleBraceJump}
+        onToggleComment={handleToggleComment}
         memoryUpdateAtom={memoryUpdateAtom}
         libraryOpeningAtom={libraryOpeningAtom}
       />
@@ -192,6 +198,7 @@ export const Deck = forwardRef(({
         ref={refBraceJumpMap}
         className="absolute left-0 top-0 w-full h-[calc(100%-24px)]"
         codeAtom={codeAtom}
+        editorSelectionAtom={editorSelectionAtom}
       />
       <DeckMemoryUpdateBalloon memoryUpdateAtom={memoryUpdateAtom} />
       {focusHighlightKey > 0 && (
