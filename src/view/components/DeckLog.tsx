@@ -16,12 +16,11 @@ function DeckLogInside({ logsAtom }: Props) {
         <div
           key={id}
           className={`text-xs px-1 rounded bg-overlay-back text-fore ${styles.logEntry}`}
-          style={{
-            font,
-            fontVariantLigatures: 'none',
-          }}
+          style={{ font }}
         >
-          {text}
+          <span style={{ fontVariantLigatures: 'none' }}>
+            {text}
+          </span>
         </div>
       ))}
     </div>

@@ -60,9 +60,9 @@ function BracePair({ str, distanceFromCenter, isSelected }: {
     return (
       <div
         className={pairCls}
-        style={{ font, fontVariantLigatures }}
+        style={{ font }}
       >
-        <span className="text-fore">&nbsp;</span>
+        <span className="text-fore" style={{ fontVariantLigatures }}>&nbsp;</span>
       </div>
     );
   }
@@ -70,13 +70,15 @@ function BracePair({ str, distanceFromCenter, isSelected }: {
   return (
     <div
       className={pairCls}
-      style={{ font, fontVariantLigatures }}
+      style={{ font }}
     >
-      <span className={isCommentLine ? 'text-gray' : 'text-fore'}>
-        {str.substring(0, commentHighlightPos)}
-      </span>
-      <span className={isCommentLine ? 'text-accent-gray' : 'text-accent'}>
-        {str.substring(commentHighlightPos)}
+      <span style={{ fontVariantLigatures }}>
+        <span className={isCommentLine ? 'text-gray' : 'text-fore'}>
+          {str.substring(0, commentHighlightPos)}
+        </span>
+        <span className={isCommentLine ? 'text-accent-gray' : 'text-accent'}>
+          {str.substring(commentHighlightPos)}
+        </span>
       </span>
     </div>
   );
