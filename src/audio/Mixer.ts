@@ -3,7 +3,6 @@ import { Analyser } from './Analyser';
 import { DCRemovalUnit } from './DCRemovalUnit';
 import { EventEmittable } from '../utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
-import { SETTINGSMAN } from '../SettingsManager';
 import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
 import { xfaderCurveLinear } from './xfaderCurveLinear';
@@ -12,7 +11,7 @@ import { LINEAR_RAMP_TIME } from './constants';
 import { HardClipNode } from './HardClipNode';
 import { LookaheadLimiterNode } from './LookaheadLimiterNode';
 
-export type XFaderModeType = 'constantPower' | 'cut' | 'linear' | 'transition';
+export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 export type MasterLimiterModeType = 'none' | 'hardClip' | 'lookahead';
 
 interface MixerChangeEvent {
@@ -50,6 +49,16 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.__xFaderPos = value;
     this.__updateXFaderGains();
     this.__emit('change', { xfaderPos: value });
+  }
+
+  private __xFaderMode: XFaderModeType = 'transition';
+  public get xFaderMode(): XFaderModeType {
+    return this.__xFaderMode;
+  }
+
+  public set xFaderMode(value: XFaderModeType) {
+    this.__xFaderMode = value;
+    this.__updateXFaderGains();
   }
 
   private __dcRemoval = false;
@@ -133,12 +142,6 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.levelMeterInB = new LevelMeter(this.analyserInB);
     this.levelMeterOut = new LevelMeter(this.analyserOut);
 
-    SETTINGSMAN.on('change', ({ xfaderMode }) => {
-      if (xfaderMode != null) {
-        this.__updateXFaderGains();
-      }
-    });
-
     this.__channelA.on('change', (event) => this.__emit('change', { channelA: event }));
     this.__channelB.on('change', (event) => this.__emit('change', { channelB: event }));
   }
@@ -164,7 +167,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
 
   private __getXFaderValue(): [ number, number ] {
     const x = this.__xFaderPos;
-    const mode = SETTINGSMAN.values.xfaderMode;
+    const mode = this.__xFaderMode;
 
     if (mode === 'none') {
       return [1.0, 1.0];

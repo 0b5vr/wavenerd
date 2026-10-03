@@ -226,6 +226,10 @@ function applySettings(settings: Partial<Settings>) {
     mixer.masterLimiterMode = settings.masterLimiterMode;
   }
 
+  if (settings.xfaderMode != null) {
+    mixer.xFaderMode = settings.xfaderMode;
+  }
+
   if (settings.eqMode != null) {
     mixer.channelA.replaceEQ(settings.eqMode);
     mixer.channelB.replaceEQ(settings.eqMode);

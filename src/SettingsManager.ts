@@ -1,11 +1,9 @@
 import { EventEmittable } from './utils/EventEmittable';
 import { type MixerEQMode, type MixerFilterMode } from './audio/MixerChannel';
-import { type MasterLimiterModeType } from './audio/Mixer';
+import { type MasterLimiterModeType, type XFaderModeType } from './audio/Mixer';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
 import { throttle } from 'throttle-debounce';
 import { type StorageManager } from './StorageManager';
-
-export type XFaderModeType = 'none' | 'constantPower' | 'cut' | 'linear' | 'transition';
 
 export type VectorscopeModeType = 'none' | 'line' | 'crisp-line' | 'points' | 'crisp-points';
 export type SpectrumModeType = 'none' | 'line' | 'crisp-line';
