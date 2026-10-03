@@ -51,7 +51,7 @@ export class MixerFilterGate extends MixerFilter {
     const hpfGain = Math.sqrt(linearstep(1.0, 0.5, value));
     this.__blendHPF.gain.linearRampToValueAtTime(hpfGain, time);
 
-    this.__emit('change', { filter: value });
+    this.onChange.notify({ filter: value });
   }
 
   public get input(): AudioNode {

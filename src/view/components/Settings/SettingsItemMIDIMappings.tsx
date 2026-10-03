@@ -12,11 +12,13 @@ function MappingItem({ midiKey, paramKey }: { midiKey: string; paramKey: string 
   const [eventIndex, setEventIndex] = useState(0);
 
   useEffect(() => {
-    MIDIMAN.on('paramChange', ({ midiKey: eventMidiKey }) => {
+    const unsubscribeParamChange = MIDIMAN.onParamChange.subscribe(({ midiKey: eventMidiKey }) => {
       if (eventMidiKey === midiKey) {
         setEventIndex((i) => i + 1);
       }
     });
+
+    return unsubscribeParamChange;
   }, [midiKey]);
 
   const handleClickRemove = useCallback(() => {

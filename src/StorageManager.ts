@@ -1,14 +1,16 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { Observable } from './utils/Observable';
 
-interface StorageManagerEvents {
-  init: void;
-  save: { path: string };
-  delete: { path: string };
+interface StorageFileEvent {
+  path: string;
 }
 
-export class StorageManager extends EventEmittable<StorageManagerEvents> {
+export class StorageManager {
   private __root?: FileSystemDirectoryHandle;
   private __directoryCache = new Map<string, FileSystemDirectoryHandle>();
+
+  public readonly onInit = new Observable();
+  public readonly onSave = new Observable<StorageFileEvent>();
+  public readonly onDelete = new Observable<StorageFileEvent>();
 
   public async init(): Promise<void> {
     try {
@@ -17,7 +19,7 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
       console.warn('OPFS not available:', error);
     }
 
-    this.__emit('init');
+    this.onInit.notify();
   }
 
   public async save(path: string, content: BufferSource | Blob | string): Promise<void> {
@@ -34,7 +36,7 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
     await writable.write(content);
     await writable.close();
 
-    this.__emit('save', { path: this.__normalizePath(path) });
+    this.onSave.notify({ path: this.__normalizePath(path) });
   }
 
   public async delete(path: string): Promise<void> {
@@ -48,7 +50,7 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
 
     await targetDir.removeEntry(fileName);
 
-    this.__emit('delete', { path: this.__normalizePath(path) });
+    this.onDelete.notify({ path: this.__normalizePath(path) });
   }
 
   /**

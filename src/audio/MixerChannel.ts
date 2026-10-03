@@ -1,5 +1,5 @@
+import { Observable } from '../utils/Observable';
 import { type MixerEQ, type MixerEQChangeEvent } from './MixerEQ';
-import { EventEmittable } from '../utils/EventEmittable';
 import { MixerEQIsolator } from './MixerEQIsolator';
 import { MixerEQNone } from './MixerEQNone';
 import { type MixerFilter, type MixerFilterChangeEvent } from './MixerFilter';
@@ -20,11 +20,7 @@ export interface MixerChannelChangeEvent {
   volume?: number;
 }
 
-interface MixerChannelEvents {
-  change: MixerChannelChangeEvent;
-}
-
-export class MixerChannel extends EventEmittable<MixerChannelEvents> {
+export class MixerChannel {
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -41,7 +37,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNode.gain.linearRampToValueAtTime(this.__gain, time);
 
-    this.__emit('change', { gain: value });
+    this.onChange.notify({ gain: value });
   }
 
   private __volume = 1.0;
@@ -55,7 +51,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeOut.gain.linearRampToValueAtTime(this.__volume, time);
 
-    this.__emit('change', { volume: value });
+    this.onChange.notify({ volume: value });
   }
 
   private __eq: MixerEQ;
@@ -63,14 +59,14 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     return this.__eq;
   }
 
-  private __eqChangeHandler: (event: MixerEQChangeEvent) => void;
+  private __unsubscribeEQ: () => void;
 
   private __filter: MixerFilter;
   public get filter(): MixerFilter {
     return this.__filter;
   }
 
-  private __filterChangeHandler: (event: MixerFilterChangeEvent) => void;
+  private __unsubscribeFilter: () => void;
 
   private __gainNode: GainNode;
   private __gainNodeOut: GainNode;
@@ -88,9 +84,9 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     return this.__gainNodeOutForAnal;
   }
 
-  public constructor(audio: AudioContext) {
-    super();
+  public readonly onChange = new Observable<MixerChannelChangeEvent>();
 
+  public constructor(audio: AudioContext) {
     this.__audio = audio;
 
     this.__gainNode = audio.createGain();
@@ -99,14 +95,14 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
 
     this.__eq = new MixerEQNone(audio);
 
-    this.__eqChangeHandler = this.__eq.on('change', (event) => (
-      this.__emit('change', { eq: event })
+    this.__unsubscribeEQ = this.__eq.onChange.subscribe((event) => (
+      this.onChange.notify({ eq: event })
     ));
 
     this.__filter = new MixerFilterNone(audio);
 
-    this.__filterChangeHandler = this.__filter.on('change', (event) => (
-      this.__emit('change', { filter: event })
+    this.__unsubscribeFilter = this.__filter.onChange.subscribe((event) => (
+      this.onChange.notify({ filter: event })
     ));
 
     this.__gainNode.connect(this.__eq.input);
@@ -118,7 +114,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
   public replaceEQ(mode: MixerEQMode): void {
     const { low, mid, high } = this.__eq;
 
-    this.__eq.off('change', this.__eqChangeHandler);
+    this.__unsubscribeEQ();
 
     this.__gainNode.disconnect();
     this.__eq.output.disconnect();
@@ -133,8 +129,8 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
     this.__eq.mid = mid;
     this.__eq.high = high;
 
-    this.__eqChangeHandler = this.__eq.on('change', (event) => (
-      this.__emit('change', { eq: event })
+    this.__unsubscribeEQ = this.__eq.onChange.subscribe((event) => (
+      this.onChange.notify({ eq: event })
     ));
 
     this.__gainNode.connect(this.__eq.input);
@@ -144,7 +140,7 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
   public replaceFilter(mode: MixerFilterMode): void {
     const { filter } = this.__filter;
 
-    this.__filter.off('change', this.__filterChangeHandler);
+    this.__unsubscribeFilter();
 
     this.__eq.output.disconnect();
     this.__filter.output.disconnect();
@@ -159,8 +155,8 @@ export class MixerChannel extends EventEmittable<MixerChannelEvents> {
 
     this.__filter.filter = filter;
 
-    this.__filterChangeHandler = this.__filter.on('change', (event) => (
-      this.__emit('change', { filter: event })
+    this.__unsubscribeFilter = this.__filter.onChange.subscribe((event) => (
+      this.onChange.notify({ filter: event })
     ));
 
     this.__eq.output.connect(this.__filter.input);

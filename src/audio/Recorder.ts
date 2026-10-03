@@ -1,4 +1,4 @@
-import { EventEmittable } from '../utils/EventEmittable';
+import { Observable } from '../utils/Observable';
 import { type RecordingSession } from './RecordingSession';
 import { WavRecordingSession } from './WavRecordingSession';
 import { NativeMediaRecordingSession } from './NativeMediaRecordingSession';
@@ -38,12 +38,7 @@ const formatConfigs: Record<string, FormatConfig> = {
   },
 };
 
-interface RecorderEvents {
-  start: void;
-  stop: void;
-}
-
-export class Recorder extends EventEmittable<RecorderEvents> {
+export class Recorder {
   public static getAvailableFormats(): FormatConfig[] {
     return Object.values(formatConfigs).filter((config) => {
       if (config.format === 'wav') return true; // always available via RecorderNode
@@ -70,9 +65,10 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     return this.__inputGain;
   }
 
-  public constructor(audio: AudioContext) {
-    super();
+  public readonly onStart = new Observable();
+  public readonly onStop = new Observable();
 
+  public constructor(audio: AudioContext) {
     this.audio = audio;
 
     this.__inputGain = new GainNode(audio);
@@ -97,7 +93,7 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     }
 
     this.__recordingStartTime = Date.now();
-    this.__emit('start');
+    this.onStart.notify();
   }
 
   public stop() {
@@ -110,6 +106,6 @@ export class Recorder extends EventEmittable<RecorderEvents> {
     this.__session = null;
     this.__recordingStartTime = null;
 
-    this.__emit('stop');
+    this.onStop.notify();
   }
 }

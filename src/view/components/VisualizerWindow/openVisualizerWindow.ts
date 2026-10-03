@@ -36,13 +36,12 @@ export function openVisualizerWindow(analyser: Analyser, frameEmitter: FrameEmit
     visualizerWindow.close();
   });
 
-  const update = () => {
+  const unsubscribeUpdate = frameEmitter.onUpdate.subscribe(() => {
     if (visualizerWindow.closed) {
-      frameEmitter.off('update', update);
+      unsubscribeUpdate();
       return;
     }
 
     proxy.update();
-  };
-  frameEmitter.on('update', update);
+  });
 }

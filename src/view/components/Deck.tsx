@@ -142,11 +142,9 @@ export const Deck = forwardRef(({
     };
     initCode();
 
-    const handleInit = storageManager.on('init', initCode);
+    const unsubscribeInit = storageManager.onInit.subscribe(initCode);
 
-    return () => {
-      storageManager.off('init', handleInit);
-    };
+    return unsubscribeInit;
   }, [storageManager, storagePath, handleLoad, handleApplyImmediately]);
 
   // -- imperative handle --------------------------------------------------------------------------

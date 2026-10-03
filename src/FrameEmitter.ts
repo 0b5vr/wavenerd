@@ -1,16 +1,17 @@
+import { Observable } from './utils/Observable';
 import { ClockRealtime } from '@0b5vr/experimental';
-import { EventEmittable } from './utils/EventEmittable';
 
-interface FrameEmitterEvents {
-  update: { time: number; deltaTime: number };
+interface FrameEmitterUpdateEvent {
+  time: number;
+  deltaTime: number;
 }
 
-export class FrameEmitter extends EventEmittable<FrameEmitterEvents> {
+export class FrameEmitter {
   private _clock: ClockRealtime;
 
-  constructor() {
-    super();
+  public readonly onUpdate = new Observable<FrameEmitterUpdateEvent>();
 
+  constructor() {
     this._clock = new ClockRealtime();
     this._clock.play();
 
@@ -23,6 +24,6 @@ export class FrameEmitter extends EventEmittable<FrameEmitterEvents> {
     this._clock.update();
     const { time, deltaTime } = this._clock;
 
-    this.__emit('update', { time, deltaTime });
+    this.onUpdate.notify({ time, deltaTime });
   }
 }

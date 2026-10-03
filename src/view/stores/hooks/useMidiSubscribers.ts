@@ -10,14 +10,14 @@ function useMidiParamsSubscriber(midiManager: MidiManager) {
   useEffect(() => {
     setMidiParams(midiManager.values);
 
-    const handleParamChange = midiManager.on('paramChange', ({ paramKey, value }) => {
+    const unsubscribeParamChange = midiManager.onParamChange.subscribe(({ paramKey, value }) => {
       setMidiParams((prev) => ({
         ...prev,
         [paramKey]: value,
       }));
     });
 
-    return () => midiManager.off('paramChange', handleParamChange);
+    return unsubscribeParamChange;
   }, [midiManager, setMidiParams]);
 }
 
@@ -25,11 +25,11 @@ function useMidiLearningSubscriber(midiManager: MidiManager) {
   const setMidiLearning = useSetAtom(midiLearningAtom);
 
   useEffect(() => {
-    const handleLearn = midiManager.on('learn', ({ paramKey }) => {
+    const unsubscribeLearn = midiManager.onLearn.subscribe(({ paramKey }) => {
       setMidiLearning(paramKey);
     });
 
-    return () => midiManager.off('learn', handleLearn);
+    return unsubscribeLearn;
   }, [midiManager, setMidiLearning]);
 }
 
@@ -49,14 +49,14 @@ function useMidiIndicatorSubscriber(midiManager: MidiManager) {
   }, [debouncedOff, setMidiIndicator]);
 
   useEffect(() => {
-    const handleNoteOn = midiManager.on('noteOn', () => indicate());
-    const handleNoteOff = midiManager.on('noteOff', () => indicate());
-    const handleCC = midiManager.on('cc', () => indicate());
+    const unsubscribeNoteOn = midiManager.onNoteOn.subscribe(indicate);
+    const unsubscribeNoteOff = midiManager.onNoteOff.subscribe(indicate);
+    const unsubscribeCC = midiManager.onCC.subscribe(indicate);
 
     return () => {
-      midiManager.off('noteOn', handleNoteOn);
-      midiManager.off('noteOff', handleNoteOff);
-      midiManager.off('cc', handleCC);
+      unsubscribeNoteOn();
+      unsubscribeNoteOff();
+      unsubscribeCC();
     };
   }, [indicate, midiManager]);
 }
@@ -68,9 +68,9 @@ function useMidiDevicesSubscriber(midiManager: MidiManager) {
     const update = () => setMidiDevices(Array.from(midiManager.deviceSet));
     update();
 
-    const handleDeviceDetect = midiManager.on('deviceDetect', update);
+    const unsubscribeDeviceDetect = midiManager.onDeviceDetect.subscribe(update);
 
-    return () => midiManager.off('deviceDetect', handleDeviceDetect);
+    return unsubscribeDeviceDetect;
   }, [midiManager, setMidiDevices]);
 }
 
@@ -81,12 +81,12 @@ function useMidiMappingsSubscriber(midiManager: MidiManager) {
     const update = () => setMidiMappings(structuredClone(midiManager.mappings));
     update();
 
-    const handleMappingAssign = midiManager.on('mappingAssign', update);
-    const handleMappingUnassign = midiManager.on('mappingUnassign', update);
+    const unsubscribeMappingAssign = midiManager.onMappingAssign.subscribe(update);
+    const unsubscribeMappingUnassign = midiManager.onMappingUnassign.subscribe(update);
 
     return () => {
-      midiManager.off('mappingAssign', handleMappingAssign);
-      midiManager.off('mappingUnassign', handleMappingUnassign);
+      unsubscribeMappingAssign();
+      unsubscribeMappingUnassign();
     };
   }, [midiManager, setMidiMappings]);
 }

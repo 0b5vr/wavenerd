@@ -9,13 +9,13 @@ export function useSettingsSubscribers(settingsManager: SettingsManager) {
   useEffect(() => {
     setSettings(settingsManager.values);
 
-    const handleChange = settingsManager.on('change', (settings) => {
+    const unsubscribeChange = settingsManager.onChange.subscribe((settings) => {
       setSettings((prev) => ({
         ...prev,
         ...settings,
       }));
     });
 
-    return () => settingsManager.off('change', handleChange);
+    return unsubscribeChange;
   });
 }

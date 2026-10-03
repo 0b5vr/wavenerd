@@ -1,22 +1,22 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { Observable } from './utils/Observable';
 
-interface FullscreenManagerEvents {
-  fullscreenChange: { isFullscreen: boolean };
+interface FullscreenChangeEvent {
+  isFullscreen: boolean;
 }
 
-export class FullscreenManager extends EventEmittable<FullscreenManagerEvents> {
+export class FullscreenManager {
   private __isFullscreen = false;
 
   public get isFullscreen() {
     return this.__isFullscreen;
   }
 
-  public constructor() {
-    super();
+  public readonly onFullscreenChange = new Observable<FullscreenChangeEvent>();
 
+  public constructor() {
     document.addEventListener('fullscreenchange', () => {
       this.__isFullscreen = document.fullscreenElement != null;
-      this.__emit('fullscreenChange', { isFullscreen: this.__isFullscreen });
+      this.onFullscreenChange.notify({ isFullscreen: this.__isFullscreen });
 
       if (this.__isFullscreen) {
         navigator.keyboard?.lock();

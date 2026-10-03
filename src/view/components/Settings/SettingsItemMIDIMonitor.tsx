@@ -24,22 +24,22 @@ export function SettingsItemMIDIMonitor() {
   );
 
   useEffect(() => {
-    const handleNoteOn = MIDIMAN.on('noteOn', (event) => {
+    const unsubscribeNoteOn = MIDIMAN.onNoteOn.subscribe((event) => {
       appendLog(event.channel, 'NoteOn', event.note, event.velocity, event.paramKey);
     });
 
-    const handleNoteOff = MIDIMAN.on('noteOff', (event) => {
+    const unsubscribeNoteOff = MIDIMAN.onNoteOff.subscribe((event) => {
       appendLog(event.channel, 'NoteOff', event.note, event.velocity, event.paramKey);
     });
 
-    const handleCC = MIDIMAN.on('cc', (event) => {
+    const unsubscribeCC = MIDIMAN.onCC.subscribe((event) => {
       appendLog(event.channel, 'CC', event.cc, event.value, event.paramKey);
     });
 
     return () => {
-      MIDIMAN.off('noteOn', handleNoteOn);
-      MIDIMAN.off('noteOff', handleNoteOff);
-      MIDIMAN.off('cc', handleCC);
+      unsubscribeNoteOn();
+      unsubscribeNoteOff();
+      unsubscribeCC();
     };
   }, [appendLog]);
 

@@ -13,7 +13,7 @@ export class MixerFilterNone extends MixerFilter {
 
   public set filter(value: number) {
     this.__filter = value;
-    this.__emit('change', { filter: value });
+    this.onChange.notify({ filter: value });
   }
 
   private __gainNode: GainNode;

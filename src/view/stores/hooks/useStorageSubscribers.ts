@@ -14,24 +14,24 @@ function useStorageListSubscriber(storageManager: StorageManager) {
       setList(list || []);
     });
 
-    const handleInit = storageManager.on('init', async () => {
+    const unsubscribeInit = storageManager.onInit.subscribe(async () => {
       // Re-fetch the file list after initialization
       const list = await storageManager.listFilesRecursive('');
       setList(list || []);
     });
 
-    const handleSave = storageManager.on('save', ({ path }) => {
+    const unsubscribeSave = storageManager.onSave.subscribe(({ path }) => {
       addList(path);
     });
 
-    const handleDelete = storageManager.on('delete', ({ path }) => {
+    const unsubscribeDelete = storageManager.onDelete.subscribe(({ path }) => {
       deleteList(path);
     });
 
     return () => {
-      storageManager.off('init', handleInit);
-      storageManager.off('save', handleSave);
-      storageManager.off('delete', handleDelete);
+      unsubscribeInit();
+      unsubscribeSave();
+      unsubscribeDelete();
     };
   }, [storageManager, addList, deleteList, setList]);
 }

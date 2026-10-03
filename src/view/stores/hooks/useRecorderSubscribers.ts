@@ -9,15 +9,12 @@ export function useRecorderSubscribers(recorder: Recorder) {
   useEffect(() => {
     setIsRecording(recorder.isRecording);
 
-    const start = () => setIsRecording(true);
-    const stop = () => setIsRecording(false);
-
-    recorder.on('start', start);
-    recorder.on('stop', stop);
+    const unsubscribeStart = recorder.onStart.subscribe(() => setIsRecording(true));
+    const unsubscribeStop = recorder.onStop.subscribe(() => setIsRecording(false));
 
     return () => {
-      recorder.off('start', start);
-      recorder.off('stop', stop);
+      unsubscribeStart();
+      unsubscribeStop();
     };
   }, [recorder, setIsRecording]);
 }

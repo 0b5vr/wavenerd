@@ -5,10 +5,8 @@ export function useFrame(callback: () => void) {
   const { frameEmitter } = useContext(StuffContext)!;
 
   useEffect(() => {
-    const handleUpdate = frameEmitter.on('update', callback);
+    const unsubscribeUpdate = frameEmitter.onUpdate.subscribe(callback);
 
-    return () => {
-      frameEmitter.off('update', handleUpdate);
-    };
+    return unsubscribeUpdate;
   }, [callback, frameEmitter]);
 }

@@ -19,7 +19,7 @@ export class MixerEQIsolator extends MixerEQ {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeLow.gain.linearRampToValueAtTime(this.__low, time);
 
-    this.__emit('change', { low: value });
+    this.onChange.notify({ low: value });
   }
 
   private __mid = 1.0;
@@ -33,7 +33,7 @@ export class MixerEQIsolator extends MixerEQ {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeMid.gain.linearRampToValueAtTime(this.__mid, time);
 
-    this.__emit('change', { mid: value });
+    this.onChange.notify({ mid: value });
   }
 
   private __high = 1.0;
@@ -47,7 +47,7 @@ export class MixerEQIsolator extends MixerEQ {
     const time = this.__audio.currentTime + LINEAR_RAMP_TIME;
     this.__gainNodeHigh.gain.linearRampToValueAtTime(this.__high, time);
 
-    this.__emit('change', { high: value });
+    this.onChange.notify({ high: value });
   }
 
   private __gainNode: GainNode;

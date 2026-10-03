@@ -87,7 +87,7 @@ updateAudio();
 
 const frameEmitter = new FrameEmitter();
 
-frameEmitter.on('update', ({ deltaTime }) => {
+frameEmitter.onUpdate.subscribe(({ deltaTime }) => {
   mixer.updateAnalysers(deltaTime);
 });
 
@@ -145,9 +145,9 @@ async function handleInitStorage() {
 }
 handleInitStorage();
 
-storageManager.on('init', handleInitStorage);
-storageManager.on('save', ({ path }) => handleUpdateStorage(path));
-storageManager.on('delete', ({ path }) => handleDeleteStorage(path));
+storageManager.onInit.subscribe(handleInitStorage);
+storageManager.onSave.subscribe(({ path }) => handleUpdateStorage(path));
+storageManager.onDelete.subscribe(({ path }) => handleDeleteStorage(path));
 
 // == midi =========================================================================================
 function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }) {
@@ -193,12 +193,12 @@ function applyMidiParam({ paramKey, value }: { paramKey: string; value: number }
   if (paramKey === '/deck_b/knob7') { deckB.setParam('knob7', value); }
 }
 
-MIDIMAN.on('initStorage', () => {
+MIDIMAN.onInitStorage.subscribe(() => {
   for (const [paramKey, value] of Object.entries(MIDIMAN.values)) {
     applyMidiParam({ paramKey, value });
   }
 });
-MIDIMAN.on('paramChange', ({ paramKey, value }) => applyMidiParam({ paramKey, value }));
+MIDIMAN.onParamChange.subscribe(({ paramKey, value }) => applyMidiParam({ paramKey, value }));
 
 await MIDIMAN.initStorage(storageManager);
 
@@ -241,10 +241,10 @@ function applySettings(settings: Partial<Settings>) {
   }
 }
 
-SETTINGSMAN.on('initStorage', () => {
+SETTINGSMAN.onInitStorage.subscribe(() => {
   applySettings(SETTINGSMAN.values);
 });
-SETTINGSMAN.on('change', (settings) => applySettings(settings));
+SETTINGSMAN.onChange.subscribe((settings) => applySettings(settings));
 
 await SETTINGSMAN.initStorage(storageManager);
 

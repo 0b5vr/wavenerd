@@ -1,7 +1,7 @@
+import { Observable } from '../utils/Observable';
 import { MixerChannel, type MixerChannelChangeEvent } from './MixerChannel';
 import { Analyser } from './Analyser';
 import { DCRemovalUnit } from './DCRemovalUnit';
-import { EventEmittable } from '../utils/EventEmittable';
 import { LevelMeter } from './LevelMeter';
 import { xfaderCurveConstantPower } from './xfaderCurveConstantPower';
 import { xfaderCurveCut } from './xfaderCurveCut';
@@ -20,11 +20,7 @@ interface MixerChangeEvent {
   channelB?: MixerChannelChangeEvent;
 }
 
-interface MixerEvents {
-  change: MixerChangeEvent;
-}
-
-export class Mixer extends EventEmittable<MixerEvents> {
+export class Mixer {
   private __audio: AudioContext;
   public get audio(): AudioContext {
     return this.__audio;
@@ -48,7 +44,7 @@ export class Mixer extends EventEmittable<MixerEvents> {
   public set xFaderPos(value: number) {
     this.__xFaderPos = value;
     this.__updateXFaderGains();
-    this.__emit('change', { xfaderPos: value });
+    this.onChange.notify({ xfaderPos: value });
   }
 
   private __xFaderMode: XFaderModeType = 'transition';
@@ -109,9 +105,9 @@ export class Mixer extends EventEmittable<MixerEvents> {
   public readonly levelMeterInB: LevelMeter;
   public readonly levelMeterOut: LevelMeter;
 
-  public constructor(audio: AudioContext) {
-    super();
+  public readonly onChange = new Observable<MixerChangeEvent>();
 
+  public constructor(audio: AudioContext) {
     this.__audio = audio;
 
     this.__channelA = new MixerChannel(audio);
@@ -142,8 +138,8 @@ export class Mixer extends EventEmittable<MixerEvents> {
     this.levelMeterInB = new LevelMeter(this.analyserInB);
     this.levelMeterOut = new LevelMeter(this.analyserOut);
 
-    this.__channelA.on('change', (event) => this.__emit('change', { channelA: event }));
-    this.__channelB.on('change', (event) => this.__emit('change', { channelB: event }));
+    this.__channelA.onChange.subscribe((event) => this.onChange.notify({ channelA: event }));
+    this.__channelB.onChange.subscribe((event) => this.onChange.notify({ channelB: event }));
   }
 
   public updateAnalysers(deltaTime: number): void {

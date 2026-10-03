@@ -1,4 +1,4 @@
-import { EventEmittable } from '../utils/EventEmittable';
+import { Observable } from '../utils/Observable';
 
 export interface MixerEQChangeEvent {
   low?: number;
@@ -6,11 +6,7 @@ export interface MixerEQChangeEvent {
   high?: number;
 }
 
-interface MixerEQEvents {
-  change: MixerEQChangeEvent;
-}
-
-export abstract class MixerEQ extends EventEmittable<MixerEQEvents> {
+export abstract class MixerEQ {
   public abstract get high(): number;
   public abstract set high(value: number);
   public abstract get mid(): number;
@@ -20,4 +16,6 @@ export abstract class MixerEQ extends EventEmittable<MixerEQEvents> {
 
   public abstract get input(): AudioNode;
   public abstract get output(): AudioNode;
+
+  public readonly onChange = new Observable<MixerEQChangeEvent>();
 }

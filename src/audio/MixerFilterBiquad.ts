@@ -44,7 +44,7 @@ export class MixerFilterBiquad extends MixerFilter {
     const hpfFreq = Math.pow(2.0, lerp(LOG2_MIN_FREQ, LOG2_MAX_FREQ, linearstep(0.5, 1.0, value)));
     this.__filterHPF.frequency.linearRampToValueAtTime(hpfFreq, time);
 
-    this.__emit('change', { filter: value });
+    this.onChange.notify({ filter: value });
   }
 
   public get input(): AudioNode {

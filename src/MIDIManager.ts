@@ -1,4 +1,4 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { Observable } from './utils/Observable';
 import { migrateMIDIManagerStorage, MIDI_VERSION_LATEST } from './migrateMIDIManagerStorage';
 import { type StorageManager } from './StorageManager';
 import { throttle } from 'throttle-debounce';
@@ -9,20 +9,45 @@ export interface MidiManagerStorageType {
   mappings?: { [ key: string ]: string };
 }
 
-interface MidiManagerEvents {
-  deviceDetect: { deviceId: string; deviceName: string };
-  message: { deviceId: string; deviceName: string };
-  noteOn: { deviceId: string; deviceName: string; channel: number; note: number; velocity: number; paramKey: string | null };
-  noteOff: { deviceId: string; deviceName: string; channel: number; note: number; velocity: number; paramKey: string | null };
-  cc: { deviceId: string; deviceName: string; channel: number; cc: number; value: number; paramKey: string | null };
-  paramChange: { paramKey: string; value: number; midiKey: string | null };
-  mappingAssign: { midiKey: string; paramKey: string };
-  mappingUnassign: { midiKey: string };
-  learn: { paramKey: string | null };
-  initStorage: void;
+interface MidiDeviceEvent {
+  deviceId: string;
+  deviceName: string;
 }
 
-export class MidiManager extends EventEmittable<MidiManagerEvents> {
+interface MidiNoteEvent extends MidiDeviceEvent {
+  channel: number;
+  note: number;
+  velocity: number;
+  paramKey: string | null;
+}
+
+interface MidiCCEvent extends MidiDeviceEvent {
+  channel: number;
+  cc: number;
+  value: number;
+  paramKey: string | null;
+}
+
+interface MidiParamChangeEvent {
+  paramKey: string;
+  value: number;
+  midiKey: string | null;
+}
+
+interface MidiMappingAssignEvent {
+  midiKey: string;
+  paramKey: string;
+}
+
+interface MidiMappingUnassignEvent {
+  midiKey: string;
+}
+
+interface MidiLearnEvent {
+  paramKey: string | null;
+}
+
+export class MidiManager {
   private __deviceSet: Set<{ deviceId: string; deviceName: string }>;
   public get deviceSet(): Set<{ deviceId: string; deviceName: string }> {
     return this.__deviceSet;
@@ -47,9 +72,18 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
 
   private __throttledSave?: () => void;
 
-  public constructor() {
-    super();
+  public readonly onDeviceDetect = new Observable<MidiDeviceEvent>();
+  public readonly onMessage = new Observable<MidiDeviceEvent>();
+  public readonly onNoteOn = new Observable<MidiNoteEvent>();
+  public readonly onNoteOff = new Observable<MidiNoteEvent>();
+  public readonly onCC = new Observable<MidiCCEvent>();
+  public readonly onParamChange = new Observable<MidiParamChangeEvent>();
+  public readonly onMappingAssign = new Observable<MidiMappingAssignEvent>();
+  public readonly onMappingUnassign = new Observable<MidiMappingUnassignEvent>();
+  public readonly onLearn = new Observable<MidiLearnEvent>();
+  public readonly onInitStorage = new Observable();
 
+  public constructor() {
     this.defaultValues = {};
 
     this.__deviceSet = new Set();
@@ -64,7 +98,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     this.__values = data.values ?? {};
     this.__mappings = data.mappings ?? {};
 
-    this.__emit('initStorage');
+    this.onInitStorage.notify();
 
     this.__throttledSave = throttle(1000, async () => {
       const rawData = JSON.stringify({
@@ -94,35 +128,35 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
       );
 
       this.__deviceSet.add({ deviceId, deviceName });
-      this.__emit('deviceDetect', { deviceId, deviceName });
+      this.onDeviceDetect.notify({ deviceId, deviceName });
     });
   }
 
   public learn(paramKey: string): void {
     this.__learningParam = paramKey;
-    this.__emit('learn', { paramKey });
+    this.onLearn.notify({ paramKey });
   }
 
   public clearLearn(): void {
     this.__learningParam = null;
-    this.__emit('learn', { paramKey: null });
+    this.onLearn.notify({ paramKey: null });
   }
 
   public assignMapping(midiKey: string, paramKey: string): void {
     this.__mappings[midiKey] = paramKey;
-    this.__emit('mappingAssign', { midiKey, paramKey });
+    this.onMappingAssign.notify({ midiKey, paramKey });
     this.__throttledSave?.();
   }
 
   public unassignMapping(midiKey: string): void {
     delete this.__mappings[midiKey];
-    this.__emit('mappingUnassign', { midiKey });
+    this.onMappingUnassign.notify({ midiKey });
     this.__throttledSave?.();
   }
 
   public setValue(paramKey: string, value: number, midiKey?: string | null): void {
     this.__values[paramKey] = value;
-    this.__emit('paramChange', {
+    this.onParamChange.notify({
       paramKey,
       value,
       midiKey: midiKey ?? null,
@@ -140,7 +174,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
     let value = 0;
 
     if (event.data) {
-      this.__emit('message', { deviceId, deviceName });
+      this.onMessage.notify({ deviceId, deviceName });
 
       const isNoteOff = event.data[0] >= 128 && event.data[0] <= 143;
       const isNoteOn = event.data[0] >= 144 && event.data[0] <= 159;
@@ -161,7 +195,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
         paramKey = this.__mappings[midiKey] ?? null;
         value = velocity;
 
-        this.__emit('noteOn', { deviceId, deviceName, channel, note, velocity, paramKey });
+        this.onNoteOn.notify({ deviceId, deviceName, channel, note, velocity, paramKey });
       } else if (isNoteOff) {
         const note = event.data[1];
         const velocity = event.data[2] / 127.0;
@@ -170,7 +204,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
         paramKey = this.__mappings[midiKey] ?? null;
         value = 0.0;
 
-        this.__emit('noteOff', { deviceId, deviceName, channel, note, velocity, paramKey });
+        this.onNoteOff.notify({ deviceId, deviceName, channel, note, velocity, paramKey });
       } else if (isCC) {
         const cc = event.data[1];
         midiKey = `cc-${channel}-${cc}`;
@@ -183,7 +217,7 @@ export class MidiManager extends EventEmittable<MidiManagerEvents> {
         paramKey = this.__mappings[midiKey] ?? null;
         value = Math.max(event.data[2] - 1.0, 0.0) / 126.0;
 
-        this.__emit('cc', { deviceId, deviceName, channel, cc, value, paramKey });
+        this.onCC.notify({ deviceId, deviceName, channel, cc, value, paramKey });
       }
     }
 

@@ -54,7 +54,7 @@ export function DeckVisualizer({
       return;
     }
 
-    const udpate = frameEmitter.on('update', () => {
+    const unsubscribeUpdate = frameEmitter.onUpdate.subscribe(() => {
       visualizer?.clear();
       visualizer?.crispFramebuffer.clear();
 
@@ -66,7 +66,7 @@ export function DeckVisualizer({
       visualizer?.crispFramebuffer.blit();
     });
 
-    return () => frameEmitter.off('update', udpate);
+    return unsubscribeUpdate;
   }, [frameEmitter, visualizer, updateVectorscope, updateSpectrum, updateOscilloscope, updateWaveform]);
 
   // render

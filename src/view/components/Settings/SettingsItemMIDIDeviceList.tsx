@@ -11,11 +11,13 @@ function MidiDeviceListItem({ deviceId, deviceName }: { deviceId: string; device
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
-    MIDIMAN.on('message', (event) => {
+    const unsubscribeMessage = MIDIMAN.onMessage.subscribe((event) => {
       if (event.deviceId === deviceId) {
         setMessageIndex((i) => i + 1);
       }
     });
+
+    return unsubscribeMessage;
   }, [deviceId]);
 
   return (

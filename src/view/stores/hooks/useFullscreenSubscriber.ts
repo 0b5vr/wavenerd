@@ -9,10 +9,10 @@ export function useFullscreenSubscriber() {
   const setIsFullscreen = useSetAtom(isFullscreenAtom);
 
   useEffect(() => {
-    const handleFullscreenChange = fullscreenManager.on('fullscreenChange', ({ isFullscreen }) => {
+    const unsubscribeFullscreenChange = fullscreenManager.onFullscreenChange.subscribe(({ isFullscreen }) => {
       setIsFullscreen(isFullscreen);
     });
 
-    return () => fullscreenManager.off('fullscreenChange', handleFullscreenChange);
+    return unsubscribeFullscreenChange;
   }, [fullscreenManager, setIsFullscreen]);
 }

@@ -1,4 +1,4 @@
-import { EventEmittable } from './utils/EventEmittable';
+import { Observable } from './utils/Observable';
 import { type MixerEQMode, type MixerFilterMode } from './audio/MixerChannel';
 import { type MasterLimiterModeType, type XFaderModeType } from './audio/Mixer';
 import { migrateSettingsManagerStorage } from './migrateSettingsManagerStorage';
@@ -90,12 +90,7 @@ export const defaultSettings: Settings = {
   recorderFormat: 'wav',
 };
 
-interface SettingsManagerEvents {
-  change: Partial<Settings>;
-  initStorage: void;
-}
-
-export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
+export class SettingsManager {
   private __values: Settings;
   public get values(): Settings {
     return this.__values;
@@ -103,9 +98,10 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
 
   private __throttledSave?: () => void;
 
-  public constructor() {
-    super();
+  public readonly onChange = new Observable<Partial<Settings>>();
+  public readonly onInitStorage = new Observable();
 
+  public constructor() {
     this.__values = structuredClone(defaultSettings);
   }
 
@@ -115,7 +111,7 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
       ...(await migrateSettingsManagerStorage(storageManager)),
     };
 
-    this.__emit('initStorage');
+    this.onInitStorage.notify();
 
     this.__throttledSave = throttle(1000, async () => {
       const rawData = JSON.stringify(this.__values);
@@ -125,7 +121,7 @@ export class SettingsManager extends EventEmittable<SettingsManagerEvents> {
 
   public set<TKey extends keyof Settings>(key: TKey, value: Settings[TKey]): void {
     this.__values[key] = value;
-    this.__emit('change', { [key]: value });
+    this.onChange.notify({ [key]: value });
     this.__throttledSave?.();
   }
 }
