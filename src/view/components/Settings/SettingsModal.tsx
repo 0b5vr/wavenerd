@@ -9,6 +9,7 @@ import { SettingsContentAppearance } from './SettingsContentAppearance';
 import { SettingsContentEditor } from './SettingsContentEditor';
 import { SettingsContentAbout } from './SettingsContentAbout';
 import { SettingsContentMIDI } from './SettingsContentMIDI';
+import { SettingsContentData } from './SettingsContentData';
 import SimpleBar from 'simplebar-react';
 
 // == components ===================================================================================
@@ -37,6 +38,7 @@ export function SettingsModal() {
           {category === 'editor' && <SettingsContentEditor />}
           {category === 'appearance' && <SettingsContentAppearance />}
           {category === 'visualization' && <SettingsContentVisualization />}
+          {category === 'data' && <SettingsContentData />}
           {category === 'about' && <SettingsContentAbout />}
         </SimpleBar>
       </div>

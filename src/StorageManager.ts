@@ -51,6 +51,27 @@ export class StorageManager extends EventEmittable<StorageManagerEvents> {
     this.__emit('delete', { path: this.__normalizePath(path) });
   }
 
+  /**
+   * Delete EVERYTHING in the storage.
+   *
+   * No `delete` events are emitted, and in-memory states of other managers are not updated.
+   * Reload the app after calling this.
+   */
+  public async clear(): Promise<void> {
+    if (!this.__root) { return; }
+
+    const names: string[] = [];
+    for await (const entry of (this.__root as any).values()) {
+      names.push(entry.name);
+    }
+
+    for (const name of names) {
+      await this.__root.removeEntry(name, { recursive: true });
+    }
+
+    this.__directoryCache.clear();
+  }
+
   public async getFile(path: string): Promise<File | undefined> {
     if (!this.__root) { return undefined; }
 

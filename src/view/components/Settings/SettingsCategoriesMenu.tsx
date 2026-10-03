@@ -5,6 +5,7 @@ import IconVolumeHigh from '~icons/mdi/volume-high';
 import IconPalette from '~icons/mdi/palette';
 import IconEye from '~icons/mdi/eye';
 import IconCodeBraces from '~icons/mdi/code-braces';
+import IconDatabase from '~icons/mdi/database';
 import IconInformation from '~icons/mdi/information';
 import IconMidiPort from '~icons/mdi/midi-port';
 import { useAtom } from 'jotai';
@@ -19,6 +20,7 @@ const settingsCategories: SettingsCategory[] = [
   'editor',
   'appearance',
   'visualization',
+  'data',
   'about',
 ];
 
@@ -28,6 +30,7 @@ const settingsCategoryNameMap: Record<SettingsCategory, string> = {
   editor: 'Editor',
   appearance: 'Appearance',
   visualization: 'Visualization',
+  data: 'Data',
   about: 'About',
 };
 
@@ -37,6 +40,7 @@ const settingsCategoryIconMap: Record<SettingsCategory, React.ReactNode> = {
   editor: <IconCodeBraces className={iconCls} />,
   appearance: <IconPalette className={iconCls} />,
   visualization: <IconEye className={iconCls} />,
+  data: <IconDatabase className={iconCls} />,
   about: <IconInformation className={iconCls} />,
 };
 
