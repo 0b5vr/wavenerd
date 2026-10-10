@@ -8,7 +8,6 @@ runs:
     - name: setup pnpm
       uses: pnpm/action-setup@v6
       with:
-        version: 11.2.2
         run_install: false
 
     - name: setup node

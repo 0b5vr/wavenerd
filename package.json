@@ -2,6 +2,7 @@
   "name": "wavenerd",
   "version": "0.2.4",
   "license": "MIT",
+  "packageManager": "pnpm@12.8.1",
   "scripts": {
     "all": "npm run lint && npm run clean && npm run build",
     "clean": "rimraf dist/",
