@@ -1,24 +1,25 @@
-import { deckACueStatusAtom, deckAErrorAtom, deckBCueStatusAtom, deckBErrorAtom, deckBPMAtom, deckBeatsAtom, deckIsPlayingAtom, deckTimeAtom } from '../atoms/deck';
-import { type WavenerdDeck } from '@0b5vr/wavenerd-deck';
-import { useEffect } from 'react';
+import { deckACueStatusAtom, deckAErrorAtom, deckBCueStatusAtom, deckBErrorAtom, deckBPMAtom, deckBeatPositionAtom, deckIsPlayingAtom, deckTimeAtom } from '../atoms/deck';
+import { type WavenerdClock, type WavenerdDeck } from '@0b5vr/wavenerd-deck';
+import { useCallback, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
+import { useFrame } from '../../utils/useFrame';
 
 function useDeckASubscribers(deckA: WavenerdDeck) {
   const setDeckACueStatus = useSetAtom(deckACueStatusAtom);
   const setDeckAError = useSetAtom(deckAErrorAtom);
 
   useEffect(() => {
-    const handleChangeCueStatus = deckA.on('changeCueStatus', ({ cueStatus }) => {
+    const unsubscribeChangeCueStatus = deckA.onChangeCueStatus.subscribe(({ cueStatus }) => {
       setDeckACueStatus(cueStatus);
     });
 
-    const handleError = deckA.on('error', ({ error }) => {
+    const unsubscribeCompile = deckA.onCompile.subscribe(({ error }) => {
       setDeckAError(error ?? null);
     });
 
     return () => {
-      deckA.off('changeCueStatus', handleChangeCueStatus);
-      deckA.off('error', handleError);
+      unsubscribeChangeCueStatus();
+      unsubscribeCompile();
     };
   });
 }
@@ -28,64 +29,63 @@ function useDeckBSubscribers(deckB: WavenerdDeck) {
   const setDeckBError = useSetAtom(deckBErrorAtom);
 
   useEffect(() => {
-    const handleChangeCueStatus = deckB.on('changeCueStatus', ({ cueStatus }) => {
+    const unsubscribeChangeCueStatus = deckB.onChangeCueStatus.subscribe(({ cueStatus }) => {
       setDeckBCueStatus(cueStatus);
     });
 
-    const handleError = deckB.on('error', ({ error }) => {
+    const unsubscribeCompile = deckB.onCompile.subscribe(({ error }) => {
       setDeckBError(error ?? null);
     });
 
     return () => {
-      deckB.off('changeCueStatus', handleChangeCueStatus);
-      deckB.off('error', handleError);
+      unsubscribeChangeCueStatus();
+      unsubscribeCompile();
     };
   });
 }
 
-function useDeckTransportSubscribers(hostDeck: WavenerdDeck) {
+function useClockSubscribers(clock: WavenerdClock) {
   const setDeckTime = useSetAtom(deckTimeAtom);
-  const setDeckBeats = useSetAtom(deckBeatsAtom);
+  const setDeckBeatPosition = useSetAtom(deckBeatPositionAtom);
   const setDeckIsPlaying = useSetAtom(deckIsPlayingAtom);
   const setDeckBPM = useSetAtom(deckBPMAtom);
 
-  useEffect(() => {
-    const handleBeatManagerUpdate = hostDeck.beatManager.on('update', (event) => {
-      setDeckTime(event.time);
-      setDeckBeats({
-        beat: event.beat,
-        bar: event.bar,
-        sixteenBar: event.sixteenBar,
-      });
-    });
+  // poll it every frame
+  useFrame(
+    useCallback(() => {
+      const { time } = clock;
+      setDeckTime(time);
+      setDeckBeatPosition(clock.timeToBeat(time));
+    }, [clock, setDeckTime, setDeckBeatPosition]),
+  );
 
-    const handlePlay = hostDeck.on('play', () => {
+  useEffect(() => {
+    const unsubscribePlay = clock.onPlay.subscribe(() => {
       setDeckIsPlaying(true);
     });
 
-    const handlePause = hostDeck.on('pause', () => {
+    const unsubscribePause = clock.onPause.subscribe(() => {
       setDeckIsPlaying(false);
     });
 
-    const handleChangeBPM = hostDeck.on('changeBPM', ({ bpm }) => {
+    const unsubscribeChangeBPM = clock.onChangeBPM.subscribe(({ bpm }) => {
       setDeckBPM(bpm);
     });
 
     return () => {
-      hostDeck.beatManager.off('update', handleBeatManagerUpdate);
-      hostDeck.off('play', handlePlay);
-      hostDeck.off('pause', handlePause);
-      hostDeck.off('changeBPM', handleChangeBPM);
+      unsubscribePlay();
+      unsubscribePause();
+      unsubscribeChangeBPM();
     };
   });
 }
 
 export function useDeckSubscribers(
-  hostDeck: WavenerdDeck,
+  clock: WavenerdClock,
   deckA: WavenerdDeck,
   deckB: WavenerdDeck,
 ) {
   useDeckASubscribers(deckA);
   useDeckBSubscribers(deckB);
-  useDeckTransportSubscribers(hostDeck);
+  useClockSubscribers(clock);
 }

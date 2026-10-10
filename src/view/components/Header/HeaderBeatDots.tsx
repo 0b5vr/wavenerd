@@ -1,16 +1,13 @@
-import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
-import { BeatManager } from '@0b5vr/wavenerd-deck';
+import { deckBeatPositionAtom } from '../../stores/atoms/deck';
+import { mod } from '@0b5vr/experimental';
 import clsx from 'clsx';
 import { atom, useAtomValue } from 'jotai';
 
 // == atoms ========================================================================================
 const beatAtom = atom((get) => {
-  const bpm = get(deckBPMAtom);
-  const { bar } = get(deckBeatsAtom);
+  const beatPosition = get(deckBeatPositionAtom);
 
-  const barSeconds = BeatManager.CalcBarSeconds(bpm);
-
-  return Math.floor(4.0 * bar / barSeconds);
+  return Math.floor(mod(beatPosition, 4.0));
 });
 
 // == components ===================================================================================

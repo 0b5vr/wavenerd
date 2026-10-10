@@ -50,7 +50,7 @@ function useFocusDeckShortcuts({
 
 // == component ====================================================================================
 export function OutOfContextApp() {
-  const { deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
+  const { clock, deckA, deckB, mixer, recorder, storageManager } = useContext(StuffContext)!;
 
   const uiMargin = useSettings('uiMargin');
   const deckBShow = useSettings('deckBShow');
@@ -61,7 +61,7 @@ export function OutOfContextApp() {
 
   useMidiSubscribers(MIDIMAN);
   useSettingsSubscribers(SETTINGSMAN);
-  useDeckSubscribers(deckA, deckA, deckB);
+  useDeckSubscribers(clock, deckA, deckB);
   useRecorderSubscribers(recorder);
   useStorageSubscribers(storageManager);
   useFullscreenSubscriber();

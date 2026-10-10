@@ -6,13 +6,13 @@ import { StuffContext } from '../StuffContext';
  * @returns boolean indicating if an underrun just occurred
  */
 export function useUnderrun() {
-  const { hostDeck } = useContext(StuffContext)!;
+  const { deckA, deckB } = useContext(StuffContext)!;
   const [underrun, setUnderrun] = useState(false);
 
   useEffect(() => {
     let id: number | undefined;
 
-    const handleUnderrun = hostDeck.on('underrun', () => {
+    const handleUnderrun = () => {
       // clear previous timeout if exists
       if (id != null) {
         clearTimeout(id);
@@ -21,18 +21,22 @@ export function useUnderrun() {
       // set underrun state and reset after a short delay
       setUnderrun(true);
       id = setTimeout(() => setUnderrun(false), 100);
-    });
+    };
+
+    const unsubscribeUnderrunA = deckA.onUnderrun.subscribe(handleUnderrun);
+    const unsubscribeUnderrunB = deckB.onUnderrun.subscribe(handleUnderrun);
 
     return () => {
       // unsubscribe on unmount
-      hostDeck.off('underrun', handleUnderrun);
+      unsubscribeUnderrunA();
+      unsubscribeUnderrunB();
 
       // clear timeout on unmount
       if (id != null) {
         clearTimeout(id);
       }
     };
-  }, [hostDeck]);
+  }, [deckA, deckB]);
 
   return underrun;
 }

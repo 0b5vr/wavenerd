@@ -14,16 +14,16 @@ export function SettingsItemBlocksMonitor() {
   const [blocksAhead, setBlocksAhead] = useState(0);
   const [msAhead, setMsAhead] = useState(0);
   const underrun = useUnderrun();
-  const { hostDeck } = useContext(StuffContext)!;
+  const { deckA } = useContext(StuffContext)!;
   const latencyBlocks = useSettings('latencyBlocks');
   const isPlaying = useAtomValue(deckIsPlayingAtom);
 
   // check blocks ahead every frame during playback
   useFrame(
     useCallback(() => {
-      setBlocksAhead(hostDeck.bufferWriteBlocks - hostDeck.bufferReadBlocks);
-      setMsAhead(((hostDeck.bufferWriteBlocks - hostDeck.bufferReadBlocks) * BLOCK_SIZE) / hostDeck.sampleRate * 1000);
-    }, [hostDeck]),
+      setBlocksAhead(deckA.bufferWriteBlocks - deckA.bufferReadBlocks);
+      setMsAhead(((deckA.bufferWriteBlocks - deckA.bufferReadBlocks) * BLOCK_SIZE) / deckA.sampleRate * 1000);
+    }, [deckA]),
   );
 
   if (!isPlaying) {

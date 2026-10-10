@@ -19,11 +19,7 @@ export const deckBCompileTimeAtom = atom(0.0);
 
 export const deckTimeAtom = atom(0.0);
 export const deckIsPlayingAtom = atom(false);
-export const deckBeatsAtom = atom({
-  beat: 0.0,
-  bar: 0.0,
-  sixteenBar: 0.0,
-});
+export const deckBeatPositionAtom = atom(0.0);
 export const deckBPMAtom = atom(140.0);
 
 export const deckShowBAtom = atom(true);

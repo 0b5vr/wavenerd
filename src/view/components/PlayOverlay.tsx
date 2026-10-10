@@ -3,15 +3,15 @@ import IconPlay from '~icons/mdi/play';
 import { StuffContext } from '../StuffContext';
 
 export function PlayOverlay({ className }: { className?: string }) {
-  const { hostDeck } = useContext(StuffContext)!;
+  const { clock } = useContext(StuffContext)!;
 
   const [isOpening, setIsOpening] = useState(true);
 
   const handleClick = useCallback(() => {
-    hostDeck.audio.resume();
-    hostDeck.play();
+    clock.audio.resume();
+    clock.play();
     setIsOpening(false);
-  }, [hostDeck]);
+  }, [clock]);
 
   if (!isOpening) {
     return null;

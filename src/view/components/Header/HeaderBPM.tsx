@@ -9,7 +9,7 @@ import { clamp } from '@0b5vr/experimental';
 
 // == components ===================================================================================
 export function HeaderBPM({ className }: { className?: string }) {
-  const { hostDeck } = useContext(StuffContext)!;
+  const { clock } = useContext(StuffContext)!;
 
   const bpm = useAtomValue(deckBPMAtom);
 
@@ -24,7 +24,7 @@ export function HeaderBPM({ className }: { className?: string }) {
         className="font-mono text-[14px] leading-none min-w-13"
         value={bpm}
         onChange={(value) => {
-          hostDeck.bpm = clamp(value, 40.0, 999.0);
+          clock.bpm = clamp(value, 40.0, 999.0);
         }}
         deltaCoarse={1.0}
         deltaFine={0.1}

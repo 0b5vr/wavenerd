@@ -1,19 +1,15 @@
-import { deckBPMAtom, deckBeatsAtom } from '../../stores/atoms/deck';
-import { BeatManager } from '@0b5vr/wavenerd-deck';
+import { deckBeatPositionAtom } from '../../stores/atoms/deck';
+import { mod } from '@0b5vr/experimental';
 import { atom, useAtomValue } from 'jotai';
 import { UILabel } from '../UILabel';
 import { UINumber } from '../UINumber';
 
 // == atoms ========================================================================================
 const textAtom = atom((get) => {
-  const bpm = get(deckBPMAtom);
-  const { bar, sixteenBar } = get(deckBeatsAtom);
+  const beatPosition = get(deckBeatPositionAtom);
 
-  const barSeconds = BeatManager.CalcBarSeconds(bpm);
-  const sixteenBarSeconds = BeatManager.CalcSixteenBarSeconds(bpm);
-
-  const stepCount = Math.floor(16.0 * bar / barSeconds).toString(16);
-  const barCount = Math.floor(16.0 * sixteenBar / sixteenBarSeconds).toString(16);
+  const stepCount = Math.floor(4.0 * mod(beatPosition, 4.0)).toString(16);
+  const barCount = Math.floor(mod(beatPosition, 64.0) / 4.0).toString(16);
 
   return `${barCount}${stepCount}`;
 });

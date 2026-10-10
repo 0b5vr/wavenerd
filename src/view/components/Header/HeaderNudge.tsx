@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 // == components ===================================================================================
 export function HeaderNudge({ className }: { className?: string }) {
-  const { hostDeck } = useContext(StuffContext)!;
+  const { clock } = useContext(StuffContext)!;
 
   const [nudgeAmount, setNudgeAmount] = useState(0.0);
   const refRoot = useRef<HTMLDivElement>(null);
@@ -14,24 +14,24 @@ export function HeaderNudge({ className }: { className?: string }) {
   const handleMouseDown = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
 
-    const initBPM = hostDeck.bpm;
+    const initBPM = clock.bpm;
 
     const rect = refRoot.current!.getBoundingClientRect();
     const center = rect.left + rect.width / 2.0;
 
     const nudgeAmount = (event.clientX - center);
     setNudgeAmount(nudgeAmount);
-    hostDeck.bpm = Math.max(40.0, initBPM + nudgeAmount * 0.1);
+    clock.bpm = Math.max(40.0, initBPM + nudgeAmount * 0.1);
 
     registerMouseEvent((event) => {
       const nudgeAmount = (event.clientX - center);
       setNudgeAmount(nudgeAmount);
-      hostDeck.bpm = Math.max(40.0, initBPM + nudgeAmount * 0.1);
+      clock.bpm = Math.max(40.0, initBPM + nudgeAmount * 0.1);
     }, () => {
       setNudgeAmount(0.0);
-      hostDeck.bpm = initBPM;
+      clock.bpm = initBPM;
     });
-  }, [hostDeck]);
+  }, [clock]);
 
   return (
     <div

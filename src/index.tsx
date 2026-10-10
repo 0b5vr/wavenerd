@@ -7,7 +7,7 @@ import { CueMixer } from './audio/CueMixer';
 import { MIDIMAN } from './MIDIManager';
 import { Mixer } from './audio/Mixer';
 import { Reverb } from './audio/Reverb';
-import { WavenerdDeck } from '@0b5vr/wavenerd-deck';
+import { WavenerdClock, WavenerdDeck, WavenerdTextureStore } from '@0b5vr/wavenerd-deck';
 import { createRoot } from 'react-dom/client';
 import { Recorder } from './audio/Recorder';
 import { WavRecorderNode } from './audio/WavRecorderNode';
@@ -24,9 +24,6 @@ import { LookaheadLimiterNode } from './audio/LookaheadLimiterNode';
 import './index.css';
 
 // == setup ========================================================================================
-const canvas = document.createElement('canvas');
-const gl = canvas.getContext('webgl2')!;
-
 const audio = new AudioContext();
 audio.suspend();
 
@@ -40,13 +37,17 @@ await WavRecorderNode.addModule(audio);
 
 const master = audio.createGain();
 
+const clock = new WavenerdClock({ audio });
+const textures = new WavenerdTextureStore({ audio });
+
 const deckOptions = {
-  gl,
   audio,
+  clock,
+  textures,
   latencyBlocks: 32,
 };
 const deckA = new WavenerdDeck(deckOptions);
-const deckB = new WavenerdDeck({ ...deckOptions, hostDeck: deckA });
+const deckB = new WavenerdDeck(deckOptions);
 const mixer = new Mixer(audio);
 
 deckA.node.connect(mixer.inputA);
@@ -104,7 +105,7 @@ async function handleUpdateStorage(path: string) {
     if (buffer == null) {
       console.error(`Failed to load sample: ${path}`);
     } else {
-      deckA.loadSample(name, buffer);
+      textures.loadSample(name, buffer);
     }
   } else if (path.startsWith('wavetables/')) {
     const file = await storageManager.getFile(path);
@@ -112,7 +113,7 @@ async function handleUpdateStorage(path: string) {
     if (buffer == null) {
       console.error(`Failed to load wavetable: ${path}`);
     } else {
-      deckA.loadWavetable(name, new Float32Array(buffer));
+      textures.loadWavetable(name, new Float32Array(buffer));
     }
   } else if (path.startsWith('images/')) {
     const file = await storageManager.getFile(path);
@@ -120,7 +121,7 @@ async function handleUpdateStorage(path: string) {
       console.error(`Failed to load image: ${path}`);
     } else {
       const image = await loadFileAsImage(file);
-      deckA.loadImage(name, image);
+      textures.loadImage(name, image);
     }
   }
 }
@@ -129,11 +130,11 @@ function handleDeleteStorage(path: string) {
   const name = pathToAssetName(path);
 
   if (path.startsWith('samples/')) {
-    deckA.deleteSample(name);
+    textures.deleteSample(name);
   } else if (path.startsWith('wavetables/')) {
-    deckA.deleteWavetable(name);
+    textures.deleteWavetable(name);
   } else if (path.startsWith('images/')) {
-    deckA.deleteImage(name);
+    textures.deleteImage(name);
   }
 }
 
@@ -265,7 +266,7 @@ root.render(
     stuff={{
       deckA,
       deckB,
-      hostDeck: deckA,
+      clock,
       mixer,
       recorder,
       router,

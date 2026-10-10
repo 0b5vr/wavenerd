@@ -12,21 +12,21 @@ const iconCls = 'w-7 h-7 cursor-pointer hover:opacity-80 active:opacity-60';
 
 // == components ===================================================================================
 export function HeaderTransport({ className }: { className?: string }) {
-  const { hostDeck } = useContext(StuffContext)!;
+  const { clock } = useContext(StuffContext)!;
 
   const isPlaying = useAtomValue(deckIsPlayingAtom);
 
   const handleClickRewind = useCallback(() => {
-    hostDeck.rewind();
-  }, [hostDeck]);
+    clock.rewind();
+  }, [clock]);
 
   const handleClickPlay = useCallback(() => {
-    hostDeck.play();
-  }, [hostDeck]);
+    clock.play();
+  }, [clock]);
 
   const handleClickPause = useCallback(() => {
-    hostDeck.pause();
-  }, [hostDeck]);
+    clock.pause();
+  }, [clock]);
 
   return (
     <div className={clsx('flex', className)}>
