@@ -1,4 +1,7 @@
-import { notifyObservers, type Observer } from '@0b5vr/experimental';
+/**
+ * A function that observes an event.
+ */
+export type Observer<T = void> = (event: T) => void;
 
 /**
  * A set of observers for a single kind of event.
@@ -24,7 +27,9 @@ export class Observable<T = void> {
    *
    * @param event The event to pass to the observers. Omit it when `T` is `void`
    */
-  public notify(...[event]: T extends void ? [] : [T]): void {
-    notifyObservers(this.__observers, event as T);
+  public notify(...[event]: [T] extends [void] ? [] : [T]): void {
+    for (const observer of this.__observers) {
+      observer(event as T);
+    }
   }
 }
