@@ -1,14 +1,19 @@
-export const defaultCodeA = `#define BPM bpm
+export const defaultCodeA = `#pragma wavenerd_shader_version 2
+
+#define BPM bpm
 #define B2T (60.0 / BPM)
 
 const float PI = acos(-1.0);
 const float TAU = 2.0 * PI;
 
-vec2 mainAudio(vec4 time) {
+vec2 mainAudio(int beatIndex, int beatFrame) {
   vec2 dest = vec2(0.0);
 
+  float tBeat = float(beatFrame) / sampleRate; // seconds since the beginning of the beat
+  float tBar = float(beatIndex % 4) * B2T + tBeat; // seconds since the beginning of the bar
+
   { // kick
-    float t = time.x; // time.x = a beat
+    float t = tBeat;
     float q = B2T - t;
 
     float env = smoothstep(0.3, 0.1, t) * smoothstep(0.0, 0.01, q);
@@ -22,7 +27,7 @@ vec2 mainAudio(vec4 time) {
   }
 
   { // sawtooth
-    float t = time.y; // time.y = a bar
+    float t = tBar;
     float q = B2T - t;
 
     float env = smoothstep(0.0, 0.01, t) * smoothstep(0.0, 0.01, q);
@@ -39,7 +44,9 @@ vec2 mainAudio(vec4 time) {
 }
 `;
 
-export const defaultCodeB = `vec2 mainAudio(vec4 time) {
+export const defaultCodeB = `#pragma wavenerd_shader_version 2
+
+vec2 mainAudio(int beatIndex, int beatFrame) {
   vec2 dest = vec2(0.0);
 
   return dest;

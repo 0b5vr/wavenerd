@@ -20,8 +20,11 @@ The cued shader will be applied when it reaches the next bar (= every 4 beats).
 This would be the most simple example:
 
 ```glsl
-vec2 mainAudio(vec4 time) {
-  return 0.1 * vec2(sin(440.0 * 2.0 * 3.1415 * time.x));
+#pragma wavenerd_shader_version 2
+
+vec2 mainAudio(int beatIndex, int beatFrame) {
+  float t = float(beatFrame) / sampleRate;
+  return 0.1 * vec2(sin(440.0 * 2.0 * 3.1415 * t));
 }
 ```
 
@@ -31,11 +34,24 @@ which just generates the sine wave in 440Hz.
 
 Mmmmmm... [Take a look at my codes?](https://github.com/0b5vr/wavenerd-dubplates)
 
-## Why is the input time vec4?
+## What are `beatIndex` and `beatFrame`?
 
-It gives you four different kind of times.
-Every components represent times in the unit of second but each loops in (a beat, a bar, sixteen bars, infinity).
-It's since the precision of time goes worse in longer live coding performances. Thank you floating point number very cool
+`beatIndex` is the number of beats since the beginning, and `beatFrame` is the number of frames (samples) since the beginning of the current beat.
+Both are integers, since the precision of float time goes worse in longer live coding performances. Thank you floating point number very cool
+
+You can derive times in seconds like this:
+
+```glsl
+float tBeat = float(beatFrame) / sampleRate; // seconds since the beginning of the beat
+float tBar = float(beatIndex % 4) * 60.0 / bpm + tBeat; // seconds since the beginning of the bar
+float tGlobal = float(beatIndex) * 60.0 / bpm + tBeat; // seconds since the beginning of the track
+```
+
+Following uniforms are available:
+
+- `bpm`: The current BPM
+- `sampleRate`: The sample rate
+- `framesPerBeat`: The max number of frames in a beat
 
 ## Why is the audio stuttery sometimes?
 
